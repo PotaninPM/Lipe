@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/map_Bottom"
+        android:enabled="true"
+        android:icon="@drawable/marker_bottom"
+        android:title="@null"/>
+    <item
+        android:id="@+id/rating"
+        android:enabled="true"
+        android:icon="@drawable/rating_users"
+        android:title="@null"/>
+    <item
+        android:id="@+id/add"
+        android:enabled="true"
+        android:icon="@drawable/add"
+        android:title="@null"/>
+    <item
+        android:id="@+id/chats"
+        android:enabled="true"
+        android:icon="@drawable/chats"
+        android:title="@null"/>
+    <item
+        android:id="@+id/profile"
+        android:enabled="true"
+        android:icon="@drawable/profile_bottom_btn"
+        android:title="@null"/>
+</menu>

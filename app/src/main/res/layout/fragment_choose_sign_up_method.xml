@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+    <LinearLayout android:id="@+id/linearSignup"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+        <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/frameStackmorskieokoin"
+            android:layout_gravity="center"
+            android:layout_height="@dimen/_470sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_width="@dimen/_300sdp"
+
+            android:background="@drawable/special_form_sign_up">
+
+            <LinearLayout
+                android:id="@+id/linearColumngooglelogo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent">
+                <LinearLayout
+                    android:id="@+id/linearContgoogletex"
+                    android:background="@drawable/form_sign_up_vary"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:gravity="start"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageGooglelogo"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/img_googlelogo"
+                        tools:ignore="ContentDescription"
+                        tools:src="@drawable/img_googlelogo" />
+
+                    <TextView
+                        android:id="@+id/txtContgoogletex"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="Продолжить с Google" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearRowemailimg"
+                    android:background="@drawable/form_sign_up_vary"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_42sdp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:layout_marginBottom="@dimen/_12sdp"
+                    android:layout_marginTop="9.93dp"
+                    android:gravity="start"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageEmailimg"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/img_emailimg" />
+
+                    <TextView
+                        android:id="@+id/txtContwithemail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="Продолжить с почтой" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView android:ellipsize="end"
+            android:id="@+id/txtSigninifexis"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_width="wrap_content"
+            android:singleLine="true"
+            android:text="Уже есть аккаунт? Войдите"/>
+    </LinearLayout>
+</FrameLayout>
