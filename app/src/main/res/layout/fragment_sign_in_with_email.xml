@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".SignInWithEmailFragment">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <LinearLayout android:id="@+id/linearSigninwithem"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
+            <ImageView android:id="@+id/imageTreeimg"
+                android:layout_gravity="start"
+                android:layout_height="@dimen/_136sdp"
+                android:layout_marginStart="@dimen/_14sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_width="@dimen/_136sdp"
+                android:scaleType="fitXY"
+                android:background="@drawable/img_treeimg"
+                tools:ignore="ContentDescription"/>
+            <LinearLayout android:gravity="start"
+                android:id="@+id/linearWelcometitle"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_20pxh"
+                android:layout_marginTop="@dimen/_1pxv"
+                android:layout_width="wrap_content" android:orientation="horizontal">
+                <TextView android:ellipsize="end"
+                    android:id="@+id/txtWelcomemsg"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:textSize="@dimen/_26sdp"
+                    android:textStyle="bold"
+                    android:singleLine="true"
+                    android:text="@string/welcome_text"
+                    android:textFontWeight="600"/>
+                <ImageView android:id="@+id/imageWelcomeimg"
+                    android:layout_height="@dimen/_26sdp"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="@dimen/_3pxv"
+                    android:layout_width="@dimen/_26sdp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_welcomeimg"
+                    tools:ignore="ContentDescription" tools:src="@drawable/img_welcomeimg"/>
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_8sdp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:hint="Введите почту"
+                    android:id="@+id/etEmailinput"
+                    android:inputType="text"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:singleLine="true"
+                    android:textColorHint="@color/black_900_7f"
+                    tools:ignore="Autofill"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_8sdp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:ellipsize="end" android:hint="Пароль"
+                    android:id="@+id/etPassinput"
+                    android:inputType="text"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:singleLine="true"
+                    tools:ignore="Autofill"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_13sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_16sdp">
+
+                <TextView
+                    android:id="@+id/txtForgotpasstex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="start"
+                    android:singleLine="true"
+                    android:text="Забыли пароль?"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSignIn"
+                android:ellipsize="end" android:gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_20pxh"
+                android:layout_marginStart="@dimen/_20pxh"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_width="match_parent"
+                android:paddingBottom="@dimen/_18pxv"
+                android:paddingEnd="@dimen/_30pxh"
+                android:background="@drawable/btn_sign_in"
+                android:paddingStart="@dimen/_30pxh"
+                android:paddingTop="@dimen/_18pxv"
+                android:textStyle="bold"
+                android:textColor="@color/white" android:singleLine="true"
+                android:text="Войти" android:textAllCaps="false"
+                />
+            <LinearLayout android:gravity="center_horizontal"
+                android:id="@+id/linearColumnlineone"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_20pxv"
+                android:layout_marginEnd="@dimen/_20pxh"
+                android:layout_marginStart="@dimen/_20pxh"
+                android:layout_marginTop="@dimen/_26sdp"
+                android:layout_width="match_parent"
+                android:orientation="vertical">
+                <LinearLayout android:id="@+id/linearRowlineone"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_1pxv"
+                    android:layout_width="match_parent" android:orientation="horizontal">
+                    <View android:background="@color/bluegray_100"
+                        android:id="@+id/lineLineOne"
+                        android:layout_height="@dimen/_1pxv"
+                        android:layout_marginBottom="@dimen/_8pxv"
+                        android:layout_marginTop="@dimen/_7pxv"
+                        android:layout_weight="0.39" android:layout_width="0dp"/>
+
+
+                    <TextView
+                        android:id="@+id/txtOrtextOne"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_9pxh"
+                        android:layout_weight="0.21"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="или"
+                        android:textSize="@dimen/_11sdp"
+                        tools:ignore="TextSizeCheck" />
+                    <View android:background="@color/bluegray_100"
+                        android:id="@+id/lineLineTwo"
+                        android:layout_height="@dimen/_1pxv"
+                        android:layout_marginBottom="@dimen/_8pxv"
+                        android:layout_marginStart="@dimen/_8pxh"
+                        android:layout_marginTop="@dimen/_7pxv"
+                        android:layout_weight="0.39" android:layout_width="0dp"/>
+                </LinearLayout>
+                <LinearLayout android:gravity="center_vertical"
+                    android:id="@+id/linearRowgooglelogo"
+                    android:layout_height="@dimen/_39sdp"
+                    android:layout_marginEnd="@dimen/_64pxh"
+                    android:layout_marginStart="@dimen/_64pxh"
+                    android:layout_marginTop="@dimen/_24pxv"
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@drawable/sign_with_google">
+                    <ImageView android:id="@+id/imageGooglelogo"
+                        android:layout_height="@dimen/_19pxh"
+                        android:layout_marginStart="@dimen/_49pxh"
+                        android:layout_width="@dimen/_19pxh"
+                        android:layout_gravity="center"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/img_googlelogo"
+                        tools:ignore="ContentDescription" />
+                    <TextView android:ellipsize="end"
+                        android:id="@+id/txtGoogletext"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_49pxh"
+                        android:layout_marginStart="@dimen/_4pxh"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content" android:singleLine="true"
+                        android:text="Google"
+                        android:textSize="@dimen/_14sdp"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txtNoAc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_25sdp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Еще нет аккаунта? Зарегистрируйтесь"
+                    android:textSize="@dimen/_11sdp"
+                    tools:ignore="TextSizeCheck" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

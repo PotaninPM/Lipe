@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".SignUpFragment">
+    <LinearLayout android:id="@+id/linearSignupwithem"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_gravity="center_vertical"
+        android:background="@color/white"
+        android:orientation="vertical">
+        <LinearLayout android:gravity="start"
+            android:id="@+id/linearColumncreateacctitl"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_width="match_parent"
+            android:orientation="vertical">
+            <ImageView android:id="@+id/imagePlantimg"
+                android:layout_gravity="start"
+                android:layout_height="@dimen/_155sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_width="match_parent"
+                android:scaleType="fitXY"
+                tools:ignore="ContentDescription"
+                android:src="@drawable/sports_vary"/>
+            <TextView android:ellipsize="end"
+                android:id="@+id/txtCreateacctitl"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="@dimen/_22sdp"
+                android:singleLine="true"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:text="Создай аккаунт" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_8sdp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:hint="Введите логин"
+                    android:id="@+id/etLogininput"
+                    android:inputType="text"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:singleLine="true"
+                    android:textColorHint="@color/black_900_7f"
+                    tools:ignore="Autofill"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_8sdp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:hint="Введите почту"
+                    android:id="@+id/etEmailinput"
+                    android:inputType="text"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:singleLine="true"
+                    android:textColorHint="@color/black_900_7f"
+                    tools:ignore="Autofill"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_8sdp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:hint="Введите пароль"
+                    android:id="@+id/etPassinput"
+                    android:inputType="text"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:singleLine="true"
+                    android:textColorHint="@color/black_900_7f"
+                    tools:ignore="Autofill"/>
+            </com.google.android.material.textfield.TextInputLayout>
+            <LinearLayout android:gravity="start"
+                android:id="@+id/linearRowvectortwo"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_10pxh"
+                android:layout_marginTop="@dimen/_24pxv"
+                android:layout_width="match_parent" android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:background="@drawable/checkmark"/>
+
+                <TextView
+                    android:id="@+id/txtAccepttiontext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_2pxv"
+                    android:layout_marginBottom="@dimen/_1pxv"
+                    android:layout_marginLeft="@dimen/_6sdp"
+                    android:ellipsize="end"
+                    android:layout_gravity="center"
+                    android:singleLine="true"
+                    android:text="Я принимаю политику конфиденциальности"
+                    android:textSize="@dimen/_11sdp"
+                    tools:ignore="TextSizeCheck" />
+
+            </LinearLayout>
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnNext"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:background="@drawable/sign_in_start_btn"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="Далее"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textFontWeight="600"
+                android:textSize="@dimen/_12sdp"
+                tools:ignore="TextSizeCheck" />
+            <LinearLayout android:gravity="center_horizontal"
+                android:id="@+id/linearColumnlineone"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_20pxh"
+                android:layout_marginStart="@dimen/_20pxh"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_width="match_parent"
+                android:orientation="vertical">
+                <LinearLayout android:id="@+id/linearRowlineone"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_1pxv"
+                    android:layout_width="match_parent" android:orientation="horizontal">
+                    <View android:background="@color/bluegray_100"
+                        android:id="@+id/lineLineOne"
+                        android:layout_height="@dimen/_1pxv"
+                        android:layout_marginBottom="@dimen/_8pxv"
+                        android:layout_marginTop="@dimen/_7pxv"
+                        android:layout_weight="0.39" android:layout_width="0dp"/>
+
+
+                    <TextView
+                        android:id="@+id/txtOrtextOne"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_9pxh"
+                        android:layout_weight="0.21"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="или"
+                        android:textSize="@dimen/_11sdp"
+                        tools:ignore="TextSizeCheck" />
+                    <View android:background="@color/bluegray_100"
+                        android:id="@+id/lineLineTwo"
+                        android:layout_height="@dimen/_1pxv"
+                        android:layout_marginBottom="@dimen/_8pxv"
+                        android:layout_marginStart="@dimen/_8pxh"
+                        android:layout_marginTop="@dimen/_7pxv"
+                        android:layout_weight="0.39" android:layout_width="0dp"/>
+                </LinearLayout>
+                <LinearLayout android:gravity="center_vertical"
+                    android:id="@+id/linearRowgooglelogo"
+                    android:layout_height="@dimen/_39sdp"
+                    android:layout_marginTop="@dimen/_13sdp"
+                    android:layout_width="@dimen/_106sdp"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:background="@drawable/sign_with_google">
+                    <ImageView android:id="@+id/imageGooglelogo"
+                        android:layout_height="@dimen/_16sdp"
+                        android:layout_marginStart="@dimen/_26sdp"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_gravity="center"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/img_googlelogo"
+                        tools:ignore="ContentDescription" />
+                    <TextView android:ellipsize="end"
+                        android:id="@+id/txtGoogletext"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content" android:singleLine="true"
+                        android:text="Google"
+                        android:layout_marginLeft="@dimen/_6sdp"
+                        android:textSize="@dimen/_14sdp"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txHaveAc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Уже есть аккаунт? Войдите"
+                    android:textSize="@dimen/_11sdp"
+                    tools:ignore="TextSizeCheck" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

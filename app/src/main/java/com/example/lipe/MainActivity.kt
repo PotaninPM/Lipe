@@ -3,6 +3,7 @@ package com.example.lipe
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.replace
 import com.example.lipe.databinding.ActivityMainBinding
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 
@@ -13,14 +14,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        replaceFragment(StartFragment())
-    }
-    private fun replaceFragment(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.all, fragment)
-        fragmentTransaction.commit()
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }

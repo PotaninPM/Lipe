@@ -5,20 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import com.example.lipe.databinding.FragmentSignUpBinding
 import com.example.lipe.databinding.FragmentStartBinding
 
-class StartFragment : Fragment() {
+class SignUpFragment : Fragment() {
 
-    private var _binding: FragmentStartBinding? = null
+    private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        _binding = FragmentStartBinding.inflate(inflater, container, false)
+        _binding = FragmentSignUpBinding.inflate(inflater, container, false)
 
         val view = binding.root
         return view
@@ -27,13 +26,13 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.nextBtn.setOnClickListener {
-            view.findNavController().navigate(R.id.action_startFragment2_to_startDescFirstFragment)
-        }
-
-//        binding.btnSignUp.setOnClickListener {
-//            view.findNavController().navigate(R.id.action_startFragment2_to_signUpFragment)
+//        binding.txHaveAc.setOnClickListener {
+//            view.findNavController().navigate(R.id.action_signUpFragment_to_signInWithEmailFragment)
 //        }
+
+        binding.btnNext.setOnClickListener {
+            view.findNavController().navigate(R.id.action_signUpFragment_to_signUpDescFragment)
+        }
     }
 
     override fun onDestroy() {

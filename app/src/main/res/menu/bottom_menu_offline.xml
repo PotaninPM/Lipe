@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/map_Bottom"
+        android:id="@+id/map"
         android:enabled="true"
         android:icon="@drawable/marker_bottom"
-        android:title="@null"/>
+        android:title="@string/map"/>
     <item
         android:id="@+id/rating"
         android:enabled="true"
         android:icon="@drawable/rating_users"
-        android:title="@null"/>
+        android:title="Магазин"/>
     <item
         android:id="@+id/add"
         android:enabled="true"
         android:icon="@drawable/add"
-        android:title="@null"/>
+        android:title="Баллы" />
     <item
         android:id="@+id/chats"
         android:enabled="true"
-        android:icon="@drawable/chats"
-        android:title="@null"/>
+        android:icon="@drawable/chats_2"
+        android:title="@string/chats"/>
     <item
         android:id="@+id/profile"
         android:enabled="true"
         android:icon="@drawable/profile_bottom_btn"
-        android:title="@null"/>
+        android:title="@string/profile"/>
 </menu>

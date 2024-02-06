@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GetPointsFragment">
+<!--    <LinearLayout android:gravity="center_horizontal"-->
+<!--        android:id="@+id/linearGetpoints"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:orientation="vertical">-->
+<!--&lt;!&ndash;        style="@style/groupStylewhite_A700"&ndash;&gt;-->
+<!--        <TextView android:ellipsize="end"-->
+<!--            android:gravity="center_horizontal"-->
+<!--            android:id="@+id/txtFortySix"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="@dimen/_13sdp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:singleLine="true"-->
+<!--            android:fontFamily="@font/poppins"-->
+<!--            android:textFontWeight="700"-->
+<!--            android:textSize="@dimen/_24sdp"-->
+<!--            android:text="Получение баллов"-->
+<!--            android:textStyle="bold" />-->
+<!--        <LinearLayout android:gravity="center_horizontal"-->
+<!--            android:id="@+id/linearTab"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="@dimen/_11pxh"-->
+<!--            android:layout_marginStart="@dimen/_11pxh"-->
+<!--            android:layout_marginTop="@dimen/_9pxv"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:orientation="vertical" style="@style/groupStylegray_201cornerRadius">-->
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:ellipsize="end" android:gravity="center"-->
+<!--                android:id="@+id/btn"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_marginBottom="@dimen/_3pxv"-->
+<!--                android:layout_marginEnd="@dimen/_6pxh"-->
+<!--                android:layout_marginStart="@dimen/_7pxh"-->
+<!--                android:layout_marginTop="@dimen/_2pxv"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:paddingBottom="@dimen/_7pxv"-->
+<!--                android:paddingEnd="@dimen/_30pxh"-->
+<!--                android:paddingStart="@dimen/_30pxh"-->
+<!--                android:paddingTop="@dimen/_7pxv"-->
+<!--                android:singleLine="true" android:text="Экология"-->
+<!--                android:textAllCaps="false"-->
+<!--                android:background="@drawable/sign_in_start_btn"/>-->
+<!--        </LinearLayout>-->
+<!--        <TextView android:gravity="center_horizontal"-->
+<!--            android:id="@+id/txtDescription"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="@dimen/_10pxh"-->
+<!--            android:layout_marginStart="@dimen/_11pxh"-->
+<!--            android:layout_marginTop="@dimen/_14pxv"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:text="Внимание! Баллы за волонтерство и соревнования начисляются автоматически, если вы были зарегистрированы на мероприятие" />-->
+<!--        <LinearLayout android:gravity="center_horizontal"-->
+<!--            android:id="@+id/linearUploadphoto"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="@dimen/_7pxh"-->
+<!--            android:layout_marginStart="@dimen/_6pxh"-->
+<!--            android:layout_marginTop="@dimen/_14pxv"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:orientation="vertical" android:background="@drawable/upload_photo_lay">-->
+<!--            <ImageView android:id="@+id/imageArrowup"-->
+<!--                android:layout_gravity="center_horizontal"-->
+<!--                android:layout_height="@dimen/_18pxh"-->
+<!--                android:layout_marginEnd="@dimen/_68pxh"-->
+<!--                android:layout_marginStart="@dimen/_68pxh"-->
+<!--                android:layout_marginTop="@dimen/_60pxv"-->
+<!--                android:layout_width="@dimen/_18pxh"-->
+<!--                android:scaleType="fitXY"-->
+<!--                android:src="@drawable/img_arrowup"-->
+<!--                tools:ignore="ContentDescription" tools:src="@drawable/img_arrowup"/>-->
+<!--            <TextView android:gravity="center_horizontal"-->
+<!--                android:id="@+id/txtFortySeven"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="@dimen/_54pxv"-->
+<!--                android:layout_marginEnd="@dimen/_68pxh"-->
+<!--                android:layout_marginStart="@dimen/_68pxh"-->
+<!--                android:layout_marginTop="@dimen/_18pxv"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:text="Загрузите фото проделанного дела"-->
+<!--                style="@style/txtNunitoSansregular16"/>-->
+<!--        </LinearLayout>-->
+<!--        <LinearLayout android:gravity="start"-->
+<!--            android:id="@+id/linearChoose"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="@dimen/_11pxh"-->
+<!--            android:layout_marginStart="@dimen/_11pxh"-->
+<!--            android:layout_marginTop="@dimen/_13pxv"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:orientation="vertical" style="@style/groupStylecornerRadius_1">-->
+<!--            <TextView android:ellipsize="end"-->
+<!--                android:id="@+id/txtFortyEight"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:singleLine="true"-->
+<!--                android:text="выберите вид выполненной работы"-->
+<!--                style="@style/txtPoppinssemibold19" tools:text="@string/msg39"/>-->
+<!--            <Spinner-->
+<!--                android:background="@drawable/layer_list_bg_gray_50_border_indigo_50_radius_4"-->
+<!--                android:id="@+id/spinnerFields"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginEnd="@dimen/_10pxh"-->
+<!--                android:layout_marginTop="@dimen/_13pxv"-->
+<!--                android:layout_width="match_parent" tools:listitem="@layout/spinner_get_points_eco"/>-->
+<!--        </LinearLayout>-->
+<!--        <androidx.appcompat.widget.AppCompatButton-->
+<!--            android:ellipsize="end" android:gravity="center"-->
+<!--            android:id="@+id/btn10" android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="@dimen/_11pxh"-->
+<!--            android:layout_marginStart="@dimen/_11pxh"-->
+<!--            android:layout_marginTop="@dimen/_160pxv"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:paddingBottom="@dimen/_18pxv"-->
+<!--            android:paddingEnd="@dimen/_30pxh"-->
+<!--            android:paddingStart="@dimen/_30pxh"-->
+<!--            android:paddingTop="@dimen/_18pxv" android:singleLine="true"-->
+<!--            android:text="@string/msg_102" android:textAllCaps="false"-->
+<!--            style="@style/btnSolidRounded_4" tools:text="@string/msg_102"/>-->
+<!--        <androidx.appcompat.widget.AppCompatButton-->
+<!--            android:ellipsize="end" android:gravity="center"-->
+<!--            android:id="@+id/btn1"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            android:layout_height="@dimen/_41pxv"-->
+<!--            android:layout_marginBottom="@dimen/_23pxv"-->
+<!--            android:layout_marginEnd="@dimen/_11pxh"-->
+<!--            android:layout_marginStart="@dimen/_11pxh"-->
+<!--            android:layout_marginTop="@dimen/_13pxv"-->
+<!--            android:layout_width="@dimen/_127pxh"-->
+<!--            android:paddingBottom="@dimen/_9pxv"-->
+<!--            android:paddingEnd="@dimen/_30pxh"-->
+<!--            android:paddingStart="@dimen/_30pxh"-->
+<!--            android:paddingTop="@dimen/_9pxv" android:singleLine="true"-->
+<!--            android:text="@string/lbl56" android:textAllCaps="false"-->
+<!--            style="@style/btnSolidRounded_6" tools:text="@string/lbl56"/>-->
+<!--    </LinearLayout>-->
+
+</FrameLayout>

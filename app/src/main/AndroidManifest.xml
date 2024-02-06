@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Lipe"
         tools:targetApi="34">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDZbjej5QMRDw4dxhMRu3w7JIS8TMiErUw" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">

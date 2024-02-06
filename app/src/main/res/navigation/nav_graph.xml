@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/startFragment2">
+
+    <fragment
+        android:id="@+id/signInWithEmailFragment"
+        android:name="com.example.lipe.SignInWithEmailFragment"
+        android:label="fragment_sign_in_with_email"
+        tools:layout="@layout/fragment_sign_in_with_email" >
+        <action
+            android:id="@+id/action_signInWithEmailFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_signInWithEmailFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.example.lipe.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment_to_signInWithEmailFragment"
+            app:destination="@id/signInWithEmailFragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_signUpDescFragment"
+            app:destination="@id/signUpDescFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpDescFragment"
+        android:name="com.example.lipe.SignUpDescFragment"
+        android:label="fragment_sign_up_desc"
+        tools:layout="@layout/fragment_sign_up_desc" >
+        <action
+            android:id="@+id/action_signUpDescFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/startFragment2"
+        android:name="com.example.lipe.StartFragment"
+        android:label="StartFragment" >
+        <action
+            android:id="@+id/action_startFragment2_to_startDescFirstFragment"
+            app:destination="@id/startDescFirstFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.lipe.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_getPointsFragment"
+            app:destination="@id/getPointsFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/getPointsFragment"
+        android:name="com.example.lipe.GetPointsFragment"
+        android:label="fragment_get_points"
+        tools:layout="@layout/fragment_get_points" >
+        <action
+            android:id="@+id/action_getPointsFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/startDescFirstFragment"
+        android:name="com.example.lipe.StartDescFirstFragment"
+        android:label="fragment_start_desc_first"
+        tools:layout="@layout/fragment_start_desc_first" >
+        <action
+            android:id="@+id/action_startDescFirstFragment_to_startDescSecondFragment"
+            app:destination="@id/startDescSecondFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/startDescSecondFragment"
+        android:name="com.example.lipe.StartDescSecondFragment"
+        android:label="fragment_start_desc_second"
+        tools:layout="@layout/fragment_start_desc_second" >
+        <action
+            android:id="@+id/action_startDescSecondFragment_to_startDescThirdFragment"
+            app:destination="@id/startDescThirdFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/startDescThirdFragment"
+        android:name="com.example.lipe.StartDescThirdFragment"
+        android:label="fragment_start_desc_third"
+        tools:layout="@layout/fragment_start_desc_third" >
+        <action
+            android:id="@+id/action_startDescThirdFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.lipe.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_getPointsFragment"
+            app:destination="@id/getPointsFragment" />
+    </fragment>
+</navigation>

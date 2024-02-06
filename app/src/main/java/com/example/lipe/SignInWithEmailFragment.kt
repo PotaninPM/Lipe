@@ -5,20 +5,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import com.example.lipe.databinding.FragmentSignInWithEmailBinding
+import com.example.lipe.databinding.FragmentSignUpBinding
 import com.example.lipe.databinding.FragmentStartBinding
 
-class StartFragment : Fragment() {
+class SignInWithEmailFragment : Fragment() {
 
-    private var _binding: FragmentStartBinding? = null
+    private var _binding: FragmentSignInWithEmailBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        _binding = FragmentStartBinding.inflate(inflater, container, false)
+        _binding = FragmentSignInWithEmailBinding.inflate(inflater, container, false)
 
         val view = binding.root
         return view
@@ -27,12 +27,12 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.nextBtn.setOnClickListener {
-            view.findNavController().navigate(R.id.action_startFragment2_to_startDescFirstFragment)
-        }
+//        binding.btnSignIn.setOnClickListener {
+//            view.findNavController().navigate(R.id.action_signInWithEmailFragment_to_mapsFragment)
+//        }
 
-//        binding.btnSignUp.setOnClickListener {
-//            view.findNavController().navigate(R.id.action_startFragment2_to_signUpFragment)
+//        binding.txtNoAc.setOnClickListener {
+//            view.findNavController().navigate(R.id.action_signInWithEmailFragment_to_signUpFragment)
 //        }
     }
 
