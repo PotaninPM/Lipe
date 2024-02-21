@@ -8,8 +8,8 @@
 
     <CheckBox
         android:id="@+id/checkBox"
-        android:layout_width="@dimen/_30sdp"
-        android:layout_height="@dimen/_30sdp"
+        android:layout_width="@dimen/_25sdp"
+        android:layout_height="@dimen/_25sdp"
         android:layout_gravity="center" />
 
     <ImageView

@@ -23,7 +23,7 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/linearMainlay"
+                android:id="@+id/etDescLay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -31,7 +31,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/txtTellaboutyou"
+                    android:id="@+id/etDescText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -46,7 +46,7 @@
                     android:textSize="@dimen/_20sdp" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/linearColumnarrowup"
+                    android:id="@+id/upload_photo"
                     android:layout_width="@dimen/_200sdp"
                     android:layout_height="@dimen/_200sdp"
                     android:layout_gravity="center"
@@ -87,24 +87,6 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_45sdp"
-                    android:layout_marginTop="@dimen/_8sdp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etLogininput"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_6sdp"
-                        android:layout_marginEnd="@dimen/_6sdp"
-                        android:hint="Ваши фамилия и имя"
-                        android:inputType="text"
-                        android:singleLine="true"
-                        android:textColorHint="@color/black_900_7f"
-                        tools:ignore="Autofill" />
-                </com.google.android.material.textfield.TextInputLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -123,7 +105,7 @@
                 </LinearLayout>
 
                 <EditText
-                    android:id="@+id/editTextTextMultiLine"
+                    android:id="@+id/descText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_120sdp"
                     android:layout_marginStart="@dimen/_6sdp"
@@ -135,7 +117,7 @@
                     android:hint="Расскажите о себе"
                     android:inputType="textMultiLine"
                     android:paddingStart="@dimen/_6sdp"
-                    android:paddingTop="@dimen/_3sdp"
+                    android:paddingTop="@dimen/_5sdp"
                     android:paddingEnd="@dimen/_6sdp"
                     android:paddingBottom="@dimen/_5sdp"
                     android:textColorHint="@color/black_900_7f" />

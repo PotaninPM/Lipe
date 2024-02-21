@@ -10,7 +10,7 @@
         android:id="@+id/rating"
         android:enabled="true"
         android:icon="@drawable/rating_users"
-        android:title="Магазин"/>
+        android:title="Рейтинг"/>
     <item
         android:id="@+id/add"
         android:enabled="true"

@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "895088919548",
+    "firebase_url": "https://durable-path-406515-default-rtdb.firebaseio.com",
+    "project_id": "durable-path-406515",
+    "storage_bucket": "durable-path-406515.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:895088919548:android:686b40037bd39e8b242879",
+        "android_client_info": {
+          "package_name": "com.example.lipe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAisBSXSGWG7ALNL17YyVPfZBwhPODUjCw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

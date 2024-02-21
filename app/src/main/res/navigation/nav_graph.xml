@@ -45,6 +45,12 @@
         <action
             android:id="@+id/action_startFragment2_to_startDescFirstFragment"
             app:destination="@id/startDescFirstFragment" />
+        <action
+            android:id="@+id/action_startFragment2_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_startFragment2_to_createEventFragment"
+            app:destination="@id/createEventFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
@@ -57,6 +63,18 @@
         <action
             android:id="@+id/action_mapsFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <argument
+            android:name="SignUpNew"
+            android:defaultValue="no" />
+        <action
+            android:id="@+id/action_mapsFragment_to_ratingFragment"
+            app:destination="@id/ratingFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_otherProfileFragment"
+            app:destination="@id/otherProfileFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_createEventFragment"
+            app:destination="@id/createEventFragment" />
     </fragment>
     <fragment
         android:id="@+id/getPointsFragment"
@@ -66,6 +84,9 @@
         <action
             android:id="@+id/action_getPointsFragment_to_mapsFragment"
             app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_getPointsFragment_self"
+            app:destination="@id/getPointsFragment" />
     </fragment>
     <fragment
         android:id="@+id/startDescFirstFragment"
@@ -105,5 +126,24 @@
         <action
             android:id="@+id/action_profileFragment_to_getPointsFragment"
             app:destination="@id/getPointsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/otherProfileFragment"
+        android:name="com.example.lipe.OtherProfileFragment"
+        android:label="fragment_other_profile"
+        tools:layout="@layout/fragment_other_profile" />
+    <fragment
+        android:id="@+id/ratingFragment"
+        android:name="com.example.lipe.RatingFragment"
+        android:label="fragment_rating"
+        tools:layout="@layout/fragment_rating" />
+    <fragment
+        android:id="@+id/createEventFragment"
+        android:name="com.example.lipe.CreateEventFragment"
+        android:label="fragment_create_event"
+        tools:layout="@layout/fragment_create_event" >
+        <action
+            android:id="@+id/action_createEventFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
     </fragment>
 </navigation>

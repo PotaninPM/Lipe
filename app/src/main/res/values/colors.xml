@@ -66,4 +66,7 @@
         <color name="bluegray_300">#8f9bb3</color>
         <color name="bluegray_901">#303030</color>
 
+    <color name="invisible">#00FFFFFF</color>
+    <color name="grey_menu">#C7C5C5</color>
+    <color name="green_menu">#00B91E</color>
 </resources>

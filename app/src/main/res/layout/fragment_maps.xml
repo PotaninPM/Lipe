@@ -15,7 +15,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="@dimen/_250sdp"
+        android:layout_width="@dimen/_296sdp"
         android:layout_height="@dimen/_42sdp"
         android:layout_marginLeft="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_6sdp"
@@ -40,13 +40,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_menu_offline" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="@dimen/_40sdp"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:layout_height="@dimen/_40sdp"
-        android:src="@drawable/shops"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <FrameLayout
+            android:id="@+id/bottomSheetContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
