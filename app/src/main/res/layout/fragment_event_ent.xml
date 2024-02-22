@@ -9,115 +9,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <HorizontalScrollView
+        <LinearLayout
+            android:id="@+id/photo_lay_1"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_180sdp"
-            android:fillViewport="true"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_height="@dimen/_238sdp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
-            <LinearLayout
+            <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/photo_lay_1"
-                    android:layout_width="@dimen/_310sdp"
-                    android:layout_height="@dimen/_180sdp"
-                    android:layout_marginEnd="@dimen/_6sdp"
-                    android:background="@drawable/upload_photo_event">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/img_arrowup" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="@dimen/_6sdp"
-                            android:gravity="center"
-                            android:text="Нажмите, чтобы загрузить фото"
-                            android:textColor="#747373"
-                            android:textSize="@dimen/_14sdp" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/photo_lay_2"
-                    android:layout_width="@dimen/_310sdp"
-                    android:layout_height="@dimen/_180sdp"
-                    android:layout_marginEnd="@dimen/_6sdp"
-                    android:background="@drawable/upload_photo_event">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/img_arrowup" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="@dimen/_6sdp"
-                            android:gravity="center"
-                            android:text="Нажмите, чтобы загрузить фото"
-                            android:textColor="#747373"
-                            android:textSize="@dimen/_14sdp" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/photo_lay_3"
-                    android:layout_width="@dimen/_310sdp"
-                    android:layout_height="@dimen/_180sdp"
-                    android:layout_marginEnd="@dimen/_6sdp"
-                    android:background="@drawable/upload_photo_event">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/img_arrowup" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="@dimen/_6sdp"
-                            android:gravity="center"
-                            android:text="Нажмите, чтобы загрузить фото"
-                            android:textColor="#747373"
-                            android:textSize="@dimen/_14sdp" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </HorizontalScrollView>
+                android:src="@drawable/ex1" />
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

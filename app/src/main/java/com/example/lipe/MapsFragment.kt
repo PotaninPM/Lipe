@@ -6,28 +6,33 @@ import android.graphics.drawable.ColorDrawable
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import com.example.lipe.databinding.FragmentMapsBinding
 
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.GenericTypeIndicator
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.getValue
+
+data class LatLngModel(
+    val latitude: Double,
+    val longitude: Double
+)
 
 class MapsFragment : Fragment() {
 
@@ -43,22 +48,38 @@ class MapsFragment : Fragment() {
 
     private lateinit var bottomSheet: BottomSheetDialog
 
+    private  lateinit var dbRef: DatabaseReference
+
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
-        //val createEventBSheet = CreateEventFragment()
-        //gMap.setOnMapClickListener { latLng ->
-//        gMap.setOnMapClickListener {
-//            Toast.makeText(requireContext(), "desdg", Toast.LENGTH_LONG).show()
-//        }
-        //val latLng = LatLng(55.75345893559696, 37.649131307444584)
+        dbRef = FirebaseDatabase.getInstance().getReference("current_events")
 
+        dbRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for(eventSnapshot in dataSnapshot.children) {
+                    val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
+
+                    if (coordinates != null) {
+                        addMarker(LatLng(coordinates[0], coordinates[1]))
+                    }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
+            }
+        })
 
         mMap.setOnMapLongClickListener { latLng ->
             CreateEventFragment.show(childFragmentManager)
+
         }
         //}
     }
 
+    private fun addMarker(latLng: LatLng) {
+        mMap.addMarker(MarkerOptions().position(latLng))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

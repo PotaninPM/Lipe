@@ -2,7 +2,6 @@ package com.example.lipe
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,18 +9,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.navigation.findNavController
+import com.example.lipe.DB.User
 import com.example.lipe.databinding.FragmentSignUpBinding
-import com.example.lipe.databinding.FragmentStartBinding
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
 
 class SignUpFragment : Fragment() {
@@ -128,7 +124,7 @@ class SignUpFragment : Fragment() {
             "-",
             username,
             email,
-            phone,
+            "7" + phone,
             pass,
             "-",
             "-",

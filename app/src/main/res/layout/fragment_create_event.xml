@@ -39,7 +39,8 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="Создайте событие"
-                    android:textSize="@dimen/_22sdp"
+                    android:textSize="@dimen/_20sdp"
+                    android:fontFamily="@font/nunito_sans"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

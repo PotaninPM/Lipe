@@ -29,10 +29,10 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //auth = FirebaseAuth.getInstance()
-//        if(auth.currentUser != null) {
+        auth = FirebaseAuth.getInstance()
+        if(auth.currentUser != null) {
             view.findNavController().navigate(R.id.action_startFragment2_to_mapsFragment)
-//        }
+        }
 
         binding.nextBtn.setOnClickListener {
             view.findNavController().navigate(R.id.action_startFragment2_to_startDescFirstFragment)

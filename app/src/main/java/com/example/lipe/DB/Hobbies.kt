@@ -1,4 +1,4 @@
-package com.example.lipe
+package com.example.lipe.DB
 
 data class Hobbies(
     val hobby1:String?= null,

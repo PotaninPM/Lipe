@@ -1,4 +1,4 @@
-package com.example.lipe
+package com.example.lipe.DB
 
 data class User(
     val uid:String?= null,
@@ -14,5 +14,6 @@ data class User(
     val firstName: String?= null,
     val lastName: String ?= null,
     val place_in_total_rating: Int?= null,
+    var organization: String ?= null,
     val hobbies: Array<String> ?= null
 )

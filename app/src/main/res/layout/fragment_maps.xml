@@ -13,36 +13,157 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="@dimen/_296sdp"
-        android:layout_height="@dimen/_42sdp"
-        android:layout_marginLeft="@dimen/_10sdp"
-        android:layout_marginTop="@dimen/_6sdp"
-        app:cardCornerRadius="@dimen/_15sdp"
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/seacrh"
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="@dimen/_256sdp"
+            android:layout_height="@dimen/_42sdp"
+            android:layout_marginLeft="@dimen/_6sdp"
+            android:layout_marginTop="@dimen/_6sdp"
+            app:cardCornerRadius="@dimen/_15sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.cardview.widget.CardView>
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/seacrh"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/_6sdp"
+            android:src="@drawable/reset_icon" />
+    </LinearLayout>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_6sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginLeft="@dimen/_6sdp"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/vary_of_events"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:src="@drawable/select_all"
+                    android:layout_marginLeft="@dimen/_6sdp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Все"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:background="@drawable/vary_of_events"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:src="@drawable/planet_icon"
+                    android:layout_marginLeft="@dimen/_6sdp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Экология"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:background="@drawable/vary_of_events"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:src="@drawable/stadium"
+                    android:layout_marginLeft="@dimen/_6sdp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Развлечения"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:background="@drawable/vary_of_events"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:src="@drawable/handshake"
+                    android:layout_marginLeft="@dimen/_6sdp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Помощь"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_52sdp"
+        android:layout_height="@dimen/_46sdp"
+        style="@style/Widget.MaterialComponents.BottomNavigationView"
+        android:background="@color/white"
+        app:itemTextColor="@color/black"
+        app:itemIconSize="@dimen/_16sdp"
+        app:itemIconTint="#5F5F5F"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_menu_offline" />
-
-        <FrameLayout
-            android:id="@+id/bottomSheetContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

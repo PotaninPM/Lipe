@@ -31,7 +31,7 @@
 
                     <LinearLayout
                         android:id="@+id/photo_lay_1"
-                        android:layout_width="@dimen/_310sdp"
+                        android:layout_width="@dimen/_260sdp"
                         android:layout_height="@dimen/_180sdp"
                         android:layout_marginEnd="@dimen/_6sdp"
                         android:background="@drawable/upload_photo_event">
@@ -62,7 +62,7 @@
 
                     <LinearLayout
                         android:id="@+id/photo_lay_2"
-                        android:layout_width="@dimen/_310sdp"
+                        android:layout_width="@dimen/_260sdp"
                         android:layout_height="@dimen/_180sdp"
                         android:layout_marginEnd="@dimen/_6sdp"
                         android:background="@drawable/upload_photo_event">
@@ -93,7 +93,7 @@
 
                     <LinearLayout
                         android:id="@+id/photo_lay_3"
-                        android:layout_width="@dimen/_310sdp"
+                        android:layout_width="@dimen/_260sdp"
                         android:layout_height="@dimen/_180sdp"
                         android:layout_marginEnd="@dimen/_6sdp"
                         android:background="@drawable/upload_photo_event">
@@ -266,18 +266,19 @@
                     android:layout_marginEnd="@dimen/_6sdp"/>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="center"
+                    android:gravity="start"
                     android:layout_marginStart="@dimen/_8sdp"
                     android:layout_marginEnd="@dimen/_8sdp"
                     android:layout_marginTop="@dimen/_8sdp">
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/etMaxInputLay"
-                        android:layout_width="match_parent"
+                        android:layout_width="@dimen/_176sdp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
+                        app:startIconDrawable="@drawable/profile_icon"
                         app:boxStrokeColor="?attr/colorControlNormal">
 
                         <com.google.android.material.textfield.TextInputEditText

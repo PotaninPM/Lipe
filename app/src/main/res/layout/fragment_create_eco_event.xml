@@ -31,7 +31,7 @@
 
                     <LinearLayout
                         android:id="@+id/photo_lay_1"
-                        android:layout_width="@dimen/_310sdp"
+                        android:layout_width="@dimen/_260sdp"
                         android:layout_height="@dimen/_180sdp"
                         android:layout_marginEnd="@dimen/_6sdp"
                         android:background="@drawable/upload_photo_event">
@@ -62,7 +62,7 @@
 
                     <LinearLayout
                         android:id="@+id/photo_lay_2"
-                        android:layout_width="@dimen/_310sdp"
+                        android:layout_width="@dimen/_260sdp"
                         android:layout_height="@dimen/_180sdp"
                         android:layout_marginEnd="@dimen/_6sdp"
                         android:background="@drawable/upload_photo_event">
@@ -93,7 +93,7 @@
 
                     <LinearLayout
                         android:id="@+id/photo_lay_3"
-                        android:layout_width="@dimen/_310sdp"
+                        android:layout_width="@dimen/_260sdp"
                         android:layout_height="@dimen/_180sdp"
                         android:layout_marginEnd="@dimen/_6sdp"
                         android:background="@drawable/upload_photo_event">

@@ -1,27 +1,31 @@
 package com.example.lipe
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.CheckBox
 import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.TimePicker
-import android.widget.Toast
+import androidx.annotation.RequiresApi
+import com.example.lipe.DB.EntEventModelDB
 import com.example.lipe.databinding.FragmentCreateEntEventBinding
-import com.example.lipe.databinding.FragmentCreateEventBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import java.text.SimpleDateFormat
 import java.util.Calendar
+
+var type: String = "null"
 
 class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
@@ -55,6 +59,9 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         SpinnerItem("Программирование", R.drawable.programming),
         SpinnerItem("Ничего", R.drawable.remove),
     )
+
+    private lateinit var dbRef: DatabaseReference
+    private lateinit var auth: FirebaseAuth
 
     var year = 0
     var month = 0
@@ -91,6 +98,36 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         return view
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        dbRef = FirebaseDatabase.getInstance().getReference("current_events")
+        auth = FirebaseAuth.getInstance()
+
+        binding.btnCreateEvent.setOnClickListener {
+            val time =Calendar.getInstance().time
+            val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
+            val current = formatter.format(time)
+
+            var title = binding.etNameinput.text.toString()!!
+            var adress = binding.adressText.text.toString()!!
+            var coord: List<Double> = listOf(55.806853, 37.809128)
+            var date_of_meeting: String = binding.setDate.text.toString()!!
+            var maxPeople:Int = binding.etMaxInputText.text.toString().toInt()!!
+            var desc: String = binding.etDescInputText.text.toString()!!
+            createEvent(3, auth.currentUser?.uid.toString(), current, type, title, adress, coord, date_of_meeting, maxPeople, desc, "1","1", "1", listOf("12", "12"))
+            //createEvent(1, "1", "1", "1", "1", "1", "1", "1", 1, "1", "1", "1", "1")
+        }
+    }
+
+    private fun createEvent(event_id: Int, creator_id: String, time_of_creation: String, type_of_event: String, title: String, adress: String, coordinates: List<Double>, date_of_meeting: String, max_people: Int, description: String, photo_one_id: String, photo_two_id: String, photo_three_id: String, reg_people: List<String>) {
+        var event = EntEventModelDB(event_id, creator_id, time_of_creation, type_of_event, title, adress, coordinates, date_of_meeting, max_people,description, photo_one_id, photo_two_id, photo_three_id, reg_people)
+        dbRef.child(event_id.toString()).setValue(event).addOnSuccessListener {
+
+        }
+    }
+
     private fun setDesignToFields() {
         binding.etNameinputLay.boxStrokeColor = Color.BLUE
         binding.etDescInputLay.boxStrokeColor = Color.BLUE
@@ -98,9 +135,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     }
 
     data class SpinnerItem(val name: String, val imageResourceId: Int)
-
-    private class CustomAdapter(context: Context, private val items: List<SpinnerItem>) : ArrayAdapter<SpinnerItem>(context, R.layout.spinner_one_chose, items) {
-
+    class CustomAdapter(context: Context, private val items: List<SpinnerItem>) : ArrayAdapter<SpinnerItem>(context, R.layout.spinner_one_chose, items) {
+        lateinit var type: String
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.spinner_one_chose, parent, false)
 
@@ -110,6 +146,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
             val item = getItem(position)
             textView.text = item?.name
+            type = item?.name.toString()
             imageView.setImageResource(item?.imageResourceId ?: 0)
 
             return view

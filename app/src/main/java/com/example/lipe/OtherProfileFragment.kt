@@ -48,7 +48,7 @@ class OtherProfileFragment : Fragment() {
 
     private fun switchTabs(position: Int) {
         val fragment = when(position) {
-            0 -> MapsFragment()
+            0 -> CreateHelpEventFragment()
             1 -> RatingFragment()
             2 -> SignUpFragment()
             else -> null
