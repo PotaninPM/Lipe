@@ -28,6 +28,15 @@
         <action
             android:id="@+id/action_signUpFragment_to_signUpDescFragment"
             app:destination="@id/signUpDescFragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_signInWithEmailFragment2"
+            app:destination="@id/signInWithEmailFragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_signUpDescFragment2"
+            app:destination="@id/signUpDescFragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpDescFragment"
@@ -126,12 +135,19 @@
         <action
             android:id="@+id/action_profileFragment_to_getPointsFragment"
             app:destination="@id/getPointsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_mapsFragment2"
+            app:destination="@id/mapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/otherProfileFragment"
         android:name="com.example.lipe.OtherProfileFragment"
         android:label="fragment_other_profile"
-        tools:layout="@layout/fragment_other_profile" />
+        tools:layout="@layout/fragment_other_profile" >
+        <action
+            android:id="@+id/action_otherProfileFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/ratingFragment"
         android:name="com.example.lipe.RatingFragment"

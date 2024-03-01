@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,17 +18,26 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.TimePicker
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.DB.EntEventModelDB
+import com.example.lipe.ViewModels.AppViewModel
 import com.example.lipe.databinding.FragmentCreateEntEventBinding
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
 var type: String = "null"
 
 class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+    //view model
+    private lateinit var appVM: AppViewModel
 
     private lateinit var spinner: Spinner
 
@@ -61,7 +71,10 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     )
 
     private lateinit var dbRef: DatabaseReference
+    private lateinit var dbRef_id: DatabaseReference
     private lateinit var auth: FirebaseAuth
+
+    var eventId: Long = 0
 
     var year = 0
     var month = 0
@@ -103,29 +116,88 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         super.onViewCreated(view, savedInstanceState)
 
         dbRef = FirebaseDatabase.getInstance().getReference("current_events")
+        dbRef_id = FirebaseDatabase.getInstance().getReference("id_event")
+
         auth = FirebaseAuth.getInstance()
 
         binding.btnCreateEvent.setOnClickListener {
-            val time =Calendar.getInstance().time
-            val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
-            val current = formatter.format(time)
-
-            var title = binding.etNameinput.text.toString()!!
-            var adress = binding.adressText.text.toString()!!
-            var coord: List<Double> = listOf(55.806853, 37.809128)
-            var date_of_meeting: String = binding.setDate.text.toString()!!
-            var maxPeople:Int = binding.etMaxInputText.text.toString().toInt()!!
-            var desc: String = binding.etDescInputText.text.toString()!!
-            createEvent(3, auth.currentUser?.uid.toString(), current, type, title, adress, coord, date_of_meeting, maxPeople, desc, "1","1", "1", listOf("12", "12"))
-            //createEvent(1, "1", "1", "1", "1", "1", "1", "1", 1, "1", "1", "1", "1")
+            createEvent()
         }
     }
 
-    private fun createEvent(event_id: Int, creator_id: String, time_of_creation: String, type_of_event: String, title: String, adress: String, coordinates: List<Double>, date_of_meeting: String, max_people: Int, description: String, photo_one_id: String, photo_two_id: String, photo_three_id: String, reg_people: List<String>) {
-        var event = EntEventModelDB(event_id, creator_id, time_of_creation, type_of_event, title, adress, coordinates, date_of_meeting, max_people,description, photo_one_id, photo_two_id, photo_three_id, reg_people)
-        dbRef.child(event_id.toString()).setValue(event).addOnSuccessListener {
+    private fun getEventPrevId(callback: (eventId: Long) -> Unit) {
+        dbRef_id.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                eventId = dataSnapshot.getValue(Long::class.java)!!
+                dbRef_id.setValue(eventId + 1)
+                callback(eventId)
+            }
 
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("ERRORS","Ошибка ${databaseError.message}")
+            }
+        })
+    }
+
+    private fun createEvent() {
+        appVM = ViewModelProvider(requireActivity()).get(AppViewModel::class.java)
+        getEventPrevId {eventId ->
+            if(checkForEmpty() == true) {
+                val time = Calendar.getInstance().time
+                val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
+                val current = formatter.format(time)
+
+                var title = binding.etNameinputText.text.toString().trim()
+                var adress = binding.adressText.text.toString().trim()
+                var coord: List<Double> = listOf(appVM.latitude, appVM.longtitude)
+                var date_of_meeting: String = binding.setDate.text.toString()
+                var maxPeople: Int = binding.etMaxInputText.text.toString().trim().toInt()
+                var desc: String = binding.etDescInputText.text.toString().trim()
+
+                var event = EntEventModelDB(
+                    eventId,
+                    auth.currentUser?.uid.toString(),
+                    current,
+                    type,
+                    title,
+                    adress,
+                    coord,
+                    date_of_meeting,
+                    maxPeople,
+                    desc,
+                    "1",
+                    "1",
+                    "1",
+                    listOf(auth.currentUser?.uid)
+                )
+
+                dbRef.child(eventId.toString()).setValue(event).addOnSuccessListener {
+                    //do pop up notif and navigate to maps
+                }
+            }
         }
+    }
+
+    fun checkForEmpty(): Boolean {
+        var check: Boolean = true
+        if(binding.etDescInputText.text.toString().isEmpty()) {
+            setError("Введите описание!", binding.etDescInputText)
+            check = false
+        }
+        if(binding.etNameinputText.text.toString().isEmpty()) {
+            setError("Введите название!", binding.etNameinputText)
+            check = false
+        }
+        if(binding.etMaxInputText.text.toString().isEmpty()) {
+            setError("Введите количество людей!", binding.etMaxInputText)
+            check = false
+        }
+        return check
+    }
+
+    private fun setError(er: String, field: TextInputEditText) {
+        var textError: TextInputEditText = field
+        textError.error=er
     }
 
     private fun setDesignToFields() {

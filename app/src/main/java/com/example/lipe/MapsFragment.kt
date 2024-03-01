@@ -1,6 +1,7 @@
 package com.example.lipe
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.fragment.app.Fragment
@@ -11,7 +12,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.replace
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import com.example.lipe.ViewModels.AppViewModel
 import com.example.lipe.databinding.FragmentMapsBinding
 
 import com.google.android.gms.maps.GoogleMap
@@ -36,9 +41,10 @@ data class LatLngModel(
 
 class MapsFragment : Fragment() {
 
-    private lateinit var autocompleteFragment: AutocompleteSupportFragment
-
     private var _binding: FragmentMapsBinding? = null
+
+    //View Model
+    private lateinit var appVM: AppViewModel
 
     private val binding get() = _binding!!
 
@@ -71,8 +77,8 @@ class MapsFragment : Fragment() {
         })
 
         mMap.setOnMapLongClickListener { latLng ->
+            appVM.setCoord(latLng.latitude, latLng.longitude)
             CreateEventFragment.show(childFragmentManager)
-
         }
         //}
     }
@@ -84,7 +90,6 @@ class MapsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getReg = arguments?.getString("SignUpNew")
-
     }
 
     override fun onCreateView(
@@ -94,6 +99,7 @@ class MapsFragment : Fragment() {
     ): View? {
         _binding = FragmentMapsBinding.inflate(inflater, container, false)
 
+        appVM = ViewModelProvider(requireActivity()).get(AppViewModel::class.java)
         val view = binding.root
         return view
     }
@@ -104,14 +110,18 @@ class MapsFragment : Fragment() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.fragment) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
 
-        if(getReg == "success_reg") {
+        if(appVM.reg == "yes") {
             showSuccessRegWindow()
+            appVM.reg = "no"
         }
 
 
         binding.bottomNavigation.setOnItemSelectedListener {
             when(it.itemId) {
-                R.id.profile -> view.findNavController().navigate(R.id.action_mapsFragment_to_otherProfileFragment)
+                R.id.profile -> replaceFragment(ProfileFragment())
+                R.id.map -> replaceFragment(MapsFragment())
+                R.id.rating -> replaceFragment(RatingFragment())
+                //R.id.chats -> replaceFragment()
                 else -> {
 
                 }
@@ -120,11 +130,35 @@ class MapsFragment : Fragment() {
         }
     }
 
+
+
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = childFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.map, fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val backCallback = object: OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                if(childFragmentManager.backStackEntryCount > 1) {
+                    childFragmentManager.popBackStack()
+                }
+                parentFragmentManager.popBackStack()
+            }
+        }
+        activity?.onBackPressedDispatcher?.addCallback(this,backCallback)
+    }
+
+
     private fun showSuccessRegWindow() {
         val pop_up_menu = layoutInflater.inflate(R.layout.pop_up_notification_success_sign_up, null)
         val pop_up = Dialog(requireContext())
         pop_up.setContentView(pop_up_menu)
-        pop_up.setCancelable(true)
+        pop_up.setCancelable(false)
         pop_up.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         pop_up.show()
         val closeBtn = pop_up.findViewById<Button>(R.id.close_ad)

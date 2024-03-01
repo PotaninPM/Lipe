@@ -20,6 +20,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        switchTabs(0)
 //        binding.bottomNavigation.setOnItemSelectedListener {
 //            when(it.itemId) {
 //                R.id.map -> view.findNavController().navigate(R.id.action_profileFragment_to_mapsFragment)
@@ -32,6 +33,20 @@ class ProfileFragment : Fragment() {
 //        }
 
 
+    }
+    private fun switchTabs(position: Int) {
+        val fragment = when(position) {
+            0 -> EventsInProfileFragment()
+            1 -> RatingFragment()
+            2 -> SignUpFragment()
+            else -> null
+        }
+
+        fragment?.let {
+            childFragmentManager.beginTransaction()
+                .replace(R.id.switcher, it)
+                .commit()
+        }
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

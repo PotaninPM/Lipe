@@ -7,6 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".MapsFragment">
 
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <fragment
         android:id="@+id/fragment"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -39,12 +44,6 @@
 
         </androidx.cardview.widget.CardView>
 
-        <ImageView
-            android:layout_width="@dimen/_36sdp"
-            android:layout_height="@dimen/_36sdp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/_6sdp"
-            android:src="@drawable/reset_icon" />
     </LinearLayout>
 
     <HorizontalScrollView

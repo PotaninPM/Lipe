@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FFFFFF"
     tools:context=".ProfileFragment">
-
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageView6"
         android:layout_width="@dimen/_126sdp"
@@ -17,17 +17,43 @@
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/upload_photo" />
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lay1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mark Zackerberg"
-        android:textSize="@dimen/_20sdp"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:textStyle="italic"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_8sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView6">
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:fontFamily="@font/interextrabold"
+            android:gravity="center"
+            android:text="Mark Zackerberg"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_20sdp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp"
+            android:layout_gravity="center"
+            android:src="@drawable/info_pers"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView6"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -37,7 +63,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="@dimen/_6sdp"
-        app:layout_constraintTop_toBottomOf="@+id/textView6">
+        app:layout_constraintTop_toBottomOf="@+id/lay1">
 
     </LinearLayout>
 
@@ -45,10 +71,20 @@
         android:id="@+id/imageView7"
         android:layout_width="@dimen/_22sdp"
         android:layout_height="@dimen/_22sdp"
-        android:src="@drawable/menu_in_other_profile"
+        android:src="@drawable/sort"
         android:layout_marginTop="@dimen/_6sdp"
         android:layout_marginEnd="@dimen/_10sdp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="@dimen/_22sdp"
+        android:layout_height="@dimen/_22sdp"
+        android:layout_marginStart="@dimen/_6sdp"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:src="@drawable/notification"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -57,11 +93,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_16sdp"
         android:layout_marginEnd="@dimen/_16sdp"
-        android:layout_marginTop="@dimen/_8sdp"
         android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_8sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+        app:layout_constraintTop_toBottomOf="@+id/lay1">
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -76,15 +112,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textStyle="bold"
-                android:textColor="@color/black"
                 android:text="152"
-                android:textSize="@dimen/_17sdp" />
+                android:textColor="@color/black"
+                android:textSize="@dimen/_17sdp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:fontFamily="@font/nunito_sans"
                 android:text="Рейтинг"
                 android:textSize="@dimen/_15sdp" />
 
@@ -105,14 +142,15 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="15"
-                android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_17sdp" />
+                android:textSize="@dimen/_17sdp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:fontFamily="@font/nunito_sans"
                 android:text="Друзей"
                 android:textColor="#4A4949"
                 android:textSize="@dimen/_15sdp" />
@@ -132,20 +170,22 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="15"
-                android:textStyle="bold"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_17sdp" />
+                android:textSize="@dimen/_17sdp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:fontFamily="@font/nunito_sans"
                 android:text="Событий"
                 android:textSize="@dimen/_15sdp" />
 
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    ]
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/appCompatButton"
         android:layout_width="match_parent"
@@ -153,8 +193,8 @@
         android:layout_marginStart="@dimen/_16sdp"
         android:layout_marginTop="@dimen/_12sdp"
         android:layout_marginEnd="@dimen/_16sdp"
-        android:background="@drawable/add_to_friend_btn"
-        android:text="Добавить в друзья"
+        android:background="@drawable/change_data"
+        android:text="Изменить данные"
         android:textColor="@color/white"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"

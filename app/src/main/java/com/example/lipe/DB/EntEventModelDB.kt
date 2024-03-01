@@ -1,7 +1,7 @@
 package com.example.lipe.DB
 
 data class EntEventModelDB(
-    var event_id: Int,
+    var event_id: Long,
     var creator_id: String,
     var time_of_creation: String,
     var type_of_event: String,
@@ -14,5 +14,5 @@ data class EntEventModelDB(
     var photo_one_id: String,
     var photo_two_id: String,
     var photo_three_id: String,
-    var reg_people_id: List<String>
+    var reg_people_id: List<String?>
 )

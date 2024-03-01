@@ -37,10 +37,6 @@ class StartFragment : Fragment() {
         binding.nextBtn.setOnClickListener {
             view.findNavController().navigate(R.id.action_startFragment2_to_startDescFirstFragment)
         }
-
-//        binding.btnSignUp.setOnClickListener {
-//            view.findNavController().navigate(R.id.action_startFragment2_to_signUpFragment)
-//        }
     }
 
     override fun onDestroy() {

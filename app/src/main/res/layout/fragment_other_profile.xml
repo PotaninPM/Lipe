@@ -16,31 +16,35 @@
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/upload_photo" />
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Mark Zackerberg"
-        android:textSize="@dimen/_20sdp"
-        android:textColor="@color/black"
-        android:fontFamily="@font/interextrabold"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
-
+<!--    <LinearLayout-->
+<!--        android:id="@+id/lay1"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/lay1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_6sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="@dimen/_6sdp"
-        app:layout_constraintTop_toBottomOf="@+id/textView6">
+        app:layout_constraintTop_toBottomOf="@+id/imageView6">
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/interextrabold"
+            android:text="Mark Zackerberg"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_20sdp"
+            android:textStyle="bold" />
 
     </LinearLayout>
+<!--    </LinearLayout>-->
+
 
     <ImageView
         android:id="@+id/imageView7"
@@ -70,7 +74,7 @@
         android:layout_marginTop="@dimen/_6sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6">
+        app:layout_constraintTop_toBottomOf="@+id/lay1">
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -158,7 +162,6 @@
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-]
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/appCompatButton"
         android:layout_width="match_parent"

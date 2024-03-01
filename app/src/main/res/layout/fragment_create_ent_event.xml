@@ -169,7 +169,7 @@
                     app:endIconMode="custom">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etNameinput"
+                        android:id="@+id/etNameinputText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Введите название события"
@@ -266,7 +266,7 @@
                     android:layout_marginEnd="@dimen/_6sdp"/>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="start"
@@ -275,7 +275,7 @@
                     android:layout_marginTop="@dimen/_8sdp">
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/etMaxInputLay"
-                        android:layout_width="@dimen/_176sdp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         app:startIconDrawable="@drawable/profile_icon"
