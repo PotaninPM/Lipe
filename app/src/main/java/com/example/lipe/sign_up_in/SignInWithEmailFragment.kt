@@ -1,27 +1,25 @@
-package com.example.lipe
+package com.example.lipe.sign_up_in
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import com.example.lipe.databinding.FragmentSignInWithEmailBinding
+import com.example.lipe.databinding.FragmentSignUpBinding
 import com.example.lipe.databinding.FragmentStartBinding
-import com.google.firebase.auth.FirebaseAuth
 
-class StartFragment : Fragment() {
+class SignInWithEmailFragment : Fragment() {
 
-    private var _binding: FragmentStartBinding? = null
+    private var _binding: FragmentSignInWithEmailBinding? = null
     private val binding get() = _binding!!
-
-    private lateinit var auth: FirebaseAuth
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentStartBinding.inflate(inflater, container, false)
+        _binding = FragmentSignInWithEmailBinding.inflate(inflater, container, false)
+
         val view = binding.root
         return view
     }
@@ -29,14 +27,13 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        auth = FirebaseAuth.getInstance()
-        if(auth.currentUser != null) {
-            view.findNavController().navigate(R.id.action_startFragment2_to_mapsFragment)
-        }
+//        binding.btnSignIn.setOnClickListener {
+//            view.findNavController().navigate(R.id.action_signInWithEmailFragment_to_mapsFragment)
+//        }
 
-        binding.nextBtn.setOnClickListener {
-            view.findNavController().navigate(R.id.action_startFragment2_to_startDescFirstFragment)
-        }
+//        binding.txtNoAc.setOnClickListener {
+//            view.findNavController().navigate(R.id.action_signInWithEmailFragment_to_signUpFragment)
+//        }
     }
 
     override fun onDestroy() {

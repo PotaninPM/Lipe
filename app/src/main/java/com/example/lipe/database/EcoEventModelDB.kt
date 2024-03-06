@@ -1,4 +1,4 @@
-package com.example.lipe.DB
+package com.example.lipe.database
 
 data class EcoEventModelDB(
     var event_id: Int,

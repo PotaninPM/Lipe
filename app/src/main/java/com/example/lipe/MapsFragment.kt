@@ -13,10 +13,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.replace
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import com.example.lipe.ViewModels.AppViewModel
+import com.example.lipe.chats.ChatsFragment
+import com.example.lipe.create_events.CreateEventFragment
 import com.example.lipe.databinding.FragmentMapsBinding
 
 import com.google.android.gms.maps.GoogleMap
@@ -24,7 +24,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -32,7 +31,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.getValue
 
 data class LatLngModel(
     val latitude: Double,
@@ -121,7 +119,8 @@ class MapsFragment : Fragment() {
                 R.id.profile -> replaceFragment(ProfileFragment())
                 R.id.map -> replaceFragment(MapsFragment())
                 R.id.rating -> replaceFragment(RatingFragment())
-                //R.id.chats -> replaceFragment()
+                R.id.chats -> replaceFragment(ChatsFragment())
+                R.id.add -> replaceFragment(GetPointsFragment())
                 else -> {
 
                 }

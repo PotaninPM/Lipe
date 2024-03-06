@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.lipe.databinding.FragmentOtherProfileBinding
-import com.example.lipe.databinding.FragmentSignUpBinding
+import com.example.lipe.sign_up_in.SignUpFragment
 import com.google.android.material.tabs.TabLayout
 
 class OtherProfileFragment : Fragment() {
@@ -31,10 +31,10 @@ class OtherProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        switchTabs(0)
+        //switchTabs(0)
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                switchTabs(tab.position)
+                //switchTabs(tab.position)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {

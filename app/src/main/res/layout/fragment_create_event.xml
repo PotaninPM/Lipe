@@ -7,7 +7,7 @@
     android:background="@drawable/bottomsheet_event"
     android:id="@+id/all_fields"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-    tools:context=".CreateEventFragment">
+    tools:context=".create_events.CreateEventFragment">
 
         <LinearLayout
             android:id="@+id/constraintLayoutMain"
@@ -43,15 +43,6 @@
                     android:fontFamily="@font/nunito_sans"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/close"
-                    android:layout_width="@dimen/_26sdp"
-                    android:layout_height="@dimen/_26sdp"
-                    android:layout_gravity="end"
-                    android:src="@drawable/close"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
             <LinearLayout android:gravity="center_horizontal"

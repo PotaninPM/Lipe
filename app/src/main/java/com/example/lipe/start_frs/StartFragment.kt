@@ -1,4 +1,4 @@
-package com.example.lipe
+package com.example.lipe.start_frs
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,20 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
-import com.example.lipe.databinding.FragmentSignInWithEmailBinding
-import com.example.lipe.databinding.FragmentSignUpBinding
+import com.example.lipe.R
 import com.example.lipe.databinding.FragmentStartBinding
+import com.google.firebase.auth.FirebaseAuth
 
-class SignInWithEmailFragment : Fragment() {
+class StartFragment : Fragment() {
 
-    private var _binding: FragmentSignInWithEmailBinding? = null
+    private var _binding: FragmentStartBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var auth: FirebaseAuth
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSignInWithEmailBinding.inflate(inflater, container, false)
-
+        _binding = FragmentStartBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }
@@ -27,13 +28,14 @@ class SignInWithEmailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        binding.btnSignIn.setOnClickListener {
-//            view.findNavController().navigate(R.id.action_signInWithEmailFragment_to_mapsFragment)
-//        }
+        auth = FirebaseAuth.getInstance()
+        if(auth.currentUser != null) {
+            view.findNavController().navigate(R.id.action_startFragment2_to_mapsFragment)
+        }
 
-//        binding.txtNoAc.setOnClickListener {
-//            view.findNavController().navigate(R.id.action_signInWithEmailFragment_to_signUpFragment)
-//        }
+        binding.nextBtn.setOnClickListener {
+            view.findNavController().navigate(R.id.action_startFragment2_to_startDescFirstFragment)
+        }
     }
 
     override fun onDestroy() {

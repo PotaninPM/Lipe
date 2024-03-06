@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/signInWithEmailFragment"
-        android:name="com.example.lipe.SignInWithEmailFragment"
+        android:name="com.example.lipe.sign_up_in.SignInWithEmailFragment"
         android:label="fragment_sign_in_with_email"
         tools:layout="@layout/fragment_sign_in_with_email" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.example.lipe.SignUpFragment"
+        android:name="com.example.lipe.sign_up_in.SignUpFragment"
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" >
         <action
@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpDescFragment"
-        android:name="com.example.lipe.SignUpDescFragment"
+        android:name="com.example.lipe.sign_up_in.SignUpDescFragment"
         android:label="fragment_sign_up_desc"
         tools:layout="@layout/fragment_sign_up_desc" >
         <action
@@ -49,7 +49,7 @@
     </fragment>
     <fragment
         android:id="@+id/startFragment2"
-        android:name="com.example.lipe.StartFragment"
+        android:name="com.example.lipe.start_frs.StartFragment"
         android:label="StartFragment" >
         <action
             android:id="@+id/action_startFragment2_to_startDescFirstFragment"
@@ -99,7 +99,7 @@
     </fragment>
     <fragment
         android:id="@+id/startDescFirstFragment"
-        android:name="com.example.lipe.StartDescFirstFragment"
+        android:name="com.example.lipe.start_frs.StartDescFirstFragment"
         android:label="fragment_start_desc_first"
         tools:layout="@layout/fragment_start_desc_first" >
         <action
@@ -108,7 +108,7 @@
     </fragment>
     <fragment
         android:id="@+id/startDescSecondFragment"
-        android:name="com.example.lipe.StartDescSecondFragment"
+        android:name="com.example.lipe.start_frs.StartDescSecondFragment"
         android:label="fragment_start_desc_second"
         tools:layout="@layout/fragment_start_desc_second" >
         <action
@@ -117,7 +117,7 @@
     </fragment>
     <fragment
         android:id="@+id/startDescThirdFragment"
-        android:name="com.example.lipe.StartDescThirdFragment"
+        android:name="com.example.lipe.start_frs.StartDescThirdFragment"
         android:label="fragment_start_desc_third"
         tools:layout="@layout/fragment_start_desc_third" >
         <action
@@ -155,7 +155,7 @@
         tools:layout="@layout/fragment_rating" />
     <fragment
         android:id="@+id/createEventFragment"
-        android:name="com.example.lipe.CreateEventFragment"
+        android:name="com.example.lipe.create_events.CreateEventFragment"
         android:label="fragment_create_event"
         tools:layout="@layout/fragment_create_event" >
         <action

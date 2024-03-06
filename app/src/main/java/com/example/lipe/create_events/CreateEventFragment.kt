@@ -1,17 +1,13 @@
-package com.example.lipe
+package com.example.lipe.create_events
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Toast
 import androidx.fragment.app.FragmentManager
-import androidx.navigation.findNavController
+import com.example.lipe.R
 import com.example.lipe.databinding.FragmentCreateEventBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.textfield.TextInputLayout
 
 class CreateEventFragment : BottomSheetDialogFragment() {
 
@@ -31,11 +27,6 @@ class CreateEventFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         switchFragmentsFields(0)
-
-
-        binding.close.setOnClickListener {
-            dismiss()
-        }
 
         binding.btnEnt.setBackgroundColor(getResources().getColor(R.color.invisible))
         binding.btnEnt.setTextColor(getResources().getColor(R.color.black))

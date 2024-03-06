@@ -1,10 +1,11 @@
 package com.example.lipe.ViewModels
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class AppViewModel: ViewModel() {
 
-//    var name: Mult = "";
     var reg: String = "no"
 
     var latitude: Double = 0.0

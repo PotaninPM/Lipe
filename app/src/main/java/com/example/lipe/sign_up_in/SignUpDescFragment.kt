@@ -1,14 +1,7 @@
-package com.example.lipe
+package com.example.lipe.sign_up_in
 
-import android.app.Dialog
 import android.content.Context
-import android.content.Intent
-import android.graphics.Camera
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.hardware.camera2.CameraDevice
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,12 +12,10 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
-import androidx.navigation.findNavController
+import com.example.lipe.R
 import com.example.lipe.databinding.FragmentSignUpDescBinding
-import com.example.lipe.databinding.FragmentStartDescFirstBinding
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 
 class SignUpDescFragment : Fragment() {
 
@@ -119,7 +110,8 @@ class SignUpDescFragment : Fragment() {
 
     data class SpinnerItem(val name: String, val imageResourceId: Int)
 
-    private class CustomAdapter(context: Context, private val items: List<SpinnerItem>) : ArrayAdapter<SpinnerItem>(context, R.layout.spinner_multi_chose, items) {
+    private class CustomAdapter(context: Context, private val items: List<SpinnerItem>) : ArrayAdapter<SpinnerItem>(context,
+        R.layout.spinner_multi_chose, items) {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.spinner_multi_chose, parent, false)

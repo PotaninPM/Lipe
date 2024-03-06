@@ -1,4 +1,4 @@
-package com.example.lipe
+package com.example.lipe.sign_up_in
 
 import android.os.Build
 import android.os.Bundle
@@ -10,8 +10,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import com.example.lipe.DB.User
+import com.example.lipe.R
+import com.example.lipe.database.User
 import com.example.lipe.ViewModels.AppViewModel
 import com.example.lipe.databinding.FragmentSignUpBinding
 import com.google.android.material.textfield.TextInputEditText

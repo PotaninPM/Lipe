@@ -5,10 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
-import com.example.lipe.databinding.FragmentMapsBinding
 import com.example.lipe.databinding.FragmentProfileBinding
-import com.google.android.gms.maps.SupportMapFragment
+import com.example.lipe.sign_up_in.SignUpFragment
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
@@ -20,6 +18,9 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+//        binding.more.setOnClickListener {
+//
+//        }
         switchTabs(0)
 //        binding.bottomNavigation.setOnItemSelectedListener {
 //            when(it.itemId) {

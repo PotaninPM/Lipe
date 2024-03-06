@@ -1,4 +1,4 @@
-package com.example.lipe
+package com.example.lipe.create_events
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -19,11 +19,14 @@ import android.widget.TextView
 import android.widget.TimePicker
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
-import com.example.lipe.DB.EntEventModelDB
+import com.example.lipe.R
 import com.example.lipe.ViewModels.AppViewModel
 import com.example.lipe.databinding.FragmentCreateEntEventBinding
+import com.example.lipe.database.EntEventModelDB
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -32,6 +35,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.TimeZone
 
 var type: String = "null"
 
@@ -76,12 +81,6 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
     var eventId: Long = 0
 
-    var year = 0
-    var month = 0
-    var day = 0
-    var hour = 0
-    var minute = 0
-
     var savedYear = 0
     var savedMonth = 0
     var savedDay = 0
@@ -96,6 +95,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         _binding = FragmentCreateEntEventBinding.inflate(inflater, container, false)
 
         setDesignToFields()
@@ -105,8 +105,9 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         val adapter = CustomAdapter(requireContext(), items)
 
         spinner.adapter = adapter
-        selectDate()
-
+        binding.setDateLay.setOnClickListener {
+            getDateTime()
+        }
         val view = binding.root
         return view
     }
@@ -207,7 +208,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     }
 
     data class SpinnerItem(val name: String, val imageResourceId: Int)
-    class CustomAdapter(context: Context, private val items: List<SpinnerItem>) : ArrayAdapter<SpinnerItem>(context, R.layout.spinner_one_chose, items) {
+    class CustomAdapter(context: Context, private val items: List<SpinnerItem>) : ArrayAdapter<SpinnerItem>(context,
+        R.layout.spinner_one_chose, items) {
         lateinit var type: String
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.spinner_one_chose, parent, false)
@@ -227,39 +229,74 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             return getView(position, convertView, parent)
         }
     }
-
     private fun getDateTime() {
-        val calendar = Calendar.getInstance()
-        day = calendar.get(Calendar.DAY_OF_MONTH)
-        month = calendar.get(Calendar.MONTH)
-        year = calendar.get(Calendar.YEAR)
-        day = calendar.get(Calendar.DAY_OF_MONTH)
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Выберите дату")
+                .build()
 
-        hour = calendar.get(Calendar.HOUR)
-        minute = calendar.get(Calendar.MINUTE)
-    }
+        datePicker.addOnPositiveButtonClickListener {
+            val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+            calendar.time = Date(it)
+            savedYear = calendar.get(Calendar.YEAR)
+            savedMonth = calendar.get(Calendar.MONTH)
+            savedDay = calendar.get(Calendar.DAY_OF_MONTH)
 
-    private fun selectDate() {
-        binding.setDateLay.setOnClickListener {
-            getDateTime()
-            DatePickerDialog(requireContext(), this, year, month, day).show()
+            val timePicker = MaterialTimePicker.Builder()
+                .setTimeFormat(TimeFormat.CLOCK_24H)
+                //.setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
+                .setTitleText("Выберите время")
+                .build()
+
+            timePicker.addOnPositiveButtonClickListener {
+                savedHour = timePicker.hour
+                savedMinute = timePicker.minute
+                onTimeSet_()
+            }
+            timePicker.show(childFragmentManager, "time_picker_tag")
         }
-    }
-    override fun onDateSet(p0: DatePicker?, year: Int, month: Int, day: Int) {
-        savedYear = year
-        savedMonth = month
-        savedDay = day
 
-        getDateTime()
-        TimePickerDialog(requireContext(), this, hour, minute, true).show()
+        datePicker.show(childFragmentManager, "date_picker_tag")
     }
-
-    override fun onTimeSet(p0: TimePicker?, hour: Int, minute: Int) {
-        savedHour = hour
-        savedMinute = minute
+    fun onTimeSet_() {
         binding.setDateLay.setBackgroundResource(R.drawable.choose_date_success)
         binding.setDate.setText("$savedYear.$savedMonth.$savedDay в $savedHour:$savedMinute")
     }
+
+    override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
+        TODO("Not yet implemented")
+    }
+    override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
+        TODO("Not yet implemented")
+    }
+
+
+//    private fun getDateTime() {
+//        val datePicker =
+//            MaterialDatePicker.Builder.datePicker()
+//                .setTitleText("Выберите дату")
+//                .build()
+//        val calendar = Calendar.getInstance()
+//        day = calendar.get(Calendar.DAY_OF_MONTH)
+//        month = calendar.get(Calendar.MONTH)
+//        year = calendar.get(Calendar.YEAR)
+//        day = calendar.get(Calendar.DAY_OF_MONTH)
+//
+//        hour = calendar.get(Calendar.HOUR)
+//        minute = calendar.get(Calendar.MINUTE)
+//    }
+
+
+
+//    override fun onDateSet(p0: DatePicker?, year: Int, month: Int, day: Int) {
+//        savedYear = year
+//        savedMonth = month
+//        savedDay = day
+//
+//        getDateTime()
+//        TimePickerDialog(requireContext(), this, hour, minute, true).show()
+//    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
