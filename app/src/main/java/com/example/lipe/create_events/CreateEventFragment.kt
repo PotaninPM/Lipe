@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import com.example.lipe.R
+import com.example.lipe.create_events.event_eco.CreateEcoEventFragment
+import com.example.lipe.create_events.event_ent.CreateEntEventFragment
+import com.example.lipe.create_events.event_help.CreateHelpEventFragment
 import com.example.lipe.databinding.FragmentCreateEventBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 

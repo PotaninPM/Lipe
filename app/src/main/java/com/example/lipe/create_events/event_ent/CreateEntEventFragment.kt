@@ -1,8 +1,11 @@
-package com.example.lipe.create_events
+package com.example.lipe.create_events.event_ent
 
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.Instrumentation.ActivityResult
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -17,10 +20,12 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.TimePicker
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.R
-import com.example.lipe.ViewModels.AppViewModel
+import com.example.lipe.viewModels.AppViewModel
 import com.example.lipe.databinding.FragmentCreateEntEventBinding
 import com.example.lipe.database.EntEventModelDB
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -33,18 +38,22 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.TimeZone
 
-var type: String = "null"
 
 class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     //view model
     private lateinit var appVM: AppViewModel
 
     private lateinit var spinner: Spinner
+
+    private var storage = Firebase.storage
 
     private var _binding: FragmentCreateEntEventBinding? = null
     private val binding get() = _binding!!
@@ -71,8 +80,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         SpinnerItem("Настольные игры", R.drawable.board_game),
         SpinnerItem("Мобильные игры", R.drawable.mobile_game),
         SpinnerItem("Шахматы", R.drawable.chess_2),
-        SpinnerItem("Программирование", R.drawable.programming),
-        SpinnerItem("Ничего", R.drawable.remove),
+        SpinnerItem("Программирование", R.drawable.programming)
     )
 
     private lateinit var dbRef: DatabaseReference
@@ -98,6 +106,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
         _binding = FragmentCreateEntEventBinding.inflate(inflater, container, false)
 
+        storage = FirebaseStorage.getInstance()
+
         setDesignToFields()
 
         spinner = binding.spinner1
@@ -108,9 +118,17 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         binding.setDateLay.setOnClickListener {
             getDateTime()
         }
+        val gallery = registerForActivityResult(
+            ActivityResultContracts.GetContent(),
+            ActivityResultCallback {  }
+        )
+        binding.photoLay1.setOnClickListener {
+
+        }
         val view = binding.root
         return view
     }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -155,21 +173,24 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                 var maxPeople: Int = binding.etMaxInputText.text.toString().trim().toInt()
                 var desc: String = binding.etDescInputText.text.toString().trim()
 
+                var type: String = "ent"
+                var sport_type: String = "-"
+
                 var event = EntEventModelDB(
                     eventId,
+                    type,
                     auth.currentUser?.uid.toString(),
                     current,
-                    type,
+                    sport_type,
                     title,
                     adress,
                     coord,
                     date_of_meeting,
                     maxPeople,
                     desc,
-                    "1",
-                    "1",
-                    "1",
-                    listOf(auth.currentUser?.uid)
+                    listOf("1", "2", "3"),
+                    listOf(auth.currentUser?.uid),
+                    1
                 )
 
                 dbRef.child(eventId.toString()).setValue(event).addOnSuccessListener {
@@ -210,6 +231,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     data class SpinnerItem(val name: String, val imageResourceId: Int)
     class CustomAdapter(context: Context, private val items: List<SpinnerItem>) : ArrayAdapter<SpinnerItem>(context,
         R.layout.spinner_one_chose, items) {
+
         lateinit var type: String
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.spinner_one_chose, parent, false)
@@ -221,10 +243,13 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             val item = getItem(position)
             textView.text = item?.name
             type = item?.name.toString()
+
             imageView.setImageResource(item?.imageResourceId ?: 0)
+
 
             return view
         }
+
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             return getView(position, convertView, parent)
         }
@@ -269,33 +294,6 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
         TODO("Not yet implemented")
     }
-
-
-//    private fun getDateTime() {
-//        val datePicker =
-//            MaterialDatePicker.Builder.datePicker()
-//                .setTitleText("Выберите дату")
-//                .build()
-//        val calendar = Calendar.getInstance()
-//        day = calendar.get(Calendar.DAY_OF_MONTH)
-//        month = calendar.get(Calendar.MONTH)
-//        year = calendar.get(Calendar.YEAR)
-//        day = calendar.get(Calendar.DAY_OF_MONTH)
-//
-//        hour = calendar.get(Calendar.HOUR)
-//        minute = calendar.get(Calendar.MINUTE)
-//    }
-
-
-
-//    override fun onDateSet(p0: DatePicker?, year: Int, month: Int, day: Int) {
-//        savedYear = year
-//        savedMonth = month
-//        savedDay = day
-//
-//        getDateTime()
-//        TimePickerDialog(requireContext(), this, hour, minute, true).show()
-//    }
 
     override fun onDestroy() {
         super.onDestroy()

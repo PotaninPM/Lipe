@@ -120,7 +120,7 @@ class SignUpDescFragment : Fragment() {
             val imageView = view.findViewById<ImageView>(R.id.imageView)
             val textView = view.findViewById<TextView>(R.id.textView)
 
-            if (position == 0) {
+            if(position == 0) {
                 checkBox.visibility = View.GONE
             } else {
                 checkBox.visibility = View.VISIBLE

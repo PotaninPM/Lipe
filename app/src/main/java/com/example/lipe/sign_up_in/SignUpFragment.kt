@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.lipe.R
 import com.example.lipe.database.User
-import com.example.lipe.ViewModels.AppViewModel
+import com.example.lipe.viewModels.AppViewModel
 import com.example.lipe.databinding.FragmentSignUpBinding
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth

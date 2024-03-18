@@ -37,7 +37,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/seacrh"
+                android:id="@+id/autocomplete_fragment"
                 android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -59,6 +59,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
             <LinearLayout
+                android:id="@+id/all_events"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@drawable/vary_of_events"
@@ -80,6 +81,31 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/friends"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:background="@drawable/vary_of_events"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:src="@drawable/friends_img"
+                    android:layout_marginLeft="@dimen/_6sdp"
+                    android:layout_gravity="center"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Друзья"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/eco_events"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_6sdp"
@@ -103,6 +129,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ent_events"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_6sdp"
@@ -126,6 +153,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/help_events"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_6sdp"

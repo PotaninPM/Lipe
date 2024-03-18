@@ -12,30 +12,44 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
-import com.example.lipe.ViewModels.AppViewModel
+import androidx.lifecycle.lifecycleScope
+import com.example.lipe.viewModels.AppViewModel
 import com.example.lipe.chats.ChatsFragment
 import com.example.lipe.create_events.CreateEventFragment
+import com.example.lipe.database.EntEventModelDB
 import com.example.lipe.databinding.FragmentMapsBinding
+import com.example.lipe.view_events.EventFragment
+import com.example.lipe.viewModels.EventEntVM
+import com.example.lipe.viewModels.SaveStateMapsVM
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Status
+import com.google.android.gms.maps.CameraUpdateFactory
 
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.gms.measurement.api.AppMeasurementSdk.ConditionalUserProperty.NAME
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.PlaceTypes.ADDRESS
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.FetchPlaceResponse
+import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
-
-data class LatLngModel(
-    val latitude: Double,
-    val longitude: Double
-)
+import java.lang.reflect.Field
 
 class MapsFragment : Fragment() {
 
@@ -44,13 +58,15 @@ class MapsFragment : Fragment() {
     //View Model
     private lateinit var appVM: AppViewModel
 
+    private lateinit var eventEntVM: EventEntVM
+
+    private lateinit var saveStateMapVM: SaveStateMapsVM
+
     private val binding get() = _binding!!
 
     private var getReg: String ?= null
 
     private lateinit var mMap: GoogleMap
-
-    private lateinit var bottomSheet: BottomSheetDialog
 
     private  lateinit var dbRef: DatabaseReference
 
@@ -58,6 +74,7 @@ class MapsFragment : Fragment() {
         mMap = googleMap
         dbRef = FirebaseDatabase.getInstance().getReference("current_events")
 
+        // show all markers on map
         dbRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for(eventSnapshot in dataSnapshot.children) {
@@ -78,16 +95,79 @@ class MapsFragment : Fragment() {
             appVM.setCoord(latLng.latitude, latLng.longitude)
             CreateEventFragment.show(childFragmentManager)
         }
-        //}
+
+        mMap.setOnMarkerClickListener { marker ->
+
+            val markerPosition = marker.position
+
+            val latitude = markerPosition.latitude
+            val longitude = markerPosition.longitude
+
+            searchEvent(latitude, longitude) { ready ->
+                EventFragment.show(childFragmentManager)
+            }
+
+            true
+        }
     }
+
+
+    //get full info about event and write to VM
+
+    //callback: (event: EntEventModelDB) -> Unit
+
+    //search event by coordinates
+    private fun searchEvent(coord1: Double, coord2: Double, callback: (ready: Boolean) -> Unit) {
+        dbRef = FirebaseDatabase.getInstance().getReference("current_events")
+
+        dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for(eventSnapshot in dataSnapshot.children) {
+                    val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
+
+                    if (coordinates!![0] == coord1 && coordinates[1] == coord2) {
+                        var type = eventSnapshot.child("type_of_event").value.toString()
+                        if(type == "ent") {
+                            var id: Int = Integer.valueOf(eventSnapshot.child("event_id").value.toString())
+                            var maxPeople: Int = eventSnapshot.child("max_people").value.toString().toInt()
+                            var title = eventSnapshot.child("title").value.toString()
+                            val description = eventSnapshot.child("description").value.toString()
+                            val creator_id = eventSnapshot.child("creator_id").value.toString()
+                            var photos = listOf("1")
+                            var peopleGo = listOf("1")
+                            var adress = eventSnapshot.child("adress").value.toString()
+                            var freePlaces = maxPeople - eventSnapshot.child("amount_reg_people").value.toString().toInt()
+                            var time_of_creation = eventSnapshot.child("time_of_creation").value.toString()
+                            val date_of_meeeting = eventSnapshot.child("date_of_meet").value.toString()
+                            var type_sport = eventSnapshot.child("sport_type").value.toString()
+                            var amount_reg_people:Int = Integer.valueOf(eventSnapshot.child("amount_reg_people").value.toString())
+
+                            //eventEntVM.maxPeople = maxPeople
+
+                            eventEntVM.setInfo(id, maxPeople, title, creator_id, photos, peopleGo, adress, freePlaces, description, time_of_creation, date_of_meeeting, type_sport, amount_reg_people)
+                        } else if(type == "eco") {
+                            //TODO
+                        }
+                        callback(true)
+                        break
+                    }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
+            }
+        })
+    }
+
 
     private fun addMarker(latLng: LatLng) {
         mMap.addMarker(MarkerOptions().position(latLng))
+        //?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.basketball_32))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getReg = arguments?.getString("SignUpNew")
     }
 
     override fun onCreateView(
@@ -98,20 +178,44 @@ class MapsFragment : Fragment() {
         _binding = FragmentMapsBinding.inflate(inflater, container, false)
 
         appVM = ViewModelProvider(requireActivity()).get(AppViewModel::class.java)
+        eventEntVM = ViewModelProvider(requireActivity()).get(EventEntVM::class.java)
+        saveStateMapVM = ViewModelProvider(requireActivity()).get(SaveStateMapsVM::class.java)
+
         val view = binding.root
         return view
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.fragment) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
 
+//        val placeId = "ChIJgUbEo8cfqokR5lP9_Wh_DaM"
+//        val placeFields = listOf(Place.Field.ID, Place.Field.NAME)
+//
+//        val placesClient: PlacesClient = Places.createClient(requireActivity())
+//// Construct a request object, passing the place ID and fields array.
+//        val request = FetchPlaceRequest.newInstance(placeId, placeFields)
+//
+//        placesClient.fetchPlace(request)
+//            .addOnSuccessListener { response: FetchPlaceResponse ->
+//                val place = response.place
+//                Log.i("INFOG", "Place found: ${place.name}")
+//            }.addOnFailureListener { exception: Exception ->
+//                if (exception is ApiException) {
+//                    Log.e("INFOG", "Place not found: ${exception.message}")
+//                    val statusCode = exception.statusCode
+//                }
+//            }
+
         if(appVM.reg == "yes") {
             showSuccessRegWindow()
             appVM.reg = "no"
         }
+
+//        binding.entEvents.setOnClickListener {
+//            binding.entEvents.setBackgroundColor(R.drawable.chosen_type)
+//        }
 
 
         binding.bottomNavigation.setOnItemSelectedListener {
@@ -120,7 +224,7 @@ class MapsFragment : Fragment() {
                 R.id.map -> replaceFragment(MapsFragment())
                 R.id.rating -> replaceFragment(RatingFragment())
                 R.id.chats -> replaceFragment(ChatsFragment())
-                R.id.add -> replaceFragment(GetPointsFragment())
+                //R.id.add -> replaceFragment(GetPointsFragment())
                 else -> {
 
                 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@drawable/bottomsheet_event"
+android:id="@+id/all_fields"
+app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+tools:context=".view_events.EventFragment">
+
+<LinearLayout
+    android:id="@+id/constraintLayoutMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/lineVectorOne"
+        android:layout_width="@dimen/_56sdp"
+        android:layout_height="@dimen/_3sdp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:background="#959494" />
+
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/create_event_lay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/_6sdp"/>
+</LinearLayout>
+</LinearLayout>

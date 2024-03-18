@@ -15,7 +15,7 @@
         android:id="@+id/add"
         android:enabled="true"
         android:icon="@drawable/add"
-        android:title="Баллы" />
+        android:title="Что-то" />
     <item
         android:id="@+id/chats"
         android:enabled="true"

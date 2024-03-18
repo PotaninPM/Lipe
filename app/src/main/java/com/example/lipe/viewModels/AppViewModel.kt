@@ -1,7 +1,5 @@
-package com.example.lipe.ViewModels
+package com.example.lipe.viewModels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class AppViewModel: ViewModel() {

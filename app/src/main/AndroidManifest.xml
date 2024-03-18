@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Lipe"
         tools:targetApi="34" >
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAF62k_QkIxOukqk7MuSlYFtj1T-4CNojk" />

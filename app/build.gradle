@@ -31,6 +31,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        dataBinding true
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -38,11 +39,26 @@ android {
 }
 
 dependencies {
+
+    implementation 'com.google.android.libraries.places:places:3.3.0'
+
+    //multiple markers
+    implementation 'com.google.maps.android:android-maps-utils:1.1.0'
+
+    //ViewModel
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.7.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0"
+
+    implementation("androidx.activity:activity-ktx:1.8.2")
+
+    //animation
+    implementation 'com.airbnb.android:lottie:6.4.0'
     //size
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
 
     // Import the Firebase BoM
-    implementation platform('com.google.firebase:firebase-bom:32.7.3')
+    implementation platform('com.google.firebase:firebase-bom:32.7.4')
 
     // When using the BoM, don't specify versions in Firebase dependencies
     implementation 'com.google.firebase:firebase-analytics'

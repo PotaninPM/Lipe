@@ -1,4 +1,4 @@
-package com.example.lipe.create_events
+package com.example.lipe.create_events.event_eco
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
