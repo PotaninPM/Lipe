@@ -71,7 +71,7 @@
                     android:clickable="true"
                     android:textSize="@dimen/_13sdp"
                     android:fontFamily="@font/inter"
-                    android:text="20 идут"
+                    android:text="@{viewModel.amount_reg_people.toString()}"
                     android:focusable="true" />
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -149,7 +149,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunitosansextrabold"
                         android:gravity="center"
-                        android:text="Mark Zakerberg"
+                        android:text="@{viewModel.creatorUsername}"
                         android:textSize="@dimen/_14sdp" />
 
                     <TextView
@@ -161,6 +161,7 @@
                 </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/addToFriendBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/_26sdp"
                     android:layout_marginEnd="@dimen/_6sdp"

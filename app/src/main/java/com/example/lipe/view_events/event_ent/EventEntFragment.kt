@@ -7,10 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.example.lipe.databinding.FragmentEventEntBinding
 import com.example.lipe.viewModels.EventEntVM
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -26,6 +29,8 @@ class EventEntFragment : BottomSheetDialogFragment() {
     private lateinit var dbRef: DatabaseReference
 
     private lateinit var dbRef_event: DatabaseReference
+
+    private lateinit var dbRef_user: DatabaseReference
 
     private var _binding: FragmentEventEntBinding? = null
     private val binding get() = _binding!!
@@ -55,14 +60,29 @@ class EventEntFragment : BottomSheetDialogFragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = eventEntVM
+
+            Log.d("INFOG", eventEntVM.latitude.toString())
+            searchEvent(eventEntVM.latitude, eventEntVM.longtitude)
         }
+
+//        eventEntVM.title1.observe(viewLifecycleOwner, Observer { title ->
+//            // Обновление заголовка в вашем пользовательском интерфейсе
+//            binding.title.text = title
+//        })
 
         binding.btnRegToEvent.setOnClickListener {
             val curUid = auth.currentUser?.uid
             if (curUid != null) {
-                checkIfUserAlreadyReg(curUid, eventEntVM.id) { isUserAlreadyRegistered ->
+                checkIfUserAlreadyReg(curUid, eventEntVM.id.value!!) { isUserAlreadyRegistered ->
                     if (!isUserAlreadyRegistered) {
-                        regUserToEvent(curUid)
+                        regUserToEvent(curUid) { result ->
+                            if(result == true) {
+                                setDialog("Успешная регистрация", "Поздравляем, регистрация на событие прошла успешно", "Отлично!")
+                            } else {
+                                //fail
+                                setDialog("Ошибка при регистрации", "Что-то пошло не так, попробуйте зарегистрироваться еще раз","Хорошо")
+                            }
+                        }
                     } else {
                         Log.d("INFOG", "Пользователь уже зарегистрирован на мероприятие")
                         //function to refuse of event
@@ -73,6 +93,23 @@ class EventEntFragment : BottomSheetDialogFragment() {
             }
         }
     }
+
+    private fun setDialog(title: String, desc: String, btnText: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(title)
+            .setMessage(desc)
+            .setPositiveButton(btnText) { dialog, which ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun checkForUpdates() {
+//        eventEntVM.title1.observe(viewLifecycleOwner, Observer { title ->
+//            binding.title.text = title
+//        })
+    }
+
 
     private fun checkIfUserAlreadyReg(curUid: String, eventId: Int, callback: (Boolean) -> Unit) {
         dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
@@ -97,29 +134,87 @@ class EventEntFragment : BottomSheetDialogFragment() {
         })
     }
 
-    private fun regUserToEvent(curUid: String) {
+    private fun searchEvent(coord1: Double, coord2: Double) {
+        dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
+        dbRef_user = FirebaseDatabase.getInstance().getReference("users")
+
+        dbRef_event.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for(eventSnapshot in dataSnapshot.children) {
+                    val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
+
+                    if (coordinates!![0] == coord1 && coordinates[1] == coord2) {
+                        var type = eventSnapshot.child("type_of_event").value.toString()
+                        if(type == "ent") {
+                            var id: Int = Integer.valueOf(eventSnapshot.child("event_id").value.toString())
+                            var maxPeople: Int = eventSnapshot.child("max_people").value.toString().toInt()
+                            var title = eventSnapshot.child("title").value.toString()
+                            val description = eventSnapshot.child("description").value.toString()
+                            val creator_uid = eventSnapshot.child("creator_id").value.toString()
+                            var photos = listOf("1")
+                            var peopleGo = listOf("1")
+                            var adress = eventSnapshot.child("adress").value.toString()
+                            var freePlaces = maxPeople - eventSnapshot.child("amount_reg_people").value.toString().toInt()
+                            var time_of_creation = eventSnapshot.child("time_of_creation").value.toString()
+                            val date_of_meeeting = eventSnapshot.child("date_of_meet").value.toString()
+                            var type_sport = eventSnapshot.child("sport_type").value.toString()
+                            var amount_reg_people:Int = Integer.valueOf(eventSnapshot.child("amount_reg_people").value.toString())
+
+                            dbRef_user.addValueEventListener(object : ValueEventListener {
+                                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                    for (eventSnapshot in dataSnapshot.children) {
+                                        if(creator_uid == eventSnapshot.child("uid").value) {
+                                            val creatorUsername = eventSnapshot.child("username").value.toString()
+                                            eventEntVM.setInfo(id, maxPeople, title, creator_uid, creatorUsername, photos, peopleGo, adress, freePlaces, description, time_of_creation, date_of_meeeting, type_sport, amount_reg_people)
+                                            break
+                                        }
+                                    }
+                                }
+
+                                override fun onCancelled(error: DatabaseError) {
+                                    Log.e("INFOG", "ErrorEventEntFragm")
+                                }
+                            })
+                        } else if(type == "eco") {
+                            //TODO
+                        }
+                        break
+                    }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
+            }
+        })
+    }
+
+    private fun regUserToEvent(curUid: String, callback: (Boolean) -> Unit) {
         dbRef = FirebaseDatabase.getInstance().getReference("users")
         dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
 
-        dbRef_event.child(eventEntVM.id.toString()).addListenerForSingleValueEvent(object : ValueEventListener {
+        dbRef_event.child(eventEntVM.id.value.toString()).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val event_id = Integer.valueOf(dataSnapshot.child("event_id").value.toString())
-                    val maxPeople:Int = Integer.valueOf(dataSnapshot.child("max_people").value.toString())
-                    val amountPeople:Int = Integer.valueOf(dataSnapshot.child("amount_reg_people").value.toString())
 
                     val newIndex = dataSnapshot.child("reg_people_id").childrenCount.toString()
 
-                    if(event_id == eventEntVM.id && maxPeople - amountPeople >= 1) {
+                    var max: Int = eventEntVM.maxPeople.value!!
+                    var reg_people: Int = eventEntVM.amount_reg_people.value!!
+                    var event_id: Int = eventEntVM.id.value!!
 
-                        eventEntVM.freePlaces--
-                        eventEntVM.amount_reg_people++
+                    if(max - reg_people >= 1) {
 
                         dbRef_event.child(event_id.toString()).child("reg_people_id").child(newIndex).setValue(curUid)
                             .addOnSuccessListener {
-                                Log.d("INFOG", "Новый элемент успешно добавлен в массив")
+                                dbRef_event.child(event_id.toString()).child("amount_reg_people").setValue(
+                                    eventEntVM.amount_reg_people.value!! + 1).addOnSuccessListener {
+                                    callback(true)
+                                }.addOnFailureListener {
+                                        callback(false)
+                                    }
                             }
                             .addOnFailureListener { e ->
-                                Log.e("INFOG", "Ошибка при добавлении нового элемента: ${e.message}")
+                                callback(false)
                             }
                     }
             }
@@ -137,6 +232,10 @@ class EventEntFragment : BottomSheetDialogFragment() {
 
         fun show(fragmentManager: FragmentManager) {
             newInstance().show(fragmentManager, "MyBottomFragment")
+        }
+
+        fun hideBottomSheet(bottomSheet: BottomSheetDialogFragment) {
+            bottomSheet.dismiss()
         }
     }
 

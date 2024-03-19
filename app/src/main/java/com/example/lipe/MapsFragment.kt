@@ -68,14 +68,15 @@ class MapsFragment : Fragment() {
 
     private lateinit var mMap: GoogleMap
 
-    private  lateinit var dbRef: DatabaseReference
+    private  lateinit var dbRef_user: DatabaseReference
+    private  lateinit var dbRef_event: DatabaseReference
 
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
-        dbRef = FirebaseDatabase.getInstance().getReference("current_events")
+        dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
 
         // show all markers on map
-        dbRef.addValueEventListener(object : ValueEventListener {
+        dbRef_event.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for(eventSnapshot in dataSnapshot.children) {
                     val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
@@ -103,61 +104,15 @@ class MapsFragment : Fragment() {
             val latitude = markerPosition.latitude
             val longitude = markerPosition.longitude
 
-            searchEvent(latitude, longitude) { ready ->
+            eventEntVM.latitude = latitude
+            eventEntVM.longtitude = longitude
+
+            //searchEvent(latitude, longitude) { ready ->
                 EventFragment.show(childFragmentManager)
-            }
+            //}
 
             true
         }
-    }
-
-
-    //get full info about event and write to VM
-
-    //callback: (event: EntEventModelDB) -> Unit
-
-    //search event by coordinates
-    private fun searchEvent(coord1: Double, coord2: Double, callback: (ready: Boolean) -> Unit) {
-        dbRef = FirebaseDatabase.getInstance().getReference("current_events")
-
-        dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for(eventSnapshot in dataSnapshot.children) {
-                    val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
-
-                    if (coordinates!![0] == coord1 && coordinates[1] == coord2) {
-                        var type = eventSnapshot.child("type_of_event").value.toString()
-                        if(type == "ent") {
-                            var id: Int = Integer.valueOf(eventSnapshot.child("event_id").value.toString())
-                            var maxPeople: Int = eventSnapshot.child("max_people").value.toString().toInt()
-                            var title = eventSnapshot.child("title").value.toString()
-                            val description = eventSnapshot.child("description").value.toString()
-                            val creator_id = eventSnapshot.child("creator_id").value.toString()
-                            var photos = listOf("1")
-                            var peopleGo = listOf("1")
-                            var adress = eventSnapshot.child("adress").value.toString()
-                            var freePlaces = maxPeople - eventSnapshot.child("amount_reg_people").value.toString().toInt()
-                            var time_of_creation = eventSnapshot.child("time_of_creation").value.toString()
-                            val date_of_meeeting = eventSnapshot.child("date_of_meet").value.toString()
-                            var type_sport = eventSnapshot.child("sport_type").value.toString()
-                            var amount_reg_people:Int = Integer.valueOf(eventSnapshot.child("amount_reg_people").value.toString())
-
-                            //eventEntVM.maxPeople = maxPeople
-
-                            eventEntVM.setInfo(id, maxPeople, title, creator_id, photos, peopleGo, adress, freePlaces, description, time_of_creation, date_of_meeeting, type_sport, amount_reg_people)
-                        } else if(type == "eco") {
-                            //TODO
-                        }
-                        callback(true)
-                        break
-                    }
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
-            }
-        })
     }
 
 
