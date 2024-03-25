@@ -208,6 +208,7 @@ class EventEntFragment : BottomSheetDialogFragment() {
                             .addOnSuccessListener {
                                 dbRef_event.child(event_id.toString()).child("amount_reg_people").setValue(
                                     eventEntVM.amount_reg_people.value!! + 1).addOnSuccessListener {
+                                        dbRef_user.child(auth.currentUser?.uid.toString())
                                     callback(true)
                                 }.addOnFailureListener {
                                         callback(false)

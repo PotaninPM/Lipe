@@ -7,11 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".MapsFragment">
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <fragment
         android:id="@+id/fragment"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -20,12 +15,25 @@
 
     <LinearLayout
         android:id="@+id/linearLayout5"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:orientation="vertical"
+        android:layout_marginStart="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_4sdp"
+        android:background="@drawable/next_event"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Рейтинг"-->
+<!--            android:textSize="@dimen/_12sdp"-->
+<!--            android:layout_marginTop="@dimen/_2sdp"-->
+<!--            android:gravity="center"/>-->
+<!--        <TextView-->
+<!--            android:layout_width=""-->
+<!--            android:layout_height=""-->
 <!--        <androidx.cardview.widget.CardView-->
 <!--            android:id="@+id/cardView"-->
 <!--            android:layout_width="@dimen/_256sdp"-->
@@ -74,6 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Все"
+                    android:textColor="@color/black"
                     android:layout_gravity="center"
                     android:textSize="@dimen/_12sdp"
                     android:layout_marginEnd="@dimen/_8sdp"
@@ -99,6 +108,7 @@
                     android:text="Друзья"
                     android:layout_marginStart="@dimen/_3sdp"
                     android:layout_gravity="center"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp"
                     android:layout_marginEnd="@dimen/_8sdp"
                     android:gravity="center"/>
@@ -121,6 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Экология"
+                    android:textColor="@color/black"
                     android:layout_marginStart="@dimen/_3sdp"
                     android:layout_gravity="center"
                     android:textSize="@dimen/_12sdp"
@@ -145,6 +156,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Развлечения"
+                    android:textColor="@color/black"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/_3sdp"
                     android:textSize="@dimen/_12sdp"
@@ -192,7 +204,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:backgroundTint="#C8DAFA"
+            android:backgroundTint="#002261"
             android:src="@drawable/target"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

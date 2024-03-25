@@ -51,6 +51,7 @@
                     android:layout_height="match_parent"
                     android:fontFamily="@font/mulishsemibold"
                     android:gravity="center"
+                    android:textSize="@dimen/_10sdp"
                     android:text="@{viewModel.type}"
                     android:textColor="#2629FF"
                     android:textStyle="bold" />
@@ -149,6 +150,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunitosansextrabold"
                         android:gravity="center"
+                        android:textColor="@color/black"
                         android:text="@{viewModel.creatorUsername}"
                         android:textSize="@dimen/_14sdp" />
 
@@ -157,6 +159,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="Создатель"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/_12sdp" />
                 </LinearLayout>
 
@@ -169,6 +172,7 @@
                     android:paddingStart="@dimen/_8sdp"
                     android:paddingEnd="@dimen/_6sdp"
                     android:text="Добавить в друзья"
+                    android:textSize="@dimen/_10sdp"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -212,12 +216,14 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunitosanssemibold"
                         android:text="25 Декабря, 2024"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/_15sdp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Суббота, 14:00 - 15:00"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/_12sdp" />
                 </LinearLayout>
             </LinearLayout>
@@ -247,12 +253,14 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunitosanssemibold"
                         android:text="Зеленый парк"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/_15sdp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/_12sdp"
+                        android:textColor="@color/black"
                         android:text="Россия, Москва, сиреневый бульвар 44 к1" />
                 </LinearLayout>
             </LinearLayout>
@@ -281,12 +289,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunitosanssemibold"
-                        android:text="Баскетбол"
+                        android:text="@{viewModel.type_sport}"
                         android:textSize="@dimen/_15sdp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/_12sdp"
                         android:text="Для людей любого возраста" />
                 </LinearLayout>
@@ -318,6 +327,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunitosanssemibold"
                         android:text="Свободных мест"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/_15sdp" />
 
                     <ProgressBar
@@ -350,6 +360,7 @@
                 android:layout_marginTop="@dimen/_6sdp"
                 android:fontFamily="@font/nunitosansbold"
                 android:layout_marginStart="@dimen/_12sdp"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lineLineThree" />
 
@@ -362,6 +373,7 @@
                 android:text="@{viewModel.eventDesc}"
                 android:textSize="@dimen/_12sdp"
                 android:layout_marginEnd="@dimen/_12sdp"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/about_event" />
 

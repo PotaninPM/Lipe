@@ -115,6 +115,33 @@ class MapsFragment : Fragment() {
         }
     }
 
+    private fun showMarkersByType(types: List<String>) {
+        dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
+
+        // show all markers on map
+        dbRef_event.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for(eventSnapshot in dataSnapshot.children) {
+                    val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
+                    val type: String = eventSnapshot.child("type_of_event").value.toString()
+
+                    if (coordinates != null) {
+                        for(s: String in types) {
+                            if(type == s) {
+                                Log.d("INFOG", type)
+                                addMarker(LatLng(coordinates[0], coordinates[1]))
+                            }
+                        }
+                    }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
+            }
+        })
+    }
+
 
     private fun addMarker(latLng: LatLng) {
         mMap.addMarker(MarkerOptions().position(latLng))
@@ -136,6 +163,9 @@ class MapsFragment : Fragment() {
         eventEntVM = ViewModelProvider(requireActivity()).get(EventEntVM::class.java)
         saveStateMapVM = ViewModelProvider(requireActivity()).get(SaveStateMapsVM::class.java)
 
+        binding.entEvents.setOnClickListener {
+            showMarkersByType(listOf("ent"))
+        }
         val view = binding.root
         return view
     }

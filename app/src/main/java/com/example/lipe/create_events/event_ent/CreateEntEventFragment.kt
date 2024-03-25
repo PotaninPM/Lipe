@@ -1,12 +1,12 @@
 package com.example.lipe.create_events.event_ent
 
-import android.app.Activity
 import android.app.DatePickerDialog
-import android.app.Instrumentation.ActivityResult
+import android.app.ProgressDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -20,7 +20,8 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.TimePicker
-import androidx.activity.result.ActivityResultCallback
+import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
@@ -29,6 +30,7 @@ import com.example.lipe.viewModels.AppViewModel
 import com.example.lipe.databinding.FragmentCreateEntEventBinding
 import com.example.lipe.database.EntEventModelDB
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -40,20 +42,36 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import java.text.SimpleDateFormat
+import java.util.ArrayList
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 import java.util.TimeZone
+import java.util.UUID
 
 
 class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     //view model
     private lateinit var appVM: AppViewModel
 
+    private lateinit var imageUri1: Uri
+    private lateinit var imageUri2: Uri
+    private lateinit var imageUri3: Uri
+
+    private var image1: String = "-"
+    private var image2: String = "-"
+    private var image3: String = "-"
+
+    private lateinit var imagesUid: ArrayList<String>
+
+    private lateinit var firebaseRef: DatabaseReference
+
     private lateinit var spinner: Spinner
 
-    private var storage = Firebase.storage
+    private lateinit var storageRef : StorageReference
 
     private var _binding: FragmentCreateEntEventBinding? = null
     private val binding get() = _binding!!
@@ -106,7 +124,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
         _binding = FragmentCreateEntEventBinding.inflate(inflater, container, false)
 
-        storage = FirebaseStorage.getInstance()
+        storageRef = FirebaseStorage.getInstance().getReference("event_images")
 
         setDesignToFields()
 
@@ -118,13 +136,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         binding.setDateLay.setOnClickListener {
             getDateTime()
         }
-        val gallery = registerForActivityResult(
-            ActivityResultContracts.GetContent(),
-            ActivityResultCallback {  }
-        )
-        binding.photoLay1.setOnClickListener {
 
-        }
         val view = binding.root
         return view
     }
@@ -140,7 +152,95 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         auth = FirebaseAuth.getInstance()
 
         binding.btnCreateEvent.setOnClickListener {
-            createEvent()
+            uploadImage {wait ->
+                if(wait) {
+                    createEvent()
+                } else {
+                    setDialog("Вы не загрузили ни одного фото", "Вы должны загрузить минимум одно фото", "Хорошо")
+                }
+            }
+        }
+
+        binding.photoLay1.setOnClickListener {
+            selectImage1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+        binding.photoLay2.setOnClickListener {
+            selectImage2.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+        binding.photoLay3.setOnClickListener {
+            selectImage3.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+    }
+
+    val selectImage1 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            binding.photo1.setImageURI(uri)
+            imageUri1 = uri
+            image1 = "1"
+            Log.d("INFOG", imageUri1.toString())
+        } else {
+            Log.d("INFOG", "No media selected")
+        }
+    }
+    val selectImage2 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            binding.photo2.setImageURI(uri)
+            imageUri2 = uri
+            image2 = "1"
+            Log.d("INFOG", imageUri1.toString())
+        } else {
+            Log.d("INFOG", "No media selected")
+        }
+    }
+    val selectImage3 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            binding.photo3.setImageURI(uri)
+            imageUri3 = uri
+            image3 = "1"
+            Log.d("INFOG", imageUri1.toString())
+        } else {
+            Log.d("INFOG", "No media selected")
+        }
+    }
+    private fun uploadImage(callback: (wait: Boolean) -> Unit) {
+
+        val storageRef = FirebaseStorage.getInstance().getReference("event_images/")
+
+        if(image1 == "-" && image2 == "-" && image3 == "-") {
+            callback(false)
+        } else {
+            if(image1 != "-") {
+                imageUri1.let {
+                    val uid: String = UUID.randomUUID().toString()
+                    storageRef.child(uid).putFile(it).addOnSuccessListener { task ->
+                        task.metadata?.reference?.downloadUrl?.addOnSuccessListener { url ->
+                            imagesUid.add(uid)
+                        }
+                    }
+                }
+            }
+
+            if(image2 != "-") {
+                imageUri2.let {
+                    val uid: String = UUID.randomUUID().toString()
+                    storageRef.child(uid).putFile(it).addOnSuccessListener { task ->
+                        task.metadata?.reference?.downloadUrl?.addOnSuccessListener { url ->
+                            imagesUid.add(uid)
+                        }
+                    }
+                }
+            }
+            if(image3 != "-") {
+                imageUri3.let {
+                    val uid: String = UUID.randomUUID().toString()
+                    storageRef.child(uid).putFile(it).addOnSuccessListener { task ->
+                        task.metadata?.reference?.downloadUrl?.addOnSuccessListener { url ->
+                            imagesUid.add(uid)
+                        }
+                    }
+                }
+            }
+            callback(true)
         }
     }
 
@@ -156,6 +256,16 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                 Log.e("ERRORS","Ошибка ${databaseError.message}")
             }
         })
+    }
+
+    private fun setDialog(title: String, desc: String, btnText: String) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(title)
+            .setMessage(desc)
+            .setPositiveButton(btnText) { dialog, which ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private fun createEvent() {
@@ -174,7 +284,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                 var desc: String = binding.etDescInputText.text.toString().trim()
 
                 var type: String = "ent"
-                var sport_type: String = "-"
+                var sport_type: String = ""
 
                 var event = EntEventModelDB(
                     eventId,
@@ -188,7 +298,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     date_of_meeting,
                     maxPeople,
                     desc,
-                    listOf("1", "2", "3"),
+                    imagesUid,
                     listOf(auth.currentUser?.uid),
                     1
                 )
@@ -231,21 +341,15 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     data class SpinnerItem(val name: String, val imageResourceId: Int)
     class CustomAdapter(context: Context, private val items: List<SpinnerItem>) : ArrayAdapter<SpinnerItem>(context,
         R.layout.spinner_one_chose, items) {
-
-        lateinit var type: String
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
             val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.spinner_one_chose, parent, false)
 
             val imageView = view.findViewById<ImageView>(R.id.imageView)
             val textView = view.findViewById<TextView>(R.id.textView)
 
-
             val item = getItem(position)
             textView.text = item?.name
-            type = item?.name.toString()
-
             imageView.setImageResource(item?.imageResourceId ?: 0)
-
 
             return view
         }
@@ -269,7 +373,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
             val timePicker = MaterialTimePicker.Builder()
                 .setTimeFormat(TimeFormat.CLOCK_24H)
-                //.setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
+                .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
                 .setTitleText("Выберите время")
                 .build()
 

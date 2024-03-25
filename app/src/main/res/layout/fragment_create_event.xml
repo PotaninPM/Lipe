@@ -38,6 +38,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
+                    android:textColor="@color/black"
                     android:text="Создайте событие"
                     android:textSize="@dimen/_20sdp"
                     android:fontFamily="@font/nunito_sans"

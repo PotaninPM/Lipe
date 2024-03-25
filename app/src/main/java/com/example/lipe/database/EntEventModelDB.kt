@@ -12,7 +12,7 @@ data class EntEventModelDB(
     var date_of_meeting: String,
     var max_people: Int,
     var description: String,
-    var photos: List<String>,
+    var photos: ArrayList<String>,
     var reg_people_id: List<String?>,
     var amount_reg_people: Int
 )

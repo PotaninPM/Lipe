@@ -18,7 +18,7 @@
             <HorizontalScrollView
                 android:id="@+id/horizontalScrollView"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_180sdp"
+                android:layout_height="@dimen/_210sdp"
                 android:fillViewport="true"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
@@ -31,94 +31,49 @@
 
                     <LinearLayout
                         android:id="@+id/photo_lay_1"
-                        android:layout_width="@dimen/_260sdp"
-                        android:layout_height="@dimen/_180sdp"
+                        android:layout_width="@dimen/_290sdp"
+                        android:layout_height="@dimen/_210sdp"
                         android:layout_marginEnd="@dimen/_6sdp"
                         android:background="@drawable/upload_photo_event">
-
-                        <LinearLayout
+                        <ImageView
+                            android:id="@+id/photo1"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:orientation="vertical">
+                            android:layout_height="match_parent"/>
+<!--                            <ImageView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_gravity="center"-->
+<!--                                android:src="@drawable/img_arrowup" />-->
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:src="@drawable/img_arrowup" />
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginTop="@dimen/_6sdp"
-                                android:gravity="center"
-                                android:text="Нажмите, чтобы загрузить фото \n(минимум одно)"
-                                android:textColor="#747373"
-                                android:textSize="@dimen/_14sdp" />
-                        </LinearLayout>
+
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/photo_lay_2"
-                        android:layout_width="@dimen/_260sdp"
-                        android:layout_height="@dimen/_180sdp"
+                        android:layout_width="@dimen/_290sdp"
+                        android:layout_height="@dimen/_210sdp"
                         android:layout_marginEnd="@dimen/_6sdp"
                         android:background="@drawable/upload_photo_event">
 
-                        <LinearLayout
+                        <ImageView
+                            android:id="@+id/photo2"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:src="@drawable/img_arrowup" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginTop="@dimen/_6sdp"
-                                android:gravity="center"
-                                android:text="Нажмите, чтобы загрузить фото\n(минимум одно)"
-                                android:textColor="#747373"
-                                android:textSize="@dimen/_14sdp" />
-                        </LinearLayout>
-
+                            android:layout_height="match_parent"/>
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/photo_lay_3"
-                        android:layout_width="@dimen/_260sdp"
-                        android:layout_height="@dimen/_180sdp"
+                        android:layout_width="@dimen/_290sdp"
+                        android:layout_height="@dimen/_210sdp"
                         android:layout_marginEnd="@dimen/_6sdp"
                         android:background="@drawable/upload_photo_event">
 
-                        <LinearLayout
+                        <ImageView
+                            android:id="@+id/photo3"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:src="@drawable/img_arrowup" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginTop="@dimen/_6sdp"
-                                android:gravity="center"
-                                android:text="Нажмите, чтобы загрузить фото\n(минимум одно)"
-                                android:textColor="#747373"
-                                android:textSize="@dimen/_14sdp" />
-                        </LinearLayout>
+                            android:layout_height="match_parent"/>
 
                     </LinearLayout>
 
@@ -173,6 +128,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Введите название события"
+                        android:textColorHint="@color/black"
                         android:inputType="text"
                         android:singleLine="true"
                         tools:ignore="Autofill"
@@ -183,22 +139,25 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_4sdp">
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_8sdp">
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/setDate_lay"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_36sdp"
-                        android:layout_marginStart="@dimen/_6sdp"
-                        android:layout_marginEnd="@dimen/_6sdp"
-                        android:layout_marginTop="@dimen/_8sdp"
                         android:background="@drawable/choose_date_lay"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
 
                         <ImageView
+                            android:id="@+id/calendar"
                             android:layout_width="@dimen/_24sdp"
                             android:layout_height="@dimen/_24sdp"
-                            android:src="@drawable/calendar"
                             android:layout_marginStart="@dimen/_4sdp"
+                            android:src="@drawable/calendar"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -207,10 +166,10 @@
                             android:id="@+id/setDate"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginTop="@dimen/_3sdp"
-                            android:layout_marginBottom="@dimen/_3sdp"
                             android:layout_marginStart="@dimen/_26sdp"
+                            android:layout_marginTop="@dimen/_3sdp"
                             android:layout_marginEnd="@dimen/_6sdp"
+                            android:layout_marginBottom="@dimen/_3sdp"
                             android:gravity="center"
                             android:text="Выберите время встречи"
                             android:textSize="@dimen/_13sdp"
@@ -264,6 +223,23 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:layout_marginStart="@dimen/_6sdp"
                     android:layout_marginEnd="@dimen/_6sdp"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/levelspinner"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:hint="Уровень"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_46sdp"
+                    android:layout_gravity="center"
+                    android:spinnerMode="dropdown"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_marginEnd="@dimen/_6sdp">
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="none"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
