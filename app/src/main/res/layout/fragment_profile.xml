@@ -64,7 +64,6 @@
                 android:fontFamily="@font/interextrabold"
                 android:text="Mark Zackerberg"
                 android:textAlignment="center"
-                android:textColor="@color/black"
                 android:textSize="@dimen/_17sdp"
                 android:textStyle="bold" />
 
@@ -110,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="152"
-                    android:textColor="@color/black"
+
                     android:textSize="@dimen/_17sdp"
                     android:textStyle="bold" />
 
@@ -120,6 +119,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/nunito_sans"
                     android:text="Рейтинг"
+                    android:textColor="#4A4949"
                     android:textSize="@dimen/_15sdp" />
 
             </LinearLayout>
@@ -139,7 +139,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="15"
-                    android:textColor="@color/black"
                     android:textSize="@dimen/_17sdp"
                     android:textStyle="bold" />
 
@@ -168,7 +167,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="15"
-                    android:textColor="@color/black"
                     android:textSize="@dimen/_17sdp"
                     android:textStyle="bold" />
 
@@ -178,35 +176,34 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/nunito_sans"
                     android:text="Событий"
+                    android:textColor="#4A4949"
                     android:textSize="@dimen/_15sdp" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/appCompatButton"
+            android:id="@+id/getPoints"
             android:layout_width="@dimen/_95sdp"
             android:layout_height="@dimen/_35sdp"
             android:layout_marginTop="@dimen/_12sdp"
             android:background="@drawable/add_to_friend_btn"
             android:text="Получить баллы"
             android:textAllCaps="false"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/appCompatButton1"
+            android:textColor="@color/quantum_white_100"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/appCompatButton1"
+            android:id="@+id/changeData"
             android:layout_width="@dimen/_105sdp"
             android:layout_height="@dimen/_35sdp"
             android:background="@drawable/add_to_friend_btn"
             android:text="Изменить данные"
             android:textAllCaps="false"
-            android:textColor="@color/white"
+            android:textColor="@color/quantum_white_100"
             app:layout_constraintBottom_toTopOf="@+id/tabLayout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
         <com.google.android.material.tabs.TabLayout
@@ -214,10 +211,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_12sdp"
-            android:background="@color/white"
+            android:background="@color/quantum_white_100"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appCompatButton">
+            app:layout_constraintTop_toBottomOf="@+id/getPoints">
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="match_parent"

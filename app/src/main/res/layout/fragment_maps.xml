@@ -82,7 +82,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Все"
-                    android:textColor="@color/black"
                     android:layout_gravity="center"
                     android:textSize="@dimen/_12sdp"
                     android:layout_marginEnd="@dimen/_8sdp"
@@ -108,7 +107,7 @@
                     android:text="Друзья"
                     android:layout_marginStart="@dimen/_3sdp"
                     android:layout_gravity="center"
-                    android:textColor="@color/black"
+
                     android:textSize="@dimen/_12sdp"
                     android:layout_marginEnd="@dimen/_8sdp"
                     android:gravity="center"/>
@@ -131,7 +130,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Экология"
-                    android:textColor="@color/black"
                     android:layout_marginStart="@dimen/_3sdp"
                     android:layout_gravity="center"
                     android:textSize="@dimen/_12sdp"
@@ -156,7 +154,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="Развлечения"
-                    android:textColor="@color/black"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/_3sdp"
                     android:textSize="@dimen/_12sdp"
@@ -207,8 +204,7 @@
             android:backgroundTint="#002261"
             android:src="@drawable/target"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:outlineSpotShadowColor="@color/invisible"/>
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -216,8 +212,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_46sdp"
         style="@style/Widget.MaterialComponents.BottomNavigationView"
-        android:background="@color/white"
-        app:itemTextColor="@color/black"
+        android:background="@color/quantum_white_100"
         app:itemIconSize="@dimen/_16sdp"
         app:itemIconTint="#5F5F5F"
         app:layout_constraintBottom_toBottomOf="parent"

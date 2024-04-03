@@ -3,14 +3,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".view_events.event_ent.EventEntFragment">
+    tools:context=".view_events.event_eco.EventEcoFragment">
 
     <data>
-        <variable name="viewModel" type="com.example.lipe.viewModels.EventEntVM" />
+        <variable name="viewModel" type="com.example.lipe.viewModels.EventEcoVM" />
 
         <variable
             name="EntEventFragment"
-            type="com.example.lipe.view_events.event_ent.EventEntFragment" />
+            type="com.example.lipe.view_events.event_eco.EventEcoFragment" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -96,7 +96,6 @@
                 android:layout_width="@dimen/_292sdp"
                 android:layout_height="@dimen/_1sdp"
                 android:layout_marginTop="@dimen/_6sdp"
-                android:background="@color/quantum_bluegrey50"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
@@ -110,6 +109,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/lineLineTwo">
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/userInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/imageView6"
@@ -144,6 +149,7 @@
                             android:text="Создатель"
                             android:textSize="@dimen/_12sdp" />
                     </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/addToFriendBtn"
@@ -197,7 +203,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunitosanssemibold"
-                        android:text="@{viewModel.dateRussianMonthDayYear}"
+                        android:text="1"
                         android:textSize="@dimen/_15sdp" />
 
                     <TextView
@@ -255,7 +261,7 @@
                 <ImageView
                     android:layout_width="@dimen/_37sdp"
                     android:layout_height="@dimen/_37sdp"
-                    android:src="@drawable/img_basketballimg" />
+                    android:src="@drawable/leaf" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -267,14 +273,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunitosanssemibold"
-                        android:text="@{viewModel.type_sport}"
+                        android:text="1"
                         android:textSize="@dimen/_15sdp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/_12sdp"
-                        android:text="@{viewModel.age}" />
+                        android:text="Степень загрязнения" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -321,7 +327,6 @@
                 android:layout_width="@dimen/_292sdp"
                 android:layout_height="@dimen/_1sdp"
                 android:layout_weight="0.39"
-                android:background="@color/quantum_bluegrey50"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="@dimen/_8sdp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -371,46 +376,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView9"
-                tools:ignore="TextSizeCheck" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/viewQr"
-                android:layout_width="@dimen/_150sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:background="@drawable/view_qrcode_btn"
-                android:ellipsize="end"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="QR код"
-                android:textAllCaps="false"
-                android:textColor="@color/quantum_white_100"
-                android:textFontWeight="600"
-                android:textSize="@dimen/_12sdp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/btnRegToEvent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="TextSizeCheck" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/deleteOrLeave"
-                android:layout_width="@dimen/_140sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:background="@drawable/view_qrcode_btn"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="покинуть"
-                android:textAllCaps="false"
-                android:textColor="@color/quantum_white_100"
-                android:layout_marginEnd="@dimen/_12sdp"
-                android:textFontWeight="600"
-                android:textSize="@dimen/_12sdp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/btnRegToEvent"
-                app:layout_constraintEnd_toEndOf="parent"
-
-                app:layout_constraintStart_toEndOf="@+id/viewQr"
                 tools:ignore="TextSizeCheck" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

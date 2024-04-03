@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/white"
+    android:background="@color/quantum_white_100"
     android:layout_height="match_parent"
     tools:context=".GetPointsFragment">
     <LinearLayout android:gravity="center_horizontal"
@@ -40,7 +40,7 @@
                 android:layout_marginBottom="@dimen/_2sdp"
                 android:ellipsize="end"
                 android:layout_gravity="center"
-                android:textColor="@color/white"
+                android:textColor="@color/quantum_white_100"
                 android:gravity="center"
                 android:paddingStart="@dimen/_18sdp"
                 android:paddingEnd="@dimen/_18sdp"
@@ -183,13 +183,13 @@
                 android:gravity="center"
                 android:textSize="@dimen/_14sdp"
                 android:text="Выберите вид выполненной работы" />
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:background="@drawable/mult_list"
-                android:id="@+id/spinnerFields"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_width="match_parent"/>
+<!--            <androidx.appcompat.widget.AppCompatSpinner-->
+<!--                android:background="@drawable/mult_list"-->
+<!--                android:id="@+id/spinnerFields"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:gravity="center"-->
+<!--                android:layout_marginTop="@dimen/_5sdp"-->
+<!--                android:layout_width="match_parent"/>-->
             <androidx.appcompat.widget.AppCompatButton
                 android:ellipsize="end" android:gravity="center"
                 android:id="@+id/btn10" android:layout_height="wrap_content"
@@ -200,7 +200,7 @@
                 android:paddingBottom="@dimen/_18pxv"
                 android:paddingEnd="@dimen/_30pxh"
                 android:paddingStart="@dimen/_30pxh"
-                android:textColor="@color/white"
+                android:textColor="@color/quantum_white_100"
                 android:background="@drawable/create_event_change_type_btn"
                 android:paddingTop="@dimen/_18pxv" android:singleLine="true"
                 android:text="Получить баллы" android:textAllCaps="false" />

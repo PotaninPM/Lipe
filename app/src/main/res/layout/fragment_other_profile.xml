@@ -50,7 +50,6 @@
             android:fontFamily="@font/interextrabold"
             android:text="Mark Zackerberg"
             android:textAlignment="center"
-            android:textColor="@color/black"
             android:textSize="@dimen/_17sdp"
             android:textStyle="bold" />
 
@@ -96,7 +95,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="152"
-                android:textColor="@color/black"
                 android:textSize="@dimen/_17sdp"
                 android:textStyle="bold" />
 
@@ -125,7 +123,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="15"
-                android:textColor="@color/black"
                 android:textSize="@dimen/_17sdp"
                 android:textStyle="bold" />
 
@@ -154,7 +151,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="15"
-                android:textColor="@color/black"
                 android:textSize="@dimen/_17sdp"
                 android:textStyle="bold" />
 
@@ -170,7 +166,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/appCompatButton"
+        android:id="@+id/getPoints"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_35sdp"
         android:layout_marginStart="@dimen/_16sdp"
@@ -178,7 +174,7 @@
         android:layout_marginEnd="@dimen/_16sdp"
         android:background="@drawable/add_to_friend_btn"
         android:text="Добавить в друзья"
-        android:textColor="@color/white"
+        android:textColor="@color/quantum_white_100"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -189,10 +185,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_12sdp"
-        android:background="@color/white"
+        android:background="@color/quantum_white_100"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appCompatButton">
+        app:layout_constraintTop_toBottomOf="@+id/getPoints">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"

@@ -6,6 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import com.example.lipe.databinding.FragmentEventEntBinding
 import com.example.lipe.databinding.FragmentProfileBinding
 import com.example.lipe.sign_up_in.SignUpFragment
 import com.google.android.gms.maps.model.LatLng
@@ -54,6 +57,8 @@ class ProfileFragment : Fragment() {
         })
 
 
+
+
 //        binding.more.setOnClickListener {
 //
 //        }
@@ -89,8 +94,10 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        val view = binding.root
+        return view
     }
     override fun onDestroy() {
         super.onDestroy()

@@ -9,6 +9,8 @@ class AppViewModel: ViewModel() {
     var latitude: Double = 0.0
     var longtitude: Double = 0.0
 
+    var event: String = ""
+
     fun setCoord(lat: Double, long: Double) {
         latitude = lat
         longtitude = long

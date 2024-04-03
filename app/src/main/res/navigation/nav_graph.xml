@@ -138,6 +138,12 @@
         <action
             android:id="@+id/action_profileFragment_to_mapsFragment2"
             app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_self"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_getPointsFragment2"
+            app:destination="@id/getPointsFragment" />
     </fragment>
     <fragment
         android:id="@+id/otherProfileFragment"

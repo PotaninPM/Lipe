@@ -4,6 +4,7 @@ import android.content.Intent
 
 data class User(
     val uid:String?= null,
+    var avatarId: String,
     val date_of_reg: String?= null,
     val balance: Int ?= 0,
     val bonus: Int ?= 0,
@@ -20,5 +21,6 @@ data class User(
     val hobbies: Array<String> ?= null,
     val query_friends: Array<String> ?= null,
     val friends: Array<String> ?= null,
-    val friends_amount: Int ?= null
+    val friends_amount: Int ?= null,
+    val curRegEventsId: ArrayList<String> ?= null
 )

@@ -31,49 +31,49 @@ class CreateEventFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         switchFragmentsFields(0)
 
-        binding.btnEnt.setBackgroundColor(getResources().getColor(R.color.invisible))
-        binding.btnEnt.setTextColor(getResources().getColor(R.color.black))
-
-        binding.btnHelp.setBackgroundColor(getResources().getColor(R.color.invisible))
-        binding.btnHelp.setTextColor(getResources().getColor(R.color.black))
+//        binding.btnEnt.setBackgroundColor(getResources().getColor(R.color.invisible))
+//        binding.btnEnt.setTextColor(getResources().getColor(R.color.black))
+//
+//        binding.btnHelp.setBackgroundColor(getResources().getColor(R.color.invisible))
+        binding.btnHelp.setTextColor(getResources().getColor(com.google.android.libraries.places.R.color.quantum_black_100))
 
         binding.btnEco.setOnClickListener {
             switchFragmentsFields(0)
 
 
-            binding.btnEnt.setBackgroundColor(getResources().getColor(R.color.invisible))
-            binding.btnEnt.setTextColor(getResources().getColor(R.color.black))
-
-            binding.btnHelp.setBackgroundColor(getResources().getColor(R.color.invisible))
-            binding.btnHelp.setTextColor(getResources().getColor(R.color.black))
-
-            binding.btnEco.setTextColor(getResources().getColor(R.color.white))
-            binding.btnEco.setBackgroundResource(R.drawable.create_event_change_type_btn)
+//            binding.btnEnt.setBackgroundColor(getResources().getColor(R.color.invisible))
+//            binding.btnEnt.setTextColor(getResources().getColor(R.color.black))
+//
+//            binding.btnHelp.setBackgroundColor(getResources().getColor(R.color.invisible))
+//            binding.btnHelp.setTextColor(getResources().getColor(R.color.black))
+//
+//            binding.btnEco.setTextColor(getResources().getColor(R.color.white))
+//            binding.btnEco.setBackgroundResource(R.drawable.create_event_change_type_btn)
 
         }
         binding.btnEnt.setOnClickListener {
             switchFragmentsFields(1)
 
-            binding.btnEco.setBackgroundColor(getResources().getColor(R.color.invisible))
-            binding.btnEco.setTextColor(getResources().getColor(R.color.black))
-
-            binding.btnHelp.setBackgroundColor(getResources().getColor(R.color.invisible))
-            binding.btnHelp.setTextColor(getResources().getColor(R.color.black))
-
-            binding.btnEnt.setTextColor(getResources().getColor(R.color.white))
-            binding.btnEnt.setBackgroundResource(R.drawable.create_event_change_type_btn)
+//            binding.btnEco.setBackgroundColor(getResources().getColor(R.color.invisible))
+//            binding.btnEco.setTextColor(getResources().getColor(R.color.black))
+//
+//            binding.btnHelp.setBackgroundColor(getResources().getColor(R.color.invisible))
+//            binding.btnHelp.setTextColor(getResources().getColor(R.color.black))
+//
+//            binding.btnEnt.setTextColor(getResources().getColor(R.color.white))
+//            binding.btnEnt.setBackgroundResource(R.drawable.create_event_change_type_btn)
         }
         binding.btnHelp.setOnClickListener {
             switchFragmentsFields(2)
 
-            binding.btnEco.setBackgroundColor(getResources().getColor(R.color.invisible))
-            binding.btnEco.setTextColor(getResources().getColor(R.color.black))
-
-            binding.btnEnt.setBackgroundColor(getResources().getColor(R.color.invisible))
-            binding.btnEnt.setTextColor(getResources().getColor(R.color.black))
-
-            binding.btnHelp.setTextColor(getResources().getColor(R.color.white))
-            binding.btnHelp.setBackgroundResource(R.drawable.create_event_change_type_btn)
+//            binding.btnEco.setBackgroundColor(getResources().getColor(R.color.invisible))
+//            binding.btnEco.setTextColor(getResources().getColor(R.color.black))
+//
+//            binding.btnEnt.setBackgroundColor(getResources().getColor(R.color.invisible))
+//            binding.btnEnt.setTextColor(getResources().getColor(R.color.black))
+//
+//            binding.btnHelp.setTextColor(getResources().getColor(R.color.white))
+//            binding.btnHelp.setBackgroundResource(R.drawable.create_event_change_type_btn)
         }
     }
 

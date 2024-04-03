@@ -4,13 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#FFFFFF"
     tools:context=".sign_up_in.SignUpFragment">
     <LinearLayout android:id="@+id/linearSignupwithem"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:layout_gravity="center_vertical"
-        android:background="@color/white"
         android:orientation="vertical">
         <LinearLayout
             android:id="@+id/linearColumncreateacctitl"
@@ -30,7 +28,6 @@
                 android:textSize="@dimen/_22sdp"
                 android:singleLine="true"
                 android:textStyle="bold"
-                android:textColor="@color/black"
                 android:text="Создай аккаунт" />
             <LinearLayout
                 android:layout_width="match_parent"
@@ -50,7 +47,6 @@
                         android:hint="Ваша фамилия"
                         android:inputType="text"
                         android:singleLine="true"
-                        android:textColorHint="@color/black_900_7f"
                         tools:ignore="Autofill" />
                 </com.google.android.material.textfield.TextInputLayout>
                 <com.google.android.material.textfield.TextInputLayout
@@ -66,7 +62,6 @@
                         android:hint="Ваше имя"
                         android:inputType="text"
                         android:singleLine="true"
-                        android:textColorHint="@color/black_900_7f"
                         tools:ignore="Autofill" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -84,7 +79,6 @@
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:singleLine="true"
-                    android:textColorHint="@color/black_900_7f"
                     tools:ignore="Autofill"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -100,7 +94,6 @@
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:singleLine="true"
-                    android:textColorHint="@color/black_900_7f"
                     tools:ignore="Autofill"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -117,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:singleLine="true"
-                    android:textColorHint="@color/black_900_7f"
+                    android:textColorHint="@color/quantum_black_100"
                     tools:ignore="Autofill"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,7 +128,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:singleLine="true"
-                    android:textColorHint="@color/black_900_7f"
+                    android:textColorHint="@color/quantum_black_100"
                     tools:ignore="Autofill"/>
             </com.google.android.material.textfield.TextInputLayout>
             <LinearLayout android:gravity="start"
@@ -176,7 +169,7 @@
                 android:singleLine="true"
                 android:text="Далее"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/quantum_white_100"
                 android:textFontWeight="600"
                 android:textSize="@dimen/_12sdp"
                 tools:ignore="TextSizeCheck" />

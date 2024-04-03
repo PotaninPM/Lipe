@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.ImageView
@@ -57,6 +58,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     //view model
     private lateinit var appVM: AppViewModel
 
+    var type_sport = "1"
+
     private lateinit var imageUri1: Uri
     private lateinit var imageUri2: Uri
     private lateinit var imageUri3: Uri
@@ -65,7 +68,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     private var image2: String = "-"
     private var image3: String = "-"
 
-    private lateinit var imagesUid: ArrayList<String>
+    private var imagesUid: ArrayList<String> = arrayListOf("-", "-", "-")
 
     private lateinit var firebaseRef: DatabaseReference
 
@@ -101,11 +104,18 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         SpinnerItem("Программирование", R.drawable.programming)
     )
 
+    private var levels: List<SpinnerItem> = listOf(
+        SpinnerItem("Для любого возраста", R.drawable.light_bulb),
+        SpinnerItem("Для детей(6 - 14 лет)", R.drawable.img_basketballimg),
+        SpinnerItem("Для подростков(14 - 18)", R.drawable.volleyball_2),
+        SpinnerItem("Для взрослых(более 18)", R.drawable.football),
+    )
+
     private lateinit var dbRef: DatabaseReference
     private lateinit var dbRef_id: DatabaseReference
     private lateinit var auth: FirebaseAuth
 
-    var eventId: Long = 0
+    var eventId: String = ""
 
     var savedYear = 0
     var savedMonth = 0
@@ -137,6 +147,17 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             getDateTime()
         }
 
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedItem = items[position]
+                type_sport = selectedItem.name
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+        }
+
         val view = binding.root
         return view
     }
@@ -152,9 +173,9 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         auth = FirebaseAuth.getInstance()
 
         binding.btnCreateEvent.setOnClickListener {
-            uploadImage {wait ->
-                if(wait) {
-                    createEvent()
+            uploadImage {photos ->
+                if(photos[0] != "-" || photos[1] != "-" || photos[2] != "-") {
+                    createEvent(photos)
                 } else {
                     setDialog("Вы не загрузили ни одного фото", "Вы должны загрузить минимум одно фото", "Хорошо")
                 }
@@ -202,60 +223,67 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             Log.d("INFOG", "No media selected")
         }
     }
-    private fun uploadImage(callback: (wait: Boolean) -> Unit) {
+    private fun uploadImage(callback: (photos: ArrayList<String>) -> Unit) {
+        val storageRef = FirebaseStorage.getInstance().getReference("event_images")
 
-        val storageRef = FirebaseStorage.getInstance().getReference("event_images/")
-
-        if(image1 == "-" && image2 == "-" && image3 == "-") {
-            callback(false)
+        val photos: ArrayList<String> = arrayListOf()
+        if (image1 == "-" && image2 == "-" && image3 == "-") {
+            callback(arrayListOf("-", "-", "-"))
         } else {
+            var used: Int = 0;
             if(image1 != "-") {
-                imageUri1.let {
+                imageUri1.let { uri ->
                     val uid: String = UUID.randomUUID().toString()
-                    storageRef.child(uid).putFile(it).addOnSuccessListener { task ->
-                        task.metadata?.reference?.downloadUrl?.addOnSuccessListener { url ->
-                            imagesUid.add(uid)
+                    val imageRef = storageRef.child(uid)
+                    imageRef.putFile(uri)
+                        .addOnSuccessListener { task ->
+                            task.storage.downloadUrl.addOnSuccessListener { url ->
+                                photos.add(uid)
+                                callback(photos)
+                            }
                         }
-                    }
+                        .addOnFailureListener { exception ->
+                            callback(arrayListOf("-", "-", "-"))
+                            used = -1
+                        }
                 }
             }
-
-            if(image2 != "-") {
-                imageUri2.let {
-                    val uid: String = UUID.randomUUID().toString()
-                    storageRef.child(uid).putFile(it).addOnSuccessListener { task ->
-                        task.metadata?.reference?.downloadUrl?.addOnSuccessListener { url ->
-                            imagesUid.add(uid)
-                        }
-                    }
-                }
-            }
-            if(image3 != "-") {
-                imageUri3.let {
-                    val uid: String = UUID.randomUUID().toString()
-                    storageRef.child(uid).putFile(it).addOnSuccessListener { task ->
-                        task.metadata?.reference?.downloadUrl?.addOnSuccessListener { url ->
-                            imagesUid.add(uid)
-                        }
-                    }
-                }
-            }
-            callback(true)
+//
+//            if(image2 != "-") {
+//                imageUri2.let { uri ->
+//                    val uid: String = UUID.randomUUID().toString()
+//                    val imageRef = storageRef.child(uid)
+//                    imageRef.putFile(uri)
+//                        .addOnSuccessListener { task ->
+//                            task.storage.downloadUrl.addOnSuccessListener { url ->
+//                                photos.add(uid)
+//                            }
+//                        }
+//                        .addOnFailureListener { exception ->
+//                            callback(arrayListOf("-", "-", "-"))
+//                            used = -1
+//                        }
+//                }
+//            }
+//
+//            if(image3 != "-") {
+//                imageUri3.let { uri ->
+//                    val uid: String = UUID.randomUUID().toString()
+//                    val imageRef = storageRef.child(uid)
+//                    imageRef.putFile(uri)
+//                        .addOnSuccessListener { task ->
+//                            task.storage.downloadUrl.addOnSuccessListener { url ->
+//                                photos.add(uid)
+//                            }
+//                        }
+//                        .addOnFailureListener { exception ->
+//                            callback(arrayListOf("-", "-", "-"))
+//                            used = -1
+//                        }
+//                }
+//            }
+//
         }
-    }
-
-    private fun getEventPrevId(callback: (eventId: Long) -> Unit) {
-        dbRef_id.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                eventId = dataSnapshot.getValue(Long::class.java)!!
-                dbRef_id.setValue(eventId + 1)
-                callback(eventId)
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("ERRORS","Ошибка ${databaseError.message}")
-            }
-        })
     }
 
     private fun setDialog(title: String, desc: String, btnText: String) {
@@ -268,38 +296,41 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             .show()
     }
 
-    private fun createEvent() {
+    private fun createEvent(photos: ArrayList<String>) {
         appVM = ViewModelProvider(requireActivity()).get(AppViewModel::class.java)
-        getEventPrevId {eventId ->
-            if(checkForEmpty() == true) {
-                val time = Calendar.getInstance().time
-                val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
-                val current = formatter.format(time)
+        if (checkForEmpty() == true) {
+            eventId = UUID.randomUUID().toString()
+            val time = Calendar.getInstance().time
+            val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
+            val current = formatter.format(time)
 
-                var title = binding.etNameinputText.text.toString().trim()
-                var adress = binding.adressText.text.toString().trim()
-                var coord: List<Double> = listOf(appVM.latitude, appVM.longtitude)
-                var date_of_meeting: String = binding.setDate.text.toString()
-                var maxPeople: Int = binding.etMaxInputText.text.toString().trim().toInt()
-                var desc: String = binding.etDescInputText.text.toString().trim()
+            var title = binding.etNameinputText.text.toString().trim()
+            var adress = binding.adressText.text.toString().trim()
+            var coord: List<Double> = listOf(appVM.latitude, appVM.longtitude)
+            var date_of_meeting: String = binding.setDate.text.toString()
+            var maxPeople: Int = binding.etMaxInputText.text.toString().trim().toInt()
+            var desc: String = binding.etDescInputText.text.toString().trim()
 
-                var type: String = "ent"
-                var sport_type: String = ""
+            var type: String = "ent"
 
+            if (type_sport == "1" || type_sport == "Выберите тип развлечения") {
+                Toast.makeText(requireContext(), "Введите спорт!", Toast.LENGTH_LONG).show()
+            } else {
                 var event = EntEventModelDB(
                     eventId,
                     type,
                     auth.currentUser?.uid.toString(),
                     current,
-                    sport_type,
+                    type_sport,
                     title,
                     adress,
                     coord,
                     date_of_meeting,
                     maxPeople,
+                    "16-18",
                     desc,
-                    imagesUid,
-                    listOf(auth.currentUser?.uid),
+                    photos,
+                    arrayListOf(auth.currentUser?.uid),
                     1
                 )
 

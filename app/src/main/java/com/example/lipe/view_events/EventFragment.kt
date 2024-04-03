@@ -1,19 +1,32 @@
 package com.example.lipe.view_events
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.R
 import com.example.lipe.databinding.FragmentEventBinding
+import com.example.lipe.viewModels.AppViewModel
+import com.example.lipe.viewModels.EventEntVM
+import com.example.lipe.view_events.event_eco.EventEcoFragment
 import com.example.lipe.view_events.event_ent.EventEntFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 class EventFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentEventBinding? = null
     private val binding get() = _binding!!
+
+    private  lateinit var dbRef_event: DatabaseReference
+
+    private lateinit var appVM: AppViewModel
+
+    private lateinit var eventEntVM: EventEntVM
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,19 +38,37 @@ class EventFragment : BottomSheetDialogFragment() {
     ): View? {
         _binding = FragmentEventBinding.inflate(inflater, container, false)
 
+        appVM = ViewModelProvider(requireActivity()).get(AppViewModel::class.java)
+
+        dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
+
+        eventEntVM = ViewModelProvider(requireActivity()).get(EventEntVM::class.java)
+
         val view = binding.root
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        switchFragments(0)
+
+        if(appVM.event == "ent") {
+            switchFragments(0)
+            //Log.d("INFOG", eventEntVM.id.toString())
+        } else if(appVM.event == "eco") {
+            switchFragments(1)
+        } else {
+            //Log.d("INFOG", eventEntVM.id.toString())
+            switchFragments(0)
+        }
+
+        //Log.d("INFOG", appVM.event)
 
     }
 
     private fun switchFragments(position: Int) {
         val fragment = when(position) {
             0 -> EventEntFragment()
+            1 -> EventEcoFragment()
             else -> null
         }
 

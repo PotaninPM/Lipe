@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.lipe.viewModels.AppViewModel
@@ -22,6 +23,7 @@ import com.example.lipe.chats.ChatsFragment
 import com.example.lipe.create_events.CreateEventFragment
 import com.example.lipe.database.EntEventModelDB
 import com.example.lipe.databinding.FragmentMapsBinding
+import com.example.lipe.viewModels.EventEcoVM
 import com.example.lipe.view_events.EventFragment
 import com.example.lipe.viewModels.EventEntVM
 import com.example.lipe.viewModels.SaveStateMapsVM
@@ -32,6 +34,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.measurement.api.AppMeasurementSdk.ConditionalUserProperty.NAME
@@ -58,7 +61,9 @@ class MapsFragment : Fragment() {
     //View Model
     private lateinit var appVM: AppViewModel
 
-    private lateinit var eventEntVM: EventEntVM
+    private val eventEntVM: EventEntVM by activityViewModels()
+
+    private lateinit var eventEcoVM: EventEcoVM
 
     private lateinit var saveStateMapVM: SaveStateMapsVM
 
@@ -81,8 +86,9 @@ class MapsFragment : Fragment() {
                 for(eventSnapshot in dataSnapshot.children) {
                     val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
 
+                    val type = eventSnapshot.child("type_of_event").value.toString()
                     if (coordinates != null) {
-                        addMarker(LatLng(coordinates[0], coordinates[1]))
+                        addMarker(LatLng(coordinates[0], coordinates[1]), type)
                     }
                 }
             }
@@ -107,13 +113,96 @@ class MapsFragment : Fragment() {
             eventEntVM.latitude = latitude
             eventEntVM.longtitude = longitude
 
-            //searchEvent(latitude, longitude) { ready ->
-                EventFragment.show(childFragmentManager)
-            //}
+            searchEvent(latitude, longitude) { ready ->
+                if(ready == true) {
+                    EventFragment.show(childFragmentManager)
+                    Log.e("INFOG", "fd")
+                } else {
+                    Log.e("INFOG", "ERROR")
+                }
+                //Log.d("INFOG", eventEntVM.id.toString())
+            }
 
             true
         }
     }
+
+    private fun searchEvent(coord1: Double, coord2: Double, callback: (ready: Boolean) -> Unit) {
+        val dbRefEvent = FirebaseDatabase.getInstance().getReference("current_events")
+        val dbRefUser = FirebaseDatabase.getInstance().getReference("users")
+
+        dbRefEvent.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for(eventSnapshot in dataSnapshot.children) {
+                    val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
+                    if(coordinates != null && coordinates[0] == coord1 && coordinates[1] == coord2) {
+                        val type = eventSnapshot.child("type_of_event").value.toString()
+                        val id = eventSnapshot.child("event_id").value.toString().toInt()
+                        val maxPeople = eventSnapshot.child("max_people").value.toString().toInt()
+                        val title = eventSnapshot.child("title").value.toString()
+                        val description = eventSnapshot.child("description").value.toString()
+                        val creatorUid = eventSnapshot.child("creator_id").value.toString()
+                        val photos = arrayListOf(eventSnapshot.child("photos").value.toString())
+                        val address = eventSnapshot.child("adress").value.toString()
+                        val freePlaces = maxPeople - eventSnapshot.child("amount_reg_people").value.toString().toInt()
+                        val timeOfCreation = eventSnapshot.child("time_of_creation").value.toString()
+                        val dateOfMeeting = eventSnapshot.child("date_of_meeting").value.toString()
+                        val amountRegPeople = eventSnapshot.child("amount_reg_people").value.toString().toInt()
+
+                        when(type) {
+                            "ent" -> {
+                                val sportType = eventSnapshot.child("sport_type").value.toString()
+                                dbRefUser.addValueEventListener(object : ValueEventListener {
+                                    override fun onDataChange(userSnapshot: DataSnapshot) {
+                                        for (userEventSnapshot in userSnapshot.children) {
+                                            if (creatorUid == userEventSnapshot.child("uid").value) {
+                                                val creatorUsername = userEventSnapshot.child("username").value.toString()
+                                                Log.d("INFOG", dateOfMeeting)
+                                                eventEntVM.setInfo(id, maxPeople, title, creatorUid, creatorUsername, photos, arrayListOf("1"), address, freePlaces, "нини", description, timeOfCreation, dateOfMeeting, sportType, amountRegPeople)
+                                                appVM.event = "ent"
+                                                callback(true)
+                                                return
+                                            }
+                                        }
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        Log.e("INFOG", "ErrorEventEntFragm")
+                                    }
+                                })
+                            }
+                            "eco" -> {
+                                val getPoints = eventSnapshot.child("get_points").value.toString().toInt()
+                                dbRefUser.addValueEventListener(object : ValueEventListener {
+                                    override fun onDataChange(userSnapshot: DataSnapshot) {
+                                        for (userEventSnapshot in userSnapshot.children) {
+                                            if (creatorUid == userEventSnapshot.child("uid").value) {
+                                                val creatorUsername = userEventSnapshot.child("username").value.toString()
+                                                eventEcoVM.setInfo(id, maxPeople, title, creatorUid, creatorUsername, photos, arrayListOf("1"), address, freePlaces, description, timeOfCreation, dateOfMeeting, amountRegPeople, getPoints)
+                                                appVM.event = "eco"
+                                                callback(true)
+                                                return
+                                            }
+                                        }
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        Log.e("INFOG", "ErrorEventEcoFragm")
+                                    }
+                                })
+                            }
+                        }
+                        break
+                    }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
+            }
+        })
+    }
+
 
     private fun showMarkersByType(types: List<String>) {
         dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
@@ -128,8 +217,7 @@ class MapsFragment : Fragment() {
                     if (coordinates != null) {
                         for(s: String in types) {
                             if(type == s) {
-                                Log.d("INFOG", type)
-                                addMarker(LatLng(coordinates[0], coordinates[1]))
+                                addMarker(LatLng(coordinates[0], coordinates[1]), type)
                             }
                         }
                     }
@@ -143,9 +231,14 @@ class MapsFragment : Fragment() {
     }
 
 
-    private fun addMarker(latLng: LatLng) {
-        mMap.addMarker(MarkerOptions().position(latLng))
-        //?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.basketball_32))
+    private fun addMarker(latLng: LatLng, type: String) {
+        if(type == "ent") {
+            mMap.addMarker(MarkerOptions().position(latLng))
+                ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.navigator))
+        } else if(type == "eco") {
+            mMap.addMarker(MarkerOptions().position(latLng))
+                ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.eco))
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -160,7 +253,8 @@ class MapsFragment : Fragment() {
         _binding = FragmentMapsBinding.inflate(inflater, container, false)
 
         appVM = ViewModelProvider(requireActivity()).get(AppViewModel::class.java)
-        eventEntVM = ViewModelProvider(requireActivity()).get(EventEntVM::class.java)
+//        eventEntVM = ViewModelProvider(requireActivity()).get(EventEntVM::class.java)
+        eventEcoVM = ViewModelProvider(requireActivity()).get(EventEcoVM::class.java)
         saveStateMapVM = ViewModelProvider(requireActivity()).get(SaveStateMapsVM::class.java)
 
         binding.entEvents.setOnClickListener {

@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:layout_marginStart="@dimen/_6sdp"
     android:layout_marginEnd="@dimen/_6sdp"
-    android:background="@color/white"
     tools:context=".create_events.event_ent.CreateEntEventFragment">
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -107,7 +106,6 @@
                     android:layout_height="wrap_content"
                     android:text="Детали события"
                     android:layout_gravity="center"
-                    android:textColor="@color/black"
                     android:textSize="@dimen/_22sdp"
                     android:textStyle="bold" />
 
@@ -128,7 +126,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Введите название события"
-                        android:textColorHint="@color/black"
                         android:inputType="text"
                         android:singleLine="true"
                         tools:ignore="Autofill"
@@ -216,6 +213,7 @@
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/spinner1"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_46sdp"
                     android:layout_gravity="center"
@@ -226,7 +224,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/levelspinner"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:hint="Уровень"
+                    android:hint="Возвраст"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_46sdp"
                     android:layout_gravity="center"
@@ -265,7 +263,6 @@
                             android:inputType="number"
                             android:gravity="center"
                             android:singleLine="true"
-                            android:textColorHint="@color/black_900_7f"
                             tools:ignore="Autofill" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
@@ -291,7 +288,6 @@
                         android:inputType="textMultiLine"
                         android:gravity="top"
                         android:singleLine="true"
-                        android:textColorHint="@color/black_900_7f"
                         tools:ignore="Autofill" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -308,7 +304,7 @@
                     android:singleLine="true"
                     android:text="Создать событие"
                     android:textAllCaps="false"
-                    android:textColor="@color/white"
+                    android:textColor="@color/quantum_white_100"
                     android:textFontWeight="600"
                     android:textSize="@dimen/_12sdp"
                     tools:ignore="TextSizeCheck" />

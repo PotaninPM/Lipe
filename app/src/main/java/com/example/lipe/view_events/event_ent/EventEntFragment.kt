@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -22,6 +23,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.squareup.picasso.Picasso
 
 class EventEntFragment : BottomSheetDialogFragment() {
     private lateinit var auth: FirebaseAuth
@@ -31,6 +35,8 @@ class EventEntFragment : BottomSheetDialogFragment() {
     private lateinit var dbRef_event: DatabaseReference
 
     private lateinit var dbRef_user: DatabaseReference
+
+    private lateinit var storageRef : StorageReference
 
     private var _binding: FragmentEventEntBinding? = null
     private val binding get() = _binding!!
@@ -61,14 +67,55 @@ class EventEntFragment : BottomSheetDialogFragment() {
             lifecycleOwner = viewLifecycleOwner
             viewModel = eventEntVM
 
-            Log.d("INFOG", eventEntVM.latitude.toString())
-            searchEvent(eventEntVM.latitude, eventEntVM.longtitude)
-        }
+            storageRef = FirebaseStorage.getInstance().reference
 
-//        eventEntVM.title1.observe(viewLifecycleOwner, Observer { title ->
-//            // Обновление заголовка в вашем пользовательском интерфейсе
-//            binding.title.text = title
-//        })
+            dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
+            //searchEvent(eventEntVM.latitude, eventEntVM.longtitude) { ready ->
+                //if (ready == true) {
+
+                    val uid = eventEntVM.photos.value?.get(0).toString().removeSurrounding("[", "]")
+
+                    Log.d("INFOG", uid)
+                    val photoRef = storageRef.child("event_images/$uid")
+                    val tokenTask = photoRef.downloadUrl
+
+                    tokenTask.addOnSuccessListener { uri ->
+                        val imageUrl = uri.toString()
+
+                        Picasso.get().load(imageUrl).into(image);
+                        Log.d("INFOG", imageUrl)
+                    }.addOnFailureListener {
+
+                    }
+            binding.deleteOrLeave.setOnClickListener {
+                if(auth.currentUser!!.uid == eventEntVM.creator.value) {
+                    deleteEvent()
+                } else {
+                    deleteUserFromEvent(auth.currentUser!!.uid)
+                }
+            }
+
+            binding.viewQr.setOnClickListener {
+
+            }
+
+            if(eventEntVM.creator.value == auth.currentUser!!.uid) {
+                binding.btnRegToEvent.visibility = View.GONE
+                binding.viewQr.visibility = View.VISIBLE
+                binding.deleteOrLeave.visibility = View.VISIBLE
+            } else {
+                checkIfUserAlreadyReg(auth.currentUser!!.uid, eventEntVM.id.value!!) { ans ->
+                    if(ans) {
+                        binding.btnRegToEvent.visibility = View.GONE
+                        binding.viewQr.visibility = View.VISIBLE
+                        binding.deleteOrLeave.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+                //}
+            //}
+        }
 
         binding.btnRegToEvent.setOnClickListener {
             val curUid = auth.currentUser?.uid
@@ -94,6 +141,34 @@ class EventEntFragment : BottomSheetDialogFragment() {
         }
     }
 
+    private fun deleteEvent() {
+        val userInEventRef = dbRef_event.child("current_events").child(eventEntVM.id.value.toString())
+        userInEventRef.removeValue().addOnSuccessListener {
+            Log.d("INFOG", "Событие удалено")
+        }.addOnFailureListener {
+            Log.d("INFOG", "Удаление произошло не успешно")
+        }
+    }
+
+    fun deleteUserFromEvent(uid: String) {
+
+        dbRef_user = FirebaseDatabase.getInstance().getReference("users").child(eventEntVM.creatorUsername.value.toString()).child("curRegEventsId").child(uid)
+
+        val userInEventRef = dbRef_event.child("current_events").child(eventEntVM.id.value.toString()).child("reg_people_id").child(uid)
+
+        dbRef_user.removeValue().addOnSuccessListener {
+            userInEventRef.removeValue()
+                .addOnSuccessListener {
+                    binding.deleteOrLeave.visibility = View.GONE
+                    binding.viewQr.visibility = View.GONE
+                    binding.btnRegToEvent.visibility = View.VISIBLE
+                }
+                .addOnFailureListener {
+                    Log.e("INFOG", "ErLeaveEvent")
+                }
+        }
+    }
+
     private fun setDialog(title: String, desc: String, btnText: String) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
@@ -102,12 +177,6 @@ class EventEntFragment : BottomSheetDialogFragment() {
                 dialog.dismiss()
             }
             .show()
-    }
-
-    private fun checkForUpdates() {
-//        eventEntVM.title1.observe(viewLifecycleOwner, Observer { title ->
-//            binding.title.text = title
-//        })
     }
 
 
@@ -134,60 +203,6 @@ class EventEntFragment : BottomSheetDialogFragment() {
         })
     }
 
-    private fun searchEvent(coord1: Double, coord2: Double) {
-        dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
-        dbRef_user = FirebaseDatabase.getInstance().getReference("users")
-
-        dbRef_event.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for(eventSnapshot in dataSnapshot.children) {
-                    val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
-
-                    if (coordinates!![0] == coord1 && coordinates[1] == coord2) {
-                        var type = eventSnapshot.child("type_of_event").value.toString()
-                        if(type == "ent") {
-                            var id: Int = Integer.valueOf(eventSnapshot.child("event_id").value.toString())
-                            var maxPeople: Int = eventSnapshot.child("max_people").value.toString().toInt()
-                            var title = eventSnapshot.child("title").value.toString()
-                            val description = eventSnapshot.child("description").value.toString()
-                            val creator_uid = eventSnapshot.child("creator_id").value.toString()
-                            var photos = listOf("1")
-                            var peopleGo = listOf("1")
-                            var adress = eventSnapshot.child("adress").value.toString()
-                            var freePlaces = maxPeople - eventSnapshot.child("amount_reg_people").value.toString().toInt()
-                            var time_of_creation = eventSnapshot.child("time_of_creation").value.toString()
-                            val date_of_meeeting = eventSnapshot.child("date_of_meet").value.toString()
-                            var type_sport = eventSnapshot.child("sport_type").value.toString()
-                            var amount_reg_people:Int = Integer.valueOf(eventSnapshot.child("amount_reg_people").value.toString())
-
-                            dbRef_user.addValueEventListener(object : ValueEventListener {
-                                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                    for (eventSnapshot in dataSnapshot.children) {
-                                        if(creator_uid == eventSnapshot.child("uid").value) {
-                                            val creatorUsername = eventSnapshot.child("username").value.toString()
-                                            eventEntVM.setInfo(id, maxPeople, title, creator_uid, creatorUsername, photos, peopleGo, adress, freePlaces, description, time_of_creation, date_of_meeeting, type_sport, amount_reg_people)
-                                            break
-                                        }
-                                    }
-                                }
-
-                                override fun onCancelled(error: DatabaseError) {
-                                    Log.e("INFOG", "ErrorEventEntFragm")
-                                }
-                            })
-                        } else if(type == "eco") {
-                            //TODO
-                        }
-                        break
-                    }
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
-            }
-        })
-    }
 
     private fun regUserToEvent(curUid: String, callback: (Boolean) -> Unit) {
         dbRef = FirebaseDatabase.getInstance().getReference("users")
