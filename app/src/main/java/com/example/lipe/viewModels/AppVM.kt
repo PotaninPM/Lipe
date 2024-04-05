@@ -2,7 +2,7 @@ package com.example.lipe.viewModels
 
 import androidx.lifecycle.ViewModel
 
-class AppViewModel: ViewModel() {
+class AppVM: ViewModel() {
 
     var reg: String = "no"
 
@@ -11,8 +11,16 @@ class AppViewModel: ViewModel() {
 
     var event: String = ""
 
+    var type: String = ""
+
+    var positionCreateFr = 0
+
     fun setCoord(lat: Double, long: Double) {
         latitude = lat
         longtitude = long
+    }
+
+    fun openFr(positionCreateFr_: Int) {
+        positionCreateFr = positionCreateFr_
     }
 }

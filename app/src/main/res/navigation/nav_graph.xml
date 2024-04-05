@@ -28,21 +28,15 @@
         <action
             android:id="@+id/action_signUpFragment_to_signUpDescFragment"
             app:destination="@id/signUpDescFragment" />
-        <action
-            android:id="@+id/action_signUpFragment_to_signInWithEmailFragment2"
-            app:destination="@id/signInWithEmailFragment" />
-        <action
-            android:id="@+id/action_signUpFragment_to_signUpDescFragment2"
-            app:destination="@id/signUpDescFragment" />
-        <action
-            android:id="@+id/action_signUpFragment_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpDescFragment"
         android:name="com.example.lipe.sign_up_in.SignUpDescFragment"
         android:label="fragment_sign_up_desc"
         tools:layout="@layout/fragment_sign_up_desc" >
+        <action
+            android:id="@+id/action_signUpDescFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
         <action
             android:id="@+id/action_signUpDescFragment_to_mapsFragment"
             app:destination="@id/mapsFragment" />
@@ -57,46 +51,30 @@
         <action
             android:id="@+id/action_startFragment2_to_mapsFragment"
             app:destination="@id/mapsFragment" />
-        <action
-            android:id="@+id/action_startFragment2_to_createEventFragment"
-            app:destination="@id/createEventFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.example.lipe.MapsFragment"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" >
-        <action
-            android:id="@+id/action_mapsFragment_to_getPointsFragment"
-            app:destination="@id/getPointsFragment" />
-        <action
-            android:id="@+id/action_mapsFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
         <argument
             android:name="SignUpNew"
             android:defaultValue="no" />
         <action
-            android:id="@+id/action_mapsFragment_to_ratingFragment"
+            android:id="@+id/action_mapsFragment_to_ratingFragment2"
             app:destination="@id/ratingFragment" />
         <action
-            android:id="@+id/action_mapsFragment_to_otherProfileFragment"
-            app:destination="@id/otherProfileFragment" />
+            android:id="@+id/action_mapsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
         <action
-            android:id="@+id/action_mapsFragment_to_createEventFragment"
-            app:destination="@id/createEventFragment" />
+            android:id="@+id/action_mapsFragment_to_chatsFragment"
+            app:destination="@id/chatsFragment" />
     </fragment>
     <fragment
         android:id="@+id/getPointsFragment"
         android:name="com.example.lipe.GetPointsFragment"
         android:label="fragment_get_points"
-        tools:layout="@layout/fragment_get_points" >
-        <action
-            android:id="@+id/action_getPointsFragment_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
-        <action
-            android:id="@+id/action_getPointsFragment_self"
-            app:destination="@id/getPointsFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_get_points" />
     <fragment
         android:id="@+id/startDescFirstFragment"
         android:name="com.example.lipe.start_frs.StartDescFirstFragment"
@@ -130,42 +108,22 @@
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
-            android:id="@+id/action_profileFragment_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
-        <action
             android:id="@+id/action_profileFragment_to_getPointsFragment"
-            app:destination="@id/getPointsFragment" />
-        <action
-            android:id="@+id/action_profileFragment_to_mapsFragment2"
-            app:destination="@id/mapsFragment" />
-        <action
-            android:id="@+id/action_profileFragment_self"
-            app:destination="@id/profileFragment" />
-        <action
-            android:id="@+id/action_profileFragment_to_getPointsFragment2"
             app:destination="@id/getPointsFragment" />
     </fragment>
     <fragment
         android:id="@+id/otherProfileFragment"
         android:name="com.example.lipe.OtherProfileFragment"
         android:label="fragment_other_profile"
-        tools:layout="@layout/fragment_other_profile" >
-        <action
-            android:id="@+id/action_otherProfileFragment_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_other_profile" />
     <fragment
         android:id="@+id/ratingFragment"
         android:name="com.example.lipe.RatingFragment"
         android:label="fragment_rating"
         tools:layout="@layout/fragment_rating" />
     <fragment
-        android:id="@+id/createEventFragment"
-        android:name="com.example.lipe.create_events.CreateEventFragment"
-        android:label="fragment_create_event"
-        tools:layout="@layout/fragment_create_event" >
-        <action
-            android:id="@+id/action_createEventFragment_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
-    </fragment>
+        android:id="@+id/chatsFragment"
+        android:name="com.example.lipe.chats.ChatsFragment"
+        android:label="fragment_chats"
+        tools:layout="@layout/fragment_chats" />
 </navigation>

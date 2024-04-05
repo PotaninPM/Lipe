@@ -3,7 +3,7 @@ package com.example.lipe.database
 import java.util.ArrayList
 
 data class EcoEventModelDB(
-    var event_id: Long,
+    var event_id: String,
     var type_of_event: String,
     var creator_id: String,
     var time_of_creation: String,

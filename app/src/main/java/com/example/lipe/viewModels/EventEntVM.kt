@@ -10,8 +10,8 @@ class EventEntVM: ViewModel() {
     private var _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
 
-    private var _id = MutableLiveData<Int>()
-    val id: LiveData<Int> = _id
+    private var _id = MutableLiveData<String>()
+    val id: LiveData<String> = _id
 
     private var _maxPeople = MutableLiveData<Int>()
     val maxPeople: LiveData<Int> = _maxPeople
@@ -63,7 +63,7 @@ class EventEntVM: ViewModel() {
         longtitude = long
     }
 
-    fun setInfo(id_: Int, maxPeople_: Int, title_: String, creator_: String, creatorUsername_: String, photos_: ArrayList<String>, peopleGo_: List<String>, adress_: String, freePlaces_: Int, age_: String, eventDesc_: String, time_of_creation_: String, date_: String, type_sport_: String, amount_reg_people_: Int) {
+    fun setInfo(id_: String, maxPeople_: Int, title_: String, creator_: String, creatorUsername_: String, photos_: ArrayList<String>, peopleGo_: List<String>, adress_: String, freePlaces_: Int, age_: String, eventDesc_: String, time_of_creation_: String, date_: String, type_sport_: String, amount_reg_people_: Int) {
         _id.value = id_
         _maxPeople.value = maxPeople_
         _title.value = title_

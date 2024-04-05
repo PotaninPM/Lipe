@@ -117,8 +117,7 @@
                     android:layout_marginStart="@dimen/_6sdp"
                     android:layout_marginEnd="@dimen/_6sdp"
                     android:layout_gravity="center"
-                    android:paddingBottom="@dimen/_6sdp"
-                    app:boxStrokeColor="#3266F1">
+                    android:paddingBottom="@dimen/_6sdp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etNameinput"
@@ -296,7 +295,7 @@
                     android:layout_marginBottom="@dimen/_8sdp"
                     android:text="Создать событие"
                     android:textAllCaps="false"
-                    android:textColor="?attr/colorOnPrimary"
+                    android:textColor="@color/quantum_white_100"
                     android:textFontWeight="600"
                     android:textSize="@dimen/_12sdp"
                     tools:ignore="TextSizeCheck" />

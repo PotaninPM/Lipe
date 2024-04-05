@@ -24,10 +24,8 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.R
 import com.example.lipe.database.EcoEventModelDB
-import com.example.lipe.database.EntEventModelDB
 import com.example.lipe.databinding.FragmentCreateEcoEventBinding
-import com.example.lipe.databinding.FragmentCreateEntEventBinding
-import com.example.lipe.viewModels.AppViewModel
+import com.example.lipe.viewModels.AppVM
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -50,7 +48,7 @@ import java.util.UUID
 
 class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
-    private lateinit var appVM: AppViewModel
+    private lateinit var appVM: AppVM
 
     private lateinit var imageUri1: Uri
     private lateinit var imageUri2: Uri
@@ -79,7 +77,7 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     private lateinit var dbRef_id: DatabaseReference
     private lateinit var auth: FirebaseAuth
 
-    var eventId: Long = 0
+    var eventId: String = ""
 
     var savedYear = 0
     var savedMonth = 0
@@ -239,20 +237,6 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         }
     }
 
-    private fun getEventPrevId(callback: (eventId: Long) -> Unit) {
-        dbRef_id.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                eventId = dataSnapshot.getValue(Long::class.java)!!
-                dbRef_id.setValue(eventId + 1)
-                callback(eventId)
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("ERRORS","Ошибка ${databaseError.message}")
-            }
-        })
-    }
-
     private fun setDialog(title: String, desc: String, btnText: String) {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(title)
@@ -264,10 +248,9 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     }
 
     private fun createEvent(photosBefore: ArrayList<String>) {
-        appVM = ViewModelProvider(requireActivity()).get(AppViewModel::class.java)
-        getEventPrevId {eventId ->
+            appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
             if(checkForEmpty() == true) {
-
+                eventId = UUID.randomUUID().toString()
                 val time = Calendar.getInstance().time
                 val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
                 val current = formatter.format(time)
@@ -307,11 +290,10 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     getPoints
                 )
 
-                dbRef.child(eventId.toString()).setValue(event).addOnSuccessListener {
+                dbRef.child(eventId).setValue(event).addOnSuccessListener {
                     //do pop up notif and navigate to maps
                 }
             }
-        }
     }
 
     fun checkForEmpty(): Boolean {

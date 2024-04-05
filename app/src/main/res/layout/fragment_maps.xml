@@ -54,139 +54,163 @@
 
     </LinearLayout>
 
-    <HorizontalScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_30sdp"
-        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_height="@dimen/_42sdp"
+        android:background="@drawable/typesevents"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginLeft="@dimen/_6sdp"
-        android:scrollbars="none"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
-        <LinearLayout
+        app:layout_constraintTop_toTopOf="parent">
+
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <LinearLayout
-                android:id="@+id/all_events"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/vary_of_events"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
-                    android:src="@drawable/select_all"
-                    android:layout_marginLeft="@dimen/_6sdp"
-                    android:layout_gravity="center"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="Все"
-                    android:layout_gravity="center"
-                    android:textSize="@dimen/_12sdp"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    android:gravity="center"/>
-            </LinearLayout>
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginLeft="@dimen/_6sdp"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
-                android:id="@+id/friends"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/_6sdp"
-                android:background="@drawable/vary_of_events"
+                android:gravity="center"
                 android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
-                    android:src="@drawable/friends_img"
-                    android:layout_marginLeft="@dimen/_6sdp"
-                    android:layout_gravity="center"/>
-                <TextView
-                    android:layout_width="match_parent"
+
+                <LinearLayout
+                    android:id="@+id/all_events"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Друзья"
-                    android:layout_marginStart="@dimen/_3sdp"
-                    android:layout_gravity="center"
+                    android:background="@drawable/vary_of_events"
+                    android:orientation="horizontal">
 
-                    android:textSize="@dimen/_12sdp"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    android:gravity="center"/>
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/_6sdp"
+                        android:src="@drawable/select_all" />
 
-            <LinearLayout
-                android:id="@+id/eco_events"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/_6sdp"
-                android:background="@drawable/vary_of_events"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
-                    android:src="@drawable/planet_icon"
-                    android:layout_marginLeft="@dimen/_6sdp"
-                    android:layout_gravity="center"/>
-                <TextView
-                    android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:gravity="center"
+                        android:text="Все"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/friends"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Экология"
-                    android:layout_marginStart="@dimen/_3sdp"
-                    android:layout_gravity="center"
-                    android:textSize="@dimen/_12sdp"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    android:gravity="center"/>
-            </LinearLayout>
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:background="@drawable/vary_of_events"
+                    android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/ent_events"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/_6sdp"
-                android:background="@drawable/vary_of_events"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
-                    android:src="@drawable/stadium"
-                    android:layout_marginLeft="@dimen/_6sdp"
-                    android:layout_gravity="center"/>
-                <TextView
-                    android:layout_width="match_parent"
+                    <ImageView
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/_6sdp"
+                        android:src="@drawable/friends_img" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+
+                        android:gravity="center"
+                        android:text="Друзья"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/eco_events"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Развлечения"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/_3sdp"
-                    android:textSize="@dimen/_12sdp"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    android:gravity="center"/>
-            </LinearLayout>
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:background="@drawable/vary_of_events"
+                    android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/help_events"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/_6sdp"
-                android:background="@drawable/vary_of_events"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
-                    android:src="@drawable/handshake"
-                    android:layout_marginLeft="@dimen/_6sdp"
-                    android:layout_gravity="center"/>
-                <TextView
-                    android:layout_width="match_parent"
+                    <ImageView
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/_6sdp"
+                        android:src="@drawable/planet_icon" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:gravity="center"
+                        android:text="Экология"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ent_events"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Помощь"
-                    android:layout_marginStart="@dimen/_3sdp"
-                    android:layout_gravity="center"
-                    android:textSize="@dimen/_12sdp"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    android:gravity="center"/>
-            </LinearLayout>
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:background="@drawable/vary_of_events"
+                    android:orientation="horizontal">
 
-        </LinearLayout>
-    </HorizontalScrollView>
+                    <ImageView
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/_6sdp"
+                        android:src="@drawable/stadium" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:gravity="center"
+                        android:text="Развлечения"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/help_events"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:background="@drawable/vary_of_events"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/_6sdp"
+                        android:src="@drawable/handshake" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_3sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:gravity="center"
+                        android:text="Помощь"
+                        android:textSize="@dimen/_12sdp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </HorizontalScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
@@ -207,12 +231,18 @@
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_46sdp"
         style="@style/Widget.MaterialComponents.BottomNavigationView"
-        android:background="@color/quantum_white_100"
         app:itemIconSize="@dimen/_16sdp"
         app:itemIconTint="#5F5F5F"
         app:layout_constraintBottom_toBottomOf="parent"

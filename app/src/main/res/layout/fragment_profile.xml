@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FFFFFF"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ProfileFragment">
+    <data>
+        <variable name="viewModel" type="com.example.lipe.viewModels.ProfileVM" />
+
+        <variable
+            name="EntEventFragment"
+            type="com.example.lipe.ProfileFragment" />
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -119,7 +126,6 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/nunito_sans"
                     android:text="Рейтинг"
-                    android:textColor="#4A4949"
                     android:textSize="@dimen/_15sdp" />
 
             </LinearLayout>
@@ -148,7 +154,6 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/nunito_sans"
                     android:text="Друзей"
-                    android:textColor="#4A4949"
                     android:textSize="@dimen/_15sdp" />
 
             </LinearLayout>
@@ -176,7 +181,6 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/nunito_sans"
                     android:text="Событий"
-                    android:textColor="#4A4949"
                     android:textSize="@dimen/_15sdp" />
 
             </LinearLayout>
@@ -211,7 +215,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_12sdp"
-            android:background="@color/quantum_white_100"
+            android:background="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/getPoints">
@@ -243,4 +247,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.core.widget.NestedScrollView>
+</layout>

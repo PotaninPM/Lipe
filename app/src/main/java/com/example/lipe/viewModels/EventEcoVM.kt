@@ -9,8 +9,8 @@ class EventEcoVM: ViewModel() {
     private var _title = MutableLiveData<String>()
     val title: LiveData<String> = _title
 
-    private var _id = MutableLiveData<Int>()
-    val id: LiveData<Int> = _id
+    private var _id = MutableLiveData<String>()
+    val id: LiveData<String> = _id
 
     private var _maxPeople = MutableLiveData<Int>()
     val maxPeople: LiveData<Int> = _maxPeople
@@ -62,7 +62,7 @@ class EventEcoVM: ViewModel() {
         longtitude = long
     }
 
-    fun setInfo(id_: Int, maxPeople_: Int, title_: String, creator_: String, creatorUsername_: String, photosBefore_: ArrayList<String>, peopleGo_: ArrayList<String>, adress_: String, freePlaces_: Int, eventDesc_: String, time_of_creation_: String, date_: String, amount_reg_people_: Int, getPoints_: Int) {
+    fun setInfo(id_: String, maxPeople_: Int, title_: String, creator_: String, creatorUsername_: String, photosBefore_: ArrayList<String>, peopleGo_: ArrayList<String>, adress_: String, freePlaces_: Int, eventDesc_: String, time_of_creation_: String, date_: String, amount_reg_people_: Int, getPoints_: Int) {
         _id.value = id_
         _maxPeople.value = maxPeople_
         _title.value = title_

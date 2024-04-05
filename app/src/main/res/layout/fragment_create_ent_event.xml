@@ -129,7 +129,7 @@
                         android:inputType="text"
                         android:singleLine="true"
                         tools:ignore="Autofill"
-                        android:textColor="#000000" />
+                        android:textColor="#FFFFFF" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -170,6 +170,7 @@
                             android:gravity="center"
                             android:text="Выберите время встречи"
                             android:textSize="@dimen/_13sdp"
+                            android:textColor="@color/quantum_white_100"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -263,6 +264,7 @@
                             android:inputType="number"
                             android:gravity="center"
                             android:singleLine="true"
+                            android:textColor="#FFFFFF"
                             tools:ignore="Autofill" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
@@ -288,6 +290,7 @@
                         android:inputType="textMultiLine"
                         android:gravity="top"
                         android:singleLine="true"
+                        android:textColor="#FFFFFF"
                         tools:ignore="Autofill" />
                 </com.google.android.material.textfield.TextInputLayout>
 

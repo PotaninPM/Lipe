@@ -128,18 +128,17 @@
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:singleLine="true"
-                    android:textColorHint="@color/quantum_black_100"
-                    tools:ignore="Autofill"/>
+                    android:textColorHint="@color/quantum_black_100" />
             </com.google.android.material.textfield.TextInputLayout>
             <LinearLayout android:gravity="start"
                 android:id="@+id/linearRowvectortwo"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_6sdp"
+
                 android:layout_marginTop="@dimen/_6sdp"
                 android:layout_width="match_parent" android:orientation="horizontal">
 
                 <CheckBox
-                    android:id="@+id/checkBox2"
+                    android:id="@+id/agreeTerms"
                     android:layout_width="@dimen/_26sdp"
                     android:layout_height="@dimen/_26sdp" />
 
@@ -180,31 +179,43 @@
                 android:layout_width="match_parent"
                 android:orientation="vertical">
 
-                <LinearLayout android:gravity="center_vertical"
+                <androidx.constraintlayout.widget.ConstraintLayout android:gravity="center_vertical"
                     android:id="@+id/linearRowgooglelogo"
                     android:layout_height="@dimen/_40sdp"
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/_147sdp"
                     android:orientation="horizontal"
                     android:layout_gravity="center"
                     android:background="@drawable/sign_with_google">
-                    <ImageView android:id="@+id/imageGooglelogo"
-                        android:layout_height="@dimen/_16sdp"
-                        android:layout_marginStart="@dimen/_26sdp"
+
+                    <ImageView
+                        android:id="@+id/imageGooglelogo"
                         android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
                         android:layout_gravity="center"
                         android:scaleType="fitXY"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:src="@drawable/img_googlelogo"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/txtGoogletext"
+                        app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="ContentDescription" />
-                    <TextView android:ellipsize="end"
+
+                    <TextView
                         android:id="@+id/txtGoogletext"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_gravity="center"
-                        android:layout_width="wrap_content" android:singleLine="true"
-                        android:text="Регистрация через Google"
-                        android:layout_marginLeft="@dimen/_6sdp"
-                        android:textSize="@dimen/_14sdp"/>
-                </LinearLayout>
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:text="Google"
+                        android:textSize="@dimen/_14sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/txHaveAc"

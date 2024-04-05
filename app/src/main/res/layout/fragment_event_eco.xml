@@ -14,9 +14,9 @@
     </data>
 
     <androidx.core.widget.NestedScrollView
-        android:background="@color/quantum_white_100"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">

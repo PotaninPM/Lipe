@@ -57,20 +57,29 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
+                        android:id="@+id/avatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
                         android:id="@+id/imageArrowup"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:layout_gravity="center_horizontal"
                         android:scaleType="fitXY"
                         android:src="@drawable/img_arrowup"
-                        app:layout_constraintBottom_toTopOf="@+id/txtThree"
+                        app:layout_constraintBottom_toTopOf="@+id/txtUpload"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         tools:ignore="ContentDescription"
                         tools:src="@drawable/img_arrowup" />
 
                     <TextView
-                        android:id="@+id/txtThree"
+                        android:id="@+id/txtUpload"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_6sdp"
@@ -94,7 +103,7 @@
                     android:layout_marginEnd="@dimen/_6sdp"
                     android:orientation="vertical">
 
-                    <Spinner
+                    <androidx.appcompat.widget.AppCompatSpinner
                         android:id="@+id/spinner1"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_46sdp"
@@ -102,23 +111,28 @@
                         android:spinnerMode="dropdown" />
 
                 </LinearLayout>
-
-                <EditText
-                    android:id="@+id/descText"
+<!--                descText-->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/descTextLay"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_120sdp"
+                    android:layout_height="@dimen/_156sdp"
                     android:layout_marginStart="@dimen/_6sdp"
-                    android:layout_marginTop="@dimen/_6sdp"
                     android:layout_marginEnd="@dimen/_6sdp"
-                    android:background="@drawable/input_field"
-                    android:ems="10"
-                    android:gravity="start|top"
-                    android:hint="Расскажите о себе"
-                    android:inputType="textMultiLine"
-                    android:paddingStart="@dimen/_6sdp"
-                    android:paddingTop="@dimen/_5sdp"
-                    android:paddingEnd="@dimen/_6sdp"
-                    android:paddingBottom="@dimen/_5sdp" />
+                    app:counterEnabled="true"
+                    app:counterMaxLength="300"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_gravity="center">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/descText"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_130sdp"
+                        android:hint="Немного о вас"
+                        android:inputType="textMultiLine"
+                        android:gravity="top"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnSignUp"

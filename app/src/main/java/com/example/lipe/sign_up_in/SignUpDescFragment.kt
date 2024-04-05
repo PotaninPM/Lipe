@@ -1,7 +1,11 @@
 package com.example.lipe.sign_up_in
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,16 +16,35 @@ import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.example.lipe.R
+import com.example.lipe.database.User
 import com.example.lipe.databinding.FragmentSignUpDescBinding
+import com.example.lipe.viewModels.AppVM
+import com.example.lipe.viewModels.SignUpVM
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import java.time.LocalDate
 
 class SignUpDescFragment : Fragment() {
 
     private lateinit var spinner: Spinner
 
     private lateinit var dbRef: DatabaseReference
+
+    private lateinit var auth: FirebaseAuth
+
+    private lateinit var signUpVM: SignUpVM
+
+    private lateinit var appVM: AppVM
+
+    private lateinit var imageUri: Uri
 
     private var _binding: FragmentSignUpDescBinding? = null
     private val binding get() = _binding!!
@@ -63,6 +86,13 @@ class SignUpDescFragment : Fragment() {
     ): View? {
         _binding = FragmentSignUpDescBinding.inflate(inflater, container, false)
 
+        signUpVM = ViewModelProvider(requireActivity()).get(SignUpVM::class.java)
+
+        appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
+
+        dbRef = FirebaseDatabase.getInstance().getReference("users")
+        auth = FirebaseAuth.getInstance()
+
         spinner = binding.spinner1
 
         val adapter = CustomAdapter(requireContext(), items)
@@ -73,28 +103,73 @@ class SignUpDescFragment : Fragment() {
         return view
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-//        dbRef = FirebaseDatabase.getInstance().getReference("users")
-//
-//        binding.btnSignUp.setOnClickListener {
-//            var desc: String = binding.descText.text.toString().trim()
-//
-//            if(desc.isNotEmpty()) {
-//
-//                val bundle = Bundle()
-//                bundle.putString("SignUpNew", "success_reg")
-//
-//                view.findNavController().navigate(R.id.action_signUpDescFragment_to_mapsFragment, bundle)
-//            } else {
-//                checkForEmpty(desc)
-//            }
-//
-//        }
 
-//        binding.uploadPhoto.setOnClickListener {
-//
-//        }
+        binding.btnSignUp.setOnClickListener {
+            var desc: String = binding.descText.text.toString().trim()
+
+            if(desc.isNotEmpty()) {
+                auth.createUserWithEmailAndPassword(signUpVM.email, signUpVM.pass).addOnCompleteListener {
+                    if(it.isSuccessful) {
+                        appVM.reg = "yes"
+                        addUserToDb(signUpVM.login, signUpVM.email, signUpVM.pass, signUpVM.number, signUpVM.name, signUpVM.lastName, desc, view)
+                    }
+                }.addOnFailureListener {
+                    Log.d("INFOG", "NO!")
+                }
+            } else {
+                checkForEmpty(desc)
+            }
+
+        }
+
+        binding.uploadPhoto.setOnClickListener {
+            selectImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+    }
+
+    val selectImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            binding.imageArrowup.visibility = View.GONE
+            binding.txtUpload.visibility = View.GONE
+            binding.avatar.setImageURI(uri)
+            imageUri = uri
+            Log.d("INFOG", imageUri.toString())
+        } else {
+            Log.d("INFOG", "No media selected")
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun addUserToDb(username: String, email: String, pass: String, phone: String, name: String, lastName: String, desc: String, view: View) {
+        val user_info = User(
+            auth.currentUser?.uid,
+            "null",
+            LocalDate.now().toString(),
+            0,
+            0,
+            0,
+            desc,
+            username,
+            email,
+            "7" + phone,
+            pass,
+            name,
+            lastName,
+            -1
+        )
+
+        dbRef.child(username).setValue(user_info).addOnSuccessListener {
+            Log.d("INFOG", "YES")
+
+            val navController = view.findNavController()
+            navController.navigate(R.id.action_signUpDescFragment_to_mapsFragment)
+
+        }.addOnFailureListener {
+            Log.d("INFOG", it.toString())
+        }
     }
 
     fun checkForEmpty(desc: String) {

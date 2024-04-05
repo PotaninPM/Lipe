@@ -55,6 +55,9 @@ class ProfileFragment : Fragment() {
                 Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
             }
         })
+        binding.getPoints.setOnClickListener {
+            auth.signOut()
+        }
 
 
 

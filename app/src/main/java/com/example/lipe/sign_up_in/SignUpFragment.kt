@@ -10,12 +10,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.example.lipe.R
 import com.example.lipe.database.User
-import com.example.lipe.viewModels.AppViewModel
+import com.example.lipe.viewModels.AppVM
 import com.example.lipe.databinding.FragmentSignUpBinding
+import com.example.lipe.viewModels.SignUpVM
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -27,10 +27,12 @@ import java.time.LocalDate
 
 class SignUpFragment : Fragment() {
 
-    private lateinit var appVM: AppViewModel
+    private lateinit var appVM: AppVM
 
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var signUpVM: SignUpVM
 
     private lateinit var dbRef: DatabaseReference
 
@@ -41,7 +43,9 @@ class SignUpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSignUpBinding.inflate(inflater, container, false)
-        appVM = ViewModelProvider(requireActivity()).get(AppViewModel::class.java)
+
+        appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
+        signUpVM = ViewModelProvider(requireActivity()).get(SignUpVM::class.java)
 
         val view = binding.root
 
@@ -56,6 +60,10 @@ class SignUpFragment : Fragment() {
 
         //auth firebase
         auth = FirebaseAuth.getInstance()
+
+        binding.txHaveAc.setOnClickListener {
+            view.findNavController().navigate(R.id.action_signUpFragment_to_signInWithEmailFragment)
+        }
 
         binding.btnNext.setOnClickListener {
             var username: String = binding.etLogininput.text.toString().trim()
@@ -77,15 +85,8 @@ class SignUpFragment : Fragment() {
                         } else {
                             checkIfEmailExists(email) {result2 ->
                                 if(result2 == "ok") {
-                                    Log.d("INFOG", "5")
-                                    auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
-                                        if(it.isSuccessful) {
-                                            appVM.reg = "yes"
-                                            addUserToDb(username, email, pass, phone, name, lastName, view)
-                                        }
-                                    }.addOnFailureListener {
-                                        Log.d("INFOG", "NO!")
-                                    }
+                                    signUpVM.setData(lastName, name, username, email, phone, pass)
+                                    view.findNavController().navigate(R.id.action_signUpFragment_to_signUpDescFragment)
                                 } else if(result2 == "noEmail") {
                                     setError("Эта почта уже занята", binding.etEmailinput)
                                     binding.etEmailinput.setText("")
@@ -115,7 +116,7 @@ class SignUpFragment : Fragment() {
             setError("Введите почту!", binding.etEmailinput)
         }
         if(pass.isEmpty()) {
-            setError("Введите пароль!", binding.etPassinput)
+            Toast.makeText(requireContext(), "Введите пароль", Toast.LENGTH_LONG).show()
         }
         if(phone.isEmpty()) {
             setError("Введите номер телефона!", binding.etPhoneinput)
@@ -128,32 +129,6 @@ class SignUpFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun addUserToDb(username: String, email: String, pass: String, phone: String, name: String, lastName: String, view: View) {
-        val user_info = User(
-            auth.currentUser?.uid,
-            "null",
-            LocalDate.now().toString(),
-            0,
-            0,
-            0,
-            "-",
-            username,
-            email,
-            "7" + phone,
-            pass,
-            name,
-            lastName,
-            -1
-        )
-
-        dbRef.child(username).setValue(user_info).addOnSuccessListener {
-            Log.d("INFOG", "YES")
-            view.findNavController().navigate(R.id.action_signUpFragment_to_mapsFragment)
-        }.addOnFailureListener {
-            Log.d("INFOG", it.toString())
-        }
-    }
 
 
     //check username if exist(return (True) if not exist)

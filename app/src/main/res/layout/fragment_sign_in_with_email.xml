@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/quantum_white_100"
     tools:context=".sign_up_in.SignInWithEmailFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,7 +13,6 @@
         <LinearLayout android:id="@+id/linearSigninwithem"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:background="@color/quantum_white_100"
             android:orientation="vertical">
             <ImageView android:id="@+id/imageTreeimg"
                 android:layout_gravity="start"
@@ -53,7 +51,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_marginEnd="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_8sdp">
@@ -69,10 +67,11 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_marginEnd="@dimen/_16sdp"
-                android:layout_marginTop="@dimen/_8sdp">
+                android:layout_marginTop="@dimen/_8sdp"
+                app:passwordToggleEnabled="true">
                 <com.google.android.material.textfield.TextInputEditText
                     android:ellipsize="end" android:hint="Пароль"
                     android:id="@+id/etPassinput"
@@ -111,11 +110,7 @@
                 android:layout_marginStart="@dimen/_20pxh"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:layout_width="match_parent"
-                android:paddingBottom="@dimen/_18pxv"
-                android:paddingEnd="@dimen/_30pxh"
                 android:background="@drawable/btn_sign_in"
-                android:paddingStart="@dimen/_30pxh"
-                android:paddingTop="@dimen/_18pxv"
                 android:textStyle="bold"
                 android:textColor="@color/quantum_white_100" android:singleLine="true"
                 android:text="Войти" android:textAllCaps="false"
@@ -133,8 +128,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_1pxv"
                     android:layout_width="match_parent" android:orientation="horizontal">
-
-
+                    <View
+                        android:id="@+id/lineLineTwo"
+                        android:layout_height="@dimen/_1pxv"
+                        android:layout_marginBottom="@dimen/_8pxv"
+                        android:layout_marginStart="@dimen/_8pxh"
+                        android:background="@color/quantum_bluegrey50"
+                        android:layout_marginTop="@dimen/_7pxv"
+                        android:layout_weight="0.39" android:layout_width="0dp"/>
                     <TextView
                         android:id="@+id/txtOrtextOne"
                         android:layout_width="0dp"
@@ -148,11 +149,12 @@
                         android:textSize="@dimen/_11sdp"
                         tools:ignore="TextSizeCheck" />
                     <View
-                        android:id="@+id/lineLineTwo"
+                        android:id="@+id/lineLineTwo2"
                         android:layout_height="@dimen/_1pxv"
                         android:layout_marginBottom="@dimen/_8pxv"
                         android:layout_marginStart="@dimen/_8pxh"
                         android:layout_marginTop="@dimen/_7pxv"
+                        android:background="@color/quantum_bluegrey50"
                         android:layout_weight="0.39" android:layout_width="0dp"/>
                 </LinearLayout>
                 <LinearLayout android:gravity="center_vertical"

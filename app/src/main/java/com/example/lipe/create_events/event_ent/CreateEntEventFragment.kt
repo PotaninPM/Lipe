@@ -1,10 +1,8 @@
 package com.example.lipe.create_events.event_ent
 
 import android.app.DatePickerDialog
-import android.app.ProgressDialog
 import android.app.TimePickerDialog
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
@@ -27,7 +25,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.R
-import com.example.lipe.viewModels.AppViewModel
+import com.example.lipe.viewModels.AppVM
 import com.example.lipe.databinding.FragmentCreateEntEventBinding
 import com.example.lipe.database.EntEventModelDB
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -36,27 +34,21 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 import java.util.TimeZone
 import java.util.UUID
 
 
 class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     //view model
-    private lateinit var appVM: AppViewModel
+    private lateinit var appVM: AppVM
 
     var type_sport = "1"
 
@@ -297,7 +289,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     }
 
     private fun createEvent(photos: ArrayList<String>) {
-        appVM = ViewModelProvider(requireActivity()).get(AppViewModel::class.java)
+        appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
         if (checkForEmpty() == true) {
             eventId = UUID.randomUUID().toString()
             val time = Calendar.getInstance().time
@@ -313,7 +305,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
             var type: String = "ent"
 
-            if (type_sport == "1" || type_sport == "Выберите тип развлечения") {
+            if(type_sport == "1" || type_sport == "Выберите тип развлечения") {
                 Toast.makeText(requireContext(), "Введите спорт!", Toast.LENGTH_LONG).show()
             } else {
                 var event = EntEventModelDB(
@@ -334,7 +326,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     1
                 )
 
-                dbRef.child(eventId.toString()).setValue(event).addOnSuccessListener {
+                dbRef.child(eventId).setValue(event).addOnSuccessListener {
+
                     //do pop up notif and navigate to maps
                 }
             }
