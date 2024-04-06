@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:background="#FFFFFF"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ProfileFragment">
@@ -10,23 +8,13 @@
         <variable name="viewModel" type="com.example.lipe.viewModels.ProfileVM" />
 
         <variable
-            name="EntEventFragment"
+            name="ProfileFragment"
             type="com.example.lipe.ProfileFragment" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/all"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-<!--    <com.google.android.material.navigation.NavigationView-->
-<!--        android:id="@+id/nav_view"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_gravity="start"-->
-<!--        android:fitsSystemWindows="true"-->
-<!--        app:headerLayout="@layout/more_info_menu"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:menu="@menu/profile_drawer" />-->
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageView9"
@@ -69,24 +57,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/interextrabold"
-                android:text="Mark Zackerberg"
+                android:text="@{viewModel.nameLastName}"
                 android:textAlignment="center"
                 android:textSize="@dimen/_17sdp"
                 android:textStyle="bold" />
 
         </LinearLayout>
-        <!--    </LinearLayout>-->
 
-
-        <ImageView
-            android:id="@+id/more"
-            android:layout_width="@dimen/_22sdp"
-            android:layout_height="@dimen/_22sdp"
-            android:src="@drawable/menu_in_other_profile"
-            android:layout_marginTop="@dimen/_6sdp"
-            android:layout_marginEnd="@dimen/_10sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -115,7 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="152"
+                    android:text="@{viewModel.ratingPoints}"
 
                     android:textSize="@dimen/_17sdp"
                     android:textStyle="bold" />
@@ -144,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="15"
+                    android:text="@{viewModel.friendsAmount}"
                     android:textSize="@dimen/_17sdp"
                     android:textStyle="bold" />
 
@@ -171,7 +148,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="15"
+                    android:text="@{viewModel.eventsAmount}"
                     android:textSize="@dimen/_17sdp"
                     android:textStyle="bold" />
 
@@ -192,7 +169,7 @@
             android:layout_height="@dimen/_35sdp"
             android:layout_marginTop="@dimen/_12sdp"
             android:background="@drawable/add_to_friend_btn"
-            android:text="Получить баллы"
+            android:text="Ваш QR"
             android:textAllCaps="false"
             android:textColor="@color/quantum_white_100"
             app:layout_constraintStart_toStartOf="parent"
@@ -203,7 +180,7 @@
             android:layout_width="@dimen/_105sdp"
             android:layout_height="@dimen/_35sdp"
             android:background="@drawable/add_to_friend_btn"
-            android:text="Изменить данные"
+            android:text="Сканировать QR"
             android:textAllCaps="false"
             android:textColor="@color/quantum_white_100"
             app:layout_constraintBottom_toTopOf="@+id/tabLayout"
@@ -215,7 +192,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_12sdp"
-            android:background="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/getPoints">

@@ -12,7 +12,6 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.lipe.R
-import com.example.lipe.database.User
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.databinding.FragmentSignUpBinding
 import com.example.lipe.viewModels.SignUpVM
@@ -23,7 +22,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import java.time.LocalDate
 
 class SignUpFragment : Fragment() {
 

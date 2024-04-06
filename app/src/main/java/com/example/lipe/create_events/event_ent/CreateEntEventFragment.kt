@@ -165,6 +165,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         auth = FirebaseAuth.getInstance()
 
         binding.btnCreateEvent.setOnClickListener {
+//            binding.scrollView.visibility = View.GONE
+//            binding.loadingProgressBar.visibility = View.VISIBLE
             uploadImage {photos ->
                 if(photos[0] != "-" || photos[1] != "-" || photos[2] != "-") {
                     createEvent(photos)

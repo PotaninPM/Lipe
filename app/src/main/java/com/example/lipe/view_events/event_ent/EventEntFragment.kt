@@ -40,12 +40,13 @@ class EventEntFragment : BottomSheetDialogFragment() {
 
     private lateinit var storageRef : StorageReference
 
+    private lateinit var appVM: AppVM
     private var _binding: FragmentEventEntBinding? = null
     private val binding get() = _binding!!
 
     private val eventEntVM: EventEntVM by activityViewModels()
 
-    private lateinit var appVM: AppVM
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,8 +82,7 @@ class EventEntFragment : BottomSheetDialogFragment() {
             storageRef = FirebaseStorage.getInstance().reference
 
             dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
-            //searchEvent(eventEntVM.latitude, eventEntVM.longtitude) { ready ->
-                //if (ready == true) {
+
             searchEvent(appVM.latitude, appVM.longtitude) {ready ->
                 if(ready) {
                     loadAllImages {ready->
@@ -130,14 +130,14 @@ class EventEntFragment : BottomSheetDialogFragment() {
             if (curUid != null) {
                 checkIfUserAlreadyReg(curUid, eventEntVM.id.value!!) { isUserAlreadyRegistered ->
                     if (!isUserAlreadyRegistered) {
-                        regUserToEvent(curUid) { result ->
-                            if(result == true) {
-                                setDialog("Успешная регистрация", "Поздравляем, регистрация на событие прошла успешно", "Отлично!")
-                            } else {
-                                //fail
-                                setDialog("Ошибка при регистрации", "Что-то пошло не так, попробуйте зарегистрироваться еще раз","Хорошо")
-                            }
-                        }
+//                        regUserToEvent(curUid) { result ->
+//                            if(result == true) {
+//                                setDialog("Успешная регистрация", "Поздравляем, регистрация на событие прошла успешно", "Отлично!")
+//                            } else {
+//                                //fail
+//                                setDialog("Ошибка при регистрации", "Что-то пошло не так, попробуйте зарегистрироваться еще раз","Хорошо")
+//                            }
+//                        }
                     } else {
                         Log.d("INFOG", "Пользователь уже зарегистрирован на мероприятие")
                         //function to refuse of event
@@ -158,6 +158,7 @@ class EventEntFragment : BottomSheetDialogFragment() {
         tokenTask.addOnSuccessListener { uri ->
             val imageUrl = uri.toString()
             Picasso.get().load(imageUrl).into(binding.image)
+            Thread.sleep(1000)
             callback(true)
 
         }.addOnFailureListener {
@@ -277,7 +278,7 @@ class EventEntFragment : BottomSheetDialogFragment() {
                 var isUserRegistered = false
                 for (childSnapshot in regPeopleSnapshot.children) {
                     val uid = childSnapshot.getValue(String::class.java)
-                    if (uid == curUid) {
+                    if(uid == curUid) {
                         isUserRegistered = true
                         break
                     }

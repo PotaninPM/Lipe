@@ -357,14 +357,14 @@
                     app:layout_constraintTop_toBottomOf="@+id/lineLineThree" />
 
                 <TextView
-                    android:id="@+id/textView9"
+                    android:id="@+id/desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_12sdp"
                     android:layout_marginEnd="@dimen/_12sdp"
                     android:fontFamily="@font/mulish"
                     android:text="@{viewModel.eventDesc}"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_13sdp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/about_event" />
 
@@ -387,7 +387,7 @@
                     android:textSize="@dimen/_12sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView9"
+                    app:layout_constraintTop_toBottomOf="@+id/desc"
                     tools:ignore="TextSizeCheck" />
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -407,7 +407,7 @@
                     android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="@+id/btnRegToEvent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView9"
+                    app:layout_constraintTop_toBottomOf="@+id/desc"
                     tools:ignore="TextSizeCheck" />
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -429,7 +429,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
 
                     app:layout_constraintStart_toEndOf="@+id/viewQr"
-                    app:layout_constraintTop_toBottomOf="@+id/textView9"
+                    app:layout_constraintTop_toBottomOf="@+id/desc"
                     tools:ignore="TextSizeCheck" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

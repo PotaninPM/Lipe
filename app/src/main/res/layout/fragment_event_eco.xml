@@ -9,7 +9,7 @@
         <variable name="viewModel" type="com.example.lipe.viewModels.EventEcoVM" />
 
         <variable
-            name="EntEventFragment"
+            name="EcoEventFragment"
             type="com.example.lipe.view_events.event_eco.EventEcoFragment" />
     </data>
 

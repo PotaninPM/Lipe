@@ -1,16 +1,20 @@
 package com.example.lipe
 
 import android.os.Bundle
+import android.provider.ContactsContract.Profile
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.example.lipe.databinding.FragmentEventEntBinding
 import com.example.lipe.databinding.FragmentProfileBinding
 import com.example.lipe.sign_up_in.SignUpFragment
+import com.example.lipe.viewModels.ProfileVM
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -27,34 +31,26 @@ class ProfileFragment : Fragment() {
     private  lateinit var dbRef: DatabaseReference
 
     private lateinit var auth: FirebaseAuth
+
+    private val profileVM: ProfileVM by activityViewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        dbRef = FirebaseDatabase.getInstance().getReference("users")
-        auth = FirebaseAuth.getInstance()
-
         val id = auth.currentUser?.uid
 
-        dbRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for(eventSnapshot in dataSnapshot.children) {
-                    val uid = eventSnapshot.child("uid").value.toString()
-                    val lastName = eventSnapshot.child("lastName").value.toString()
-                    if(uid == id) {
-                        //val
-                        Log.d("INFOG", lastName)
-                    }
-                }
+        //if(profileVM.ratingPoints.value ==) {
+        findAccount() {ready ->
+            if(ready) {
+                Log.d("INFOG", profileVM.nameLastName.value.toString())
             }
+        }
+        //}
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
-            }
-        })
         binding.getPoints.setOnClickListener {
             auth.signOut()
         }
@@ -79,6 +75,51 @@ class ProfileFragment : Fragment() {
 
 
     }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+
+        dbRef = FirebaseDatabase.getInstance().getReference("users")
+        auth = FirebaseAuth.getInstance()
+
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = profileVM
+        }
+
+        val view = binding.root
+        return view
+    }
+    private fun findAccount(callback: (ready: Boolean) -> Unit) {
+
+        dbRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for(profile in dataSnapshot.children) {
+                    if(profile.child("uid").value.toString() == auth.currentUser!!.uid) {
+                        val name:String = profile.child("firstName").value.toString()
+                        val lastName:String = profile.child("lastName").value.toString()
+                        val ratingAmount: Int = profile.child("rating").value.toString().toInt()
+                        val friendsAmount: Int = profile.child("friends_amount").value.toString().toInt()
+                        val eventsAmount: Int = profile.child("events_amount").value.toString().toInt()
+                        val firstLastName: String = name + " " + lastName
+                        profileVM.setInfo(firstLastName, friendsAmount,eventsAmount, ratingAmount)
+
+                        callback(true)
+                        break
+                    }
+                }
+
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
+                callback(false)
+            }
+        })
+    }
+
     private fun switchTabs(position: Int) {
         val fragment = when(position) {
             0 -> CurEventsInProfileFragment()
@@ -93,15 +134,7 @@ class ProfileFragment : Fragment() {
                 .commit()
         }
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
-        val view = binding.root
-        return view
-    }
     override fun onDestroy() {
         super.onDestroy()
         _binding = null

@@ -1,7 +1,6 @@
 package com.example.lipe.sign_up_in
 
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -22,7 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.lipe.R
-import com.example.lipe.database.User
+import com.example.lipe.database.UserDB
 import com.example.lipe.databinding.FragmentSignUpDescBinding
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.viewModels.SignUpVM
@@ -144,7 +143,7 @@ class SignUpDescFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun addUserToDb(username: String, email: String, pass: String, phone: String, name: String, lastName: String, desc: String, view: View) {
-        val user_info = User(
+        val user_DB_info = UserDB(
             auth.currentUser?.uid,
             "null",
             LocalDate.now().toString(),
@@ -158,10 +157,17 @@ class SignUpDescFragment : Fragment() {
             pass,
             name,
             lastName,
-            -1
+            -1,
+            "-",
+            arrayListOf("-"),
+            arrayListOf("Добро пожаловать!"),
+            arrayListOf("-"),
+            0,
+            arrayListOf("-"),
+            0,
         )
 
-        dbRef.child(username).setValue(user_info).addOnSuccessListener {
+        dbRef.child(username).setValue(user_DB_info).addOnSuccessListener {
             Log.d("INFOG", "YES")
 
             val navController = view.findNavController()

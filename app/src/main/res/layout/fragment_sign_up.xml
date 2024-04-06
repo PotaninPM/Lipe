@@ -180,7 +180,7 @@
                 android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout android:gravity="center_vertical"
-                    android:id="@+id/linearRowgooglelogo"
+                    android:id="@+id/signUpWithGoogle"
                     android:layout_height="@dimen/_40sdp"
                     android:layout_width="@dimen/_147sdp"
                     android:orientation="horizontal"
@@ -226,9 +226,11 @@
                     android:gravity="center"
                     android:singleLine="true"
                     android:textStyle="bold"
+                    android:clickable="true"
                     android:text="Уже есть аккаунт? Войдите"
                     android:textSize="@dimen/_11sdp"
-                    tools:ignore="TextSizeCheck" />
+                    tools:ignore="TextSizeCheck"
+                    android:focusable="true" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

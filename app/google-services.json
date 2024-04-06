@@ -13,7 +13,20 @@
           "package_name": "com.example.lipe"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "895088919548-56gvv91cvkgf398eim3d52nfj8i27fll.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lipe",
+            "certificate_hash": "cd7fcef692bdb75b2700a7d38efc6a8dab2f011f"
+          }
+        },
+        {
+          "client_id": "895088919548-o9vu4vqbokq7mpii3i6j5f2lquatsqa3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAisBSXSGWG7ALNL17YyVPfZBwhPODUjCw"
@@ -21,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "895088919548-o9vu4vqbokq7mpii3i6j5f2lquatsqa3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -1,8 +1,6 @@
 package com.example.lipe.database
 
-import android.content.Intent
-
-data class User(
+data class UserDB(
     val uid:String?= null,
     var avatarId: String,
     val date_of_reg: String?= null,
@@ -18,9 +16,10 @@ data class User(
     val lastName: String ?= null,
     val place_in_total_rating: Int?= null,
     var organization: String ?= null,
-    val hobbies: Array<String> ?= null,
-    val query_friends: Array<String> ?= null,
-    val friends: Array<String> ?= null,
+    val hobbies: ArrayList<String> ?= null,
+    val query_friends: ArrayList<String> ?= null,
+    val friends: ArrayList<String> ?= null,
     val friends_amount: Int ?= null,
-    val curRegEventsId: ArrayList<String> ?= null
+    val curRegEventsId: ArrayList<String> ?= null,
+    val events_amount: Int ?= null
 )
