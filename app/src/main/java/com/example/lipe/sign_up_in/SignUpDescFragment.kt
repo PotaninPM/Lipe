@@ -197,7 +197,7 @@ class SignUpDescFragment : Fragment() {
             0,
         )
 
-        dbRef.child(username).setValue(user_DB_info).addOnSuccessListener {
+        dbRef.child(auth.currentUser!!.uid).setValue(user_DB_info).addOnSuccessListener {
             Log.d("INFOG", "YES")
 
             val navController = view.findNavController()

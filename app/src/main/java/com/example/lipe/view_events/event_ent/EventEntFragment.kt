@@ -164,7 +164,7 @@ class EventEntFragment : BottomSheetDialogFragment() {
         } else {
             val uid = eventEntVM.photos.value?.get(0).toString().removeSurrounding("[", "]")
 
-            val userAvatarRef = storageRef.child("avatars/${auth.currentUser!!.uid}")
+            val userAvatarRef = storageRef.child("avatars/${eventEntVM.creator.value}")
 
             val photoRef = storageRef.child("event_images/$uid")
 
@@ -178,13 +178,16 @@ class EventEntFragment : BottomSheetDialogFragment() {
                 tokenTask2.addOnSuccessListener { uri ->
                     val imageUrl2 = uri.toString()
                     Picasso.get().load(imageUrl2).into(binding.eventAvatar)
+                    callback(true)
+                }.addOnFailureListener {
+
                 }
                 Thread.sleep(1000)
-                callback(true)
 
             }.addOnFailureListener {
                 callback(false)
             }
+
         }
 
     }
@@ -314,7 +317,7 @@ class EventEntFragment : BottomSheetDialogFragment() {
 
 
     private fun regUserToEvent(curUid: String, callback: (Boolean) -> Unit) {
-        val dbRef_users = FirebaseDatabase.getInstance().getReference("users")
+        val dbRef_users = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
         val dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
 
         val event_id = eventEntVM.id.value.toString()
@@ -333,7 +336,7 @@ class EventEntFragment : BottomSheetDialogFragment() {
                             .addOnSuccessListener {
                                 dbRef_event.child(event_id).child("amount_reg_people").setValue(reg_people + 1)
                                     .addOnSuccessListener {
-                                        dbRef_users.child(curUid).child("curRegEventsId").child(event_id).setValue(true)
+                                        dbRef_users.child("curRegEventsId").child(event_id).setValue(event_id)
                                             .addOnSuccessListener {
                                                 binding.btnRegToEvent.visibility = View.GONE
                                                 binding.viewQr.visibility = View.VISIBLE
@@ -371,7 +374,6 @@ class EventEntFragment : BottomSheetDialogFragment() {
             }
         })
     }
-
 
 
     companion object {
