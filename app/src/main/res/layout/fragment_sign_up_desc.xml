@@ -49,19 +49,24 @@
                     android:layout_height="@dimen/_200sdp"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/_6sdp"
-                    android:background="@drawable/upload_photo"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
+                    <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/avatar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:padding="@dimen/_2sdp"
+                        android:scaleType="centerCrop"
+                        android:background="#B7B4B4"
+                        app:strokeWidth="@dimen/_2sdp"
+                        app:strokeColor="#BC1616"
+                        app:shapeAppearanceOverlay="@style/ImageStyle_Circle"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.476"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 

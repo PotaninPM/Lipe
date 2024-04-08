@@ -122,7 +122,6 @@ class MapsFragment : Fragment() {
                     val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
                     if(coordinates != null && coordinates[0] == coord1 && coordinates[1] == coord2) {
                         val type = eventSnapshot.child("type_of_event").value.toString()
-
                         appVM.type = type
                         done = 1
                         callback(true)
@@ -285,6 +284,9 @@ class MapsFragment : Fragment() {
         closeBtn.setOnClickListener {
             pop_up.dismiss()
         }
+    }
+    companion object {
+        private const val REQUEST_LOCATION_PERMISSION = 1
     }
 
     override fun onDestroy() {

@@ -29,7 +29,9 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import java.time.LocalDate
+import java.util.UUID
 
 class SignUpDescFragment : Fragment() {
 
@@ -44,6 +46,8 @@ class SignUpDescFragment : Fragment() {
     private lateinit var appVM: AppVM
 
     private lateinit var imageUri: Uri
+
+    private var upload_photo: Boolean = false
 
     private var _binding: FragmentSignUpDescBinding? = null
     private val binding get() = _binding!!
@@ -109,11 +113,18 @@ class SignUpDescFragment : Fragment() {
         binding.btnSignUp.setOnClickListener {
             var desc: String = binding.descText.text.toString().trim()
 
-            if(desc.isNotEmpty()) {
+            if(desc.isNotEmpty() && upload_photo == true) {
                 auth.createUserWithEmailAndPassword(signUpVM.email, signUpVM.pass).addOnCompleteListener {
                     if(it.isSuccessful) {
-                        appVM.reg = "yes"
-                        addUserToDb(signUpVM.login, signUpVM.email, signUpVM.pass, signUpVM.number, signUpVM.name, signUpVM.lastName, desc, view)
+                        uploadImage {uid ->
+                            if(uid != "null") {
+                                appVM.reg = "yes"
+                                addUserToDb(signUpVM.login, signUpVM.email, signUpVM.pass, signUpVM.number, signUpVM.name, signUpVM.lastName, desc, uid, view)
+                            } else {
+                                Log.d("INFOG", "Что-то пошло не так")
+                                Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_LONG).show()
+                            }
+                        }
                     }
                 }.addOnFailureListener {
                     Log.d("INFOG", "NO!")
@@ -134,6 +145,8 @@ class SignUpDescFragment : Fragment() {
             binding.imageArrowup.visibility = View.GONE
             binding.txtUpload.visibility = View.GONE
             binding.avatar.setImageURI(uri)
+            binding.avatar.setStrokeColorResource(R.color.green)
+            upload_photo = true
             imageUri = uri
             Log.d("INFOG", imageUri.toString())
         } else {
@@ -141,11 +154,28 @@ class SignUpDescFragment : Fragment() {
         }
     }
 
+    private fun uploadImage(callback: (uid: String) -> Unit) {
+        val storageRef = FirebaseStorage.getInstance().getReference("avatars")
+        imageUri.let { uri ->
+            val uid: String = auth.currentUser!!.uid
+            val imageRef = storageRef.child(uid)
+            imageRef.putFile(uri)
+                .addOnSuccessListener { task ->
+                    task.storage.downloadUrl.addOnSuccessListener { url ->
+                        callback(uid)
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    callback("null")
+                }
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    fun addUserToDb(username: String, email: String, pass: String, phone: String, name: String, lastName: String, desc: String, view: View) {
+    fun addUserToDb(username: String, email: String, pass: String, phone: String, name: String, lastName: String, desc: String, avatar: String, view: View) {
         val user_DB_info = UserDB(
             auth.currentUser?.uid,
-            "null",
+            avatar,
             LocalDate.now().toString(),
             0,
             0,

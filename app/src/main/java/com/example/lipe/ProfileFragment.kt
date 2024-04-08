@@ -1,5 +1,7 @@
 package com.example.lipe
 
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract.Profile
 import android.util.Log
@@ -8,21 +10,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import com.example.lipe.databinding.FragmentEventEntBinding
 import com.example.lipe.databinding.FragmentProfileBinding
 import com.example.lipe.sign_up_in.SignUpFragment
 import com.example.lipe.viewModels.ProfileVM
-import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.squareup.picasso.Picasso
+import java.util.UUID
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
@@ -33,9 +34,14 @@ class ProfileFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
 
     private val profileVM: ProfileVM by activityViewModels()
+
+    private lateinit var storageRef : StorageReference
+
+    private lateinit var imageUri: Uri
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        storageRef = FirebaseStorage.getInstance().reference
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,11 +50,6 @@ class ProfileFragment : Fragment() {
         val id = auth.currentUser?.uid
 
         //if(profileVM.ratingPoints.value ==) {
-        findAccount() {ready ->
-            if(ready) {
-                Log.d("INFOG", profileVM.nameLastName.value.toString())
-            }
-        }
         //}
 
         binding.getPoints.setOnClickListener {
@@ -87,6 +88,21 @@ class ProfileFragment : Fragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = profileVM
+
+            binding.loadingProgressBar.visibility = View.VISIBLE
+            binding.allProfile.visibility = View.GONE
+
+            findAccount {ready ->
+                if(ready) {
+                    setProfilePhoto {ready ->
+                        if(ready) {
+                            binding.loadingProgressBar.visibility = View.GONE
+                            binding.allProfile.visibility = View.VISIBLE
+                        }
+                    }
+                }
+            }
+            binding.theme.setImageResource(R.drawable.ex2)
         }
 
         val view = binding.root
@@ -103,9 +119,10 @@ class ProfileFragment : Fragment() {
                         val ratingAmount: Int = profile.child("rating").value.toString().toInt()
                         val friendsAmount: Int = profile.child("friends_amount").value.toString().toInt()
                         val eventsAmount: Int = profile.child("events_amount").value.toString().toInt()
+                        val avatar: String = profile.child("avatarId").value.toString()
+                        
                         val firstLastName: String = name + " " + lastName
-                        profileVM.setInfo(firstLastName, friendsAmount,eventsAmount, ratingAmount)
-
+                        profileVM.setInfo(firstLastName, friendsAmount, eventsAmount, ratingAmount, avatar)
                         callback(true)
                         break
                     }
@@ -119,6 +136,23 @@ class ProfileFragment : Fragment() {
             }
         })
     }
+
+    private fun setProfilePhoto(callback: (ready: Boolean) -> Unit) {
+        val uid:String = profileVM.avatar.value.toString()
+
+        val photoRef = storageRef.child("avatars/$uid")
+
+        val tokenTask = photoRef.downloadUrl
+
+        tokenTask.addOnSuccessListener { uri ->
+            val imageUrl = uri.toString()
+            Picasso.get().load(imageUrl).into(binding.avatar)
+            callback(true)
+        }.addOnFailureListener {
+            callback(false)
+        }
+    }
+
 
     private fun switchTabs(position: Int) {
         val fragment = when(position) {

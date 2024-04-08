@@ -128,12 +128,15 @@
                     app:layout_constraintTop_toTopOf="@+id/lineLineTwo">
 
 
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/imageView6"
-                        android:layout_width="@dimen/_38sdp"
-                        android:layout_height="@dimen/_38sdp"
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/eventAvatar"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:padding="@dimen/_2sdp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ex2"
                         android:layout_marginStart="@dimen/_8sdp"
-                        android:src="@drawable/upload_photo"
+                        app:shapeAppearanceOverlay="@style/ImageStyle_Circle"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -143,7 +146,7 @@
                         android:layout_marginStart="@dimen/_6sdp"
                         android:orientation="vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/imageView6"
+                        app:layout_constraintStart_toEndOf="@+id/eventAvatar"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
@@ -395,6 +398,7 @@
                     android:layout_width="@dimen/_150sdp"
                     android:layout_height="@dimen/_40sdp"
                     android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:background="@drawable/view_qrcode_btn"
                     android:ellipsize="end"
                     android:gravity="center"
@@ -415,6 +419,7 @@
                     android:layout_width="@dimen/_140sdp"
                     android:layout_height="@dimen/_40sdp"
                     android:layout_marginEnd="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:background="@drawable/view_qrcode_btn"
                     android:ellipsize="end"
                     android:gravity="center"
@@ -427,7 +432,6 @@
                     android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="@+id/btnRegToEvent"
                     app:layout_constraintEnd_toEndOf="parent"
-
                     app:layout_constraintStart_toEndOf="@+id/viewQr"
                     app:layout_constraintTop_toBottomOf="@+id/desc"
                     tools:ignore="TextSizeCheck" />

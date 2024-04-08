@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ImageStyle_Circle">
+        <item name = "cornerSize">50%</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+    <style name="ImageStyle_theme">
+        <item name="cornerSizeBottomLeft">10%</item>
+        <item name="cornerSizeBottomRight">10%</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+</resources>

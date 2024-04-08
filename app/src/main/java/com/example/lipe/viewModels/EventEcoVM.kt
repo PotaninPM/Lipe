@@ -15,6 +15,9 @@ class EventEcoVM: ViewModel() {
     private var _maxPeople = MutableLiveData<Int>()
     val maxPeople: LiveData<Int> = _maxPeople
 
+    private var _powerPollution = MutableLiveData<String>()
+    val powerPollution: LiveData<String> = _powerPollution
+
     private var _minPeople = MutableLiveData<Int>()
     val minPeople: LiveData<Int> = _minPeople
 
@@ -22,7 +25,7 @@ class EventEcoVM: ViewModel() {
     val creator: LiveData<String> = _creator
 
     private var _photosBefore = MutableLiveData<ArrayList<String>>()
-    val photos: LiveData<ArrayList<String>> = _photosBefore
+    val photosBefore: LiveData<ArrayList<String>> = _photosBefore
 
     private var _peopleGo = MutableLiveData<ArrayList<String>>()
     val peopleGo: LiveData<ArrayList<String>> = _peopleGo
@@ -62,7 +65,7 @@ class EventEcoVM: ViewModel() {
         longtitude = long
     }
 
-    fun setInfo(id_: String, maxPeople_: Int, title_: String, creator_: String, creatorUsername_: String, photosBefore_: ArrayList<String>, peopleGo_: ArrayList<String>, adress_: String, freePlaces_: Int, eventDesc_: String, time_of_creation_: String, date_: String, amount_reg_people_: Int, getPoints_: Int) {
+    fun setInfo(id_: String, maxPeople_: Int, minPeople_: Int, powerPollution_: Int, title_: String, creator_: String, creatorUsername_: String, photosBefore_: ArrayList<String>, peopleGo_: ArrayList<String>, adress_: String, freePlaces_: Int, eventDesc_: String, time_of_creation_: String, date_: String, amount_reg_people_: Int, getPoints_: Int) {
         _id.value = id_
         _maxPeople.value = maxPeople_
         _title.value = title_
@@ -72,11 +75,12 @@ class EventEcoVM: ViewModel() {
         _adress.value = adress_
         _eventDesc.value = eventDesc_
         _date.value = date_
-        _type.value = "eco"
+        _type.value = "Экология"
         _time_of_creation.value = time_of_creation_
         _amount_reg_people.value = amount_reg_people_
         _freePlaces.value = 100 - 100 * amount_reg_people.value!! / maxPeople.value!!
-
+        _powerPollution.value = powerPollution_.toString()
+        _minPeople.value = minPeople_
         _getPoints.value = getPoints_
 
         _creatorUsername.value = creatorUsername_

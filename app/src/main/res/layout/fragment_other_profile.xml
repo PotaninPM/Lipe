@@ -22,7 +22,7 @@
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content">-->
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/eventAvatar"
         android:layout_width="@dimen/_116sdp"
         android:layout_height="@dimen/_116sdp"
         android:layout_marginTop="148dp"
@@ -41,7 +41,7 @@
         android:layout_marginTop="@dimen/_6sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView6">
+        app:layout_constraintTop_toBottomOf="@+id/eventAvatar">
 
         <TextView
             android:id="@+id/textView6"
