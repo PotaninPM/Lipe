@@ -395,7 +395,7 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/viewQr"
-                    android:layout_width="@dimen/_150sdp"
+                    android:layout_width="@dimen/_140sdp"
                     android:layout_height="@dimen/_40sdp"
                     android:layout_marginStart="@dimen/_12sdp"
                     android:layout_marginTop="@dimen/_8sdp"
@@ -420,11 +420,11 @@
                     android:layout_height="@dimen/_40sdp"
                     android:layout_marginEnd="@dimen/_12sdp"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/view_qrcode_btn"
+                    android:background="@drawable/delete_or_leave_event"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="покинуть"
+                    android:text="Покинуть"
                     android:textAllCaps="false"
                     android:textColor="@color/quantum_white_100"
                     android:textFontWeight="600"

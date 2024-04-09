@@ -99,7 +99,9 @@ class EventFragment : BottomSheetDialogFragment() {
         fun show(fragmentManager: FragmentManager) {
             newInstance().show(fragmentManager, "MyBottomSheetFragment1")
         }
+
     }
+
 
     override fun onDestroy() {
         super.onDestroy()

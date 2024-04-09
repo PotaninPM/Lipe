@@ -11,10 +11,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import com.example.lipe.MapsFragment
 import com.example.lipe.R
 import com.example.lipe.databinding.FragmentEventEntBinding
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.viewModels.EventEntVM
+import com.example.lipe.view_events.EventFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
@@ -91,9 +93,9 @@ class EventEntFragment : BottomSheetDialogFragment() {
 
         binding.deleteOrLeave.setOnClickListener {
             if(auth.currentUser!!.uid == eventEntVM.creator.value) {
-                deleteEvent()
+                deleteEvent(eventEntVM.id.value.toString())
             } else {
-                deleteUserFromEvent(auth.currentUser!!.uid)
+                deleteUserFromEvent(eventEntVM.id.value.toString())
             }
         }
 
@@ -256,19 +258,27 @@ class EventEntFragment : BottomSheetDialogFragment() {
         })
     }
 
-    private fun deleteEvent() {
-        val userInEventRef = dbRef_event.child("current_events").child(eventEntVM.id.value.toString())
-        userInEventRef.removeValue().addOnSuccessListener {
-            Log.d("INFOG", "Событие удалено")
-        }.addOnFailureListener {
-            Log.d("INFOG", "Удаление произошло не успешно")
+    private fun deleteEvent(uid: String) {
+        val dbRef_user = FirebaseDatabase.getInstance().getReference("users").child(auth.currentUser!!.uid).child("curRegEventsId").child(uid)
+        val curPeople = dbRef_event.child(eventEntVM.id.value.toString())
+        dbRef_user.removeValue().addOnSuccessListener {
+            curPeople.removeValue()
+                .addOnSuccessListener {
+                    binding.deleteOrLeave.visibility = View.GONE
+                    binding.viewQr.visibility = View.GONE
+                    binding.btnRegToEvent.visibility = View.VISIBLE
+                }
+                .addOnFailureListener {
+                    Log.e("INFOG", "ErLeaveEvent")
+                }
         }
     }
 
     fun deleteUserFromEvent(uid: String) {
-        val dbRef_user = FirebaseDatabase.getInstance().getReference("users").child(eventEntVM.creatorUsername.value.toString()).child("curRegEventsId").child(uid)
-        val userInEventRef = dbRef_event.child("current_events").child(eventEntVM.id.value.toString()).child("reg_people_id").child(uid)
-
+        val dbRef_user = FirebaseDatabase.getInstance().getReference("users").child(auth.currentUser!!.uid).child("curRegEventsId").child(uid)
+        val userInEventRef = dbRef_event.child(eventEntVM.id.value.toString()).child("reg_people_id").child(auth.currentUser!!.uid)
+        val curPeople = dbRef_event.child(eventEntVM.id.value.toString()).child("amount_reg_people").toString()
+        Log.d("INFOG", curPeople)
         dbRef_user.removeValue().addOnSuccessListener {
             userInEventRef.removeValue()
                 .addOnSuccessListener {
@@ -329,8 +339,7 @@ class EventEntFragment : BottomSheetDialogFragment() {
                     val reg_people = dataSnapshot.child("amount_reg_people").getValue(Int::class.java) ?: 0
 
                     if (max - reg_people > 0) {
-                        val newIndex = dataSnapshot.child("reg_people_id").childrenCount.toString()
-                        val regPeopleRef = dbRef_event.child(event_id).child("reg_people_id").child(newIndex)
+                        val regPeopleRef = dbRef_event.child(event_id).child("reg_people_id").child(auth.currentUser!!.uid)
 
                         regPeopleRef.setValue(curUid)
                             .addOnSuccessListener {

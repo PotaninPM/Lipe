@@ -9,4 +9,9 @@
         <item name="cornerSizeBottomRight">10%</item>
         <item name="cornerFamily">rounded</item>
     </style>
+
+    <style name="ImageStyle_marker">
+        <item name="cornerSize">30%</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
 </resources>

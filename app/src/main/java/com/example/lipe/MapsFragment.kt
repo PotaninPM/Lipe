@@ -1,23 +1,30 @@
 package com.example.lipe
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.chats.ChatsFragment
 import com.example.lipe.create_events.CreateEventFragment
+import com.example.lipe.create_events.event_ent.CreateEntEventFragment
 import com.example.lipe.databinding.FragmentMapsBinding
 import com.example.lipe.viewModels.EventEcoVM
 import com.example.lipe.view_events.EventFragment
@@ -29,6 +36,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -52,8 +60,6 @@ class MapsFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private var getReg: String ?= null
-
     private lateinit var mMap: GoogleMap
 
     private  lateinit var dbRef_user: DatabaseReference
@@ -68,10 +74,10 @@ class MapsFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for(eventSnapshot in dataSnapshot.children) {
                     val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
-
+                    val eventId: String = eventSnapshot.child("event_id").value.toString()
                     val type = eventSnapshot.child("type_of_event").value.toString()
                     if (coordinates != null) {
-                        addMarker(LatLng(coordinates[0], coordinates[1]), type)
+                        addMarker(LatLng(coordinates[0], coordinates[1]), type, eventId)
                     }
                 }
             }
@@ -122,6 +128,11 @@ class MapsFragment : Fragment() {
                     val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
                     if(coordinates != null && coordinates[0] == coord1 && coordinates[1] == coord2) {
                         val type = eventSnapshot.child("type_of_event").value.toString()
+                        val eventId: String = eventSnapshot.child("event_id").value.toString()
+                        if(type == "ent") {
+                            val type_sport:String = eventSnapshot.child("sport_type").value.toString()
+                            appVM.type_sport = type_sport
+                        }
                         appVM.type = type
                         done = 1
                         callback(true)
@@ -149,11 +160,12 @@ class MapsFragment : Fragment() {
                 for(eventSnapshot in dataSnapshot.children) {
                     val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
                     val type: String = eventSnapshot.child("type_of_event").value.toString()
+                    val eventId: String = eventSnapshot.child("event_id").value.toString()
 
                     if (coordinates != null) {
                         for(s: String in types) {
                             if(type == s) {
-                                addMarker(LatLng(coordinates[0], coordinates[1]), type)
+                                addMarker(LatLng(coordinates[0], coordinates[1]), type, eventId)
                             }
                         }
                     }
@@ -167,18 +179,43 @@ class MapsFragment : Fragment() {
     }
 
 
-    private fun addMarker(latLng: LatLng, type: String) {
+    private fun addMarker(latLng: LatLng, type: String, eventId: String) {
         if(type == "ent") {
-            mMap.addMarker(MarkerOptions().position(latLng))
-                ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.navigator))
+            val markerLayout = LayoutInflater.from(context).inflate(R.layout.custom_marker, null)
+            val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
+
+            if(true) {
+                markerImageView.setImageResource(R.drawable.football)
+            }
+
+            val markerOptions = MarkerOptions()
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
+                .anchor(0.5f, 1f)
+
+            mMap.addMarker(markerOptions)
+
         } else if(type == "eco") {
             mMap.addMarker(MarkerOptions().position(latLng))
                 ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.eco))
         }
     }
 
+
+    private fun createDrawableFromView(view: View): Bitmap {
+        val displayMetrics = resources.displayMetrics
+        view.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        view.measure(displayMetrics.widthPixels, displayMetrics.heightPixels)
+        view.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
+        val bitmap = Bitmap.createBitmap(view.measuredWidth, view.measuredHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
+        return bitmap
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
@@ -193,9 +230,9 @@ class MapsFragment : Fragment() {
         eventEcoVM = ViewModelProvider(requireActivity()).get(EventEcoVM::class.java)
         saveStateMapVM = ViewModelProvider(requireActivity()).get(SaveStateMapsVM::class.java)
 
-        binding.entEvents.setOnClickListener {
-            showMarkersByType(listOf("ent"))
-        }
+//        binding.entEvents.setOnClickListener {
+//            showMarkersByType(listOf("ent"))
+//        }
         val view = binding.root
         return view
     }

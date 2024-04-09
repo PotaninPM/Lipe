@@ -38,7 +38,7 @@ class EventEntVM: ViewModel() {
     val date: LiveData<String> = _date
 
     private var _type_sport = MutableLiveData<String>()
-    val type_sport: LiveData<String> = _type_sport
+    var type_sport: LiveData<String> = _type_sport
 
     private var _type = MutableLiveData<String>()
     val type: LiveData<String> = _type

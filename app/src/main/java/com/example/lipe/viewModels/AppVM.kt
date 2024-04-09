@@ -12,6 +12,7 @@ class AppVM: ViewModel() {
     var event: String = ""
 
     var type: String = ""
+    var type_sport: String = ""
 
     var positionCreateFr = 0
 
