@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/_260sdp"
+    android:layout_height="@dimen/_390sdp"
+    android:background="@drawable/view_qr"
+    tools:context=".PersQrCodeFragment">
+
+    <ImageView
+        android:id="@+id/imageViewQRCode"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="@dimen/_150sdp"
+        android:background="@color/quantum_white_100"
+        android:layout_gravity="center_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="@dimen/_192sdp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:fontFamily="@font/interextrabold"
+        android:textSize="@dimen/_14sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:text="Покажите QR код дежурному, чтобы зарегистрироваться на событие"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageViewQRCode" />
+
+    <Button
+        android:id="@+id/buttonClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_gravity="center_horizontal"
+        android:text="Закрыть"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+</androidx.constraintlayout.widget.ConstraintLayout>

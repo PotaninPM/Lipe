@@ -76,7 +76,6 @@ class EventEntFragment : BottomSheetDialogFragment() {
                         checkIfUserAlreadyReg(auth.currentUser!!.uid, eventEntVM.id.value.toString()) {ans ->
                             if(ans) {
                                 binding.btnRegToEvent.visibility = View.GONE
-                                binding.viewQr.visibility = View.VISIBLE
                                 binding.deleteOrLeave.visibility = View.VISIBLE
 
                                 binding.allEntEvent.visibility = View.VISIBLE
@@ -99,9 +98,6 @@ class EventEntFragment : BottomSheetDialogFragment() {
             }
         }
 
-        binding.viewQr.setOnClickListener {
-
-        }
 
         binding.btnRegToEvent.setOnClickListener {
             val curUid = auth.currentUser?.uid
@@ -265,7 +261,6 @@ class EventEntFragment : BottomSheetDialogFragment() {
             curPeople.removeValue()
                 .addOnSuccessListener {
                     binding.deleteOrLeave.visibility = View.GONE
-                    binding.viewQr.visibility = View.GONE
                     binding.btnRegToEvent.visibility = View.VISIBLE
                 }
                 .addOnFailureListener {
@@ -283,7 +278,6 @@ class EventEntFragment : BottomSheetDialogFragment() {
             userInEventRef.removeValue()
                 .addOnSuccessListener {
                     binding.deleteOrLeave.visibility = View.GONE
-                    binding.viewQr.visibility = View.GONE
                     binding.btnRegToEvent.visibility = View.VISIBLE
                 }
                 .addOnFailureListener {
@@ -348,7 +342,6 @@ class EventEntFragment : BottomSheetDialogFragment() {
                                         dbRef_users.child("curRegEventsId").child(event_id).setValue(event_id)
                                             .addOnSuccessListener {
                                                 binding.btnRegToEvent.visibility = View.GONE
-                                                binding.viewQr.visibility = View.VISIBLE
                                                 binding.deleteOrLeave.visibility = View.VISIBLE
 
                                                 callback(true)

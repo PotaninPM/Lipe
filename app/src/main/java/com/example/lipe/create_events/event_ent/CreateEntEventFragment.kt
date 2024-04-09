@@ -103,8 +103,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         SpinnerItem("Для взрослых(более 18)", R.drawable.football),
     )
 
-    private lateinit var dbRef: DatabaseReference
-    private lateinit var dbRef_id: DatabaseReference
+    private lateinit var dbRef_events: DatabaseReference
+    private lateinit var dbRef_users: DatabaseReference
     private lateinit var auth: FirebaseAuth
 
     var eventId: String = ""
@@ -159,8 +159,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        dbRef = FirebaseDatabase.getInstance().getReference("current_events")
-        dbRef_id = FirebaseDatabase.getInstance().getReference("id_event")
+        dbRef_events = FirebaseDatabase.getInstance().getReference("current_events")
+        dbRef_users = FirebaseDatabase.getInstance().getReference("users")
 
         auth = FirebaseAuth.getInstance()
 
@@ -328,9 +328,12 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     1
                 )
 
-                dbRef.child(eventId).setValue(event).addOnSuccessListener {
+                val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/curRegEventsId")
 
-                    //do pop up notif and navigate to maps
+                dbRef_events.child(eventId).setValue(event).addOnSuccessListener {
+                    dbRef_user.child(eventId).setValue(eventId).addOnSuccessListener {
+                        //do pop up notif and navigate to maps
+                    }
                 }
             }
         }

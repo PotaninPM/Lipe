@@ -58,8 +58,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_42sdp"
         android:background="@drawable/typesevents"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintStart_toStartOf="parent">
 
         <HorizontalScrollView
             android:id="@+id/horizontalScrollView2"
@@ -211,14 +211,13 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="@dimen/_4sdp"
         android:layout_marginBottom="@dimen/_8sdp"
-        android:layout_marginEnd="@dimen/_4sdp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
@@ -232,6 +231,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation">

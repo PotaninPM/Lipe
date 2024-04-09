@@ -16,6 +16,8 @@ class AppVM: ViewModel() {
 
     var positionCreateFr = 0
 
+    var qrData: String = "ass"
+
     fun setCoord(lat: Double, long: Double) {
         latitude = lat
         longtitude = long

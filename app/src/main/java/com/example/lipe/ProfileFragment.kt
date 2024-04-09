@@ -14,6 +14,7 @@ import com.example.lipe.databinding.FragmentEventEntBinding
 import com.example.lipe.databinding.FragmentProfileBinding
 import com.example.lipe.sign_up_in.SignUpFragment
 import com.example.lipe.viewModels.ProfileVM
+import com.example.lipe.view_events.event_eco.EventEcoFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -52,9 +53,6 @@ class ProfileFragment : Fragment() {
         //if(profileVM.ratingPoints.value ==) {
         //}
 
-        binding.getPoints.setOnClickListener {
-            auth.signOut()
-        }
 
 
 
@@ -105,6 +103,16 @@ class ProfileFragment : Fragment() {
             binding.theme.setImageResource(R.drawable.ex2)
         }
 
+        binding.btnEnt.setOnClickListener {
+            switchToEcoFragment()
+        }
+
+        binding.qrCode.setOnClickListener {
+            val qrData = "Ti negr"
+            val fragment = PersQrCodeFragment()
+            fragment.show(childFragmentManager, "persQrCodeFragment")
+        }
+
         val view = binding.root
         return view
     }
@@ -153,6 +161,11 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private fun switchToEcoFragment() {
+        childFragmentManager.beginTransaction()
+            .replace(R.id.switcher, CurEventsInProfileFragment())
+            .commit()
+    }
 
     private fun switchTabs(position: Int) {
         val fragment = when(position) {

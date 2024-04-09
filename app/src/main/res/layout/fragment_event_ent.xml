@@ -393,32 +393,11 @@
                     app:layout_constraintTop_toBottomOf="@+id/desc"
                     tools:ignore="TextSizeCheck" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/viewQr"
-                    android:layout_width="@dimen/_140sdp"
-                    android:layout_height="@dimen/_40sdp"
-                    android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/view_qrcode_btn"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="QR код"
-                    android:textAllCaps="false"
-                    android:textColor="@color/quantum_white_100"
-                    android:textFontWeight="600"
-                    android:textSize="@dimen/_12sdp"
-                    android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="@+id/btnRegToEvent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/desc"
-                    tools:ignore="TextSizeCheck" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/deleteOrLeave"
                     android:layout_width="@dimen/_140sdp"
                     android:layout_height="@dimen/_40sdp"
-                    android:layout_marginEnd="@dimen/_12sdp"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:background="@drawable/delete_or_leave_event"
                     android:ellipsize="end"
@@ -430,9 +409,8 @@
                     android:textFontWeight="600"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="@+id/btnRegToEvent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/viewQr"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/desc"
                     tools:ignore="TextSizeCheck" />
 
