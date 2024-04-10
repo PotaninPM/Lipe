@@ -108,7 +108,6 @@ class ProfileFragment : Fragment() {
         }
 
         binding.qrCode.setOnClickListener {
-            val qrData = "Ti negr"
             val fragment = PersQrCodeFragment()
             fragment.show(childFragmentManager, "persQrCodeFragment")
         }

@@ -274,6 +274,7 @@ class MapsFragment : Fragment() {
             when(it.itemId) {
                 R.id.profile -> replaceFragment(ProfileFragment())
                 R.id.map -> replaceFragment(MapsFragment())
+                R.id.add -> replaceFragment(FriendRequestsFragment())
                 R.id.rating -> replaceFragment(RatingFragment())
                 R.id.chats -> replaceFragment(ChatsFragment())
                 //R.id.add -> replaceFragment(GetPointsFragment())

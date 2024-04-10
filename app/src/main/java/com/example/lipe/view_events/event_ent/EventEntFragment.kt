@@ -90,36 +90,6 @@ class EventEntFragment : BottomSheetDialogFragment() {
             }
         }
 
-        binding.deleteOrLeave.setOnClickListener {
-            if(auth.currentUser!!.uid == eventEntVM.creator.value) {
-                deleteEvent(eventEntVM.id.value.toString())
-            } else {
-                deleteUserFromEvent(eventEntVM.id.value.toString())
-            }
-        }
-
-
-        binding.btnRegToEvent.setOnClickListener {
-            val curUid = auth.currentUser?.uid
-            if (curUid != null) {
-                checkIfUserAlreadyReg(curUid, eventEntVM.id.value!!) { isUserAlreadyRegistered ->
-                    if (!isUserAlreadyRegistered) {
-                        regUserToEvent(curUid) { result ->
-                            if(result == true) {
-                                setDialog("Успешная регистрация", "Поздравляем, регистрация на событие прошла успешно", "Отлично!")
-                            } else {
-                                //fail
-                                setDialog("Ошибка при регистрации", "Что-то пошло не так, попробуйте зарегистрироваться еще раз","Хорошо")
-                            }
-                        }
-                    } else {
-                        Log.d("INFOG", "Пользователь уже зарегистрирован на мероприятие")
-                    }
-                }
-            } else {
-                Log.e("INFOG", "UID пользователя не найден")
-            }
-        }
 
         //eventEntVM = ViewModelProvider(requireActivity()).get(EventEntVM::class.java)
         val view = binding.root
@@ -152,8 +122,92 @@ class EventEntFragment : BottomSheetDialogFragment() {
 
                 //}
             //}
+            deleteOrLeave.setOnClickListener {
+                if(auth.currentUser!!.uid == eventEntVM.creator.value) {
+                    deleteEvent(eventEntVM.id.value.toString())
+                } else {
+                    deleteUserFromEvent(eventEntVM.id.value.toString())
+                }
+            }
+
+
+            btnRegToEvent.setOnClickListener {
+                val curUid = auth.currentUser?.uid
+                if (curUid != null) {
+                    checkIfUserAlreadyReg(curUid, eventEntVM.id.value!!) { isUserAlreadyRegistered ->
+                        if (!isUserAlreadyRegistered) {
+                            regUserToEvent(curUid) { result ->
+                                if(result == true) {
+                                    setDialog("Успешная регистрация", "Поздравляем, регистрация на событие прошла успешно", "Отлично!")
+                                } else {
+                                    //fail
+                                    setDialog("Ошибка при регистрации", "Что-то пошло не так, попробуйте зарегистрироваться еще раз","Хорошо")
+                                }
+                            }
+                        } else {
+                            Log.d("INFOG", "Пользователь уже зарегистрирован на мероприятие")
+                        }
+                    }
+                } else {
+                    Log.e("INFOG", "UID пользователя не найден")
+                }
+            }
+
+            addToFriendBtn.setOnClickListener {
+                checkIfUserAlreadyFriend {ready ->
+                    if(ready == "not") {
+
+                    }
+                }
+            }
         }
     }
+
+    private fun sendFriendRequest() {
+        val dbRef_user_query_friends = FirebaseDatabase.getInstance().getReference("users/${eventEntVM.creator.value.toString()}/query_friends").child(auth.currentUser!!.uid).setValue(auth.currentUser!!.uid)
+
+    }
+
+    private fun checkIfUserAlreadyFriend(callback: (ready: String) -> Unit) {
+        val dbRef_user_friends = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/friends")
+        val dbRef_user_query_friends = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/query_friends")
+
+        var reg = "not"
+
+        dbRef_user_friends.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+               for(user in snapshot.children) {
+                   if(user.value == auth.currentUser!!.uid) {
+                       reg = "friend"
+                       break
+                   }
+               }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                 reg = "error"
+            }
+
+        })
+
+        dbRef_user_query_friends.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(user in snapshot.children) {
+                    if(user.value == auth.currentUser!!.uid) {
+                        reg = "query"
+                        break
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                reg = "error"
+            }
+
+        })
+        callback(reg)
+    }
+
 
     private fun loadAllImages(callback: (Boolean) -> Unit) {
         if(eventEntVM.creatorUsername.value == "Удаленный аккаунт") {

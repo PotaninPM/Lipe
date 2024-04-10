@@ -18,9 +18,6 @@ class CurEventsInProfileFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        recyclerView = binding.recuclerviewInProfile
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
     override fun onCreateView(
