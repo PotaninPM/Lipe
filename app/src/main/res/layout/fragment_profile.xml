@@ -13,6 +13,7 @@
     </data>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/all"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -85,16 +86,6 @@
                         android:textStyle="bold" />
 
                 </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/qrCode"
-                    android:layout_width="@dimen/_50sdp"
-                    android:layout_height="@dimen/_50sdp"
-                    android:src="@drawable/qr1"
-                    app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
-                    app:layout_constraintEnd_toStartOf="@+id/avatar"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/avatar" />
 
 
                 <ImageView
@@ -261,7 +252,7 @@
                         android:paddingStart="@dimen/_14sdp"
                         android:paddingEnd="@dimen/_14sdp"
                         android:singleLine="true"
-                        android:text="Экология"
+                        android:text="Текущие"
                         android:textAllCaps="false"
                         android:textColor="@color/quantum_white_100"
                         app:layout_constraintStart_toStartOf="parent"
@@ -281,7 +272,7 @@
                         android:paddingStart="@dimen/_14sdp"
                         android:paddingEnd="@dimen/_14sdp"
                         android:singleLine="true"
-                        android:text="Развлечения"
+                        android:text="Прошедшие"
                         android:textAllCaps="false"
                         android:textColor="@color/quantum_white_100"
                         app:layout_constraintEnd_toStartOf="@+id/btnHelp"
@@ -303,7 +294,7 @@
                         android:paddingStart="@dimen/_14sdp"
                         android:paddingEnd="@dimen/_14sdp"
                         android:singleLine="true"
-                        android:text="Помощь"
+                        android:text="Посты"
                         android:textAllCaps="false"
                         android:textColor="@color/quantum_white_100"
                         app:layout_constraintEnd_toEndOf="parent"

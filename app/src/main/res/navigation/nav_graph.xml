@@ -110,6 +110,9 @@
         <action
             android:id="@+id/action_profileFragment_to_getPointsFragment"
             app:destination="@id/getPointsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_friendRequestsFragment"
+            app:destination="@id/friendRequestsFragment" />
     </fragment>
     <fragment
         android:id="@+id/otherProfileFragment"
@@ -126,4 +129,9 @@
         android:name="com.example.lipe.chats.ChatsFragment"
         android:label="fragment_chats"
         tools:layout="@layout/fragment_chats" />
+    <fragment
+        android:id="@+id/friendRequestsFragment"
+        android:name="com.example.lipe.friend_requests.FriendRequestsFragment"
+        android:label="fragment_friend_requests"
+        tools:layout="@layout/fragment_friend_requests" />
 </navigation>

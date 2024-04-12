@@ -1,17 +1,14 @@
 package com.example.lipe
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,8 +21,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.chats.ChatsFragment
 import com.example.lipe.create_events.CreateEventFragment
-import com.example.lipe.create_events.event_ent.CreateEntEventFragment
 import com.example.lipe.databinding.FragmentMapsBinding
+import com.example.lipe.friend_requests.FriendRequestsFragment
 import com.example.lipe.viewModels.EventEcoVM
 import com.example.lipe.view_events.EventFragment
 import com.example.lipe.viewModels.EventEntVM
@@ -36,7 +33,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError

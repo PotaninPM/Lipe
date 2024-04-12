@@ -55,6 +55,9 @@ class EventEntVM: ViewModel() {
     private var _age = MutableLiveData<String>()
     val age: LiveData<String> = _age
 
+    private var _friend = MutableLiveData<String>()
+    val friend: LiveData<String> = _friend
+
     var latitude: Double = 0.0
     var longtitude: Double = 0.0
 
@@ -63,7 +66,7 @@ class EventEntVM: ViewModel() {
         longtitude = long
     }
 
-    fun setInfo(id_: String, maxPeople_: Int, title_: String, creator_: String, creatorUsername_: String, photos_: ArrayList<String>, peopleGo_: List<String>, adress_: String, freePlaces_: Int, age_: String, eventDesc_: String, time_of_creation_: String, date_: String, type_sport_: String, amount_reg_people_: Int) {
+    fun setInfo(id_: String, maxPeople_: Int, title_: String, creator_: String, creatorUsername_: String, photos_: ArrayList<String>, peopleGo_: List<String>, adress_: String, freePlaces_: Int, age_: String, eventDesc_: String, time_of_creation_: String, date_: String, type_sport_: String, amount_reg_people_: Int, friend_: String) {
         _id.value = id_
         _maxPeople.value = maxPeople_
         _title.value = title_
@@ -79,10 +82,11 @@ class EventEntVM: ViewModel() {
         _amount_reg_people.value = amount_reg_people_
         _freePlaces.value = 100 - 100 * amount_reg_people.value!! / maxPeople.value!!
 
+        _friend.value = friend_
+
         _age.value = age_
         _creatorUsername.value = creatorUsername_
 
-        Log.d("INFOG1", date_)
         setDate(date_)
     }
 

@@ -56,22 +56,23 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnEco"
-                    android:background="@drawable/create_event_change_type_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="@dimen/_4sdp"
-                    android:layout_marginTop="@dimen/_2sdp"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:ellipsize="end"
                     android:layout_gravity="center"
-                    android:textColor="@color/quantum_white_100"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_marginEnd="@dimen/_4sdp"
+                    android:layout_marginBottom="@dimen/_2sdp"
+                    android:background="@drawable/create_event_change_type_btn"
+                    android:ellipsize="end"
                     android:gravity="center"
                     android:paddingStart="@dimen/_18sdp"
                     android:paddingEnd="@dimen/_18sdp"
                     android:singleLine="true"
                     android:text="Экология"
                     android:textAllCaps="false"
+                    android:textColor="@color/quantum_white_100"
                     tools:ignore="TextSizeCheck" />
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnEnt"
                     android:background="@drawable/create_event_change_type_btn"

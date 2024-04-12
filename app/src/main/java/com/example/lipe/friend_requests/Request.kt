@@ -1,3 +1,5 @@
 package com.example.lipe.friend_requests
 
-data class Request(val imageId: Int, val username: String, val desc: String)
+import java.net.URL
+
+data class Request(val avatarUrl: String, val username: String, val uid_sender: String, val uid_accepter: String)

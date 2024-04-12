@@ -1,5 +1,6 @@
 package com.example.lipe.view_events.event_ent
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -153,31 +154,36 @@ class EventEntFragment : BottomSheetDialogFragment() {
                 }
             }
 
-            addToFriendBtn.setOnClickListener {
-                checkIfUserAlreadyFriend {ready ->
-                    if(ready == "not") {
-
-                    }
-                }
-            }
+//            addToFriendBtn.setOnClickListener {
+//                val status: String = eventEntVM.friend.value.toString()
+//                if(status == "Добавить в друзья") {
+//                    sendFriendRequest()
+//                    eventEntVM._friend.value = "Отменить заявку"
+//                } else if(status == "Удалить из друзей") {
+//
+//                } else if(status == "Отменить заявку") {
+//
+//                }
+//            }
         }
     }
 
     private fun sendFriendRequest() {
-        val dbRef_user_query_friends = FirebaseDatabase.getInstance().getReference("users/${eventEntVM.creator.value.toString()}/query_friends").child(auth.currentUser!!.uid).setValue(auth.currentUser!!.uid)
-
+        val dbRef_user_query_friends = FirebaseDatabase.getInstance().getReference("users/${eventEntVM.creator.value.toString()}/query_friends")
+        dbRef_user_query_friends.child(auth.currentUser!!.uid).setValue(auth.currentUser!!.uid)
     }
 
     private fun checkIfUserAlreadyFriend(callback: (ready: String) -> Unit) {
         val dbRef_user_friends = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/friends")
-        val dbRef_user_query_friends = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/query_friends")
+        val dbRef_user_query_friends_to_you = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/query_friends")
+        val dbRef_user_query_friends_to_creator = FirebaseDatabase.getInstance().getReference("users/${eventEntVM.creator.value.toString()}/query_friends")
 
         var reg = "not"
 
         dbRef_user_friends.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                for(user in snapshot.children) {
-                   if(user.value == auth.currentUser!!.uid) {
+                   if(user.value.toString() == eventEntVM.creator.value.toString()) {
                        reg = "friend"
                        break
                    }
@@ -189,22 +195,41 @@ class EventEntFragment : BottomSheetDialogFragment() {
             }
 
         })
-
-        dbRef_user_query_friends.addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for(user in snapshot.children) {
-                    if(user.value == auth.currentUser!!.uid) {
-                        reg = "query"
-                        break
+        if(reg != "friend") {
+            dbRef_user_query_friends_to_you.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (user in snapshot.children) {
+                        if (user.value == auth.currentUser!!.uid) {
+                            reg = "request_to_you"
+                            break
+                        }
                     }
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                reg = "error"
-            }
+                override fun onCancelled(error: DatabaseError) {
+                    reg = "error"
+                }
 
-        })
+            })
+        }
+
+        if(reg != "friend" && reg != "request_to_you") {
+            dbRef_user_query_friends_to_creator.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (user in snapshot.children) {
+                        if (user.value == auth.currentUser!!.uid) {
+                            reg = "request_to_creator"
+                            break
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    reg = "error"
+                }
+
+            })
+        }
         callback(reg)
     }
 
@@ -270,31 +295,68 @@ class EventEntFragment : BottomSheetDialogFragment() {
                         when(type) {
                             "ent" -> {
                                 val sportType = eventSnapshot.child("sport_type").value.toString()
+                                checkIfUserAlreadyFriend { ready ->
+                                    var found: Boolean = false
+                                    dbRefUser.addValueEventListener(object : ValueEventListener {
+                                        override fun onDataChange(userSnapshot: DataSnapshot) {
+                                            for (userEventSnapshot in userSnapshot.children) {
+                                                if (creatorUid == userEventSnapshot.child("uid").value) {
+                                                    val creatorUsername =
+                                                        userEventSnapshot.child("username").value.toString()
+                                                    val userPhoto = "1"
+                                                    eventEntVM.setInfo(
+                                                        id,
+                                                        maxPeople,
+                                                        title,
+                                                        creatorUid,
+                                                        creatorUsername,
+                                                        photos,
+                                                        arrayListOf("1"),
+                                                        address,
+                                                        freePlaces,
+                                                        age,
+                                                        description,
+                                                        timeOfCreation,
+                                                        dateOfMeeting,
+                                                        sportType,
+                                                        amountRegPeople,
+                                                        ready
+                                                    )
+                                                    Log.d("INFOG", ready)
+                                                    callback(true)
+                                                    found = true
+                                                    return
+                                                }
+                                            }
 
-                                var found: Boolean = false
-                                dbRefUser.addValueEventListener(object : ValueEventListener {
-                                    override fun onDataChange(userSnapshot: DataSnapshot) {
-                                        for(userEventSnapshot in userSnapshot.children) {
-                                            if (creatorUid == userEventSnapshot.child("uid").value) {
-                                                val creatorUsername = userEventSnapshot.child("username").value.toString()
-                                                val userPhoto = "1"
-                                                eventEntVM.setInfo(id, maxPeople, title, creatorUid, creatorUsername, photos, arrayListOf("1"), address, freePlaces, age, description, timeOfCreation, dateOfMeeting, sportType, amountRegPeople)
+                                            if (found == false) {
+                                                eventEntVM.setInfo(
+                                                    id,
+                                                    maxPeople,
+                                                    title,
+                                                    creatorUid,
+                                                    "Удаленный аккаунт",
+                                                    photos,
+                                                    arrayListOf("1"),
+                                                    address,
+                                                    freePlaces,
+                                                    age,
+                                                    description,
+                                                    timeOfCreation,
+                                                    dateOfMeeting,
+                                                    sportType,
+                                                    amountRegPeople,
+                                                    ready
+                                                )
                                                 callback(true)
-                                                found = true
-                                                return
                                             }
                                         }
 
-                                        if(found == false) {
-                                            eventEntVM.setInfo(id, maxPeople, title, creatorUid, "Удаленный аккаунт", photos, arrayListOf("1"), address, freePlaces, age, description, timeOfCreation, dateOfMeeting, sportType, amountRegPeople)
-                                            callback(true)
+                                        override fun onCancelled(error: DatabaseError) {
+                                            callback(false)
                                         }
-                                    }
-
-                                    override fun onCancelled(error: DatabaseError) {
-                                        callback(false)
-                                    }
-                                })
+                                    })
+                                }
                             }
                         }
                         break

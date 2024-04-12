@@ -14,4 +14,12 @@
         <item name="cornerSize">30%</item>
         <item name="cornerFamily">rounded</item>
     </style>
+    <style name="ImageStyle_eventProfile">
+        <item name="cornerSizeTopLeft">10%</item>
+        <item name="cornerSizeTopRight">10%</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+    <style name="event_bottom">
+        <item name="android:background">@drawable/event_bottom</item>
+    </style>
 </resources>

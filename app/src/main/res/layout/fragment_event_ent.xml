@@ -141,6 +141,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <LinearLayout
+                        android:id="@+id/linearLayout9"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/_6sdp"
@@ -165,21 +166,30 @@
                             android:textSize="@dimen/_12sdp" />
                     </LinearLayout>
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/addToFriendBtn"
+                    <LinearLayout
+                        android:id="@+id/status"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_26sdp"
-                        android:layout_marginEnd="@dimen/_6sdp"
-                        android:background="@drawable/subscribe_btn"
-                        android:paddingStart="@dimen/_8sdp"
-                        android:paddingEnd="@dimen/_6sdp"
-                        android:text="Добавить в друзья"
-                        android:textAllCaps="false"
-                        android:textColor="@color/quantum_white_100"
-                        android:textSize="@dimen/_10sdp"
+                        android:layout_height="@dimen/_28sdp"
+                        android:layout_marginTop="@dimen/_7sdp"
+                        android:background="@drawable/type_event_form"
+                        android:paddingStart="@dimen/_7sdp"
+                        android:paddingEnd="@dimen/_4sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/statusText"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/mulishsemibold"
+                            android:gravity="center"
+                            android:text="@{viewModel.friend}"
+                            android:textColor="#2629FF"
+                            android:textSize="@dimen/_10sdp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View

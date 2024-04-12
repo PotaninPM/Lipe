@@ -10,8 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import com.example.lipe.databinding.FragmentEventEntBinding
 import com.example.lipe.databinding.FragmentProfileBinding
+import com.example.lipe.friend_requests.FriendRequestsFragment
 import com.example.lipe.sign_up_in.SignUpFragment
 import com.example.lipe.viewModels.ProfileVM
 import com.example.lipe.view_events.event_eco.EventEcoFragment
@@ -53,7 +55,9 @@ class ProfileFragment : Fragment() {
         //if(profileVM.ratingPoints.value ==) {
         //}
 
-
+//        binding.notifications.setOnClickListener {
+//            replaceFragment(FriendRequestsFragment())
+//        }
 
 
 
@@ -105,11 +109,6 @@ class ProfileFragment : Fragment() {
 
         binding.btnEnt.setOnClickListener {
             switchToEcoFragment()
-        }
-
-        binding.qrCode.setOnClickListener {
-            val fragment = PersQrCodeFragment()
-            fragment.show(childFragmentManager, "persQrCodeFragment")
         }
 
         val view = binding.root
@@ -179,6 +178,14 @@ class ProfileFragment : Fragment() {
                 .replace(R.id.switcher, it)
                 .commit()
         }
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = childFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.all, fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
     }
 
     override fun onDestroy() {
