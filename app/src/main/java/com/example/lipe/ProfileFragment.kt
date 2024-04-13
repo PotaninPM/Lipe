@@ -1,22 +1,17 @@
 package com.example.lipe
 
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.provider.ContactsContract.Profile
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.findNavController
-import com.example.lipe.databinding.FragmentEventEntBinding
 import com.example.lipe.databinding.FragmentProfileBinding
-import com.example.lipe.friend_requests.FriendRequestsFragment
+import com.example.lipe.events_in_profile.CurEventsInProfileFragment
 import com.example.lipe.sign_up_in.SignUpFragment
 import com.example.lipe.viewModels.ProfileVM
-import com.example.lipe.view_events.event_eco.EventEcoFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -26,7 +21,6 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
-import java.util.UUID
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
@@ -50,7 +44,6 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val id = auth.currentUser?.uid
 
         //if(profileVM.ratingPoints.value ==) {
         //}
@@ -64,7 +57,6 @@ class ProfileFragment : Fragment() {
 //        binding.more.setOnClickListener {
 //
 //        }
-        switchTabs(0)
 //        binding.bottomNavigation.setOnItemSelectedListener {
 //            when(it.itemId) {
 //                R.id.map -> view.findNavController().navigate(R.id.action_profileFragment_to_mapsFragment)
@@ -83,6 +75,8 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
+
+        switchTabs(0)
 
         dbRef = FirebaseDatabase.getInstance().getReference("users")
         auth = FirebaseAuth.getInstance()

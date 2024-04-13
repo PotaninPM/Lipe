@@ -21,6 +21,7 @@ class RequestsAdapter: RecyclerView.Adapter<RequestsAdapter.RequestsHolder>() {
 
         val binding = FriendRequestItemBinding.bind(item)
         fun bind(request: Request) = with(binding) {
+
             Picasso.get().load(request.avatarUrl).into(shapeableImageView)
             username.text = request.username
 

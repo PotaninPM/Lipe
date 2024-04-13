@@ -3,11 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CurEventsInProfileFragment">
+    tools:context=".events_in_profile.CurEventsInProfileFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recuclerview_in_profile"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center"/>
 </FrameLayout>

@@ -63,4 +63,5 @@
     <color name="md_theme_dark_scrim">#000000</color>
     <color name="green">#00B91E</color>
     <color name="grey">#ACACAC</color>
+    <color name="indigo">#7f5753f3</color>
 </resources>
