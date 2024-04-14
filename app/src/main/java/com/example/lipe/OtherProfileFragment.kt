@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.lipe.databinding.FragmentOtherProfileBinding
 import com.example.lipe.events_in_profile.CurEventsInProfileFragment
+import com.example.lipe.rating_board.RatingFragment
 import com.example.lipe.sign_up_in.SignUpFragment
 import com.google.android.material.tabs.TabLayout
 

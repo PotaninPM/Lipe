@@ -325,7 +325,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     desc,
                     photos,
                     arrayListOf(auth.currentUser?.uid),
-                    1
+                    1,
+                    "ok"
                 )
 
                 val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/curRegEventsId")

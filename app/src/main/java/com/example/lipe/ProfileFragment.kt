@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.example.lipe.databinding.FragmentProfileBinding
 import com.example.lipe.events_in_profile.CurEventsInProfileFragment
+import com.example.lipe.rating_board.RatingFragment
 import com.example.lipe.sign_up_in.SignUpFragment
 import com.example.lipe.viewModels.ProfileVM
 import com.google.firebase.auth.FirebaseAuth
@@ -67,6 +68,12 @@ class ProfileFragment : Fragment() {
 //            }
 //            true
 //        }
+        binding.btnCurEvent.setOnClickListener {
+            switchTabs(0)
+        }
+        binding.btnPastEvent.setOnClickListener {
+            switchTabs(1)
+        }
 
 
     }
@@ -99,10 +106,6 @@ class ProfileFragment : Fragment() {
                 }
             }
             binding.theme.setImageResource(R.drawable.ex2)
-        }
-
-        binding.btnEnt.setOnClickListener {
-            switchToEcoFragment()
         }
 
         val view = binding.root
@@ -153,12 +156,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun switchToEcoFragment() {
-        childFragmentManager.beginTransaction()
-            .replace(R.id.switcher, CurEventsInProfileFragment())
-            .commit()
-    }
-
     private fun switchTabs(position: Int) {
         val fragment = when(position) {
             0 -> CurEventsInProfileFragment()
@@ -172,14 +169,6 @@ class ProfileFragment : Fragment() {
                 .replace(R.id.switcher, it)
                 .commit()
         }
-    }
-
-    private fun replaceFragment(fragment: Fragment) {
-        val fragmentManager = childFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.all, fragment)
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
     }
 
     override fun onDestroy() {

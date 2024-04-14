@@ -23,6 +23,7 @@ import com.example.lipe.chats.ChatsFragment
 import com.example.lipe.create_events.CreateEventFragment
 import com.example.lipe.databinding.FragmentMapsBinding
 import com.example.lipe.friend_requests.FriendRequestsFragment
+import com.example.lipe.rating_board.RatingFragment
 import com.example.lipe.viewModels.EventEcoVM
 import com.example.lipe.view_events.EventFragment
 import com.example.lipe.viewModels.EventEntVM
@@ -177,7 +178,7 @@ class MapsFragment : Fragment() {
 
     private fun addMarker(latLng: LatLng, type: String, eventId: String) {
         if(type == "ent") {
-            val markerLayout = LayoutInflater.from(context).inflate(R.layout.custom_marker, null)
+            val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker, null)
             val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
 
             if(true) {

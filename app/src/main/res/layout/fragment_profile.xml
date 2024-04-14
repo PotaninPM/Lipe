@@ -238,7 +238,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btnEco"
+                        android:id="@+id/btnCurEvent"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -260,7 +260,7 @@
                         tools:layout_editor_absoluteY="5dp" />
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btnEnt"
+                        android:id="@+id/btnPastEvent"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/_8sdp"
@@ -276,7 +276,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/quantum_white_100"
                         app:layout_constraintEnd_toStartOf="@+id/btnHelp"
-                        app:layout_constraintStart_toEndOf="@+id/btnEco"
+                        app:layout_constraintStart_toEndOf="@+id/btnCurEvent"
                         tools:ignore="TextSizeCheck"
                         tools:layout_editor_absoluteY="5dp" />
 

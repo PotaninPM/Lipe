@@ -15,5 +15,6 @@ data class EntEventModelDB(
     var description: String,
     var photos: ArrayList<String>,
     var reg_people_id: ArrayList<String?>,
-    var amount_reg_people: Int
+    var amount_reg_people: Int,
+    var status: String
 )

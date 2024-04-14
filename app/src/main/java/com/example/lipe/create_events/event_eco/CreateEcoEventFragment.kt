@@ -287,7 +287,8 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     arrayListOf(),
                     arrayListOf(auth.currentUser?.uid.toString()),
                     1,
-                    getPoints
+                    getPoints,
+                    "ok"
                 )
 
                 dbRef.child(eventId).setValue(event).addOnSuccessListener {

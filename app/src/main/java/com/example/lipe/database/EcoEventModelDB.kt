@@ -19,5 +19,6 @@ data class EcoEventModelDB(
     var photo_after_id: ArrayList<String>,
     var reg_people_id: ArrayList<String>,
     var amount_reg_people: Int,
-    var get_points: Int
+    var get_points: Int,
+    var status: String
 )

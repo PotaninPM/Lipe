@@ -121,7 +121,7 @@
         tools:layout="@layout/fragment_other_profile" />
     <fragment
         android:id="@+id/ratingFragment"
-        android:name="com.example.lipe.RatingFragment"
+        android:name="com.example.lipe.rating_board.RatingFragment"
         android:label="fragment_rating"
         tools:layout="@layout/fragment_rating" />
     <fragment

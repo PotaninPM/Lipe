@@ -16,11 +16,16 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.squareup.picasso.Picasso
 
 class CurEventsInProfileFragment : Fragment() {
 
     private var _binding: FragmentCurEventsInProfileBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var storageRef : StorageReference
 
     private lateinit var adapter: CurEventsAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +38,8 @@ class CurEventsInProfileFragment : Fragment() {
     ): View? {
         _binding = FragmentCurEventsInProfileBinding.inflate(inflater, container, false)
 
+        storageRef = FirebaseStorage.getInstance().reference
+
         adapter = CurEventsAdapter()
         binding.recuclerviewInProfile.layoutManager = LinearLayoutManager(requireContext())
         binding.recuclerviewInProfile.adapter = adapter
@@ -44,45 +51,46 @@ class CurEventsInProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val events = ArrayList<EventItem>()
-        val event = EventItem("https://upload.wikimedia.org/wikipedia/commons/0/0e/Felis_silvestris_silvestris.jpg", "Футбол", "12 октября 2024, 8:00 - 12:00", "Подтвержден")
-        events.add(event)
-        events.add(event)
-        events.add(event)
-        adapter.updateRequests(events)
+        setCurEvents()
     }
 
-    private fun setRequests() {
-//        val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/query_friends")
-//        dbRef_user.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                val requests = ArrayList<Request>()
-//                for(queries in dataSnapshot.children) {
-//                    val dbRef_username = FirebaseDatabase.getInstance().getReference("users/${queries.value.toString()}")
-//                    dbRef_username.addListenerForSingleValueEvent(object: ValueEventListener {
-//                        override fun onDataChange(snapshot: DataSnapshot) {
-//                            val username:String = snapshot.child("username").value.toString()
-//                            val uid: String = snapshot.child("uid").value.toString()
-//                            getUserPhotoUrl(queries.value.toString()) {url ->
-//                                if(url != "-") {
-//                                    val request = Request(url, username, uid, auth.currentUser!!.uid)
-//                                    requests.add(request)
-//                                    adapter.updateRequests(requests)
-//                                }
-//                            }
-//                        }
-//
-//                        override fun onCancelled(error: DatabaseError) {
-//                            Log.e("FirebaseError","Ошибка Firebase ${error.message}")
-//                        }
-//                    })
-//                }
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-//                Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
-//            }
-//        })
+    private fun setCurEvents() {
+        val dbRef_cur_events = FirebaseDatabase.getInstance().getReference("current_events")
+        dbRef_cur_events.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val curEvents = ArrayList<EventItem>()
+                for (events in dataSnapshot.children) {
+                    val title = events.child("title").value.toString()
+                    val date_meeting = events.child("date_of_meeting").value.toString()
+                    val status = events.child("status").value.toString()
+                    val main_photo = arrayListOf(events.child("photos").value.toString()).get(0).removeSurrounding("[", "]")
+
+                    var statusRus = ""
+
+                    if(status == "ok") {
+                        statusRus = "Подтверждён"
+                    } else if(status == "processing") {
+                        statusRus = "В обработке"
+                    } else if(status == "failed") {
+                        statusRus = "Будет удалён"
+                    }
+
+                    val photoRef = storageRef.child("event_images/$main_photo")
+
+                    val token = photoRef.downloadUrl
+
+                    token.addOnSuccessListener {uri ->
+                        val imageUrl = uri.toString()
+                        curEvents.add(EventItem(imageUrl, title, date_meeting, statusRus))
+                        adapter.updateRequests(curEvents)
+                    }
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
+            }
+        })
     }
     override fun onDestroy() {
         super.onDestroy()
