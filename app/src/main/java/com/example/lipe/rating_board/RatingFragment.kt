@@ -9,14 +9,15 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lipe.databinding.FragmentRatingBinding
+import com.example.lipe.friend_requests.RequestsAdapter
 
 class RatingFragment : Fragment() {
 
     private var _binding: FragmentRatingBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var searchView: SearchView
+    private var rateList = ArrayList<RatingItem>()
+    private lateinit var adapter: RatingAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -25,6 +26,31 @@ class RatingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        adapter = RatingAdapter()
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = adapter
+
+        binding.recyclerView.setHasFixedSize(true)
+
+        addPeople()
+//        binding.searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                filterList(newText)
+//                return true
+//            }
+//
+//        })
+    }
+
+    private fun filterList(query: String) {
+        if(query != null) {
+            val filteredList = ArrayList<RatingItem>()
+
+        }
     }
 
     override fun onCreateView(
@@ -33,20 +59,17 @@ class RatingFragment : Fragment() {
     ): View? {
         _binding = FragmentRatingBinding.inflate(inflater, container, false)
 
-        recyclerView = binding.recyclerView
-        searchView = binding.searchView
-
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        addPeople()
-
         val view = binding.root
         return view
     }
 
     private fun addPeople() {
+        //val dbRef_user = FirebaseDatabase.getInstance().getReference("rating/${auth.currentUser!!.uid}/query_friends")
+        rateList.add(RatingItem("1", "https://s0.rbk.ru/v6_top_pics/media/img/0/95/346980502063950.webp", 1, "MikePM", 123))
+        rateList.add(RatingItem("1", "https://s0.rbk.ru/v6_top_pics/media/img/0/95/346980502063950.webp", 1, "MikePM", 123))
+        rateList.add(RatingItem("1", "https://s0.rbk.ru/v6_top_pics/media/img/0/95/346980502063950.webp", 1, "MikePM", 123))
 
+        adapter.updateRequests(rateList)
     }
 
     override fun onDestroy() {

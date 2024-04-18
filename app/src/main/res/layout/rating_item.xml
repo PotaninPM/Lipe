@@ -5,16 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/_62sdp"
     android:background="@drawable/rating_item_source">
+
         <TextView
             android:id="@+id/place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/shapeableImageView3"
+            android:id="@+id/persImage"
             android:layout_width="@dimen/_42sdp"
             android:layout_height="@dimen/_42sdp"
             android:src="@drawable/ex2"
@@ -34,6 +36,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/rating_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2000"

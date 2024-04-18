@@ -194,6 +194,7 @@ class SignUpDescFragment : Fragment() {
             arrayListOf("-"),
             0,
             arrayListOf("-"),
+            arrayListOf("-"),
             0,
         )
 

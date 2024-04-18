@@ -26,23 +26,48 @@ class RequestsAdapter: RecyclerView.Adapter<RequestsAdapter.RequestsHolder>() {
             username.text = request.username
 
             acceptBtn.setOnClickListener {
-                val dbRef_accepter_friends = FirebaseDatabase.getInstance().getReference("users/${request.uid_accepter}/friends")
-                val dbRef_sender_friends = FirebaseDatabase.getInstance().getReference("users/${request.uid_sender}/friends")
+                val dbRef_accepter_friends = FirebaseDatabase.getInstance()
+                    .getReference("users/${request.uid_accepter}/friends")
+                val dbRef_sender_friends = FirebaseDatabase.getInstance()
+                    .getReference("users/${request.uid_sender}/friends")
 
-                val dbRef_accepter_query = FirebaseDatabase.getInstance().getReference("users/${request.uid_accepter}/query_friends")
-                val dbRef_sender_query = FirebaseDatabase.getInstance().getReference("users/${request.uid_sender}/query_friends")
-                dbRef_accepter_friends.child(request.uid_sender).setValue(request.uid_sender).addOnSuccessListener {
-                    dbRef_sender_friends.child(request.uid_accepter).setValue(request.uid_accepter).addOnSuccessListener {
-                        dbRef_accepter_query.child(request.uid_sender).removeValue().addOnSuccessListener {
-                            dbRef_sender_query.child(request.uid_accepter).removeValue().addOnSuccessListener {
-                                if(adapterPosition != RecyclerView.NO_POSITION) {
-                                    removeRequest(adapterPosition)
+                val dbRef_accepter_query = FirebaseDatabase.getInstance()
+                    .getReference("users/${request.uid_accepter}/query_friends")
+                val dbRef_sender_query = FirebaseDatabase.getInstance()
+                    .getReference("users/${request.uid_sender}/query_friends")
+                dbRef_accepter_friends.child(request.uid_sender).setValue(request.uid_sender)
+                    .addOnSuccessListener {
+                        dbRef_sender_friends.child(request.uid_accepter)
+                            .setValue(request.uid_accepter).addOnSuccessListener {
+                            dbRef_accepter_query.child(request.uid_sender).removeValue()
+                                .addOnSuccessListener {
+                                    dbRef_sender_query.child(request.uid_accepter).removeValue()
+                                        .addOnSuccessListener {
+                                            if (adapterPosition != RecyclerView.NO_POSITION) {
+                                                removeRequest(adapterPosition)
+                                            }
+                                        }
                                 }
-                            }
+                        }.addOnFailureListener {
+                            Log.e("INFOG", "Err Request Friend")
                         }
                     }.addOnFailureListener {
-                        Log.e("INFOG", "Err Request Friend")
-                    }
+                    Log.e("INFOG", "Err Request Friend")
+                }
+            }
+
+            declineBtn.setOnClickListener {
+                val dbRef_accepter_query = FirebaseDatabase.getInstance()
+                    .getReference("users/${request.uid_accepter}/query_friends")
+                val dbRef_sender_query = FirebaseDatabase.getInstance()
+                    .getReference("users/${request.uid_sender}/query_friends")
+                dbRef_accepter_query.child(request.uid_sender).removeValue().addOnSuccessListener {
+                    dbRef_sender_query.child(request.uid_accepter).removeValue()
+                        .addOnSuccessListener {
+                            if (adapterPosition != RecyclerView.NO_POSITION) {
+                                removeRequest(adapterPosition)
+                            }
+                        }
                 }.addOnFailureListener {
                     Log.e("INFOG", "Err Request Friend")
                 }

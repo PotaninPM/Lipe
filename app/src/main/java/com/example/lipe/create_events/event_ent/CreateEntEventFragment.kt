@@ -330,10 +330,13 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                 )
 
                 val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/curRegEventsId")
+                val dbRef_user_your = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/yourCreatedEvents")
 
                 dbRef_events.child(eventId).setValue(event).addOnSuccessListener {
                     dbRef_user.child(eventId).setValue(eventId).addOnSuccessListener {
-                        //do pop up notif and navigate to maps
+                        dbRef_user_your.child(eventId).setValue(eventId).addOnSuccessListener {
+                            //do smth
+                        }
                     }
                 }
             }

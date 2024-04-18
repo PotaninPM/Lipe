@@ -1,6 +1,7 @@
 package com.example.lipe.start_frs
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ class StartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentStartBinding.inflate(inflater, container, false)
+        auth = FirebaseAuth.getInstance()
         val view = binding.root
         return view
     }
@@ -28,7 +30,6 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        auth = FirebaseAuth.getInstance()
         if(auth.currentUser != null) {
             view.findNavController().navigate(R.id.action_startFragment2_to_mapsFragment)
         }

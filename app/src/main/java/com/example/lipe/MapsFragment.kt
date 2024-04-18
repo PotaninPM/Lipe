@@ -2,6 +2,7 @@ package com.example.lipe
 
 import android.app.Dialog
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -16,6 +17,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.viewModels.AppVM
@@ -28,6 +31,7 @@ import com.example.lipe.viewModels.EventEcoVM
 import com.example.lipe.view_events.EventFragment
 import com.example.lipe.viewModels.EventEntVM
 import com.example.lipe.viewModels.SaveStateMapsVM
+import com.example.lipe.your_profile.ProfileFragment
 
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -61,6 +65,7 @@ class MapsFragment : Fragment() {
 
     private  lateinit var dbRef_user: DatabaseReference
     private  lateinit var dbRef_event: DatabaseReference
+
 
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
@@ -320,6 +325,7 @@ class MapsFragment : Fragment() {
             pop_up.dismiss()
         }
     }
+
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 1
     }

@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#FFFFFF"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ProfileFragment">
+    tools:context=".your_profile.ProfileFragment">
     <data>
         <variable name="viewModel" type="com.example.lipe.viewModels.ProfileVM" />
 
         <variable
             name="ProfileFragment"
-            type="com.example.lipe.ProfileFragment" />
+            type="com.example.lipe.your_profile.ProfileFragment" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -90,12 +90,12 @@
 
                 <ImageView
                     android:id="@+id/qrCodeScan"
-                    android:layout_width="@dimen/_36sdp"
-                    android:layout_height="@dimen/_36sdp"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
                     android:src="@drawable/scanner"
                     app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/avatar"
+                    app:layout_constraintEnd_toStartOf="@+id/avatar"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/avatar"
                     app:layout_constraintVertical_bias="0.492" />
 
@@ -275,13 +275,13 @@
                         android:text="Прошедшие"
                         android:textAllCaps="false"
                         android:textColor="@color/quantum_white_100"
-                        app:layout_constraintEnd_toStartOf="@+id/btnHelp"
+                        app:layout_constraintEnd_toStartOf="@+id/btnYourEvents"
                         app:layout_constraintStart_toEndOf="@+id/btnCurEvent"
                         tools:ignore="TextSizeCheck"
                         tools:layout_editor_absoluteY="5dp" />
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btnHelp"
+                        android:id="@+id/btnYourEvents"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/_8sdp"
@@ -294,7 +294,7 @@
                         android:paddingStart="@dimen/_14sdp"
                         android:paddingEnd="@dimen/_14sdp"
                         android:singleLine="true"
-                        android:text="Посты"
+                        android:text="Ваши"
                         android:textAllCaps="false"
                         android:textColor="@color/quantum_white_100"
                         app:layout_constraintEnd_toEndOf="parent"

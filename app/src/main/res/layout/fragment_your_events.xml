@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="@dimen/_50sdp"
-    tools:context=".your_profile.cur_events.CurEventsInProfileFragment">
-
+    tools:context=".your_profile.your_events.YourEventsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recuclerview_in_profile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"/>
+
 </FrameLayout>

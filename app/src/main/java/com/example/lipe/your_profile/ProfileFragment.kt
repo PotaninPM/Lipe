@@ -1,4 +1,4 @@
-package com.example.lipe
+package com.example.lipe.your_profile
 
 import android.net.Uri
 import android.os.Bundle
@@ -8,11 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import com.example.lipe.R
 import com.example.lipe.databinding.FragmentProfileBinding
-import com.example.lipe.events_in_profile.CurEventsInProfileFragment
 import com.example.lipe.rating_board.RatingFragment
 import com.example.lipe.sign_up_in.SignUpFragment
 import com.example.lipe.viewModels.ProfileVM
+import com.example.lipe.your_profile.cur_events.CurEventsInProfileFragment
+import com.example.lipe.your_profile.cur_events.YourEventsFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -73,6 +75,9 @@ class ProfileFragment : Fragment() {
         }
         binding.btnPastEvent.setOnClickListener {
             switchTabs(1)
+        }
+        binding.btnYourEvents.setOnClickListener {
+            switchTabs(2)
         }
 
 
@@ -160,7 +165,7 @@ class ProfileFragment : Fragment() {
         val fragment = when(position) {
             0 -> CurEventsInProfileFragment()
             1 -> RatingFragment()
-            2 -> SignUpFragment()
+            2 -> YourEventsFragment()
             else -> null
         }
 

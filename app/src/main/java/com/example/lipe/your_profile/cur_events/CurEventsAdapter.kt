@@ -1,4 +1,4 @@
-package com.example.lipe.events_in_profile
+package com.example.lipe.your_profile.cur_events
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lipe.R
 import com.example.lipe.databinding.EventItemBinding
+import com.example.lipe.your_profile.EventItem
 import com.google.firebase.database.DatabaseReference
 import com.squareup.picasso.Picasso
 import java.util.ArrayList
