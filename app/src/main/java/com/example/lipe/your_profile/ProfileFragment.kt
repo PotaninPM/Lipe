@@ -1,5 +1,6 @@
 package com.example.lipe.your_profile
 
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -38,6 +39,8 @@ class ProfileFragment : Fragment() {
     private lateinit var storageRef : StorageReference
 
     private lateinit var imageUri: Uri
+
+    private var originalBackground: Drawable? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -72,12 +75,24 @@ class ProfileFragment : Fragment() {
 //        }
         binding.btnCurEvent.setOnClickListener {
             switchTabs(0)
+            binding.btnYourEvents.setBackgroundResource(0)
+            binding.btnPastEvent.setBackgroundResource(0)
+
+            binding.btnCurEvent.background = originalBackground
         }
         binding.btnPastEvent.setOnClickListener {
             switchTabs(1)
+            binding.btnYourEvents.setBackgroundResource(0)
+            binding.btnCurEvent.setBackgroundResource(0)
+
+            binding.btnPastEvent.background = originalBackground
         }
         binding.btnYourEvents.setOnClickListener {
             switchTabs(2)
+            binding.btnCurEvent.setBackgroundResource(0)
+            binding.btnPastEvent.setBackgroundResource(0)
+
+            binding.btnYourEvents.background = originalBackground
         }
 
 
@@ -88,7 +103,11 @@ class ProfileFragment : Fragment() {
     ): View? {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
 
+        originalBackground = binding.btnCurEvent.background
+
         switchTabs(0)
+        binding.btnYourEvents.setBackgroundResource(0)
+        binding.btnPastEvent.setBackgroundResource(0)
 
         dbRef = FirebaseDatabase.getInstance().getReference("users")
         auth = FirebaseAuth.getInstance()
