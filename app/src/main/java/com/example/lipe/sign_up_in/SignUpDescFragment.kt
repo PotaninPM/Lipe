@@ -98,6 +98,9 @@ class SignUpDescFragment : Fragment() {
 
         spinner = binding.spinner1
 
+        binding.all.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
+
         val adapter = CustomAdapter(requireContext(), items)
 
         spinner.adapter = adapter
@@ -111,6 +114,10 @@ class SignUpDescFragment : Fragment() {
 
 
         binding.btnSignUp.setOnClickListener {
+
+            binding.all.visibility = View.GONE
+            binding.progressBar.visibility = View.VISIBLE
+
             var desc: String = binding.descText.text.toString().trim()
 
             if(desc.isNotEmpty() && upload_photo == true) {
@@ -127,10 +134,16 @@ class SignUpDescFragment : Fragment() {
                         }
                     }
                 }.addOnFailureListener {
+                    binding.all.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(requireContext(), "Smth went wrong", Toast.LENGTH_LONG).show()
+
                     Log.d("INFOG", "NO!")
                 }
             } else {
                 checkForEmpty(desc)
+                binding.all.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
             }
 
         }
@@ -199,7 +212,6 @@ class SignUpDescFragment : Fragment() {
         )
 
         dbRef.child(auth.currentUser!!.uid).setValue(user_DB_info).addOnSuccessListener {
-            Log.d("INFOG", "YES")
 
             val navController = view.findNavController()
             navController.navigate(R.id.action_signUpDescFragment_to_mapsFragment)
