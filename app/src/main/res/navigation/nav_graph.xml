@@ -69,6 +69,9 @@
         <action
             android:id="@+id/action_mapsFragment_to_chatsFragment"
             app:destination="@id/chatsFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_chatsAndGroupsFragment"
+            app:destination="@id/chatsAndGroupsFragment" />
     </fragment>
     <fragment
         android:id="@+id/getPointsFragment"
@@ -115,11 +118,6 @@
             app:destination="@id/friendRequestsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/otherProfileFragment"
-        android:name="com.example.lipe.OtherProfileFragment"
-        android:label="fragment_other_profile"
-        tools:layout="@layout/fragment_other_profile" />
-    <fragment
         android:id="@+id/ratingFragment"
         android:name="com.example.lipe.rating_board.RatingFragment"
         android:label="fragment_rating"
@@ -134,4 +132,9 @@
         android:name="com.example.lipe.friend_requests.FriendRequestsFragment"
         android:label="fragment_friend_requests"
         tools:layout="@layout/fragment_friend_requests" />
+    <fragment
+        android:id="@+id/chatsAndGroupsFragment"
+        android:name="com.example.lipe.chats.ChatsAndGroupsFragment"
+        android:label="fragment_chats_and_groups"
+        tools:layout="@layout/fragment_chats_and_groups" />
 </navigation>

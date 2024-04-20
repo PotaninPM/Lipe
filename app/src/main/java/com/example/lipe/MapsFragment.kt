@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import com.example.lipe.chats.ChatsAndGroupsFragment
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.chats.ChatsFragment
 import com.example.lipe.create_events.CreateEventFragment
@@ -278,7 +279,7 @@ class MapsFragment : Fragment() {
                 R.id.map -> replaceFragment(MapsFragment())
                 R.id.add -> replaceFragment(FriendRequestsFragment())
                 R.id.rating -> replaceFragment(RatingFragment())
-                R.id.chats -> replaceFragment(ChatsFragment())
+                R.id.chats -> replaceFragment(ChatsAndGroupsFragment())
                 //R.id.add -> replaceFragment(GetPointsFragment())
                 else -> {
 
