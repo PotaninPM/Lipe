@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".chats.GroupsFragment">
+    tools:context=".chats_and_groups.groups.GroupsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/groupsRecyclerView"

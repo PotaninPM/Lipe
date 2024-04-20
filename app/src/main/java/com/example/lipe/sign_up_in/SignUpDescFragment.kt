@@ -21,7 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.lipe.R
-import com.example.lipe.database.UserDB
+import com.example.lipe.database_models.UserDB
 import com.example.lipe.databinding.FragmentSignUpDescBinding
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.viewModels.SignUpVM
@@ -31,7 +31,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.time.LocalDate
-import java.util.UUID
 
 class SignUpDescFragment : Fragment() {
 

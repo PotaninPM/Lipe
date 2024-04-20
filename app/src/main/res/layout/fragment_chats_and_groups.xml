@@ -5,7 +5,7 @@
     android:background="#FFFFFF"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".chats.ChatsAndGroupsFragment">
+    tools:context=".chats_and_groups.ChatsAndGroupsFragment">
 
     <ImageView
         android:layout_width="@dimen/_23sdp"

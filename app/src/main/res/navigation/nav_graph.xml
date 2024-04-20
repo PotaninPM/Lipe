@@ -124,7 +124,7 @@
         tools:layout="@layout/fragment_rating" />
     <fragment
         android:id="@+id/chatsFragment"
-        android:name="com.example.lipe.chats.ChatsFragment"
+        android:name="com.example.lipe.chats_and_groups.chats.ChatsFragment"
         android:label="fragment_chats"
         tools:layout="@layout/fragment_chats" />
     <fragment
@@ -134,7 +134,7 @@
         tools:layout="@layout/fragment_friend_requests" />
     <fragment
         android:id="@+id/chatsAndGroupsFragment"
-        android:name="com.example.lipe.chats.ChatsAndGroupsFragment"
+        android:name="com.example.lipe.chats_and_groups.ChatsAndGroupsFragment"
         android:label="fragment_chats_and_groups"
         tools:layout="@layout/fragment_chats_and_groups" />
 </navigation>

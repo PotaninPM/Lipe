@@ -1,8 +1,7 @@
-package com.example.lipe.peopleGoToEvent
+package com.example.lipe.people_go_to_event
 
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import java.util.ArrayList
 

@@ -23,7 +23,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.R
-import com.example.lipe.database.EcoEventModelDB
+import com.example.lipe.database_models.EcoEventModelDB
 import com.example.lipe.databinding.FragmentCreateEcoEventBinding
 import com.example.lipe.viewModels.AppVM
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -32,11 +32,8 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.text.SimpleDateFormat

@@ -27,7 +27,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.R
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.databinding.FragmentCreateEntEventBinding
-import com.example.lipe.database.EntEventModelDB
+import com.example.lipe.database_models.EntEventModelDB
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText

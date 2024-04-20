@@ -1,4 +1,4 @@
-package com.example.lipe.database
+package com.example.lipe.database_models
 
 data class UserDB(
     val uid:String?= null,

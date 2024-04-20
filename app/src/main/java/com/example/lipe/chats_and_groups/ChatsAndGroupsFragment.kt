@@ -1,15 +1,12 @@
-package com.example.lipe.chats
+package com.example.lipe.chats_and_groups
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TableLayout
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
-import com.example.lipe.R
 import com.example.lipe.databinding.FragmentChatsAndGroupsBinding
-import com.example.lipe.databinding.FragmentSignInWithEmailBinding
 import com.google.android.material.tabs.TabLayout
 
 class ChatsAndGroupsFragment : Fragment() {

@@ -2,7 +2,6 @@ package com.example.lipe
 
 import android.app.Dialog
 import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -17,13 +16,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import com.example.lipe.chats.ChatsAndGroupsFragment
+import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.viewModels.AppVM
-import com.example.lipe.chats.ChatsFragment
 import com.example.lipe.create_events.CreateEventFragment
 import com.example.lipe.databinding.FragmentMapsBinding
 import com.example.lipe.friend_requests.FriendRequestsFragment
