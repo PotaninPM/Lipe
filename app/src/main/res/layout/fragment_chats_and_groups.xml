@@ -8,6 +8,7 @@
     tools:context=".chats_and_groups.ChatsAndGroupsFragment">
 
     <ImageView
+        android:id="@+id/notification_chats"
         android:layout_width="@dimen/_23sdp"
         android:layout_height="@dimen/_23sdp"
         android:src="@drawable/notification"
@@ -23,7 +24,7 @@
         android:layout_marginTop="@dimen/_12sdp"
         android:background="@drawable/tabs"
         app:tabIndicatorGravity="center"
-        app:tabSelectedTextColor="#000000"
+        app:tabSelectedTextColor="#FFFFFF"
         app:tabMode="fixed"
         app:tabIndicatorColor="@null"
         app:tabIndicator="@drawable/tab_design"
@@ -49,6 +50,7 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_4sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
 

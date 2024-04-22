@@ -136,5 +136,9 @@
         android:id="@+id/chatsAndGroupsFragment"
         android:name="com.example.lipe.chats_and_groups.ChatsAndGroupsFragment"
         android:label="fragment_chats_and_groups"
-        tools:layout="@layout/fragment_chats_and_groups" />
+        tools:layout="@layout/fragment_chats_and_groups" >
+        <action
+            android:id="@+id/action_chatsAndGroupsFragment_to_friendRequestsFragment"
+            app:destination="@id/friendRequestsFragment" />
+    </fragment>
 </navigation>

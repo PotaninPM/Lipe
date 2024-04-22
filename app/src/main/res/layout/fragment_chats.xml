@@ -8,6 +8,7 @@
     tools:context=".chats_and_groups.chats.ChatsFragment">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
+        tools:listitem="@layout/chat_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

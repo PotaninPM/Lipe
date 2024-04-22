@@ -2,10 +2,12 @@ package com.example.lipe
 
 import android.app.Dialog
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.LocationManager
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
@@ -16,6 +18,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
@@ -35,7 +38,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -56,6 +61,10 @@ class MapsFragment : Fragment() {
 
     private lateinit var saveStateMapVM: SaveStateMapsVM
 
+    val markers: HashMap<String, Marker> = HashMap()
+
+    private lateinit var locationManager: LocationManager
+
     private val binding get() = _binding!!
 
     private lateinit var mMap: GoogleMap
@@ -63,22 +72,36 @@ class MapsFragment : Fragment() {
     private  lateinit var dbRef_user: DatabaseReference
     private  lateinit var dbRef_event: DatabaseReference
 
+    val eventsMarkersMap = HashMap<String, Marker>()
 
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
         dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
 
         // show all markers on map
-        dbRef_event.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for(eventSnapshot in dataSnapshot.children) {
-                    val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
-                    val eventId: String = eventSnapshot.child("event_id").value.toString()
-                    val type = eventSnapshot.child("type_of_event").value.toString()
-                    if (coordinates != null) {
-                        addMarker(LatLng(coordinates[0], coordinates[1]), type, eventId)
-                    }
+        dbRef_event.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
+                val coordinates: List<Double>? = dataSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
+                val eventId: String = dataSnapshot.child("event_id").value.toString()
+                val type = dataSnapshot.child("type_of_event").value?.toString() ?: "default_type"
+                if (coordinates != null) {
+                    val marker = addMarker(LatLng(coordinates[0], coordinates[1]), type, eventId)
+                    eventsMarkersMap[eventId] = marker!!
                 }
+            }
+
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+                val eventId: String = dataSnapshot.child("event_id").value.toString()
+                eventsMarkersMap[eventId]?.remove()
+                eventsMarkersMap.remove(eventId)
+            }
+
+            override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {
+                // Обработка изменения события
+            }
+
+            override fun onChildMoved(dataSnapshot: DataSnapshot, prevChildKey: String?) {
+                // Обработка перемещения события
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -92,13 +115,10 @@ class MapsFragment : Fragment() {
         }
 
         mMap.setOnMarkerClickListener { marker ->
-
             val markerPosition = marker.position
 
             val latitude = markerPosition.latitude
             val longitude = markerPosition.longitude
-
-
 
             eventEntVM.latitude = latitude
             eventEntVM.longtitude = longitude
@@ -116,6 +136,8 @@ class MapsFragment : Fragment() {
             true
         }
     }
+
+
 
     private fun searchTypeOfEvent(coord1: Double, coord2: Double, callback: (ready: Boolean) -> Unit) {
         val dbRefEvent = FirebaseDatabase.getInstance().getReference("current_events")
@@ -178,7 +200,8 @@ class MapsFragment : Fragment() {
     }
 
 
-    private fun addMarker(latLng: LatLng, type: String, eventId: String) {
+    private fun addMarker(latLng: LatLng, type: String, eventId: String): Marker? {
+        var marker: Marker? = null
         if(type == "ent") {
             val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker, null)
             val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
@@ -192,13 +215,15 @@ class MapsFragment : Fragment() {
                 .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
                 .anchor(0.5f, 1f)
 
-            mMap.addMarker(markerOptions)
+            marker = mMap.addMarker(markerOptions)
 
         } else if(type == "eco") {
-            mMap.addMarker(MarkerOptions().position(latLng))
-                ?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.eco))
+            marker = mMap.addMarker(MarkerOptions().position(latLng))
+            marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.eco))
         }
+        return marker
     }
+
 
 
     private fun createDrawableFromView(view: View): Bitmap {
@@ -273,9 +298,9 @@ class MapsFragment : Fragment() {
             when(it.itemId) {
                 R.id.profile -> replaceFragment(ProfileFragment())
                 R.id.map -> replaceFragment(MapsFragment())
-                R.id.add -> replaceFragment(FriendRequestsFragment())
                 R.id.rating -> replaceFragment(RatingFragment())
                 R.id.chats -> replaceFragment(ChatsAndGroupsFragment())
+                R.id.notification_chats -> replaceFragment(FriendRequestsFragment())
                 //R.id.add -> replaceFragment(GetPointsFragment())
                 else -> {
 

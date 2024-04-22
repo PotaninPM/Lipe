@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.example.lipe.R
 import com.example.lipe.databinding.FragmentChatsAndGroupsBinding
 import com.google.android.material.tabs.TabLayout
 
@@ -53,6 +55,10 @@ class ChatsAndGroupsFragment : Fragment() {
                 binding.tableLayout.selectTab(binding.tableLayout.getTabAt(position))
             }
         })
+
+        binding.notificationChats.setOnClickListener {
+            //view?.findNavController()?.navigate(R.id.action_chatsAndGroupsFragment_to_friendRequestsFragment)
+        }
         val view = binding.root
         return view
     }

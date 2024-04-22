@@ -24,10 +24,12 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
+import com.example.lipe.CryptAlgo
 import com.example.lipe.R
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.databinding.FragmentCreateEntEventBinding
 import com.example.lipe.database_models.EntEventModelDB
+import com.example.lipe.database_models.GroupModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -310,6 +312,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             if(type_sport == "1" || type_sport == "Выберите тип развлечения") {
                 Toast.makeText(requireContext(), "Введите спорт!", Toast.LENGTH_LONG).show()
             } else {
+                val uidGroup = UUID.randomUUID().toString()
                 var event = EntEventModelDB(
                     eventId,
                     type,
@@ -326,16 +329,21 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     photos,
                     arrayListOf(auth.currentUser?.uid),
                     1,
-                    "ok"
+                    "ok",
+                    uidGroup
                 )
 
                 val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/curRegEventsId")
                 val dbRef_user_your = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/yourCreatedEvents")
+                val dbRef_group = FirebaseDatabase.getInstance().getReference("groups")
 
                 dbRef_events.child(eventId).setValue(event).addOnSuccessListener {
                     dbRef_user.child(eventId).setValue(eventId).addOnSuccessListener {
                         dbRef_user_your.child(eventId).setValue(eventId).addOnSuccessListener {
-                            //do smth
+                            val group = GroupModel(uidGroup, arrayListOf(auth.currentUser!!.uid), arrayListOf("-"))
+                            dbRef_group.child(uidGroup).setValue(group).addOnSuccessListener {
+                                //do smth
+                            }
                         }
                     }
                 }

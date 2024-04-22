@@ -18,7 +18,7 @@ public class CryptAlgo {
         System.out.println(res);
     }
 
-    private static String encrypt(String s) {
+    public static String encrypt(String s) {
 
         StringBuilder res = new StringBuilder();
 
@@ -67,7 +67,7 @@ public class CryptAlgo {
 
         return res.toString();
     }
-    private static String crypt(String s) {
+    public static String crypt(String s) {
 
         StringBuilder res = new StringBuilder();
 
