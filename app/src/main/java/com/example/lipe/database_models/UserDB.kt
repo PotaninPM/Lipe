@@ -22,5 +22,6 @@ data class UserDB(
     val friends_amount: Int ?= null,
     val curRegEventsId: ArrayList<String> ?= null,
     val yourCreatedEvents: ArrayList<String> ?= null,
-    val events_amount: Int ?= null
+    val events_amount: Int ?= null,
+    val chats: ArrayList<String> ?= null
 )

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#FFFFFF"
+    android:id="@+id/all"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".chats_and_groups.ChatsAndGroupsFragment">

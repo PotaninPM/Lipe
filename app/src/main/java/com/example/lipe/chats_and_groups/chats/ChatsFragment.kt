@@ -54,10 +54,10 @@ class ChatsFragment : Fragment() {
         binding.chatRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.chatRecyclerView.adapter = adapter
 
-        //setChats()
+        setChats()
     }
 
-//    private fun setChats() {
+    private fun setChats() {
 //        val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/friends")
 //        dbRef_user.addValueEventListener(object : ValueEventListener {
 //            override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -88,7 +88,7 @@ class ChatsFragment : Fragment() {
 //                Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
 //            }
 //        })
-//    }
+    }
 
     override fun onDestroy() {
         super.onDestroy()

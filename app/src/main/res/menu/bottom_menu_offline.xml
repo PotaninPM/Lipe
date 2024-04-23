@@ -12,11 +12,6 @@
         android:icon="@drawable/rating_users"
         android:title="Рейтинг" />
     <item
-        android:id="@+id/add"
-        android:enabled="true"
-        android:icon="@drawable/add"
-        android:title="Посты" />
-    <item
         android:id="@+id/chats"
         android:enabled="true"
         android:icon="@drawable/chats_2"

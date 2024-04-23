@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.lipe.R
+import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.databinding.FragmentFriendRequestsBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -55,6 +57,10 @@ class FriendRequestsFragment : Fragment() {
         binding.recyclerReq.adapter = adapter
 
         setRequests()
+
+        binding.backBtn.setOnClickListener {
+            replaceFragment(ChatsAndGroupsFragment())
+        }
     }
 
     private fun setRequests() {
@@ -100,6 +106,13 @@ class FriendRequestsFragment : Fragment() {
         }.addOnFailureListener {
             callback("-")
         }
+    }
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = childFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.map, fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
     }
     override fun onDestroy() {
         super.onDestroy()

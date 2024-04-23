@@ -83,7 +83,7 @@ class MapsFragment : Fragment() {
             override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
                 val coordinates: List<Double>? = dataSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
                 val eventId: String = dataSnapshot.child("event_id").value.toString()
-                val type = dataSnapshot.child("type_of_event").value?.toString() ?: "default_type"
+                val type = dataSnapshot.child("type_of_event").value?.toString() ?: "def_type"
                 if (coordinates != null) {
                     val marker = addMarker(LatLng(coordinates[0], coordinates[1]), type, eventId)
                     eventsMarkersMap[eventId] = marker!!
@@ -172,34 +172,6 @@ class MapsFragment : Fragment() {
     }
 
 
-    private fun showMarkersByType(types: List<String>) {
-        dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
-
-        // show all markers on map
-        dbRef_event.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for(eventSnapshot in dataSnapshot.children) {
-                    val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
-                    val type: String = eventSnapshot.child("type_of_event").value.toString()
-                    val eventId: String = eventSnapshot.child("event_id").value.toString()
-
-                    if (coordinates != null) {
-                        for(s: String in types) {
-                            if(type == s) {
-                                addMarker(LatLng(coordinates[0], coordinates[1]), type, eventId)
-                            }
-                        }
-                    }
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
-            }
-        })
-    }
-
-
     private fun addMarker(latLng: LatLng, type: String, eventId: String): Marker? {
         var marker: Marker? = null
         if(type == "ent") {
@@ -218,8 +190,19 @@ class MapsFragment : Fragment() {
             marker = mMap.addMarker(markerOptions)
 
         } else if(type == "eco") {
-            marker = mMap.addMarker(MarkerOptions().position(latLng))
-            marker?.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.eco))
+            val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker, null)
+            val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
+
+            if(true) {
+                markerImageView.setImageResource(R.drawable.leaf)
+            }
+
+            val markerOptions = MarkerOptions()
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
+                .anchor(0.5f, 1f)
+
+            marker = mMap.addMarker(markerOptions)
         }
         return marker
     }

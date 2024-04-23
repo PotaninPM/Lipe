@@ -9,6 +9,7 @@ import androidx.navigation.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.lipe.R
 import com.example.lipe.databinding.FragmentChatsAndGroupsBinding
+import com.example.lipe.friend_requests.FriendRequestsFragment
 import com.google.android.material.tabs.TabLayout
 
 class ChatsAndGroupsFragment : Fragment() {
@@ -57,7 +58,7 @@ class ChatsAndGroupsFragment : Fragment() {
         })
 
         binding.notificationChats.setOnClickListener {
-            //view?.findNavController()?.navigate(R.id.action_chatsAndGroupsFragment_to_friendRequestsFragment)
+            replaceFragment(FriendRequestsFragment())
         }
         val view = binding.root
         return view
@@ -66,6 +67,14 @@ class ChatsAndGroupsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = childFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.all, fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
     }
 
     override fun onDestroy() {

@@ -208,6 +208,7 @@ class SignUpDescFragment : Fragment() {
             arrayListOf("-"),
             arrayListOf("-"),
             0,
+            arrayListOf("-")
         )
 
         dbRef.child(auth.currentUser!!.uid).setValue(user_DB_info).addOnSuccessListener {
