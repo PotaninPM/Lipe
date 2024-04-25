@@ -243,7 +243,7 @@ class MapsFragment : Fragment() {
 
 
         binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
-
+        binding.allText.setTextColor(Color.BLACK)
 
         if(appVM.reg == "yes") {
             showSuccessRegWindow()
@@ -255,6 +255,7 @@ class MapsFragment : Fragment() {
                 resetMarkers()
                 appVM.markersType = "friends"
                 binding.friends.setBackgroundResource(R.drawable.vary_of_events)
+                binding.friendsText.setTextColor(Color.BLACK)
             }
         }
 
@@ -263,6 +264,7 @@ class MapsFragment : Fragment() {
                 resetMarkers()
                 appVM.markersType = "all"
                 binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
+                binding.allText.setTextColor(Color.BLACK)
             }
         }
 
@@ -271,6 +273,7 @@ class MapsFragment : Fragment() {
                 resetMarkers()
                 appVM.markersType = "eco"
                 binding.ecoEvents.setBackgroundResource(R.drawable.vary_of_events)
+                binding.ecoText.setTextColor(Color.BLACK)
             }
         }
 
@@ -279,6 +282,7 @@ class MapsFragment : Fragment() {
                 resetMarkers()
                 appVM.markersType = "ent"
                 binding.entEvents.setBackgroundResource(R.drawable.vary_of_events)
+                binding.entText.setTextColor(Color.BLACK)
             }
         }
 
@@ -287,6 +291,7 @@ class MapsFragment : Fragment() {
                 resetMarkers()
                 appVM.markersType = "help"
                 binding.helpEvents.setBackgroundResource(R.drawable.vary_of_events)
+                binding.friendsText.setTextColor(Color.BLACK)
             }
         }
 
@@ -304,13 +309,15 @@ class MapsFragment : Fragment() {
         }
     }
     private fun resetMarkers() {
+        eventsMarkersMap.values.forEach { it.remove() }
+        eventsMarkersMap.clear()
+
         binding.friends.setBackgroundResource(0)
         binding.allEvents.setBackgroundResource(0)
         binding.ecoEvents.setBackgroundResource(0)
         binding.entEvents.setBackgroundResource(0)
         binding.helpEvents.setBackgroundResource(0)
 
-        eventsMarkersMap.clear()
     }
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = childFragmentManager

@@ -91,6 +91,7 @@
                         android:src="@drawable/select_all" />
 
                     <TextView
+                        android:id="@+id/all_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -116,6 +117,7 @@
                         android:src="@drawable/friends_img" />
 
                     <TextView
+                        android:id="@+id/friends_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -142,6 +144,7 @@
                         android:src="@drawable/planet_icon" />
 
                     <TextView
+                        android:id="@+id/eco_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -167,6 +170,7 @@
                         android:src="@drawable/stadium" />
 
                     <TextView
+                        android:id="@+id/ent_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
@@ -192,6 +196,7 @@
                         android:src="@drawable/handshake" />
 
                     <TextView
+                        android:id="@+id/help_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
