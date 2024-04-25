@@ -81,7 +81,6 @@
                     android:id="@+id/all_events"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:background="@drawable/vary_of_events"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -106,7 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_6sdp"
-                    android:background="@drawable/vary_of_events"
+
                     android:orientation="horizontal">
 
                     <ImageView
@@ -133,7 +132,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_6sdp"
-                    android:background="@drawable/vary_of_events"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -159,7 +157,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_6sdp"
-                    android:background="@drawable/vary_of_events"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -185,7 +182,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/_6sdp"
-                    android:background="@drawable/vary_of_events"
                     android:orientation="horizontal">
 
                     <ImageView

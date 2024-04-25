@@ -18,6 +18,7 @@ class AppVM: ViewModel() {
 
     var qrData: String = "jj"
 
+    var markersType: String = ""
     fun setCoord(lat: Double, long: Double) {
         latitude = lat
         longtitude = long

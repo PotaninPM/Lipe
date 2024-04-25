@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <style name="ImageStyle_Circle">
         <item name = "cornerSize">50%</item>
         <item name="cornerFamily">rounded</item>
@@ -9,6 +10,7 @@
         <item name="cornerSizeBottomRight">10%</item>
         <item name="cornerFamily">rounded</item>
     </style>
+
 
     <style name="ImageStyle_marker">
         <item name="cornerSize">30%</item>

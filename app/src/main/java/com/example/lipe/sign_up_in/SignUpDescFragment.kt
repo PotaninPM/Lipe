@@ -227,11 +227,6 @@ class SignUpDescFragment : Fragment() {
         }
     }
 
-    private fun setError(er: String, field: TextInputEditText) {
-        var textError: TextInputEditText = field
-        textError.error=er
-    }
-
     data class SpinnerItem(val name: String, val imageResourceId: Int)
 
     private class CustomAdapter(context: Context, private val items: List<SpinnerItem>) : ArrayAdapter<SpinnerItem>(context,

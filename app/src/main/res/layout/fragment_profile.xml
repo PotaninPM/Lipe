@@ -1,317 +1,304 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="#FFFFFF"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".your_profile.ProfileFragment">
     <data>
-        <variable name="viewModel" type="com.example.lipe.viewModels.ProfileVM" />
-
         <variable
-            name="ProfileFragment"
-            type="com.example.lipe.your_profile.ProfileFragment" />
+            name="viewModel"
+            type="com.example.lipe.viewModels.ProfileVM" />
     </data>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/all"
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-            <ProgressBar
-                android:id="@+id/loadingProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/all"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:orientation="vertical"
+            android:background="#FFFFFF"
+            android:clipToPadding="false">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/allProfile"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintEnd_toEndOf="parent">
+                android:layout_height="match_parent">
 
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/theme"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_132sdp"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:shapeAppearanceOverlay="@style/ImageStyle_theme"
-                    app:srcCompat="@drawable/profile_theme" />
-
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/avatar"
-                    android:layout_width="@dimen/_120sdp"
-                    android:layout_height="@dimen/_120sdp"
-                    android:layout_marginTop="@dimen/_62sdp"
-                    android:padding="@dimen/_2sdp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ex2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.476"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:shapeAppearanceOverlay="@style/ImageStyle_Circle"
-                    app:strokeColor="#015EFF"
-                    app:strokeWidth="@dimen/_2sdp" />
-
-                <LinearLayout
-                    android:id="@+id/lay1"
+                <ProgressBar
+                    android:id="@+id/loadingProgressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_4sdp"
-                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/avatar">
-
-                    <TextView
-                        android:id="@+id/textView6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/interextrabold"
-                        android:text="@{viewModel.nameLastName}"
-                        android:textAlignment="center"
-                        android:textSize="@dimen/_17sdp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
-
-
-                <ImageView
-                    android:id="@+id/qrCodeScan"
-                    android:layout_width="@dimen/_32sdp"
-                    android:layout_height="@dimen/_32sdp"
-                    android:src="@drawable/scanner"
-                    app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
-                    app:layout_constraintEnd_toStartOf="@+id/avatar"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/avatar"
-                    app:layout_constraintVertical_bias="0.492" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout"
+                    android:id="@+id/allProfile"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_62sdp"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:layout_marginTop="@dimen/_6sdp"
-                    android:background="@drawable/profile_rates"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lay1">
+                    android:layout_height="match_parent">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/theme"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_132sdp"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/ImageStyle_theme"
+                        app:srcCompat="@drawable/profile_theme" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/avatar"
+                        android:layout_width="@dimen/_120sdp"
+                        android:layout_height="@dimen/_120sdp"
+                        android:layout_marginTop="@dimen/_62sdp"
+                        android:padding="@dimen/_2sdp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ex2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.476"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/ImageStyle_Circle"
+                        app:strokeColor="#015EFF"
+                        app:strokeWidth="@dimen/_2sdp" />
 
                     <LinearLayout
-                        android:id="@+id/linearLayout"
+                        android:id="@+id/lay1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toBottomOf="@+id/avatar">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="@{viewModel.ratingPoints}"
-
+                            android:id="@+id/textView6"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/interextrabold"
+                            android:text="@{viewModel.nameLastName}"
+                            android:textAlignment="center"
                             android:textSize="@dimen/_17sdp"
                             android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/nunito_sans"
-                            android:text="Рейтинг"
-                            android:textSize="@dimen/_15sdp" />
-
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/linearLayout2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+                    <ImageView
+                        android:id="@+id/qrCodeScan"
+                        android:layout_width="@dimen/_32sdp"
+                        android:layout_height="@dimen/_32sdp"
+                        android:src="@drawable/scanner"
+                        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
+                        app:layout_constraintEnd_toStartOf="@+id/avatar"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="@+id/avatar"
+                        app:layout_constraintVertical_bias="0.492" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="@{viewModel.friendsAmount}"
-                            android:textSize="@dimen/_17sdp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/nunito_sans"
-                            android:text="Друзей"
-                            android:textSize="@dimen/_15sdp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraintLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_62sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:background="@drawable/profile_rates"
+                        android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/linearLayout"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/lay1">
 
-                        <TextView
+                        <LinearLayout
+                            android:id="@+id/linearLayout10"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="@{viewModel.eventsAmount}"
-                            android:textSize="@dimen/_17sdp"
-                            android:textStyle="bold" />
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
-                        <TextView
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@{viewModel.ratingPoints}"
+                                android:textSize="@dimen/_17sdp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/nunito_sans"
+                                android:text="Рейтинг"
+                                android:textSize="@dimen/_15sdp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/nunito_sans"
-                            android:text="Событий"
-                            android:textSize="@dimen/_15sdp" />
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/linearLayout10"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@{viewModel.friendsAmount}"
+                                android:textSize="@dimen/_17sdp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/nunito_sans"
+                                android:text="Друзей"
+                                android:textSize="@dimen/_15sdp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/linearLayout10"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@{viewModel.eventsAmount}"
+                                android:textSize="@dimen/_17sdp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/nunito_sans"
+                                android:text="Событий"
+                                android:textSize="@dimen/_15sdp" />
+
+                        </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/linearTab"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_50sdp"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:background="@drawable/profiletabs"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+                        tools:layout_editor_absoluteX="11dp">
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnCurEvent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:background="@drawable/profiletabsbtns"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/nunitosanssemibold"
+                            android:gravity="center"
+                            android:paddingStart="@dimen/_14sdp"
+                            android:paddingEnd="@dimen/_14sdp"
+                            android:singleLine="true"
+                            android:text="Текущие"
+                            android:textAllCaps="false"
+                            android:textColor="@color/quantum_white_100"
+                            app:layout_constraintStart_toStartOf="parent"
+                            tools:ignore="TextSizeCheck"
+                            tools:layout_editor_absoluteY="5dp" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnPastEvent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:background="@drawable/profiletabsbtns"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/nunitosanssemibold"
+                            android:gravity="center"
+                            android:paddingStart="@dimen/_14sdp"
+                            android:paddingEnd="@dimen/_14sdp"
+                            android:singleLine="true"
+                            android:text="Прошедшие"
+                            android:textAllCaps="false"
+                            android:textColor="@color/quantum_white_100"
+                            app:layout_constraintEnd_toStartOf="@+id/btnYourEvents"
+                            app:layout_constraintStart_toEndOf="@+id/btnCurEvent"
+                            tools:ignore="TextSizeCheck"
+                            tools:layout_editor_absoluteY="5dp" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnYourEvents"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:background="@drawable/profiletabsbtns"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/nunitosanssemibold"
+                            android:gravity="center"
+                            android:paddingStart="@dimen/_14sdp"
+                            android:paddingEnd="@dimen/_14sdp"
+                            android:singleLine="true"
+                            android:text="Ваши"
+                            android:textAllCaps="false"
+                            android:textColor="@color/quantum_white_100"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            tools:ignore="TextSizeCheck" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/switcher"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearTab" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <!--            <androidx.appcompat.widget.AppCompatButton-->
-                <!--                android:id="@+id/qrCode"-->
-                <!--                android:layout_width="@dimen/_95sdp"-->
-                <!--                android:layout_height="@dimen/_35sdp"-->
-                <!--                android:background="@drawable/your_qr"-->
-                <!--                android:text="Ваш QR"-->
-                <!--                android:textAllCaps="false"-->
-                <!--                android:layout_marginTop="@dimen/_8sdp"-->
-                <!--                android:textColor="@color/quantum_white_100"-->
-                <!--                app:layout_constraintEnd_toStartOf="@+id/lay1"-->
-                <!--                app:layout_constraintStart_toStartOf="parent"-->
-                <!--                app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />-->
-
-                <!--            <androidx.appcompat.widget.AppCompatButton-->
-                <!--                android:id="@+id/changeData"-->
-                <!--                android:layout_width="@dimen/_105sdp"-->
-                <!--                android:layout_height="@dimen/_35sdp"-->
-                <!--                android:layout_marginEnd="16dp"-->
-                <!--                android:background="@drawable/add_to_friend_btn"-->
-                <!--                android:text="Сканировать QR"-->
-                <!--                android:textAllCaps="false"-->
-                <!--                android:textColor="@color/quantum_white_100"-->
-                <!--                app:layout_constraintBottom_toBottomOf="@+id/qrCode"-->
-                <!--                app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                app:layout_constraintStart_toEndOf="@+id/lay1"-->
-                <!--                app:layout_constraintTop_toBottomOf="@+id/constraintLayout"-->
-                <!--                app:layout_constraintVertical_bias="1.0" />-->
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/linearTab"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_54sdp"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_16sdp"
-                    android:background="@drawable/profiletabs"
-                    android:gravity="center_horizontal"
-                    android:orientation="horizontal"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btnCurEvent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:layout_marginBottom="@dimen/_8sdp"
-                        android:background="@drawable/profiletabsbtns"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/nunitosanssemibold"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/_14sdp"
-                        android:paddingEnd="@dimen/_14sdp"
-                        android:singleLine="true"
-                        android:text="Текущие"
-                        android:textAllCaps="false"
-                        android:textColor="@color/quantum_white_100"
-                        app:layout_constraintStart_toStartOf="parent"
-                        tools:ignore="TextSizeCheck"
-                        tools:layout_editor_absoluteY="5dp" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btnPastEvent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:layout_marginBottom="@dimen/_8sdp"
-                        android:background="@drawable/profiletabsbtns"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/nunitosanssemibold"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/_14sdp"
-                        android:paddingEnd="@dimen/_14sdp"
-                        android:singleLine="true"
-                        android:text="Прошедшие"
-                        android:textAllCaps="false"
-                        android:textColor="@color/quantum_white_100"
-                        app:layout_constraintEnd_toStartOf="@+id/btnYourEvents"
-                        app:layout_constraintStart_toEndOf="@+id/btnCurEvent"
-                        tools:ignore="TextSizeCheck"
-                        tools:layout_editor_absoluteY="5dp" />
-
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btnYourEvents"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_8sdp"
-                        android:layout_marginBottom="@dimen/_8sdp"
-                        android:background="@drawable/profiletabsbtns"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/nunitosanssemibold"
-                        android:gravity="center"
-                        android:paddingStart="@dimen/_14sdp"
-                        android:paddingEnd="@dimen/_14sdp"
-                        android:singleLine="true"
-                        android:text="Ваши"
-                        android:textAllCaps="false"
-                        android:textColor="@color/quantum_white_100"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        tools:ignore="TextSizeCheck" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/switcher"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearTab" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- Выдвижная панель -->
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:fitsSystemWindows="true"
+            app:headerLayout="@layout/nav_profile_header"
+            app:menu="@menu/profile_drawer" />
+
+    </androidx.drawerlayout.widget.DrawerLayout>
 
 </layout>

@@ -49,7 +49,6 @@ class ChatsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         adapter = ChatsAdapter()
         binding.chatRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.chatRecyclerView.adapter = adapter
@@ -58,36 +57,29 @@ class ChatsFragment : Fragment() {
     }
 
     private fun setChats() {
-//        val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/friends")
-//        dbRef_user.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                val chats = ArrayList<Chat>()
-//                for(chats in dataSnapshot.children) {
-//                    val dbRef_username = FirebaseDatabase.getInstance().getReference("users/${queries.value.toString()}")
-//                    dbRef_username.addListenerForSingleValueEvent(object: ValueEventListener {
-//                        override fun onDataChange(snapshot: DataSnapshot) {
-//                            val username:String = snapshot.child("username").value.toString()
-//                            val uid: String = snapshot.child("uid").value.toString()
-//                            getUserPhotoUrl(queries.value.toString()) {url ->
-//                                if(url != "-") {
-//                                    val request = Request(url, username, uid, auth.currentUser!!.uid)
-//                                    requests.add(request)
-//                                    adapter.updateRequests(requests)
-//                                }
-//                            }
-//                        }
-//
-//                        override fun onCancelled(error: DatabaseError) {
-//                            Log.e("FirebaseError","Ошибка Firebase ${error.message}")
-//                        }
-//                    })
-//                }
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-//                Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
-//            }
-//        })
+        val dbRef_chats = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/chats")
+        dbRef_chats.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val chats = ArrayList<Chat>()
+                for(chats in dataSnapshot.children) {
+                    val dbRef_chat_uid = FirebaseDatabase.getInstance().getReference("chats/${chats.value.toString()}")
+                    dbRef_chat_uid.addListenerForSingleValueEvent(object: ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val username:String = snapshot.child("username").value.toString()
+                            val uid: String = snapshot.child("uid").value.toString()
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            Log.e("FirebaseError","Ошибка Firebase ${error.message}")
+                        }
+                    })
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
+            }
+        })
     }
 
     override fun onDestroy() {

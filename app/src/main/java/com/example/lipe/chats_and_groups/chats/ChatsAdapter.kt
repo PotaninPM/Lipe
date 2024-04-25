@@ -19,7 +19,7 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>(){
 
         val binding = ChatItemBinding.bind(item)
         fun bind(chat: Chat) = with(binding) {
-            Picasso.get().load(chat.avatarUrl).into(avatar)
+//            Picasso.get().load(chat.avatarUrl).into(avatar)
             name.text = chat.name
             lastMessage.text = chat.last_message
         }

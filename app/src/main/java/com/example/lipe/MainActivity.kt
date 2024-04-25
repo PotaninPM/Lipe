@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.replace
 import com.example.lipe.databinding.ActivityMainBinding
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.material.color.DynamicColors
 import com.google.android.material.internal.EdgeToEdgeUtils
 
 class MainActivity : AppCompatActivity() {

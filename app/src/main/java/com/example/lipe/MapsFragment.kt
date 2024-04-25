@@ -1,15 +1,13 @@
 package com.example.lipe
 
+import ProfileFragment
 import android.app.Dialog
-import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.LocationManager
 import androidx.fragment.app.Fragment
-
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,22 +15,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import androidx.activity.OnBackPressedCallback
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.create_events.CreateEventFragment
 import com.example.lipe.databinding.FragmentMapsBinding
-import com.example.lipe.friend_requests.FriendRequestsFragment
 import com.example.lipe.rating_board.RatingFragment
 import com.example.lipe.viewModels.EventEcoVM
 import com.example.lipe.view_events.EventFragment
 import com.example.lipe.viewModels.EventEntVM
 import com.example.lipe.viewModels.SaveStateMapsVM
-import com.example.lipe.your_profile.ProfileFragment
-
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -47,7 +40,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
-
 class MapsFragment : Fragment() {
 
     private var _binding: FragmentMapsBinding? = null
@@ -69,8 +61,8 @@ class MapsFragment : Fragment() {
 
     private lateinit var mMap: GoogleMap
 
-    private  lateinit var dbRef_user: DatabaseReference
-    private  lateinit var dbRef_event: DatabaseReference
+    private lateinit var dbRef_user: DatabaseReference
+    private lateinit var dbRef_event: DatabaseReference
 
     val eventsMarkersMap = HashMap<String, Marker>()
 
@@ -249,33 +241,54 @@ class MapsFragment : Fragment() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.fragment) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
 
-//        val placeId = "ChIJgUbEo8cfqokR5lP9_Wh_DaM"
-//        val placeFields = listOf(Place.Field.ID, Place.Field.NAME)
-//
-//        val placesClient: PlacesClient = Places.createClient(requireActivity())
-//// Construct a request object, passing the place ID and fields array.
-//        val request = FetchPlaceRequest.newInstance(placeId, placeFields)
-//
-//        placesClient.fetchPlace(request)
-//            .addOnSuccessListener { response: FetchPlaceResponse ->
-//                val place = response.place
-//                Log.i("INFOG", "Place found: ${place.name}")
-//            }.addOnFailureListener { exception: Exception ->
-//                if (exception is ApiException) {
-//                    Log.e("INFOG", "Place not found: ${exception.message}")
-//                    val statusCode = exception.statusCode
-//                }
-//            }
+
+        binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
+
 
         if(appVM.reg == "yes") {
             showSuccessRegWindow()
             appVM.reg = "no"
         }
 
-//        binding.entEvents.setOnClickListener {
-//            binding.entEvents.setBackgroundColor(R.drawable.chosen_type)
-//        }
+        binding.friends.setOnClickListener {
+            if (appVM.markersType != "friends") {
+                resetMarkers()
+                appVM.markersType = "friends"
+                binding.friends.setBackgroundResource(R.drawable.vary_of_events)
+            }
+        }
 
+        binding.allEvents.setOnClickListener {
+            if (appVM.markersType != "all") {
+                resetMarkers()
+                appVM.markersType = "all"
+                binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
+            }
+        }
+
+        binding.ecoEvents.setOnClickListener {
+            if (appVM.markersType != "eco") {
+                resetMarkers()
+                appVM.markersType = "eco"
+                binding.ecoEvents.setBackgroundResource(R.drawable.vary_of_events)
+            }
+        }
+
+        binding.entEvents.setOnClickListener {
+            if (appVM.markersType != "ent") {
+                resetMarkers()
+                appVM.markersType = "ent"
+                binding.entEvents.setBackgroundResource(R.drawable.vary_of_events)
+            }
+        }
+
+        binding.helpEvents.setOnClickListener {
+            if (appVM.markersType != "help") {
+                resetMarkers()
+                appVM.markersType = "help"
+                binding.helpEvents.setBackgroundResource(R.drawable.vary_of_events)
+            }
+        }
 
         binding.bottomNavigation.setOnItemSelectedListener {
             when(it.itemId) {
@@ -283,8 +296,6 @@ class MapsFragment : Fragment() {
                 R.id.map -> replaceFragment(MapsFragment())
                 R.id.rating -> replaceFragment(RatingFragment())
                 R.id.chats -> replaceFragment(ChatsAndGroupsFragment())
-                R.id.notification_chats -> replaceFragment(FriendRequestsFragment())
-                //R.id.add -> replaceFragment(GetPointsFragment())
                 else -> {
 
                 }
@@ -292,29 +303,34 @@ class MapsFragment : Fragment() {
             true
         }
     }
+    private fun resetMarkers() {
+        binding.friends.setBackgroundResource(0)
+        binding.allEvents.setBackgroundResource(0)
+        binding.ecoEvents.setBackgroundResource(0)
+        binding.entEvents.setBackgroundResource(0)
+        binding.helpEvents.setBackgroundResource(0)
 
-
-
+        eventsMarkersMap.clear()
+    }
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = childFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.map, fragment)
-        fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        val backCallback = object: OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                if(childFragmentManager.backStackEntryCount > 1) {
-                    childFragmentManager.popBackStack()
-                }
-                parentFragmentManager.popBackStack()
-            }
-        }
-        activity?.onBackPressedDispatcher?.addCallback(this,backCallback)
-    }
+//    override fun onAttach(context: Context) {
+//        super.onAttach(context)
+//        val backCallback = object: OnBackPressedCallback(true){
+//            override fun handleOnBackPressed() {
+//                if(childFragmentManager.backStackEntryCount > 1) {
+//                    childFragmentManager.popBackStack()
+//                }
+//                parentFragmentManager.popBackStack()
+//            }
+//        }
+//        activity?.onBackPressedDispatcher?.addCallback(this,backCallback)
+//    }
 
 
     private fun showSuccessRegWindow() {

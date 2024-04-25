@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/all"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/quantum_white_100"
@@ -34,7 +35,7 @@
                 android:fontFamily="@font/intersemibold"
                 android:text="Уведомления"
                 android:textSize="@dimen/_16sdp"
-                android:layout_marginLeft="@dimen/_6sdp"
+                android:layout_marginLeft="@dimen/_12sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/back_btn"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -5,6 +5,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/get_points"
+            android:icon="@drawable/calendar"
+            android:title="Получить баллы" />
+        <item
             android:id="@+id/nav_home"
             android:icon="@drawable/calendar"
             android:title="Изменить информацию" />
@@ -16,5 +20,10 @@
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/calendar"
             android:title="Настройки" />
+
+        <item
+            android:id="@+id/sign_out"
+            android:icon="@drawable/calendar"
+            android:title="Выйти" />
     </group>
 </menu>

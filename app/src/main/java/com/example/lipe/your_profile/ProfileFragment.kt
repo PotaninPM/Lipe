@@ -1,27 +1,22 @@
-package com.example.lipe.your_profile
-
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.lipe.R
+import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.databinding.FragmentProfileBinding
-import com.example.lipe.rating_board.RatingFragment
-import com.example.lipe.sign_up_in.SignUpFragment
 import com.example.lipe.viewModels.ProfileVM
 import com.example.lipe.your_profile.cur_events.CurEventsInProfileFragment
 import com.example.lipe.your_profile.cur_events.YourEventsFragment
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
@@ -30,160 +25,173 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
-    private  lateinit var dbRef: DatabaseReference
-
+    private lateinit var dbRef: DatabaseReference
     private lateinit var auth: FirebaseAuth
+    private lateinit var storageRef: StorageReference
+    private var originalBackground: Drawable? = null
 
     private val profileVM: ProfileVM by activityViewModels()
 
-    private lateinit var storageRef : StorageReference
-
-    private lateinit var imageUri: Uri
-
-    private var originalBackground: Drawable? = null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        storageRef = FirebaseStorage.getInstance().reference
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-        //if(profileVM.ratingPoints.value ==) {
-        //}
-
-//        binding.notifications.setOnClickListener {
-//            replaceFragment(FriendRequestsFragment())
-//        }
-
-
-
-//        binding.more.setOnClickListener {
-//
-//        }
-//        binding.bottomNavigation.setOnItemSelectedListener {
-//            when(it.itemId) {
-//                R.id.map -> view.findNavController().navigate(R.id.action_profileFragment_to_mapsFragment)
-//
-//                else -> {
-//
-//                }
-//            }
-//            true
-//        }
-        binding.btnCurEvent.setOnClickListener {
-            switchTabs(0)
-            binding.btnYourEvents.setBackgroundResource(0)
-            binding.btnPastEvent.setBackgroundResource(0)
-
-            binding.btnCurEvent.background = originalBackground
-        }
-        binding.btnPastEvent.setOnClickListener {
-            switchTabs(1)
-            binding.btnYourEvents.setBackgroundResource(0)
-            binding.btnCurEvent.setBackgroundResource(0)
-
-            binding.btnPastEvent.background = originalBackground
-        }
-        binding.btnYourEvents.setOnClickListener {
-            switchTabs(2)
-            binding.btnCurEvent.setBackgroundResource(0)
-            binding.btnPastEvent.setBackgroundResource(0)
-
-            binding.btnYourEvents.background = originalBackground
-        }
-
-
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-
+        val view = binding.root
         originalBackground = binding.btnCurEvent.background
-
         switchTabs(0)
+
         binding.btnYourEvents.setBackgroundResource(0)
         binding.btnPastEvent.setBackgroundResource(0)
+        binding.btnCurEvent.background = originalBackground
 
         dbRef = FirebaseDatabase.getInstance().getReference("users")
         auth = FirebaseAuth.getInstance()
+        storageRef = FirebaseStorage.getInstance().reference
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = profileVM
 
-            binding.loadingProgressBar.visibility = View.VISIBLE
-            binding.allProfile.visibility = View.GONE
+            loadingProgressBar.visibility = View.VISIBLE
+            allProfile.visibility = View.GONE
 
-            findAccount {ready ->
-                if(ready) {
-                    setProfilePhoto {ready ->
-                        if(ready) {
-                            binding.loadingProgressBar.visibility = View.GONE
-                            binding.allProfile.visibility = View.VISIBLE
+            findAccount { userData ->
+                if (userData != null) {
+                    profileVM.setInfo(
+                        "${userData.firstName} ${userData.lastName}" + " ⓘ",
+                        userData.friendsAmount,
+                        userData.eventsAmount,
+                        userData.ratingPoints,
+                        userData.avatarId
+                    )
+                    setProfilePhotos {
+                        if (it) {
+                            loadingProgressBar.visibility = View.GONE
+                            allProfile.visibility = View.VISIBLE
                         }
                     }
                 }
             }
-            binding.theme.setImageResource(R.drawable.ex2)
+
+            theme.setOnClickListener {
+                selectImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+
+            btnCurEvent.setOnClickListener {
+                switchTabs(0)
+                btnYourEvents.setBackgroundResource(0)
+                btnPastEvent.setBackgroundResource(0)
+                btnCurEvent.background = originalBackground
+            }
+            btnPastEvent.setOnClickListener {
+                switchTabs(1)
+                btnYourEvents.setBackgroundResource(0)
+                btnCurEvent.setBackgroundResource(0)
+                btnPastEvent.background = originalBackground
+            }
+            btnYourEvents.setOnClickListener {
+                switchTabs(2)
+                btnCurEvent.setBackgroundResource(0)
+                btnPastEvent.setBackgroundResource(0)
+                btnYourEvents.background = originalBackground
+            }
         }
 
-        val view = binding.root
         return view
     }
-    private fun findAccount(callback: (ready: Boolean) -> Unit) {
 
-        dbRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for(profile in dataSnapshot.children) {
-                    if(profile.child("uid").value.toString() == auth.currentUser!!.uid) {
-                        val name:String = profile.child("firstName").value.toString()
-                        val lastName:String = profile.child("lastName").value.toString()
-                        val ratingAmount: Int = profile.child("rating").value.toString().toInt()
-                        val friendsAmount: Int = profile.child("friends_amount").value.toString().toInt()
-                        val eventsAmount: Int = profile.child("events_amount").value.toString().toInt()
-                        val avatar: String = profile.child("avatarId").value.toString()
-                        
-                        val firstLastName: String = name + " " + lastName
-                        profileVM.setInfo(firstLastName, friendsAmount, eventsAmount, ratingAmount, avatar)
-                        callback(true)
-                        break
+    val selectImage =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                binding.theme.setImageURI(uri)
+                uploadImage(uri)
+            } else {
+                Log.d("INFOG", "No media selected")
+            }
+        }
+
+    private fun uploadImage(imageUri: Uri) {
+        val storageRef = FirebaseStorage.getInstance().getReference("user_theme")
+        imageUri.let { uri ->
+            val uid: String = auth.currentUser!!.uid
+            val imageRef = storageRef.child(uid)
+            imageRef.putFile(uri)
+                .addOnSuccessListener { task ->
+                    task.storage.downloadUrl.addOnSuccessListener { url ->
+                        val dbRef_user =
+                            FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/themeUid")
+                        dbRef_user.child(uid).setValue(uid).addOnSuccessListener {
+
+                        }.addOnFailureListener {
+                            Log.d("INFOG", "ProfileErrTheme")
+                        }
                     }
                 }
+                .addOnFailureListener { exception ->
+                    Log.d("INFOG", "ProfileErrTheme")
+                }
+        }
+    }
 
+    private fun findAccount(callback: (UserData?) -> Unit) {
+        val dbRef_user =
+            FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
+
+        dbRef_user.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val name: String = dataSnapshot.child("firstName").value.toString()
+                val lastName: String = dataSnapshot.child("lastName").value.toString()
+                val ratingAmount: Int = dataSnapshot.child("rating").value.toString().toInt()
+                val friendsAmount: Int = dataSnapshot.child("friends_amount").value.toString().toInt()
+                val eventsAmount: Int = dataSnapshot.child("events_amount").value.toString().toInt()
+                val avatar: String = dataSnapshot.child("avatarId").value.toString()
+
+                Log.d("INFOG", name)
+
+                callback(
+                    UserData(
+                        name,
+                        lastName,
+                        ratingAmount,
+                        friendsAmount,
+                        eventsAmount,
+                        avatar
+                    )
+                )
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
-                callback(false)
+                Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
+                callback(null)
             }
         })
     }
 
-    private fun setProfilePhoto(callback: (ready: Boolean) -> Unit) {
-        val uid:String = profileVM.avatar.value.toString()
+    private fun setProfilePhotos(callback: (Boolean) -> Unit) {
+        val photoRef = storageRef.child("avatars/${auth.currentUser!!.uid}")
+        val themeRef = storageRef.child("user_theme/${auth.currentUser!!.uid}")
 
-        val photoRef = storageRef.child("avatars/$uid")
+        val tokenTaskAvatar = photoRef.downloadUrl
+        val tokenTaskTheme = themeRef.downloadUrl
 
-        val tokenTask = photoRef.downloadUrl
-
-        tokenTask.addOnSuccessListener { uri ->
+        tokenTaskAvatar.addOnSuccessListener { uri ->
             val imageUrl = uri.toString()
-            Picasso.get().load(imageUrl).into(binding.avatar)
-            callback(true)
+            Picasso.get().load(imageUrl).rotate("90".toFloat()).into(binding.avatar)
+            tokenTaskTheme.addOnSuccessListener { uri ->
+                val imageThemeUrl = uri.toString()
+                Picasso.get().load(imageThemeUrl).rotate("90".toFloat()).into(binding.theme)
+                callback(true)
+            }
         }.addOnFailureListener {
             callback(false)
         }
     }
 
     private fun switchTabs(position: Int) {
-        val fragment = when(position) {
+        val fragment = when (position) {
             0 -> CurEventsInProfileFragment()
-            1 -> RatingFragment()
+            1 -> ChatsAndGroupsFragment()
             2 -> YourEventsFragment()
             else -> null
         }
@@ -195,8 +203,17 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 }
+
+data class UserData(
+    val firstName: String,
+    val lastName: String,
+    val ratingPoints: Int,
+    val friendsAmount: Int,
+    val eventsAmount: Int,
+    val avatarId: String
+)

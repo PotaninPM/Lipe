@@ -48,7 +48,6 @@ class FriendRequestsFragment : Fragment() {
         val view = binding.root
         return view
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -110,7 +109,7 @@ class FriendRequestsFragment : Fragment() {
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = childFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.map, fragment)
+        fragmentTransaction.replace(R.id.all, fragment)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }

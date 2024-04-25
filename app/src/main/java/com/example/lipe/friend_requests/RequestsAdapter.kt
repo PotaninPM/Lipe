@@ -29,6 +29,9 @@ class RequestsAdapter: RecyclerView.Adapter<RequestsAdapter.RequestsHolder>() {
             username.text = request.username
 
             acceptBtn.setOnClickListener {
+                binding.acceptBtn.isClickable = false
+                binding.declineBtn.isClickable = false
+
                 val dbRef_accepter_friends = FirebaseDatabase.getInstance()
                     .getReference("users/${request.uid_accepter}/friends")
                 val dbRef_sender_friends = FirebaseDatabase.getInstance()
@@ -83,6 +86,8 @@ class RequestsAdapter: RecyclerView.Adapter<RequestsAdapter.RequestsHolder>() {
             }
 
             declineBtn.setOnClickListener {
+                binding.acceptBtn.isClickable = false
+                binding.declineBtn.isClickable = false
                 val dbRef_accepter_query = FirebaseDatabase.getInstance()
                     .getReference("users/${request.uid_accepter}/query_friends")
                 val dbRef_sender_query = FirebaseDatabase.getInstance()

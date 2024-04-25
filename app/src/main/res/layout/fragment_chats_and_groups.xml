@@ -8,6 +8,13 @@
     android:layout_height="match_parent"
     tools:context=".chats_and_groups.ChatsAndGroupsFragment">
 
+    <LinearLayout
+        android:layout_width="@dimen/_12sdp"
+        android:layout_height="@dimen/_12sdp"
+        android:background="@drawable/circle_notif"
+        app:layout_constraintBottom_toTopOf="@+id/notification_chats"
+        app:layout_constraintEnd_toEndOf="@+id/notification_chats" />
+
     <ImageView
         android:id="@+id/notification_chats"
         android:layout_width="@dimen/_23sdp"
