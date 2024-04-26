@@ -92,17 +92,6 @@
 
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/qrCodeScan"
-                        android:layout_width="@dimen/_32sdp"
-                        android:layout_height="@dimen/_32sdp"
-                        android:src="@drawable/scanner"
-                        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
-                        app:layout_constraintEnd_toStartOf="@+id/avatar"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/avatar"
-                        app:layout_constraintVertical_bias="0.492" />
-
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/constraintLayout"
                         android:layout_width="match_parent"
@@ -203,7 +192,7 @@
                         android:id="@+id/linearTab"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_50sdp"
-                        android:layout_marginTop="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_12sdp"
                         android:layout_marginStart="@dimen/_10sdp"
                         android:layout_marginEnd="@dimen/_10sdp"
                         android:background="@drawable/profiletabs"

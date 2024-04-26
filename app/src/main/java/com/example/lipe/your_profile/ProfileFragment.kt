@@ -147,8 +147,6 @@ class ProfileFragment : Fragment() {
                 val eventsAmount: Int = dataSnapshot.child("events_amount").value.toString().toInt()
                 val avatar: String = dataSnapshot.child("avatarId").value.toString()
 
-                Log.d("INFOG", name)
-
                 callback(
                     UserData(
                         name,

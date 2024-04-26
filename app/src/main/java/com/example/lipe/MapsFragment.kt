@@ -76,8 +76,14 @@ class MapsFragment : Fragment() {
                 val coordinates: List<Double>? = dataSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
                 val eventId: String = dataSnapshot.child("event_id").value.toString()
                 val type = dataSnapshot.child("type_of_event").value?.toString() ?: "def_type"
+
+                var sport_type = "-"
+
+                if(type == "ent") {
+                    sport_type = dataSnapshot.child("sport_type").value.toString()
+                }
                 if (coordinates != null) {
-                    addMarker(LatLng(coordinates[0], coordinates[1]), type, eventId)
+                    addMarker(LatLng(coordinates[0], coordinates[1]), type, eventId, sport_type)
                 }
             }
 
@@ -124,7 +130,6 @@ class MapsFragment : Fragment() {
             searchTypeOfEvent(latitude, longitude) {ready ->
                 if(ready) {
                     EventFragment.show(childFragmentManager)
-                    Log.d("INFOG", appVM.type)
                 }
             }
 
@@ -258,14 +263,31 @@ class MapsFragment : Fragment() {
         })
     }
 
-    private fun addMarker(latLng: LatLng, type: String, eventId: String): Marker? {
+    private fun addMarker(latLng: LatLng, type: String, eventId: String, sport_type: String): Marker? {
         var marker: Marker? = null
         val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker, null)
         val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
 
+        var sportType: Int = 0
+
+        if(sport_type != "-") {
+            if(sport_type == "Воллейбол") {
+                sportType = R.drawable.volleyball_2
+            } else if(sport_type == "Футбол") {
+                sportType = R.drawable.football
+            } else if(sport_type == "Рэгби") {
+                sportType = R.drawable.rugby_ball
+            } else if(sport_type == "Баскетбол") {
+                sportType = R.drawable.img_basketballimg
+            } else if(sport_type == "Теннис") {
+                sportType = R.drawable.tennis
+            } else if(sport_type == "Лыжи") {
+                sportType = R.drawable.skiing_1
+            }
+        }
         val markerImageResource = when (type) {
             "eco" -> R.drawable.leaf
-            "ent" -> R.drawable.football
+            "ent" -> sportType
             else -> R.drawable.basketball_32
         }
 
@@ -286,41 +308,6 @@ class MapsFragment : Fragment() {
 
         return marker
     }
-
-//    private fun addMarker(latLng: LatLng, type: String, eventId: String): Marker? {
-//        var marker: Marker? = null
-//        if(type == "ent") {
-//            val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker, null)
-//            val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
-//
-//            if(true) {
-//                markerImageView.setImageResource(R.drawable.football)
-//            }
-//
-//            val markerOptions = MarkerOptions()
-//                .position(latLng)
-//                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
-//                .anchor(0.5f, 1f)
-//
-//            marker = mMap.addMarker(markerOptions)
-//
-//        } else if(type == "eco") {
-//            val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker, null)
-//            val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
-//
-//            if(true) {
-//                markerImageView.setImageResource(R.drawable.leaf)
-//            }
-//
-//            val markerOptions = MarkerOptions()
-//                .position(latLng)
-//                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
-//                .anchor(0.5f, 1f)
-//
-//            marker = mMap.addMarker(markerOptions)
-//        }
-//        return marker
-//    }
     private fun showMarkersByType(type: String) {
         when (type) {
             "all" -> {
