@@ -62,9 +62,9 @@ class MapsFragment : Fragment() {
     private lateinit var dbRef_user: DatabaseReference
     private lateinit var dbRef_event: DatabaseReference
 
-    private val allEventsMarkersMap = HashMap<String, Marker>()
     private val ecoEventsMarkersMap = HashMap<String, Marker>()
     private val entEventsMarkersMap = HashMap<String, Marker>()
+    private val helpEventsMarkersMap = HashMap<String, Marker>()
 
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
@@ -85,14 +85,9 @@ class MapsFragment : Fragment() {
                 val eventId: String = dataSnapshot.child("event_id").value.toString()
                 val type: String = dataSnapshot.child("type_of_event").value.toString()
                 if(type == "ent") {
-                    allEventsMarkersMap[eventId]?.remove()
-                    allEventsMarkersMap.remove(eventId)
-
                     entEventsMarkersMap[eventId]?.remove()
-                    entEventsMarkersMap.remove(eventId)
                 } else if(type == "eco") {
-                    allEventsMarkersMap[eventId]?.remove()
-                    ecoEventsMarkersMap.remove(eventId)
+                    ecoEventsMarkersMap[eventId]?.remove()
                 }
             }
 
@@ -284,9 +279,9 @@ class MapsFragment : Fragment() {
         marker = mMap.addMarker(markerOptions)
 
         when (type) {
-            "all" -> allEventsMarkersMap[eventId] = marker!!
             "eco" -> ecoEventsMarkersMap[eventId] = marker!!
             "ent" -> entEventsMarkersMap[eventId] = marker!!
+            "help" -> helpEventsMarkersMap[eventId] = marker!!
         }
 
         return marker
@@ -329,18 +324,28 @@ class MapsFragment : Fragment() {
     private fun showMarkersByType(type: String) {
         when (type) {
             "all" -> {
-                showOrHideMarkers(allEventsMarkersMap, "show")
-                showOrHideMarkers(ecoEventsMarkersMap, "hide")
-                showOrHideMarkers(entEventsMarkersMap, "hide")
+                showOrHideMarkers(ecoEventsMarkersMap, "show")
+                showOrHideMarkers(entEventsMarkersMap, "show")
+                showOrHideMarkers(helpEventsMarkersMap, "show")
             }
             "eco" -> {
                 showOrHideMarkers(ecoEventsMarkersMap, "show")
-                showOrHideMarkers(allEventsMarkersMap, "hide")
+                showOrHideMarkers(helpEventsMarkersMap, "hide")
                 showOrHideMarkers(entEventsMarkersMap, "hide")
             }
             "ent" -> {
                 showOrHideMarkers(entEventsMarkersMap, "show")
-                showOrHideMarkers(allEventsMarkersMap, "hide")
+                showOrHideMarkers(helpEventsMarkersMap, "hide")
+                showOrHideMarkers(ecoEventsMarkersMap, "hide")
+            }
+            "friends" -> {
+                showOrHideMarkers(entEventsMarkersMap, "hide")
+                showOrHideMarkers(helpEventsMarkersMap, "hide")
+                showOrHideMarkers(ecoEventsMarkersMap, "hide")
+            }
+            "help" -> {
+                showOrHideMarkers(helpEventsMarkersMap, "show")
+                showOrHideMarkers(entEventsMarkersMap, "hide")
                 showOrHideMarkers(ecoEventsMarkersMap, "hide")
             }
         }
