@@ -53,8 +53,6 @@ class MapsFragment : Fragment() {
 
     private lateinit var saveStateMapVM: SaveStateMapsVM
 
-    val markers: HashMap<String, Marker> = HashMap()
-
     private lateinit var locationManager: LocationManager
 
     private val binding get() = _binding!!
@@ -64,7 +62,9 @@ class MapsFragment : Fragment() {
     private lateinit var dbRef_user: DatabaseReference
     private lateinit var dbRef_event: DatabaseReference
 
-    val eventsMarkersMap = HashMap<String, Marker>()
+    private val allEventsMarkersMap = HashMap<String, Marker>()
+    private val ecoEventsMarkersMap = HashMap<String, Marker>()
+    private val entEventsMarkersMap = HashMap<String, Marker>()
 
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
@@ -77,15 +77,23 @@ class MapsFragment : Fragment() {
                 val eventId: String = dataSnapshot.child("event_id").value.toString()
                 val type = dataSnapshot.child("type_of_event").value?.toString() ?: "def_type"
                 if (coordinates != null) {
-                    val marker = addMarker(LatLng(coordinates[0], coordinates[1]), type, eventId)
-                    eventsMarkersMap[eventId] = marker!!
+                    addMarker(LatLng(coordinates[0], coordinates[1]), type, eventId)
                 }
             }
 
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
                 val eventId: String = dataSnapshot.child("event_id").value.toString()
-                eventsMarkersMap[eventId]?.remove()
-                eventsMarkersMap.remove(eventId)
+                val type: String = dataSnapshot.child("type_of_event").value.toString()
+                if(type == "ent") {
+                    allEventsMarkersMap[eventId]?.remove()
+                    allEventsMarkersMap.remove(eventId)
+
+                    entEventsMarkersMap[eventId]?.remove()
+                    entEventsMarkersMap.remove(eventId)
+                } else if(type == "eco") {
+                    allEventsMarkersMap[eventId]?.remove()
+                    ecoEventsMarkersMap.remove(eventId)
+                }
             }
 
             override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {
@@ -130,7 +138,99 @@ class MapsFragment : Fragment() {
     }
 
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentMapsBinding.inflate(inflater, container, false)
 
+        appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
+//        eventEntVM = ViewModelProvider(requireActivity()).get(EventEntVM::class.java)
+        eventEcoVM = ViewModelProvider(requireActivity()).get(EventEcoVM::class.java)
+        saveStateMapVM = ViewModelProvider(requireActivity()).get(SaveStateMapsVM::class.java)
+
+        val view = binding.root
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val mapFragment = childFragmentManager.findFragmentById(R.id.fragment) as SupportMapFragment?
+        mapFragment?.getMapAsync(callback)
+
+
+        binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
+        binding.allText.setTextColor(Color.BLACK)
+
+        if(appVM.reg == "yes") {
+            showSuccessRegWindow()
+            appVM.reg = "no"
+        }
+
+        binding.friends.setOnClickListener {
+            if (appVM.markersType != "friends") {
+                appVM.markersType = "friends"
+                resetBackgroundForBtns()
+                showMarkersByType("friends")
+                binding.friends.setBackgroundResource(R.drawable.vary_of_events)
+                binding.friendsText.setTextColor(Color.BLACK)
+            }
+        }
+
+        binding.allEvents.setOnClickListener {
+            if (appVM.markersType != "all") {
+                appVM.markersType = "all"
+                resetBackgroundForBtns()
+                showMarkersByType("all")
+                binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
+                binding.allText.setTextColor(Color.BLACK)
+            }
+        }
+
+        binding.ecoEvents.setOnClickListener {
+            if (appVM.markersType != "eco") {
+                appVM.markersType = "eco"
+                resetBackgroundForBtns()
+                showMarkersByType("eco")
+                binding.ecoEvents.setBackgroundResource(R.drawable.vary_of_events)
+                binding.ecoText.setTextColor(Color.BLACK)
+            }
+        }
+
+        binding.entEvents.setOnClickListener {
+            if (appVM.markersType != "ent") {
+                appVM.markersType = "ent"
+                resetBackgroundForBtns()
+                showMarkersByType("ent")
+                binding.entEvents.setBackgroundResource(R.drawable.vary_of_events)
+                binding.entText.setTextColor(Color.BLACK)
+            }
+        }
+
+        binding.helpEvents.setOnClickListener {
+            if (appVM.markersType != "help") {
+                appVM.markersType = "help"
+                resetBackgroundForBtns()
+                showMarkersByType("help")
+                binding.helpEvents.setBackgroundResource(R.drawable.vary_of_events)
+                binding.helpText.setTextColor(Color.BLACK)
+            }
+        }
+
+        binding.bottomNavigation.setOnItemSelectedListener {
+            when(it.itemId) {
+                R.id.profile -> replaceFragment(ProfileFragment())
+                R.id.map -> replaceFragment(MapsFragment())
+                R.id.rating -> replaceFragment(RatingFragment())
+                R.id.chats -> replaceFragment(ChatsAndGroupsFragment())
+                else -> {
+
+                }
+            }
+            true
+        }
+    }
     private fun searchTypeOfEvent(coord1: Double, coord2: Double, callback: (ready: Boolean) -> Unit) {
         val dbRefEvent = FirebaseDatabase.getInstance().getReference("current_events")
 
@@ -163,44 +263,94 @@ class MapsFragment : Fragment() {
         })
     }
 
-
     private fun addMarker(latLng: LatLng, type: String, eventId: String): Marker? {
         var marker: Marker? = null
-        if(type == "ent") {
-            val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker, null)
-            val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
+        val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker, null)
+        val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
 
-            if(true) {
-                markerImageView.setImageResource(R.drawable.football)
-            }
-
-            val markerOptions = MarkerOptions()
-                .position(latLng)
-                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
-                .anchor(0.5f, 1f)
-
-            marker = mMap.addMarker(markerOptions)
-
-        } else if(type == "eco") {
-            val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker, null)
-            val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
-
-            if(true) {
-                markerImageView.setImageResource(R.drawable.leaf)
-            }
-
-            val markerOptions = MarkerOptions()
-                .position(latLng)
-                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
-                .anchor(0.5f, 1f)
-
-            marker = mMap.addMarker(markerOptions)
+        val markerImageResource = when (type) {
+            "eco" -> R.drawable.leaf
+            "ent" -> R.drawable.football
+            else -> R.drawable.basketball_32
         }
+
+        markerImageView.setImageResource(markerImageResource)
+
+        val markerOptions = MarkerOptions()
+            .position(latLng)
+            .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
+            .anchor(0.5f, 1f)
+
+        marker = mMap.addMarker(markerOptions)
+
+        when (type) {
+            "all" -> allEventsMarkersMap[eventId] = marker!!
+            "eco" -> ecoEventsMarkersMap[eventId] = marker!!
+            "ent" -> entEventsMarkersMap[eventId] = marker!!
+        }
+
         return marker
     }
 
-
-
+//    private fun addMarker(latLng: LatLng, type: String, eventId: String): Marker? {
+//        var marker: Marker? = null
+//        if(type == "ent") {
+//            val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker, null)
+//            val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
+//
+//            if(true) {
+//                markerImageView.setImageResource(R.drawable.football)
+//            }
+//
+//            val markerOptions = MarkerOptions()
+//                .position(latLng)
+//                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
+//                .anchor(0.5f, 1f)
+//
+//            marker = mMap.addMarker(markerOptions)
+//
+//        } else if(type == "eco") {
+//            val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker, null)
+//            val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
+//
+//            if(true) {
+//                markerImageView.setImageResource(R.drawable.leaf)
+//            }
+//
+//            val markerOptions = MarkerOptions()
+//                .position(latLng)
+//                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
+//                .anchor(0.5f, 1f)
+//
+//            marker = mMap.addMarker(markerOptions)
+//        }
+//        return marker
+//    }
+    private fun showMarkersByType(type: String) {
+        when (type) {
+            "all" -> {
+                showOrHideMarkers(allEventsMarkersMap, "show")
+                showOrHideMarkers(ecoEventsMarkersMap, "hide")
+                showOrHideMarkers(entEventsMarkersMap, "hide")
+            }
+            "eco" -> {
+                showOrHideMarkers(ecoEventsMarkersMap, "show")
+                showOrHideMarkers(allEventsMarkersMap, "hide")
+                showOrHideMarkers(entEventsMarkersMap, "hide")
+            }
+            "ent" -> {
+                showOrHideMarkers(entEventsMarkersMap, "show")
+                showOrHideMarkers(allEventsMarkersMap, "hide")
+                showOrHideMarkers(ecoEventsMarkersMap, "hide")
+            }
+        }
+    }
+    private fun showOrHideMarkers(markerMap: HashMap<String, Marker>, func: String) {
+        if(func != "hide")
+            markerMap.forEach { it.value.isVisible = true }
+        else
+            markerMap.forEach { it.value.isVisible = false }
+    }
     private fun createDrawableFromView(view: View): Bitmap {
         val displayMetrics = resources.displayMetrics
         view.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -217,107 +367,13 @@ class MapsFragment : Fragment() {
 
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentMapsBinding.inflate(inflater, container, false)
-
-        appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
-//        eventEntVM = ViewModelProvider(requireActivity()).get(EventEntVM::class.java)
-        eventEcoVM = ViewModelProvider(requireActivity()).get(EventEcoVM::class.java)
-        saveStateMapVM = ViewModelProvider(requireActivity()).get(SaveStateMapsVM::class.java)
-
-//        binding.entEvents.setOnClickListener {
-//            showMarkersByType(listOf("ent"))
-//        }
-        val view = binding.root
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.fragment) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
-
-
-        binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
-        binding.allText.setTextColor(Color.BLACK)
-
-        if(appVM.reg == "yes") {
-            showSuccessRegWindow()
-            appVM.reg = "no"
-        }
-
-        binding.friends.setOnClickListener {
-            if (appVM.markersType != "friends") {
-                resetMarkers()
-                appVM.markersType = "friends"
-                binding.friends.setBackgroundResource(R.drawable.vary_of_events)
-                binding.friendsText.setTextColor(Color.BLACK)
-            }
-        }
-
-        binding.allEvents.setOnClickListener {
-            if (appVM.markersType != "all") {
-                resetMarkers()
-                appVM.markersType = "all"
-                binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
-                binding.allText.setTextColor(Color.BLACK)
-            }
-        }
-
-        binding.ecoEvents.setOnClickListener {
-            if (appVM.markersType != "eco") {
-                resetMarkers()
-                appVM.markersType = "eco"
-                binding.ecoEvents.setBackgroundResource(R.drawable.vary_of_events)
-                binding.ecoText.setTextColor(Color.BLACK)
-            }
-        }
-
-        binding.entEvents.setOnClickListener {
-            if (appVM.markersType != "ent") {
-                resetMarkers()
-                appVM.markersType = "ent"
-                binding.entEvents.setBackgroundResource(R.drawable.vary_of_events)
-                binding.entText.setTextColor(Color.BLACK)
-            }
-        }
-
-        binding.helpEvents.setOnClickListener {
-            if (appVM.markersType != "help") {
-                resetMarkers()
-                appVM.markersType = "help"
-                binding.helpEvents.setBackgroundResource(R.drawable.vary_of_events)
-                binding.friendsText.setTextColor(Color.BLACK)
-            }
-        }
-
-        binding.bottomNavigation.setOnItemSelectedListener {
-            when(it.itemId) {
-                R.id.profile -> replaceFragment(ProfileFragment())
-                R.id.map -> replaceFragment(MapsFragment())
-                R.id.rating -> replaceFragment(RatingFragment())
-                R.id.chats -> replaceFragment(ChatsAndGroupsFragment())
-                else -> {
-
-                }
-            }
-            true
-        }
-    }
-    private fun resetMarkers() {
-        eventsMarkersMap.values.forEach { it.remove() }
-        eventsMarkersMap.clear()
-
-        binding.friends.setBackgroundResource(0)
-        binding.allEvents.setBackgroundResource(0)
-        binding.ecoEvents.setBackgroundResource(0)
-        binding.entEvents.setBackgroundResource(0)
-        binding.helpEvents.setBackgroundResource(0)
-
+    private fun resetBackgroundForBtns() {
+        val type = appVM.markersType
+        binding.friends.setBackgroundResource(if(type == "friends") R.drawable.vary_of_events else 0)
+        binding.allEvents.setBackgroundResource(if(type == "all") R.drawable.vary_of_events else 0)
+        binding.ecoEvents.setBackgroundResource(if(type == "eco") R.drawable.vary_of_events else 0)
+        binding.entEvents.setBackgroundResource(if(type == "ent") R.drawable.vary_of_events else 0)
+        binding.helpEvents.setBackgroundResource(if(type == "help") R.drawable.vary_of_events else 0)
     }
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = childFragmentManager
