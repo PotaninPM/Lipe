@@ -6,21 +6,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lipe.R
 import com.example.lipe.databinding.ChatItemBinding
-import com.example.lipe.databinding.FriendRequestItemBinding
-import com.example.lipe.friend_requests.Request
-import com.google.firebase.database.DatabaseReference
-import com.squareup.picasso.Picasso
 import java.util.ArrayList
 
 class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>(){
 
-    val chatsList = ArrayList<Chat>()
+    val chatsList = ArrayList<ChatItem>()
     inner class ChatsHolder(item: View): RecyclerView.ViewHolder(item) {
 
         val binding = ChatItemBinding.bind(item)
-        fun bind(chat: Chat) = with(binding) {
+        fun bind(chat: ChatItem) = with(binding) {
 //            Picasso.get().load(chat.avatarUrl).into(avatar)
-            name.text = chat.name
+            name.text = chat.memberUid1
             lastMessage.text = chat.last_message
         }
     }
@@ -43,7 +39,7 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>(){
         }
     }
 
-    fun updateRequests(chats: List<Chat>) {
+    fun updateRequests(chats: List<ChatItem>) {
         chatsList.clear()
         chatsList.addAll(chats)
         notifyDataSetChanged()

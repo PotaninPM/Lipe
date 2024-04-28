@@ -4,10 +4,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lipe.R
-import com.example.lipe.chats_and_groups.chats.Chat
 import com.example.lipe.database_models.ChatModelDB
 import com.example.lipe.databinding.FriendRequestItemBinding
 import com.google.firebase.database.DatabaseReference

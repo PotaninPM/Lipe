@@ -1,20 +1,27 @@
 package com.example.lipe
 
 import ProfileFragment
+import android.Manifest
 import android.app.Dialog
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.Location
+import android.location.LocationListener
 import android.location.LocationManager
 import androidx.fragment.app.Fragment
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
@@ -26,6 +33,12 @@ import com.example.lipe.viewModels.EventEcoVM
 import com.example.lipe.view_events.EventFragment
 import com.example.lipe.viewModels.EventEntVM
 import com.example.lipe.viewModels.SaveStateMapsVM
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
@@ -40,7 +53,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
-class MapsFragment : Fragment() {
+import kotlin.math.roundToLong
+
+class MapsFragment : Fragment(), OnMapReadyCallback, LocationListener {
 
     private var _binding: FragmentMapsBinding? = null
 
@@ -58,6 +73,9 @@ class MapsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var mMap: GoogleMap
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
+    private var currentLocation: Location? = null
 
     private lateinit var dbRef_user: DatabaseReference
     private lateinit var dbRef_event: DatabaseReference
@@ -66,10 +84,19 @@ class MapsFragment : Fragment() {
     private val entEventsMarkersMap = HashMap<String, Marker>()
     private val helpEventsMarkersMap = HashMap<String, Marker>()
 
+    private var currentLatitude: Double? = null
+    private var currentLongitude: Double? = null
+
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
-        dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
 
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.isMyLocationEnabled = true
+        } else {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+        }
+
+        dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
         // show all markers on map
         dbRef_event.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
@@ -136,7 +163,13 @@ class MapsFragment : Fragment() {
             true
         }
     }
-
+    override fun onLocationChanged(location: Location) {
+        // update cur coordinates
+        Log.d("INFOG", "1")
+        currentLocation = location
+        currentLatitude = location.latitude
+        currentLongitude = location.longitude
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -158,8 +191,6 @@ class MapsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.fragment) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
-
-
         binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
         binding.allText.setTextColor(Color.BLACK)
 
@@ -403,12 +434,38 @@ class MapsFragment : Fragment() {
     }
 
     companion object {
-        private const val REQUEST_LOCATION_PERMISSION = 1
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+    }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    return
+                }
+                mMap.isMyLocationEnabled = true
+            } else {
+                // Показать диалоговое окно с объяснением, почему это разрешение необходимо
+            }
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+    override fun onMapReady(p0: GoogleMap) {
+        TODO("Not yet implemented")
     }
 
 }

@@ -11,6 +11,7 @@ import com.example.lipe.R
 import com.example.lipe.databinding.FragmentChatsAndGroupsBinding
 import com.example.lipe.friend_requests.FriendRequestsFragment
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.database.FirebaseDatabase
 
 class ChatsAndGroupsFragment : Fragment() {
 
@@ -28,6 +29,7 @@ class ChatsAndGroupsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentChatsAndGroupsBinding.inflate(inflater, container, false)
+
         adapter = ChatsAndGroupsTabAdapter(childFragmentManager, lifecycle)
 
         binding.tableLayout.addTab(binding.tableLayout.newTab().setText("Чаты"))

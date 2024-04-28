@@ -35,7 +35,7 @@ class ProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val view = binding.root
         originalBackground = binding.btnCurEvent.background
@@ -57,7 +57,7 @@ class ProfileFragment : Fragment() {
             allProfile.visibility = View.GONE
 
             findAccount { userData ->
-                if (userData != null) {
+                if(userData != null) {
                     profileVM.setInfo(
                         "${userData.firstName} ${userData.lastName}" + " ⓘ",
                         userData.friendsAmount,
@@ -66,7 +66,7 @@ class ProfileFragment : Fragment() {
                         userData.avatarId
                     )
                     setProfilePhotos {
-                        if (it) {
+                        if(it) {
                             loadingProgressBar.visibility = View.GONE
                             allProfile.visibility = View.VISIBLE
                         }
@@ -110,7 +110,6 @@ class ProfileFragment : Fragment() {
                 Log.d("INFOG", "No media selected")
             }
         }
-
     private fun uploadImage(imageUri: Uri) {
         val storageRef = FirebaseStorage.getInstance().getReference("user_theme")
         imageUri.let { uri ->
@@ -175,10 +174,10 @@ class ProfileFragment : Fragment() {
 
         tokenTaskAvatar.addOnSuccessListener { uri ->
             val imageUrl = uri.toString()
-            Picasso.get().load(imageUrl).rotate("90".toFloat()).into(binding.avatar)
+            Picasso.get().load(imageUrl).rotate(90f).into(binding.avatar)
             tokenTaskTheme.addOnSuccessListener { uri ->
                 val imageThemeUrl = uri.toString()
-                Picasso.get().load(imageThemeUrl).rotate("90".toFloat()).into(binding.theme)
+                Picasso.get().load(imageThemeUrl).rotate(90f).into(binding.theme)
                 callback(true)
             }
         }.addOnFailureListener {
