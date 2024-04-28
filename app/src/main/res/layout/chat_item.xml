@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/all"
     android:layout_width="match_parent"
     android:layout_height="@dimen/_62sdp">
 
@@ -22,9 +23,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_12sdp"
-        android:layout_marginTop="@dimen/_1sdp"
+        android:layout_marginTop="@dimen/_2sdp"
         android:fontFamily="@font/roboto_bold"
-        android:text="Mike Potanin"
+        android:text=""
         android:textSize="@dimen/_13sdp"
         app:layout_constraintStart_toEndOf="@+id/avatar"
         app:layout_constraintTop_toTopOf="@+id/avatar" />
@@ -34,9 +35,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_regular"
-        android:text="Привет, как дела?"
+        android:text=""
         android:textSize="@dimen/_12sdp"
         android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_2sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/avatar"
         app:layout_constraintTop_toBottomOf="@+id/name" />

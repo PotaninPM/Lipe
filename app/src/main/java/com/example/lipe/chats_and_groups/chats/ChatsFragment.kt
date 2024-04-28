@@ -53,7 +53,8 @@ class ChatsFragment : Fragment() {
     }
 
     private fun setChats() {
-        val dbRef_chats = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/chats")
+        val yourUid = auth.currentUser?.uid
+        val dbRef_chats = FirebaseDatabase.getInstance().getReference("users/${yourUid}/chats")
         dbRef_chats.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val chats_list = ArrayList<ChatItem>()
@@ -61,13 +62,18 @@ class ChatsFragment : Fragment() {
                     val dbRef_chat_uid = FirebaseDatabase.getInstance().getReference("chats/${chats.value.toString()}")
                     dbRef_chat_uid.addListenerForSingleValueEvent(object: ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
-                            val uid: String = snapshot.child("uid").value.toString()
-                            val last_msg: String = snapshot.child("last_message").value.toString()
-                            val memberUid1: String = snapshot.child("").value.toString()
-                            val memberUid2: String = snapshot.child("").value.toString()
-                            val chat = ChatItem(uid, last_msg, memberUid1, memberUid2)
-                            chats_list.add(chat)
-                            adapter.updateRequests(chats_list)
+                            val uid: String = snapshot.key.toString()
+                            val memberUid1: String = snapshot.child("user1_uid").value.toString()
+                            val memberUid2: String = snapshot.child("user2_uid").value.toString()
+                            if(memberUid2 == yourUid) {
+                                val chat = ChatItem(uid, yourUid, memberUid1)
+                                chats_list.add(chat)
+                                adapter.updateRequests(chats_list)
+                            } else {
+                                val chat = ChatItem(uid, yourUid!!, memberUid2)
+                                chats_list.add(chat)
+                                adapter.updateRequests(chats_list)
+                            }
                         }
 
                         override fun onCancelled(error: DatabaseError) {

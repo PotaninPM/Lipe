@@ -119,8 +119,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback, LocationListener {
                 val type: String = dataSnapshot.child("type_of_event").value.toString()
                 if(type == "ent") {
                     entEventsMarkersMap[eventId]?.remove()
+                    entEventsMarkersMap.remove(eventId)
                 } else if(type == "eco") {
                     ecoEventsMarkersMap[eventId]?.remove()
+                    ecoEventsMarkersMap.remove(eventId)
                 }
             }
 
@@ -163,6 +165,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, LocationListener {
             true
         }
     }
+
     override fun onLocationChanged(location: Location) {
         // update cur coordinates
         Log.d("INFOG", "1")
@@ -179,7 +182,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, LocationListener {
         _binding = FragmentMapsBinding.inflate(inflater, container, false)
 
         appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
-//        eventEntVM = ViewModelProvider(requireActivity()).get(EventEntVM::class.java)
         eventEcoVM = ViewModelProvider(requireActivity()).get(EventEcoVM::class.java)
         saveStateMapVM = ViewModelProvider(requireActivity()).get(SaveStateMapsVM::class.java)
 
@@ -262,6 +264,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, LocationListener {
             true
         }
     }
+
     private fun searchTypeOfEvent(coord1: Double, coord2: Double, callback: (ready: Boolean) -> Unit) {
         val dbRefEvent = FirebaseDatabase.getInstance().getReference("current_events")
 
