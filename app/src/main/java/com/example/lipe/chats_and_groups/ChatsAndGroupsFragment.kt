@@ -1,6 +1,7 @@
 package com.example.lipe.chats_and_groups
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,6 +78,7 @@ class ChatsAndGroupsFragment : Fragment() {
         fragmentTransaction.replace(R.id.all, fragment)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
+        Log.d("INFOG", "ChatsAndGroups")
     }
 
     override fun onDestroy() {

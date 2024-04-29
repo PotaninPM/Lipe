@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.lipe.ChatFragment
 import com.example.lipe.R
+import com.example.lipe.chats_and_groups.chat_fr.ChatFragment
 import com.example.lipe.databinding.ChatItemBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.DataSnapshot

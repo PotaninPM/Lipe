@@ -459,6 +459,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, LocationListener {
         }
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
