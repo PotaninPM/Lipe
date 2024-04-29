@@ -124,7 +124,7 @@
         tools:layout="@layout/fragment_rating" />
     <fragment
         android:id="@+id/chatsFragment"
-        android:name="com.example.lipe.chats_and_groups.chats.ChatsFragment"
+        android:name="com.example.lipe.chats_and_groups.all_chats.AllChatsFragment"
         android:label="fragment_chats"
         tools:layout="@layout/fragment_chats" />
     <fragment

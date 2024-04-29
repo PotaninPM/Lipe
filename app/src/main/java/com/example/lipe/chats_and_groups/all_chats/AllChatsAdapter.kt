@@ -1,15 +1,15 @@
-package com.example.lipe.chats_and_groups.chats
+package com.example.lipe.chats_and_groups.all_chats
 
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.lipe.ChatFragment
 import com.example.lipe.R
 import com.example.lipe.databinding.ChatItemBinding
-import com.google.firebase.auth.FirebaseAuth
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -20,7 +20,7 @@ import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import java.util.ArrayList
 
-class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>(){
+class AllChatsAdapter : RecyclerView.Adapter<AllChatsAdapter.ChatsHolder>(){
 
     val chatsList = ArrayList<ChatItem>()
 
@@ -33,10 +33,6 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>(){
         fun bind(chat: ChatItem) = with(binding) {
             all.visibility = View.GONE
             avatar.visibility = View.GONE
-
-            all.setOnClickListener {
-                Log.d("INFOG", chat.uid)
-            }
 
             storageRef = FirebaseStorage.getInstance().reference
             dbRef = FirebaseDatabase.getInstance().reference
@@ -94,6 +90,20 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>(){
                 }
 
             })
+
+            all.setOnClickListener {
+                val context = it.context
+                if (context is AppCompatActivity) {
+                    val bottomNavigationView = context.findViewById<BottomNavigationView>(R.id.bottom_navigation)
+                    bottomNavigationView.visibility = View.GONE
+                    val fragment = ChatFragment()
+                    val fragmentManager = context.supportFragmentManager
+                    fragmentManager.beginTransaction()
+                        .replace(R.id.all_chats_and_groups, fragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+            }
         }
     }
 

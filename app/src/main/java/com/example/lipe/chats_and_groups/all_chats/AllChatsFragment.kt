@@ -1,4 +1,4 @@
-package com.example.lipe.chats_and_groups.chats
+package com.example.lipe.chats_and_groups.all_chats
 
 import android.os.Bundle
 import android.util.Log
@@ -16,7 +16,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
-class ChatsFragment : Fragment() {
+class AllChatsFragment : Fragment() {
 
     private var _binding: FragmentChatsBinding? = null
     private val binding get() = _binding!!
@@ -25,7 +25,7 @@ class ChatsFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
 
-    private lateinit var adapter: ChatsAdapter
+    private lateinit var adapter: AllChatsAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -45,7 +45,7 @@ class ChatsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = ChatsAdapter()
+        adapter = AllChatsAdapter()
         binding.chatRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.chatRecyclerView.adapter = adapter
 

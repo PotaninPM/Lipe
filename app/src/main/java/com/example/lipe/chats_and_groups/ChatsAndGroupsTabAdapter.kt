@@ -4,8 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.lipe.chats_and_groups.chats.ChatsFragment
-import com.example.lipe.chats_and_groups.groups.GroupsFragment
+import com.example.lipe.chats_and_groups.all_chats.AllChatsFragment
+import com.example.lipe.chats_and_groups.all_groups.GroupsFragment
 
 class ChatsAndGroupsTabAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
     override fun getItemCount(): Int {
@@ -14,7 +14,7 @@ class ChatsAndGroupsTabAdapter(fragmentManager: FragmentManager, lifecycle: Life
 
     override fun createFragment(position: Int): Fragment {
         return if(position == 0) {
-            ChatsFragment()
+            AllChatsFragment()
         } else {
             GroupsFragment()
         }

@@ -1,4 +1,4 @@
-package com.example.lipe.chats_and_groups.groups
+package com.example.lipe.chats_and_groups.all_groups
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
