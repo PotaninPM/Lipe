@@ -24,5 +24,6 @@ data class UserDB(
     val yourCreatedEvents: ArrayList<String> ?= null,
     val events_amount: Int ?= null,
     val chats: ArrayList<String> ?= null,
+    val groups: ArrayList<String> ?= null,
     val themeUid: String = "default"
 )

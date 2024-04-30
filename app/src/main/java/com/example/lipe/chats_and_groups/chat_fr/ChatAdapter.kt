@@ -13,7 +13,7 @@ class ChatAdapter(var messages: List<Message>) :
     RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
 
     inner class ChatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val messageTextView: TextView = itemView.findViewById(R.id.message_text)
+        private val messageTextView: TextView = itemView.findViewById(R.id.sender_message_text)
 
         fun bind(message: Message) {
             messageTextView.text = message.text
@@ -23,6 +23,7 @@ class ChatAdapter(var messages: List<Message>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.message_item, parent, false)
+
         return ChatViewHolder(view)
     }
 

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/quantum_white_100"
+    android:id="@+id/all_chat"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".chats_and_groups.chat_fr.ChatFragment">
@@ -20,7 +21,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/back_btn"
                 android:layout_width="@dimen/_18sdp"
                 android:layout_height="@dimen/_18sdp"
                 android:background="@drawable/back_btn_white"
@@ -37,7 +38,7 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/ex2"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                app:layout_constraintStart_toEndOf="@+id/back_btn"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/ImageStyle_Circle" />
 

@@ -5,11 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lipe.MapsFragment
 import com.example.lipe.R
+import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.chats_and_groups.Message
 import com.example.lipe.chats_and_groups.all_chats.AllChatsFragment
 import com.example.lipe.databinding.FragmentChatBinding
@@ -55,6 +57,15 @@ class ChatFragment : Fragment() {
             }
         }
 
+        binding.backBtn.setOnClickListener {
+            val fragment = ChatsAndGroupsFragment()
+            val fragmentManager = childFragmentManager
+            fragmentManager.beginTransaction()
+                .replace(R.id.all_chat, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
         db.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val messages = mutableListOf<Message>()
@@ -63,7 +74,6 @@ class ChatFragment : Fragment() {
                     val senderId = messageSnapshot.child("senderId").getValue(String::class.java)
                     val timestamp = messageSnapshot.child("time").getValue(Long::class.java)
                     val message = Message(text ?: "", senderId ?: "", timestamp ?: 0)
-                    Log.d("INFOG", message.toString())
                     messages.add(message)
                 }
                 chatAdapter.messages = messages
@@ -80,6 +90,10 @@ class ChatFragment : Fragment() {
     }
     override fun onDestroyView() {
         super.onDestroyView()
+
+        val bottomNav = (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNav.visibility = View.VISIBLE
+
         _binding = null
     }
 }

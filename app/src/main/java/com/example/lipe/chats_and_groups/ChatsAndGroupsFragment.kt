@@ -78,7 +78,6 @@ class ChatsAndGroupsFragment : Fragment() {
         fragmentTransaction.replace(R.id.all, fragment)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
-        Log.d("INFOG", "ChatsAndGroups")
     }
 
     override fun onDestroy() {

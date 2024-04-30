@@ -466,7 +466,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, LocationListener {
     }
     override fun onDestroyView() {
         super.onDestroyView()
-        fusedLocationClient.removeLocationUpdates(locationCallback)
+        if (::fusedLocationClient.isInitialized) {
+            fusedLocationClient.removeLocationUpdates(locationCallback)
+        }
     }
     override fun onMapReady(p0: GoogleMap) {
         TODO("Not yet implemented")

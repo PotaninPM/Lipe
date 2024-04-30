@@ -335,14 +335,19 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
                 val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/curRegEventsId")
                 val dbRef_user_your = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/yourCreatedEvents")
+                val dbRef_user_groups = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/groups")
+
                 val dbRef_group = FirebaseDatabase.getInstance().getReference("groups")
+
 
                 dbRef_events.child(eventId).setValue(event).addOnSuccessListener {
                     dbRef_user.child(eventId).setValue(eventId).addOnSuccessListener {
                         dbRef_user_your.child(eventId).setValue(eventId).addOnSuccessListener {
-                            val group = GroupModel(uidGroup, arrayListOf(auth.currentUser!!.uid), arrayListOf("-"))
+                            val group = GroupModel(uidGroup, title, photos.get(0), arrayListOf(auth.currentUser!!.uid), arrayListOf())
                             dbRef_group.child(uidGroup).setValue(group).addOnSuccessListener {
-                                //do smth
+                                dbRef_user_groups.child(uidGroup).setValue(uidGroup).addOnSuccessListener {
+                                    //do smth
+                                }
                             }
                         }
                     }
