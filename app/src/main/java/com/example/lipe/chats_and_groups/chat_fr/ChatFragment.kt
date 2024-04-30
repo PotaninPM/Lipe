@@ -60,6 +60,7 @@ class ChatFragment : Fragment() {
                 db.push().setValue(message)
                 binding.messageInput.text?.clear()
             }
+
         }
 
         binding.backBtn.setOnClickListener {
