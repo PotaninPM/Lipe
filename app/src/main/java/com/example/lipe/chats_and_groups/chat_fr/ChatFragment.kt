@@ -27,6 +27,8 @@ class ChatFragment : Fragment() {
     private lateinit var chatAdapter: ChatAdapter
     private lateinit var db: DatabaseReference
 
+    private lateinit var auth: FirebaseAuth
+
     private val chatVM: ChatVM by activityViewModels()
 
     override fun onCreateView(
@@ -34,6 +36,9 @@ class ChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentChatBinding.inflate(inflater, container, false)
+
+        auth = FirebaseAuth.getInstance()
+
         val view = binding.root
         return view
     }
@@ -44,7 +49,7 @@ class ChatFragment : Fragment() {
         db = FirebaseDatabase.getInstance().getReference("chats/300f91a7-9112-426a-ab01-25729c986e9f/messages")
 
         binding.recyclerViewChat.layoutManager = LinearLayoutManager(requireContext())
-        chatAdapter = ChatAdapter(listOf())
+        chatAdapter = ChatAdapter(listOf(), auth.currentUser!!.uid)
         binding.recyclerViewChat.adapter = chatAdapter
 
         binding.sendBtn.setOnClickListener {

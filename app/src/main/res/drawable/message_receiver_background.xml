@@ -1,0 +1,7 @@
+<!-- message_text_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="8dp" />
+    <solid android:color="#ADFFB5" />
+    <corners android:bottomLeftRadius="0dp" android:radius="@dimen/_22sdp"/>
+</shape>
