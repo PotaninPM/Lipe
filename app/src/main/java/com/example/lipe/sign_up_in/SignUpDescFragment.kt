@@ -25,7 +25,6 @@ import com.example.lipe.database_models.UserDB
 import com.example.lipe.databinding.FragmentSignUpDescBinding
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.viewModels.SignUpVM
-import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -200,7 +199,7 @@ class SignUpDescFragment : Fragment() {
             name,
             lastName,
             -1,
-            "-",
+            arrayListOf("-"),
             arrayListOf("-"),
             arrayListOf("Добро пожаловать!"),
             arrayListOf("-"),

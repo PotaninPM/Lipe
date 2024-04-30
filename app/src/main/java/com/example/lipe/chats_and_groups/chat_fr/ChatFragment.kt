@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.lipe.CryptAlgo
 import com.example.lipe.MapsFragment
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
@@ -48,7 +49,11 @@ class ChatFragment : Fragment() {
 
         db = FirebaseDatabase.getInstance().getReference("chats/300f91a7-9112-426a-ab01-25729c986e9f/messages")
 
-        binding.recyclerViewChat.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerViewChat.layoutManager = LinearLayoutManager(requireContext()).apply {
+            reverseLayout = false
+            stackFromEnd = true
+        }
+
         chatAdapter = ChatAdapter(listOf(), auth.currentUser!!.uid)
         binding.recyclerViewChat.adapter = chatAdapter
 
@@ -56,7 +61,7 @@ class ChatFragment : Fragment() {
             val messageText = binding.messageInput.text.toString().trim()
             if(messageText.isNotEmpty()) {
                 val currentUser = FirebaseAuth.getInstance().currentUser
-                val message = Message(messageText, currentUser?.uid ?: "", System.currentTimeMillis())
+                val message = Message(CryptAlgo.crypt(messageText), currentUser?.uid ?: "", System.currentTimeMillis())
                 db.push().setValue(message)
                 binding.messageInput.text?.clear()
             }
@@ -70,6 +75,9 @@ class ChatFragment : Fragment() {
                 .replace(R.id.all_chat, fragment)
                 .addToBackStack(null)
                 .commit()
+
+            val bottomNav = (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
+            bottomNav.visibility = View.VISIBLE
         }
 
         db.addValueEventListener(object : ValueEventListener {

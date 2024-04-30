@@ -12,8 +12,6 @@
         android:id="@+id/recyclerViewChat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:reverseLayout="true"
-        app:stackFromEnd="true"
         android:layout_marginBottom="@dimen/_3sdp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,6 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_42sdp"
         android:background="#F7FAFF"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:orientation="horizontal">

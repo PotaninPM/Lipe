@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.lipe.CryptAlgo
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.Message
 import com.example.lipe.viewModels.AppVM
@@ -17,7 +18,7 @@ class ChatAdapter(var messages: List<Message>, var myUserId: String) :
         private val messageTextView: TextView = itemView.findViewById(R.id.sender_message_text)
 
         fun bind(message: Message) {
-            messageTextView.text = message.text
+            messageTextView.text = CryptAlgo.encrypt(message.text)
         }
     }
 

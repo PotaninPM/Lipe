@@ -12,6 +12,7 @@
         android:background="@drawable/message_sender_background"
         android:padding="@dimen/_8sdp"
         android:layout_marginTop="@dimen/_3sdp"
+        app:layout_constraintWidth_max="@dimen/_262sdp"
         android:layout_marginEnd="@dimen/_3sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
