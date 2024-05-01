@@ -65,6 +65,8 @@ class ProfileFragment : Fragment() {
                         userData.ratingPoints,
                         userData.avatarId
                     )
+                    loadingProgressBar.visibility = View.GONE
+                    allProfile.visibility = View.VISIBLE
                     setProfilePhotos {
                         if(it) {
                             loadingProgressBar.visibility = View.GONE

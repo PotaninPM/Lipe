@@ -211,9 +211,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                             "latitude" to location.latitude,
                             "longitude" to location.longitude
                         )
-//                        dbRef_location.setValue(newLocation).addOnSuccessListener {
-//                            Log.d("INFOG", "locUpdate")
-//                        }
+                        dbRef_location.setValue(newLocation).addOnSuccessListener {
+                            Log.d("INFOG", "locUpdate")
+                        }
                         Picasso.get().load("https://tierarzt-karlsruhe-durlach.de/storage/2023/07/hamster-1555083.jpg").into(markerImageView)
 
                         myLocationMarker = mMap.addMarker(
@@ -226,9 +226,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                             "latitude" to location.latitude,
                             "longitude" to location.longitude
                         )
-//                        dbRef_location.setValue(newLocation).addOnSuccessListener {
-//                            Log.d("INFOG", "locUpdate")
-//                        }
+                        dbRef_location.setValue(newLocation).addOnSuccessListener {
+                            Log.d("INFOG", "locUpdate")
+                        }
                         val startPosition = myLocationMarker!!.position
                         val endPosition = LatLng(location.latitude, location.longitude)
 
@@ -522,7 +522,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onPause() {
         super.onPause()
-        fusedLocationClient.removeLocationUpdates(locationCallback)
+        if (::fusedLocationClient.isInitialized && ::locationCallback.isInitialized) {
+            fusedLocationClient.removeLocationUpdates(locationCallback)
+        }
     }
 
     private fun resetBackgroundForBtns() {

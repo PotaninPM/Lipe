@@ -201,12 +201,12 @@ class SignUpDescFragment : Fragment() {
             -1,
             arrayListOf("-"),
             arrayListOf("-"),
-            arrayListOf("Добро пожаловать!"),
             arrayListOf("-"),
             0,
             arrayListOf("-"),
             arrayListOf("-"),
             0,
+            arrayListOf("-"),
             arrayListOf("-")
         )
 
