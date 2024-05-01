@@ -5,6 +5,8 @@ import android.Manifest
 import android.animation.ValueAnimator
 import android.app.Dialog
 import android.content.pm.PackageManager
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -51,6 +53,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -99,8 +102,36 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private var currentLatitude: Double? = null
     private var currentLongitude: Double? = null
 
+    private fun setMapStyle() {
+        val nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val mapStyleResourceId = if (nightMode == Configuration.UI_MODE_NIGHT_YES) {
+            R.raw.map_style_dark
+        } else {
+            R.raw.map_style_light
+        }
+
+        try {
+            val success = mMap.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    requireContext(),
+                    mapStyleResourceId
+                )
+            )
+
+            if (!success) {
+                Log.e("INFOG", "failed")
+            }
+        } catch (e: Resources.NotFoundException) {
+            Log.e("INFOG", "Error: ", e)
+        }
+    }
+
+
+
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
+
+        setMapStyle()
 
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -592,7 +623,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

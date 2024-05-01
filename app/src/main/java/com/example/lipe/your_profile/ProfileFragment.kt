@@ -139,7 +139,7 @@ class ProfileFragment : Fragment() {
         val dbRef_user =
             FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
 
-        dbRef_user.addListenerForSingleValueEvent(object : ValueEventListener {
+        dbRef_user.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val name: String = dataSnapshot.child("firstName").value.toString()
                 val lastName: String = dataSnapshot.child("lastName").value.toString()
