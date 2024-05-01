@@ -18,7 +18,7 @@
     </style>
 
     <style name="ImageStyle_marker_people">
-        <item name="cornerSize">20%</item>
+        <item name="cornerSize">40%</item>
         <item name="cornerFamily">rounded</item>
     </style>
 

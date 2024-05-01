@@ -8,6 +8,12 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
+import android.graphics.RectF
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import androidx.fragment.app.Fragment
@@ -55,6 +61,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
@@ -179,17 +187,17 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+
     private fun startLocationUpdates() {
         val dbRef_location = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/location")
 
-        val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker_friends, null)
+        val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker_you, null)
         val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
-        //Picasso.get().load("https://tierarzt-karlsruhe-durlach.de/storage/2023/07/hamster-1555083.jpg").into(markerImageView)
-        markerImageView.setImageResource(R.drawable.leaf)
+
 
         val locationRequest = LocationRequest.create().apply {
-            interval = 5000
-            fastestInterval = 3000
+            interval = 10000
+            fastestInterval = 5000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
 
@@ -206,6 +214,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 //                        dbRef_location.setValue(newLocation).addOnSuccessListener {
 //                            Log.d("INFOG", "locUpdate")
 //                        }
+                        Picasso.get().load("https://tierarzt-karlsruhe-durlach.de/storage/2023/07/hamster-1555083.jpg").into(markerImageView)
 
                         myLocationMarker = mMap.addMarker(
                             MarkerOptions()
@@ -257,6 +266,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 locationCallback,
                 Looper.getMainLooper()
             )
+            mMap.isMyLocationEnabled = false
         }
     }
 
@@ -274,8 +284,32 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         eventEcoVM = ViewModelProvider(requireActivity()).get(EventEcoVM::class.java)
         saveStateMapVM = ViewModelProvider(requireActivity()).get(SaveStateMapsVM::class.java)
 
+        findPersonOnMap()
+
         val view = binding.root
         return view
+    }
+
+    private fun findPersonOnMap() {
+        val dbRef_location = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/location")
+        dbRef_location.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val latitude = snapshot.child("latitude").value.toString().toDouble()
+                val longitude = snapshot.child("longitude").value.toString().toDouble()
+
+                mMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(latitude, longitude),
+                        16f
+                    )
+                )
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -569,7 +603,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
     override fun onMapReady(p0: GoogleMap) {
-        TODO("Not yet implemented")
+        mMap = p0
+        mMap.uiSettings.isMyLocationButtonEnabled = false
+        mMap.uiSettings.isMyLocationButtonEnabled = false
     }
 
 }
