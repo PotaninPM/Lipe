@@ -12,8 +12,13 @@
     </style>
 
 
-    <style name="ImageStyle_marker">
-        <item name="cornerSize">30%</item>
+    <style name="ImageStyle_marker_events">
+        <item name="cornerSize">50%</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+
+    <style name="ImageStyle_marker_people">
+        <item name="cornerSize">20%</item>
         <item name="cornerFamily">rounded</item>
     </style>
 

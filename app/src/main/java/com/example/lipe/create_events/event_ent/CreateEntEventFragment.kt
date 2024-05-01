@@ -226,7 +226,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         if (image1 == "-" && image2 == "-" && image3 == "-") {
             callback(arrayListOf("-", "-", "-"))
         } else {
-            var used: Int = 0;
+            var used: Int = 0
             if(image1 != "-") {
                 imageUri1.let { uri ->
                     val uid: String = UUID.randomUUID().toString()

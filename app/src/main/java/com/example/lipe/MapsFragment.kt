@@ -2,16 +2,14 @@ package com.example.lipe
 
 import ProfileFragment
 import android.Manifest
+import android.animation.ValueAnimator
 import android.app.Dialog
-import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.os.Looper
@@ -19,9 +17,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -37,6 +35,7 @@ import com.example.lipe.viewModels.EventEntVM
 import com.example.lipe.viewModels.SaveStateMapsVM
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
@@ -56,7 +55,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
-import kotlin.math.roundToLong
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
@@ -78,7 +76,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var locationCallback: LocationCallback
-    private var currentLocation: Location? = null
+
+    private var myLocationMarker: Marker? = null
 
     private lateinit var dbRef_user: DatabaseReference
     private lateinit var dbRef_event: DatabaseReference
@@ -181,10 +180,16 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun startLocationUpdates() {
+        val dbRef_location = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/location")
+
+        val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker_friends, null)
+        val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
+        //Picasso.get().load("https://tierarzt-karlsruhe-durlach.de/storage/2023/07/hamster-1555083.jpg").into(markerImageView)
+        markerImageView.setImageResource(R.drawable.leaf)
 
         val locationRequest = LocationRequest.create().apply {
-            interval = 10000
-            fastestInterval = 5000
+            interval = 5000
+            fastestInterval = 3000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
 
@@ -193,8 +198,51 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 locationResult.lastLocation?.let { location ->
                     currentLatitude = location.latitude
                     currentLongitude = location.longitude
-                    mMap.addMarker(MarkerOptions().position(LatLng(location.latitude, location.longitude)))
-                    //moveCameraToLocation(LatLng(currentLatitude!!, currentLongitude!!))
+                    if(myLocationMarker == null) {
+                        val newLocation = hashMapOf<String, Double>(
+                            "latitude" to location.latitude,
+                            "longitude" to location.longitude
+                        )
+//                        dbRef_location.setValue(newLocation).addOnSuccessListener {
+//                            Log.d("INFOG", "locUpdate")
+//                        }
+
+                        myLocationMarker = mMap.addMarker(
+                            MarkerOptions()
+                                .position(LatLng(location.latitude, location.longitude))
+                                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
+                        )
+                    } else {
+                        val newLocation = hashMapOf<String, Double>(
+                            "latitude" to location.latitude,
+                            "longitude" to location.longitude
+                        )
+//                        dbRef_location.setValue(newLocation).addOnSuccessListener {
+//                            Log.d("INFOG", "locUpdate")
+//                        }
+                        val startPosition = myLocationMarker!!.position
+                        val endPosition = LatLng(location.latitude, location.longitude)
+
+                        val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
+                        valueAnimator.duration = 1000
+                        valueAnimator.interpolator = LinearInterpolator()
+                        valueAnimator.addUpdateListener { animation ->
+                            val v = animation.animatedFraction
+                            val newPosition = LatLng(
+                                startPosition.latitude * (1 - v) + endPosition.latitude * v,
+                                startPosition.longitude * (1 - v) + endPosition.longitude * v
+                            )
+                            myLocationMarker!!.position = newPosition
+                        }
+                        valueAnimator.start()
+                    }
+
+//                    mMap.animateCamera(
+//                        CameraUpdateFactory.newLatLngZoom(
+//                            LatLng(location.latitude, location.longitude),
+//                            17f
+//                        )
+//                    )
                 }
             }
         }
@@ -211,6 +259,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             )
         }
     }
+
 
 
     override fun onCreateView(
@@ -343,7 +392,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private fun addMarker(latLng: LatLng, type: String, eventId: String, sport_type: String): Marker? {
         var marker: Marker? = null
-        val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker, null)
+        val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker_friends, null)
         val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
 
         var sportType: Int = 0
