@@ -11,6 +11,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.os.Looper
@@ -57,7 +58,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
@@ -262,36 +265,57 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
             valueAnimator.start()
         } else {
-            val dbRef_friend = FirebaseDatabase.getInstance().getReference("users/${friendUid}/avatarId")
             val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker_friends, null)
             val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
 
-            markerImageView.setImageResource(R.drawable.football)
+            val dbRef_friend = FirebaseDatabase.getInstance().getReference("users/${friendUid}/avatarId")
 
-            val markerOptions = MarkerOptions()
-                .position(latLng)
-                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
-                .anchor(0.5f, 1f)
+            dbRef_friend.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val storage = FirebaseStorage.getInstance().getReference("avatars/${snapshot.value}")
+                    storage.downloadUrl.addOnSuccessListener { url ->
+                        Picasso.get().load(url).into(object : Target {
+                            override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                                markerImageView.setImageBitmap(bitmap)
 
-            val marker = mMap.addMarker(markerOptions)
+                                val markerOptions = MarkerOptions()
+                                    .position(latLng)
+                                    .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
+                                    .anchor(0.5f, 1f)
 
-            val startPosition = marker!!.position
-            val endPosition = latLng
+                                val marker = mMap.addMarker(markerOptions)
 
-            val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
-            valueAnimator.duration = 1000
-            valueAnimator.interpolator = LinearInterpolator()
-            valueAnimator.addUpdateListener { animation ->
-                val v = animation.animatedFraction
-                val newPosition = LatLng(
-                    startPosition.latitude * (1 - v) + endPosition.latitude * v,
-                    startPosition.longitude * (1 - v) + endPosition.longitude * v
-                )
-                marker!!.position = newPosition
-            }
-            valueAnimator.start()
+                                val startPosition = marker!!.position
+                                val endPosition = latLng
 
-            friendsMarkersMap[friendUid] = marker!!
+                                val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
+                                valueAnimator.duration = 1000
+                                valueAnimator.interpolator = LinearInterpolator()
+                                valueAnimator.addUpdateListener { animation ->
+                                    val v = animation.animatedFraction
+                                    val newPosition = LatLng(
+                                        startPosition.latitude * (1 - v) + endPosition.latitude * v,
+                                        startPosition.longitude * (1 - v) + endPosition.longitude * v
+                                    )
+                                    marker!!.position = newPosition
+                                }
+                                valueAnimator.start()
+
+                                friendsMarkersMap[friendUid] = marker!!
+                            }
+
+                            override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
+
+                            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+                        })
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
         }
     }
 

@@ -12,14 +12,11 @@ import com.google.firebase.database.FirebaseDatabase.*
 class SetOnlineOrOffline : Application() {
 
     private lateinit var auth: FirebaseAuth
-    private var appInForeground = false
     override fun onCreate() {
         super.onCreate()
 
         auth = FirebaseAuth.getInstance()
-//        if(auth.currentUser!!.uid != null) {
-//            setUserStatus("online")
-//        }
+
         val user = auth.currentUser!!.uid
 
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
@@ -46,6 +43,9 @@ class SetOnlineOrOffline : Application() {
             override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
 
             override fun onActivityDestroyed(activity: Activity) {
+                if(user != null) {
+                    setUserStatus("offline")
+                }
                 Log.d("INFOG", "activityDestroyed")
             }
         })
