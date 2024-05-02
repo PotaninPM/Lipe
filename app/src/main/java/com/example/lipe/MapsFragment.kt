@@ -10,14 +10,7 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
-import android.graphics.Rect
-import android.graphics.RectF
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
-import android.location.Location
 import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.os.Looper
@@ -28,6 +21,7 @@ import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -43,7 +37,6 @@ import com.example.lipe.viewModels.EventEntVM
 import com.example.lipe.viewModels.SaveStateMapsVM
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
@@ -64,7 +57,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
-import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
@@ -92,6 +84,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var dbRef_user: DatabaseReference
     private lateinit var dbRef_event: DatabaseReference
+    private lateinit var dbRef_friends: DatabaseReference
     private lateinit var auth: FirebaseAuth
 
     private val ecoEventsMarkersMap = HashMap<String, Marker>()
@@ -126,8 +119,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-
-
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
 
@@ -148,6 +139,165 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             )
         }
 
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            addAllEvents()
+
+            addAllFriends()
+        } else {
+            Toast.makeText(requireContext(), "Вы не авторизован", Toast.LENGTH_LONG).show()
+        }
+
+        mMap.setOnMapLongClickListener { latLng ->
+            appVM.setCoord(latLng.latitude, latLng.longitude)
+            CreateEventFragment.show(childFragmentManager)
+        }
+
+        mMap.setOnMarkerClickListener { marker ->
+
+            val markerPosition = marker.position
+
+            val latitude = markerPosition.latitude
+            val longitude = markerPosition.longitude
+
+            eventEntVM.latitude = latitude
+            eventEntVM.longtitude = longitude
+
+            appVM.latitude = latitude
+            appVM.longtitude = longitude
+
+            mMap.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(latitude, longitude),
+                    17f
+                )
+            )
+
+            searchTypeOfEvent(latitude, longitude) {ready ->
+                if(ready) {
+                    EventFragment.show(childFragmentManager)
+                }
+            }
+
+            true
+        }
+    }
+
+    private fun addAllFriends() {
+        dbRef_friends.child("users").child(auth.currentUser!!.uid).child("friends")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    for (friendSnapshot in dataSnapshot.children) {
+                        val friendUid = friendSnapshot.value.toString()
+                        addFriendToMap(friendUid)
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
+                }
+            })
+
+        dbRef_friends.child("users").child(auth.currentUser!!.uid).child("friends")
+            .addChildEventListener(object : ChildEventListener {
+                override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                    val friendUid = dataSnapshot.value.toString()
+                    addFriendToMap(friendUid)
+                }
+
+                override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {}
+
+                override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+                    val friendUid = dataSnapshot.value.toString()
+                    removeFriendFromMap(friendUid)
+                }
+
+                override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {}
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.e("FirebaseError", "Ошибка ${databaseError.message}")
+                }
+            })
+    }
+    private fun removeFriendFromMap(friendUid: String) {
+        val existingMarker = friendsMarkersMap[friendUid]
+        existingMarker?.remove()
+        friendsMarkersMap.remove(friendUid)
+    }
+
+    private fun addFriendToMap(friendUid: String) {
+        dbRef_user.child("users").child(friendUid).child("location")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val latitude = dataSnapshot.child("latitude").value as? Double
+                    val longitude = dataSnapshot.child("longitude").value as? Double
+                    if (latitude != null && longitude != null) {
+                        val latLng = LatLng(latitude, longitude)
+                        updateFriendMarkerPosition(friendUid, latLng)
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
+                }
+            })
+    }
+
+    private fun updateFriendMarkerPosition(friendUid: String, latLng: LatLng) {
+        val existingMarker = friendsMarkersMap[friendUid]
+        if(existingMarker != null) {
+            val startPosition = existingMarker.position
+            val endPosition = latLng
+
+            val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
+            valueAnimator.duration = 1000
+            valueAnimator.interpolator = LinearInterpolator()
+            valueAnimator.addUpdateListener { animation ->
+                val v = animation.animatedFraction
+                val newPosition = LatLng(
+                    startPosition.latitude * (1 - v) + endPosition.latitude * v,
+                    startPosition.longitude * (1 - v) + endPosition.longitude * v
+                )
+                existingMarker.position = newPosition
+            }
+            valueAnimator.start()
+        } else {
+            val dbRef_friend = FirebaseDatabase.getInstance().getReference("users/${friendUid}/avatarId")
+            val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker_friends, null)
+            val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
+
+            markerImageView.setImageResource(R.drawable.football)
+
+            val markerOptions = MarkerOptions()
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
+                .anchor(0.5f, 1f)
+
+            val marker = mMap.addMarker(markerOptions)
+
+            val startPosition = marker!!.position
+            val endPosition = latLng
+
+            val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
+            valueAnimator.duration = 1000
+            valueAnimator.interpolator = LinearInterpolator()
+            valueAnimator.addUpdateListener { animation ->
+                val v = animation.animatedFraction
+                val newPosition = LatLng(
+                    startPosition.latitude * (1 - v) + endPosition.latitude * v,
+                    startPosition.longitude * (1 - v) + endPosition.longitude * v
+                )
+                marker!!.position = newPosition
+            }
+            valueAnimator.start()
+
+            friendsMarkersMap[friendUid] = marker!!
+        }
+    }
+
+
+
+    private fun addAllEvents() {
         dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
         // show all markers on map
         dbRef_event.addChildEventListener(object : ChildEventListener {
@@ -179,43 +329,17 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
 
             override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-                // Обработка изменения события
+
             }
 
             override fun onChildMoved(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-                // Обработка перемещения события
+
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
             }
         })
-
-        mMap.setOnMapLongClickListener { latLng ->
-            appVM.setCoord(latLng.latitude, latLng.longitude)
-            CreateEventFragment.show(childFragmentManager)
-        }
-
-        mMap.setOnMarkerClickListener { marker ->
-            val markerPosition = marker.position
-
-            val latitude = markerPosition.latitude
-            val longitude = markerPosition.longitude
-
-            eventEntVM.latitude = latitude
-            eventEntVM.longtitude = longitude
-
-            appVM.latitude = latitude
-            appVM.longtitude = longitude
-
-            searchTypeOfEvent(latitude, longitude) {ready ->
-                if(ready) {
-                    EventFragment.show(childFragmentManager)
-                }
-            }
-
-            true
-        }
     }
 
 
@@ -276,13 +400,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                         }
                         valueAnimator.start()
                     }
-
-//                    mMap.animateCamera(
-//                        CameraUpdateFactory.newLatLngZoom(
-//                            LatLng(location.latitude, location.longitude),
-//                            17f
-//                        )
-//                    )
                 }
             }
         }
@@ -315,6 +432,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         eventEcoVM = ViewModelProvider(requireActivity()).get(EventEcoVM::class.java)
         saveStateMapVM = ViewModelProvider(requireActivity()).get(SaveStateMapsVM::class.java)
 
+        dbRef_user = FirebaseDatabase.getInstance().getReference()
+        dbRef_friends = FirebaseDatabase.getInstance().getReference()
         findPersonOnMap()
 
         val view = binding.root
@@ -337,7 +456,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+
             }
 
         })
@@ -454,7 +573,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
         })
     }
-
     private fun addMarker(latLng: LatLng, type: String, eventId: String, sport_type: String): Marker? {
         var marker: Marker? = null
         val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker_friends, null)
@@ -506,26 +624,31 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 showOrHideMarkers(ecoEventsMarkersMap, "show")
                 showOrHideMarkers(entEventsMarkersMap, "show")
                 showOrHideMarkers(helpEventsMarkersMap, "show")
+                showOrHideMarkers(friendsMarkersMap, "show")
             }
             "eco" -> {
                 showOrHideMarkers(ecoEventsMarkersMap, "show")
                 showOrHideMarkers(helpEventsMarkersMap, "hide")
                 showOrHideMarkers(entEventsMarkersMap, "hide")
+                showOrHideMarkers(friendsMarkersMap, "hide")
             }
             "ent" -> {
                 showOrHideMarkers(entEventsMarkersMap, "show")
                 showOrHideMarkers(helpEventsMarkersMap, "hide")
                 showOrHideMarkers(ecoEventsMarkersMap, "hide")
+                showOrHideMarkers(friendsMarkersMap, "hide")
             }
             "friends" -> {
                 showOrHideMarkers(entEventsMarkersMap, "hide")
                 showOrHideMarkers(helpEventsMarkersMap, "hide")
                 showOrHideMarkers(ecoEventsMarkersMap, "hide")
+                showOrHideMarkers(friendsMarkersMap, "show")
             }
             "help" -> {
                 showOrHideMarkers(helpEventsMarkersMap, "show")
                 showOrHideMarkers(entEventsMarkersMap, "hide")
                 showOrHideMarkers(ecoEventsMarkersMap, "hide")
+                showOrHideMarkers(friendsMarkersMap, "hide")
             }
         }
     }
