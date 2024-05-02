@@ -25,5 +25,6 @@ data class UserDB(
     val chats: ArrayList<String>? = null,
     val groups: ArrayList<String> ?= null,
     val location: HashMap<String, Double> = hashMapOf("latitude" to 0.0, "longitude" to 0.0),
-    val themeUid: String = "default"
+    val themeUid: String = "default",
+    val status: String = "online"
 )
