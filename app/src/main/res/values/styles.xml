@@ -22,6 +22,17 @@
         <item name="cornerFamily">rounded</item>
     </style>
 
+
+    <style name="Style.App.circleImageView" parent="">
+        <item name="shapeAppearance">@style/ShapeAppearanceOverlay.App.circleImageView</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.circleImageView" parent="">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+
     <style name="ImageStyle_eventProfile">
         <item name="cornerSizeTopLeft">8%</item>
         <item name="cornerSizeTopRight">8%</item>

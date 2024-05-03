@@ -17,7 +17,7 @@ class SetOnlineOrOffline : Application() {
 
         auth = FirebaseAuth.getInstance()
 
-        val user = auth.currentUser!!.uid
+        val user = auth.currentUser?.uid
 
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}

@@ -4,14 +4,17 @@ import ProfileFragment
 import android.Manifest
 import android.animation.ValueAnimator
 import android.app.Dialog
+import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.os.Looper
@@ -22,7 +25,9 @@ import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -58,9 +63,16 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.io.IOException
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
@@ -88,6 +100,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var dbRef_user: DatabaseReference
     private lateinit var dbRef_event: DatabaseReference
     private lateinit var dbRef_friends: DatabaseReference
+    private lateinit var dbRef_status: DatabaseReference
+
     private lateinit var auth: FirebaseAuth
 
     private val ecoEventsMarkersMap = HashMap<String, Marker>()
@@ -229,22 +243,102 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun addFriendToMap(friendUid: String) {
-        dbRef_user.child("users").child(friendUid).child("location")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val latitude = dataSnapshot.child("latitude").value as? Double
-                    val longitude = dataSnapshot.child("longitude").value as? Double
-                    if (latitude != null && longitude != null) {
-                        val latLng = LatLng(latitude, longitude)
-                        updateFriendMarkerPosition(friendUid, latLng)
+        val locationListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val latitude = dataSnapshot.child("latitude").value as? Double
+                val longitude = dataSnapshot.child("longitude").value as? Double
+                if (latitude != null && longitude != null) {
+                    val latLng = LatLng(latitude, longitude)
+                    updateFriendMarkerPosition(friendUid, latLng)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
+            }
+        }
+
+        val statusListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val status = dataSnapshot.value as? String
+                if (status != null) {
+                    val marker = friendsMarkersMap[friendUid]
+                    if (marker != null) {
+                        //updateMarkerStatusView(marker, status)
                     }
                 }
+                Log.d("INFOG", "checkStatus $status")
+            }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
+            }
+        }
+
+        dbRef_user.child("users").child(friendUid).child("location").addValueEventListener(locationListener)
+        dbRef_status.child("users").child(friendUid).child("status").addValueEventListener(statusListener)
+
+        val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker_friends, null)
+        val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
+
+        val dbRef_friend = FirebaseDatabase.getInstance().getReference("users/$friendUid/avatarId")
+
+        dbRef_friend.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val storage = FirebaseStorage.getInstance().getReference("avatars/${snapshot.value}")
+                storage.downloadUrl.addOnSuccessListener { url ->
+                    loadBitmapFromFirebase(requireContext(), url) { bitmap ->
+                        bitmap?.let {
+                            markerImageView.setImageBitmap(bitmap)
+
+                            val markerOptions = MarkerOptions()
+                                .position(LatLng(0.0, 0.0))
+                                .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
+                                .anchor(0.5f, 1f)
+
+                            val marker = mMap.addMarker(markerOptions)
+                            friendsMarkersMap[friendUid] = marker!!
+                        }
+                    }
                 }
-            })
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
     }
+
+    private fun loadBitmapFromFirebase(context: Context, uri: Uri, callback: (Bitmap?) -> Unit) {
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val maxImageSize = 1024 * 1024 * 2 // 2MB
+                val stream = context.contentResolver.openInputStream(uri)
+                val bitmap = BitmapFactory.decodeStream(stream)
+                callback(bitmap)
+            } catch (e: IOException) {
+                Log.e("INFOG", e.message.toString())
+                callback(null)
+            }
+        }
+    }
+
+
+
+    //smth wrong with that function, for tommorow
+//    private fun updateMarkerStatusView(marker: Marker?, status: String) {
+//        marker?.let { marker ->
+//            val markerLayout = marker.tag as? View
+//            if (markerLayout != null) {
+//                val statusView = markerLayout.findViewById<View>(R.id.statusView)
+//                when (status) {
+//                    "online" -> statusView.setBackgroundResource(R.drawable.online_spot)
+//                    "offline" -> statusView.setBackgroundResource(R.drawable.offline_spot)
+//                }
+//            }
+//        }
+//    }
 
     private fun updateFriendMarkerPosition(friendUid: String, latLng: LatLng) {
         val existingMarker = friendsMarkersMap[friendUid]
@@ -297,11 +391,14 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                                         startPosition.latitude * (1 - v) + endPosition.latitude * v,
                                         startPosition.longitude * (1 - v) + endPosition.longitude * v
                                     )
-                                    marker!!.position = newPosition
+                                    marker.position = newPosition
                                 }
                                 valueAnimator.start()
 
-                                friendsMarkersMap[friendUid] = marker!!
+                                friendsMarkersMap[friendUid] = marker
+
+                                //set first status
+//                                updateMarkerStatusView(marker, )
                             }
 
                             override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
@@ -366,13 +463,15 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         })
     }
 
-
     private fun startLocationUpdates() {
         val dbRef_location = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/location")
 
         val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker_you, null)
         val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
 
+        //val uri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/durable-path-406515.appspot.com/o/avatars%2FOcPJvLEkxqhnKlj4GeTAPBbYIN82?alt=media&token=a7a77381-cef0-4eb3-9466-d70c0235c9e6")
+
+        Picasso.get().load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXmoXt9uHDXenK1pPudL_b-lDX1tA1Uzee0aU3MjwpHQ&s").into(markerImageView)
 
         val locationRequest = LocationRequest.create().apply {
             interval = 10000
@@ -393,7 +492,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                         dbRef_location.setValue(newLocation).addOnSuccessListener {
                             Log.d("INFOG", "locUpdate")
                         }
-                        Picasso.get().load("https://tierarzt-karlsruhe-durlach.de/storage/2023/07/hamster-1555083.jpg").into(markerImageView)
 
                         myLocationMarker = mMap.addMarker(
                             MarkerOptions()
@@ -458,6 +556,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         dbRef_user = FirebaseDatabase.getInstance().getReference()
         dbRef_friends = FirebaseDatabase.getInstance().getReference()
+        dbRef_status = FirebaseDatabase.getInstance().getReference()
+
         findPersonOnMap()
 
         val view = binding.root
@@ -719,19 +819,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         fragmentTransaction.replace(R.id.map, fragment)
         fragmentTransaction.commit()
     }
-
-//    override fun onAttach(context: Context) {
-//        super.onAttach(context)
-//        val backCallback = object: OnBackPressedCallback(true){
-//            override fun handleOnBackPressed() {
-//                if(childFragmentManager.backStackEntryCount > 1) {
-//                    childFragmentManager.popBackStack()
-//                }
-//                parentFragmentManager.popBackStack()
-//            }
-//        }
-//        activity?.onBackPressedDispatcher?.addCallback(this,backCallback)
-//    }
 
 
     private fun showSuccessRegWindow() {

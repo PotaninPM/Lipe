@@ -199,15 +199,15 @@ class SignUpDescFragment : Fragment() {
             name,
             lastName,
             -1,
-            arrayListOf("-"),
-            arrayListOf("-"),
-            arrayListOf("-"),
+            arrayListOf(),
+            arrayListOf(),
+            arrayListOf(),
             0,
-            arrayListOf("-"),
-            arrayListOf("-"),
+            arrayListOf(),
+            arrayListOf(),
             0,
-            arrayListOf("-"),
-            arrayListOf("-")
+            arrayListOf(),
+            arrayListOf()
         )
 
         dbRef.child(auth.currentUser!!.uid).setValue(user_DB_info).addOnSuccessListener {
