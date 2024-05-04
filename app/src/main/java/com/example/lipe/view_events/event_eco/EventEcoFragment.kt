@@ -23,7 +23,6 @@ import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.squareup.picasso.Picasso
 import java.util.ArrayList
 
 class EventEcoFragment : Fragment() {
@@ -95,7 +94,7 @@ class EventEcoFragment : Fragment() {
 
         tokenTask.addOnSuccessListener { uri ->
             val imageUrl = uri.toString()
-            Picasso.get().load(imageUrl).into(binding.image)
+            //Picasso.get().load(imageUrl).into(binding.image)
             Thread.sleep(1000)
             callback(true)
 

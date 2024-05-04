@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lipe.databinding.FragmentChatsBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -36,6 +37,8 @@ class AllChatsFragment : Fragment() {
     ): View? {
         _binding = FragmentChatsBinding.inflate(inflater, container, false)
 
+        adapter = AllChatsAdapter(viewLifecycleOwner.lifecycleScope)
+
         storageRef = FirebaseStorage.getInstance().reference
         auth = FirebaseAuth.getInstance()
 
@@ -45,7 +48,7 @@ class AllChatsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = AllChatsAdapter()
+        adapter = AllChatsAdapter(viewLifecycleOwner.lifecycleScope)
         binding.chatRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.chatRecyclerView.adapter = adapter
 

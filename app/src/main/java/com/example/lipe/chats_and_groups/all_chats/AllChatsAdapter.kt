@@ -1,11 +1,19 @@
 package com.example.lipe.chats_and_groups.all_chats
 
+import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import coil.Coil
+import coil.request.ImageRequest
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.chat_fr.ChatFragment
 import com.example.lipe.databinding.ChatItemBinding
@@ -17,15 +25,19 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.ArrayList
 
-class AllChatsAdapter : RecyclerView.Adapter<AllChatsAdapter.ChatsHolder>(){
+class AllChatsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.Adapter<AllChatsAdapter.ChatsHolder>(){
 
     val chatsList = ArrayList<ChatItem>()
 
     private lateinit var storageRef: StorageReference
     private lateinit var dbRef: DatabaseReference
+
+    private val lifecycleScope: LifecycleCoroutineScope = lifecycleScope
     inner class ChatsHolder(item: View): RecyclerView.ViewHolder(item) {
 
         val binding = ChatItemBinding.bind(item)
@@ -72,8 +84,16 @@ class AllChatsAdapter : RecyclerView.Adapter<AllChatsAdapter.ChatsHolder>(){
             val photoUrl = photoRef.downloadUrl
 
             photoUrl.addOnSuccessListener { url ->
-                val imageUrl = url.toString()
-                Picasso.get().load(imageUrl).into(binding.avatar)
+                lifecycleScope.launch {
+                    val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                        Coil.imageLoader(binding.avatar.context).execute(
+                            ImageRequest.Builder(binding.avatar.context)
+                                .data(url)
+                                .build()
+                        ).drawable?.toBitmap()!!
+                    }
+                    binding.avatar.setImageBitmap(bitmap)
+                }
             }.addOnFailureListener {
                 Log.d("INFOG", "Ошибка чаты аватар")
             }

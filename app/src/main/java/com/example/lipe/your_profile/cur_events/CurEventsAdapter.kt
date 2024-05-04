@@ -8,7 +8,6 @@ import com.example.lipe.R
 import com.example.lipe.databinding.EventItemBinding
 import com.example.lipe.your_profile.EventItem
 import com.google.firebase.database.DatabaseReference
-import com.squareup.picasso.Picasso
 import java.util.ArrayList
 
 class CurEventsAdapter : RecyclerView.Adapter<CurEventsAdapter.CurEventsHolder>() {
@@ -22,7 +21,7 @@ class CurEventsAdapter : RecyclerView.Adapter<CurEventsAdapter.CurEventsHolder>(
             dateTime.text = event.date_time
             title.text = event.title
             status.text = event.status
-            Picasso.get().load(event.imageUrl).into(imageEvent)
+            //Picasso.get().load(event.imageUrl).into(imageEvent)
         }
     }
 

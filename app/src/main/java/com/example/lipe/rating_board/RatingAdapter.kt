@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lipe.R
 import com.example.lipe.databinding.RatingItemBinding
 import com.google.firebase.database.DatabaseReference
-import com.squareup.picasso.Picasso
 import kotlin.collections.ArrayList
 
 class RatingAdapter :  RecyclerView.Adapter<RatingAdapter.RatingHolder>() {
@@ -18,7 +17,7 @@ class RatingAdapter :  RecyclerView.Adapter<RatingAdapter.RatingHolder>() {
 
         val binding = RatingItemBinding.bind(item)
         fun bind(rating: RatingItem) = with(binding) {
-            Picasso.get().load(rating.avatarUrl).into(persImage)
+            //Picasso.get().load(rating.avatarUrl).into(persImage)
             username.text = rating.username
             ratingScore.text = rating.score.toString()
             place.text = rating.place.toString()

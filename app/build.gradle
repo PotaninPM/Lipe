@@ -44,8 +44,6 @@ dependencies {
     //qr code
     implementation 'com.google.zxing:core:3.4.1'
 
-    implementation 'com.squareup.picasso:picasso:2.8'
-
     implementation 'com.google.android.libraries.places:places:3.4.0'
 
     //multiple markers
@@ -70,7 +68,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
 
     //image markers
-    implementation("io.coil-kt:coil:1.3.2")
+    implementation("io.coil-kt:coil:2.6.0")
 
     // Maps SDK for Android
     implementation 'com.google.android.gms:play-services-maps:18.2.0'

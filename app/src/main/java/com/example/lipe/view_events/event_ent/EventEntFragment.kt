@@ -30,7 +30,6 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.squareup.picasso.Picasso
 
 class EventEntFragment : BottomSheetDialogFragment() {
     private lateinit var auth: FirebaseAuth
@@ -236,7 +235,7 @@ class EventEntFragment : BottomSheetDialogFragment() {
 
     private fun loadAllImages(callback: (Boolean) -> Unit) {
         if(eventEntVM.creatorUsername.value == "Удаленный аккаунт") {
-            Picasso.get().load(R.drawable.block_user).into(binding.eventAvatar)
+            binding.eventAvatar.setImageResource(R.drawable.block_user)
             callback(true)
         } else {
             val uid = eventEntVM.photos.value?.get(0).toString().removeSurrounding("[", "]")
@@ -251,10 +250,10 @@ class EventEntFragment : BottomSheetDialogFragment() {
 
             tokenTask.addOnSuccessListener { uri ->
                 val imageUrl = uri.toString()
-                Picasso.get().load(imageUrl).into(binding.image)
+                //Picasso.get().load(imageUrl).into(binding.image)
                 tokenTask2.addOnSuccessListener { uri ->
                     val imageUrl2 = uri.toString()
-                    Picasso.get().load(imageUrl2).into(binding.eventAvatar)
+                    //Picasso.get().load(imageUrl2).into(binding.eventAvatar)
                     callback(true)
                 }.addOnFailureListener {
 

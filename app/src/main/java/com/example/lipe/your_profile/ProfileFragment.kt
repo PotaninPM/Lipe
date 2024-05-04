@@ -1,3 +1,4 @@
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
@@ -7,8 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import coil.Coil
+import coil.request.ImageRequest
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.databinding.FragmentProfileBinding
@@ -19,7 +24,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
@@ -134,7 +141,16 @@ class ProfileFragment : Fragment() {
                 imageRef.putFile(uri)
                     .addOnSuccessListener { task ->
                         task.storage.downloadUrl.addOnSuccessListener { url ->
-                            Picasso.get().load(url).into(binding.theme)
+                            lifecycleScope.launch {
+                                val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                                    Coil.imageLoader(requireContext()).execute(
+                                        ImageRequest.Builder(requireContext())
+                                            .data(url)
+                                            .build()
+                                    ).drawable?.toBitmap()!!
+                                }
+                                binding.theme.setImageBitmap(bitmap)
+                            }
                         }
                     }
                     .addOnFailureListener { exception ->
@@ -149,7 +165,16 @@ class ProfileFragment : Fragment() {
                 imageRef.putFile(uri)
                     .addOnSuccessListener { task ->
                         task.storage.downloadUrl.addOnSuccessListener { url ->
-                            Picasso.get().load(url).into(binding.avatar)
+                            lifecycleScope.launch {
+                                val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                                    Coil.imageLoader(requireContext()).execute(
+                                        ImageRequest.Builder(requireContext())
+                                            .data(url)
+                                            .build()
+                                    ).drawable?.toBitmap()!!
+                                }
+                                binding.avatar.setImageBitmap(bitmap)
+                            }
                         }
                     }
                     .addOnFailureListener { exception ->
@@ -195,12 +220,28 @@ class ProfileFragment : Fragment() {
         val tokenTaskAvatar = photoRef.downloadUrl
         val tokenTaskTheme = themeRef.downloadUrl
 
-        tokenTaskAvatar.addOnSuccessListener { uri ->
-            val imageUrl = uri.toString()
-            Picasso.get().load(imageUrl).rotate(90f).into(binding.avatar)
-            tokenTaskTheme.addOnSuccessListener { uri ->
-                val imageThemeUrl = uri.toString()
-                Picasso.get().load(imageThemeUrl).rotate(90f).into(binding.theme)
+        tokenTaskAvatar.addOnSuccessListener { url_avatar ->
+            lifecycleScope.launch {
+                val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                    Coil.imageLoader(requireContext()).execute(
+                        ImageRequest.Builder(requireContext())
+                            .data(url_avatar)
+                            .build()
+                    ).drawable?.toBitmap()!!
+                }
+                binding.avatar.setImageBitmap(bitmap)
+            }
+            tokenTaskTheme.addOnSuccessListener { url_theme ->
+                lifecycleScope.launch {
+                    val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                        Coil.imageLoader(requireContext()).execute(
+                            ImageRequest.Builder(requireContext())
+                                .data(url_theme)
+                                .build()
+                        ).drawable?.toBitmap()!!
+                    }
+                    binding.theme.setImageBitmap(bitmap)
+                }
                 callback(true)
             }
         }.addOnFailureListener {

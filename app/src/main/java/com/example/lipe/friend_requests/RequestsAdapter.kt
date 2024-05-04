@@ -10,7 +10,6 @@ import com.example.lipe.database_models.ChatModelDB
 import com.example.lipe.databinding.FriendRequestItemBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.squareup.picasso.Picasso
 import java.util.ArrayList
 import java.util.UUID
 
@@ -23,7 +22,8 @@ class RequestsAdapter: RecyclerView.Adapter<RequestsAdapter.RequestsHolder>() {
         val binding = FriendRequestItemBinding.bind(item)
         fun bind(request: Request) = with(binding) {
 
-            Picasso.get().load(request.avatarUrl).into(shapeableImageView)
+            //Picasso.get().load(request.avatarUrl).into(shapeableImageView)
+
             username.text = request.username
 
             acceptBtn.setOnClickListener {

@@ -1,11 +1,16 @@
 package com.example.lipe.chats_and_groups.all_groups
 
+import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
+import coil.Coil
+import coil.request.ImageRequest
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.all_chats.ChatItem
 import com.example.lipe.chats_and_groups.chat_fr.ChatFragment
@@ -18,15 +23,19 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.squareup.picasso.Picasso
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.ArrayList
 
-class AllGroupsAdapter : RecyclerView.Adapter<AllGroupsAdapter.GroupsHolder>(){
+class AllGroupsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.Adapter<AllGroupsAdapter.GroupsHolder>(){
 
     val groupsList = ArrayList<GroupItem>()
 
     private lateinit var storageRef: StorageReference
     private lateinit var dbRef: DatabaseReference
+
+    private val lifecycleScope: LifecycleCoroutineScope = lifecycleScope
     inner class GroupsHolder(item: View): RecyclerView.ViewHolder(item) {
 
         val binding = ChatItemBinding.bind(item)
@@ -59,8 +68,16 @@ class AllGroupsAdapter : RecyclerView.Adapter<AllGroupsAdapter.GroupsHolder>(){
             val photoUrl = photoRef.downloadUrl
 
             photoUrl.addOnSuccessListener { url ->
-                val imageUrl = url.toString()
-                Picasso.get().load(imageUrl).into(binding.avatar)
+                lifecycleScope.launch {
+                    val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                        Coil.imageLoader(binding.avatar.context).execute(
+                            ImageRequest.Builder(binding.avatar.context)
+                                .data(url)
+                                .build()
+                        ).drawable?.toBitmap()!!
+                    }
+                    binding.avatar.setImageBitmap(bitmap)
+                }
                 all.visibility = View.VISIBLE
                 avatar.visibility = View.VISIBLE
             }
