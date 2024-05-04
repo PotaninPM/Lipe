@@ -20,7 +20,6 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:orientation="vertical"
-            android:background="#FFFFFF"
             android:clipToPadding="false">
 
             <androidx.constraintlayout.widget.ConstraintLayout

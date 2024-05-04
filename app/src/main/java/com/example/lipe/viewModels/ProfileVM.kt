@@ -18,15 +18,12 @@ class ProfileVM: ViewModel() {
     private var _ratingPoints = MutableLiveData<String>()
     val ratingPoints: LiveData<String> = _ratingPoints
 
-    private var _avatar = MutableLiveData<String>()
-    val avatar: LiveData<String> = _avatar
 
-    fun setInfo(nameLastName_: String, friendsAmount_: Int, eventsAmount_: Int, ratingPoints_: Int, avatar: String) {
+    fun setInfo(nameLastName_: String, friendsAmount_: Int, eventsAmount_: Int, ratingPoints_: Int) {
         _nameLastName.value = nameLastName_
         _friendsAmount.value = friendsAmount_.toString()
         _eventsAmount.value = eventsAmount_.toString()
         _ratingPoints.value = ratingPoints_.toString()
-        _avatar.value = avatar
 
 //
 //        _age.value = age_

@@ -2,7 +2,6 @@ package com.example.lipe.database_models
 
 data class UserDB(
     val uid:String?= null,
-    var avatarId: String,
     val date_of_reg: String?= null,
     val balance: Int ?= 0,
     val bonus: Int ?= 0,
@@ -24,7 +23,5 @@ data class UserDB(
     val events_amount: Int? = 0,
     val chats: ArrayList<String>? = null,
     val groups: ArrayList<String> ?= null,
-    val location: HashMap<String, Double> = hashMapOf("latitude" to 0.0, "longitude" to 0.0),
-    val themeUid: String = "default",
     val status: String = "online"
 )

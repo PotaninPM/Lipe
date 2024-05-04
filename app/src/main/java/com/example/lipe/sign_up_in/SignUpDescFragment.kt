@@ -26,8 +26,11 @@ import com.example.lipe.databinding.FragmentSignUpDescBinding
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.viewModels.SignUpVM
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import java.time.LocalDate
 
@@ -124,7 +127,7 @@ class SignUpDescFragment : Fragment() {
                         uploadImage {uid ->
                             if(uid != "null") {
                                 appVM.reg = "yes"
-                                addUserToDb(signUpVM.login, signUpVM.email, signUpVM.pass, signUpVM.number, signUpVM.name, signUpVM.lastName, desc, uid, view)
+                                addUserToDb(signUpVM.login, signUpVM.email, signUpVM.pass, signUpVM.number, signUpVM.name, signUpVM.lastName, desc, view)
                             } else {
                                 Log.d("INFOG", "Что-то пошло не так")
                                 Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_LONG).show()
@@ -183,10 +186,9 @@ class SignUpDescFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun addUserToDb(username: String, email: String, pass: String, phone: String, name: String, lastName: String, desc: String, avatar: String, view: View) {
+    fun addUserToDb(username: String, email: String, pass: String, phone: String, name: String, lastName: String, desc: String, view: View) {
         val user_DB_info = UserDB(
             auth.currentUser?.uid,
-            avatar,
             LocalDate.now().toString(),
             0,
             0,
@@ -210,13 +212,17 @@ class SignUpDescFragment : Fragment() {
             arrayListOf()
         )
 
-        dbRef.child(auth.currentUser!!.uid).setValue(user_DB_info).addOnSuccessListener {
+        FirebaseDatabase.getInstance().getReference("location").child(auth.currentUser!!.uid).setValue(
+            hashMapOf("latitude" to "-", "longitude" to "-")
+        ).addOnSuccessListener {
+            dbRef.child(auth.currentUser!!.uid).setValue(user_DB_info).addOnSuccessListener {
 
-            val navController = view.findNavController()
-            navController.navigate(R.id.action_signUpDescFragment_to_mapsFragment)
+                val navController = view.findNavController()
+                navController.navigate(R.id.action_signUpDescFragment_to_mapsFragment)
 
-        }.addOnFailureListener {
-            Log.d("INFOG", it.toString())
+            }.addOnFailureListener {
+                Log.d("INFOG", it.toString())
+            }
         }
     }
 

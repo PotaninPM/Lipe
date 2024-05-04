@@ -62,22 +62,26 @@ class ProfileFragment : Fragment() {
                         "${userData.firstName} ${userData.lastName}" + " ⓘ",
                         userData.friendsAmount,
                         userData.eventsAmount,
-                        userData.ratingPoints,
-                        userData.avatarId
+                        userData.ratingPoints
                     )
                     loadingProgressBar.visibility = View.GONE
                     allProfile.visibility = View.VISIBLE
-                    setProfilePhotos {
-                        if(it) {
-                            loadingProgressBar.visibility = View.GONE
-                            allProfile.visibility = View.VISIBLE
-                        }
-                    }
+                }
+            }
+
+            setProfilePhotos {
+                if(it) {
+                    loadingProgressBar.visibility = View.GONE
+                    allProfile.visibility = View.VISIBLE
                 }
             }
 
             theme.setOnClickListener {
-                selectImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                selectImageTheme.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+
+            avatar.setOnClickListener {
+                selectImageAvatar.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
 
             btnCurEvent.setOnClickListener {
@@ -103,42 +107,61 @@ class ProfileFragment : Fragment() {
         return view
     }
 
-    val selectImage =
+    val selectImageTheme =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 binding.theme.setImageURI(uri)
-                uploadImage(uri)
+                uploadImage(uri, "theme")
             } else {
                 Log.d("INFOG", "No media selected")
             }
         }
-    private fun uploadImage(imageUri: Uri) {
-        val storageRef = FirebaseStorage.getInstance().getReference("user_theme")
-        imageUri.let { uri ->
-            val uid: String = auth.currentUser!!.uid
-            val imageRef = storageRef.child(uid)
-            imageRef.putFile(uri)
-                .addOnSuccessListener { task ->
-                    task.storage.downloadUrl.addOnSuccessListener { url ->
-                        val dbRef_user =
-                            FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/themeUid")
-                        dbRef_user.child(uid).setValue(uid).addOnSuccessListener {
-
-                        }.addOnFailureListener {
-                            Log.d("INFOG", "ProfileErrTheme")
+    val selectImageAvatar =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                binding.avatar.setImageURI(uri)
+                uploadImage(uri, "avatar")
+            } else {
+                Log.d("INFOG", "No media selected")
+            }
+        }
+    private fun uploadImage(imageUri: Uri, type: String) {
+        if(type == "theme") {
+            val storageRef = FirebaseStorage.getInstance().getReference("user_theme")
+            imageUri.let { uri ->
+                val uid: String = auth.currentUser!!.uid
+                val imageRef = storageRef.child(uid)
+                imageRef.putFile(uri)
+                    .addOnSuccessListener { task ->
+                        task.storage.downloadUrl.addOnSuccessListener { url ->
+                            Picasso.get().load(url).into(binding.theme)
                         }
                     }
-                }
-                .addOnFailureListener { exception ->
-                    Log.d("INFOG", "ProfileErrTheme")
-                }
+                    .addOnFailureListener { exception ->
+                        Log.d("INFOG", "ProfileErrTheme")
+                    }
+            }
+        } else if(type == "avatar") {
+            val storageRef = FirebaseStorage.getInstance().getReference("avatar")
+            imageUri.let { uri ->
+                val uid: String = auth.currentUser!!.uid
+                val imageRef = storageRef.child(uid)
+                imageRef.putFile(uri)
+                    .addOnSuccessListener { task ->
+                        task.storage.downloadUrl.addOnSuccessListener { url ->
+                            Picasso.get().load(url).into(binding.avatar)
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("INFOG", "ProfileErrTheme")
+                    }
+            }
         }
     }
 
     private fun findAccount(callback: (UserData?) -> Unit) {
         val dbRef_user =
             FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
-
         dbRef_user.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val name: String = dataSnapshot.child("firstName").value.toString()
@@ -146,7 +169,6 @@ class ProfileFragment : Fragment() {
                 val ratingAmount: Int = dataSnapshot.child("rating").value.toString().toInt()
                 val friendsAmount: Int = dataSnapshot.child("friends_amount").value.toString().toInt()
                 val eventsAmount: Int = dataSnapshot.child("events_amount").value.toString().toInt()
-                val avatar: String = dataSnapshot.child("avatarId").value.toString()
 
                 callback(
                     UserData(
@@ -155,7 +177,6 @@ class ProfileFragment : Fragment() {
                         ratingAmount,
                         friendsAmount,
                         eventsAmount,
-                        avatar
                     )
                 )
             }
@@ -214,5 +235,4 @@ data class UserData(
     val ratingPoints: Int,
     val friendsAmount: Int,
     val eventsAmount: Int,
-    val avatarId: String
 )
