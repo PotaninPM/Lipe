@@ -133,6 +133,15 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         setMapStyle()
 
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            addAllEvents()
+
+            addAllFriends()
+        } else {
+            Toast.makeText(requireContext(), "Вы не авторизован", Toast.LENGTH_LONG).show()
+        }
+
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -148,14 +157,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             )
         }
 
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            addAllEvents()
-
-            addAllFriends()
-        } else {
-            Toast.makeText(requireContext(), "Вы не авторизован", Toast.LENGTH_LONG).show()
-        }
 
         mMap.setOnMapLongClickListener { latLng ->
             appVM.setCoord(latLng.latitude, latLng.longitude)
@@ -327,159 +328,184 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun updateFriendMarkerPosition(friendUid: String, latLng: LatLng) {
-        val existingMarker = friendsMarkersMap[friendUid]
-        if (existingMarker != null) {
-            val startPosition = existingMarker.position
-            val endPosition = latLng
+        try {
+            val existingMarker = friendsMarkersMap[friendUid]
+            if (existingMarker != null) {
+                val startPosition = existingMarker.position
+                val endPosition = latLng
 
-            val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
-            valueAnimator.duration = 1000
-            valueAnimator.interpolator = LinearInterpolator()
-            valueAnimator.addUpdateListener { animation ->
-                val v = animation.animatedFraction
-                val newPosition = LatLng(
-                    startPosition.latitude * (1 - v) + endPosition.latitude * v,
-                    startPosition.longitude * (1 - v) + endPosition.longitude * v
-                )
-                existingMarker.position = newPosition
+                val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
+                valueAnimator.duration = 1000
+                valueAnimator.interpolator = LinearInterpolator()
+                valueAnimator.addUpdateListener { animation ->
+                    val v = animation.animatedFraction
+                    val newPosition = LatLng(
+                        startPosition.latitude * (1 - v) + endPosition.latitude * v,
+                        startPosition.longitude * (1 - v) + endPosition.longitude * v
+                    )
+                    existingMarker.position = newPosition
+                }
+                valueAnimator.start()
+            } else {
+                val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker_friend, null)
+                val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
+
+                val storage = FirebaseStorage.getInstance().getReference("avatars/$friendUid")
+                storage.downloadUrl.addOnSuccessListener { url ->
+                    lifecycleScope.launch {
+                        try {
+                            val bitmap: Bitmap = withContext(Dispatchers.Main.immediate) {
+                                Coil.imageLoader(requireContext()).execute(
+                                    ImageRequest.Builder(requireContext())
+                                        .data(url)
+                                        .allowHardware(false)
+                                        .build()
+                                ).drawable?.toBitmap()!!
+                            }
+
+                            markerImageView.setImageBitmap(bitmap)
+
+                            val markerOptions = MarkerOptions()
+                                .position(latLng)
+                                .icon(
+                                    BitmapDescriptorFactory.fromBitmap(
+                                        createDrawableFromView(
+                                            markerLayout
+                                        )
+                                    )
+                                )
+                                .anchor(0.5f, 1f)
+
+                            val marker = mMap.addMarker(markerOptions)
+
+                            val startPosition = marker!!.position
+                            val endPosition = latLng
+
+                            val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
+                            valueAnimator.duration = 1000
+                            valueAnimator.interpolator = LinearInterpolator()
+                            valueAnimator.addUpdateListener { animation ->
+                                val v = animation.animatedFraction
+                                val newPosition = LatLng(
+                                    startPosition.latitude * (1 - v) + endPosition.latitude * v,
+                                    startPosition.longitude * (1 - v) + endPosition.longitude * v
+                                )
+                                marker.position = newPosition
+                            }
+                            valueAnimator.start()
+
+                            friendsMarkersMap[friendUid] = marker
+                        } catch (e: Exception) {
+                            Log.e("INFOG", "Ошибка при загрузке изображения: ${e.message}")
+                        }
+                    }
+                }
             }
-            valueAnimator.start()
-        } else {
+        } catch (e : Exception) {
+            Log.e("INFOG", "${e}")
+        }
+    }
+
+
+    private fun startLocationUpdates() {
+        try {
+            val dbRef_location = FirebaseDatabase.getInstance().getReference("location/${auth.currentUser!!.uid}")
+
             val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker_friend, null)
             val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
 
-            val storage = FirebaseStorage.getInstance().getReference("avatars/$friendUid")
-            storage.downloadUrl.addOnSuccessListener { url ->
-                lifecycleScope.launch {
-                    val markerOptions = MarkerOptions()
-                        .position(latLng)
-                        .icon(
-                            BitmapDescriptorFactory.fromBitmap(
-                                createDrawableFromView(
-                                    markerLayout
-                                )
-                            )
-                        )
-                        .anchor(0.5f, 1f)
-
-                    val marker = mMap.addMarker(markerOptions)
-
-                    val startPosition = marker!!.position
-                    val endPosition = latLng
-
-                    val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
-                    valueAnimator.duration = 1000
-                    valueAnimator.interpolator = LinearInterpolator()
-                    valueAnimator.addUpdateListener { animation ->
-                        val v = animation.animatedFraction
-                        val newPosition = LatLng(
-                            startPosition.latitude * (1 - v) + endPosition.latitude * v,
-                            startPosition.longitude * (1 - v) + endPosition.longitude * v
-                        )
-                        marker.position = newPosition
-                    }
-                    valueAnimator.start()
-
-                    friendsMarkersMap[friendUid] = marker
-                }
+            val locationRequest = LocationRequest.create().apply {
+                interval = 10000
+                fastestInterval = 5000
+                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             }
-        }
-    }
 
-    private fun startLocationUpdates() {
-        val dbRef_location = FirebaseDatabase.getInstance().getReference("location/${auth.currentUser!!.uid}")
+            locationCallback = object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    locationResult.lastLocation?.let { location ->
+                        currentLatitude = location.latitude
+                        currentLongitude = location.longitude
+                        if(myLocationMarker == null) {
+                            val newLocation = hashMapOf<String, Double>(
+                                "latitude" to location.latitude,
+                                "longitude" to location.longitude
+                            )
+                            dbRef_location.setValue(newLocation).addOnSuccessListener {
+                                Log.d("INFOG", "locUpdate")
+                            }
+                            val storage = FirebaseStorage.getInstance().getReference("avatars/${auth.currentUser!!.uid}")
+                            storage.downloadUrl.addOnSuccessListener { url ->
+                                lifecycleScope.launch {
+                                    val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                                        Coil.imageLoader(requireContext()).execute(
+                                            ImageRequest.Builder(requireContext())
+                                                .data(url)
+                                                .build()
+                                        ).drawable?.toBitmap()!!
+                                    }
 
-        val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker_friend, null)
-        val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
+                                    markerImageView.setImageBitmap(bitmap)
 
-        val locationRequest = LocationRequest.create().apply {
-            interval = 10000
-            fastestInterval = 5000
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
-
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                locationResult.lastLocation?.let { location ->
-                    currentLatitude = location.latitude
-                    currentLongitude = location.longitude
-                    if(myLocationMarker == null) {
-                        val newLocation = hashMapOf<String, Double>(
-                            "latitude" to location.latitude,
-                            "longitude" to location.longitude
-                        )
-                        dbRef_location.setValue(newLocation).addOnSuccessListener {
-                            Log.d("INFOG", "locUpdate")
-                        }
-                        val storage = FirebaseStorage.getInstance().getReference("avatars/${auth.currentUser!!.uid}")
-                        storage.downloadUrl.addOnSuccessListener { url ->
-                            lifecycleScope.launch {
-                                val bitmap: Bitmap = withContext(Dispatchers.IO) {
-                                    Coil.imageLoader(requireContext()).execute(
-                                        ImageRequest.Builder(requireContext())
-                                            .data(url)
-                                            .build()
-                                    ).drawable?.toBitmap()!!
-                                }
-
-                                markerImageView.setImageBitmap(bitmap)
-
-                                val markerOptions = MarkerOptions()
-                                    .position(LatLng(location.latitude, location.longitude))
-                                    .icon(
-                                        BitmapDescriptorFactory.fromBitmap(
-                                            createDrawableFromView(
-                                                markerLayout
+                                    val markerOptions = MarkerOptions()
+                                        .position(LatLng(location.latitude, location.longitude))
+                                        .icon(
+                                            BitmapDescriptorFactory.fromBitmap(
+                                                createDrawableFromView(
+                                                    markerLayout
+                                                )
                                             )
                                         )
-                                    )
-                                    .anchor(0.5f, 1f)
+                                        .anchor(0.5f, 1f)
 
-                                myLocationMarker = mMap.addMarker(markerOptions)
+                                    myLocationMarker = mMap.addMarker(markerOptions)
+                                }
                             }
-                        }
 
-                    } else {
-                        val newLocation = hashMapOf<String, Double>(
-                            "latitude" to location.latitude,
-                            "longitude" to location.longitude
-                        )
-                        dbRef_location.setValue(newLocation).addOnSuccessListener {
-
-                        }
-                        val startPosition = myLocationMarker!!.position
-                        val endPosition = LatLng(location.latitude, location.longitude)
-
-                        val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
-                        valueAnimator.duration = 1000
-                        valueAnimator.interpolator = LinearInterpolator()
-                        valueAnimator.addUpdateListener { animation ->
-                            val v = animation.animatedFraction
-                            val newPosition = LatLng(
-                                startPosition.latitude * (1 - v) + endPosition.latitude * v,
-                                startPosition.longitude * (1 - v) + endPosition.longitude * v
+                        } else {
+                            val newLocation = hashMapOf<String, Double>(
+                                "latitude" to location.latitude,
+                                "longitude" to location.longitude
                             )
-                            myLocationMarker!!.position = newPosition
+                            dbRef_location.setValue(newLocation).addOnSuccessListener {
+
+                            }
+                            val startPosition = myLocationMarker!!.position
+                            val endPosition = LatLng(location.latitude, location.longitude)
+
+                            val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
+                            valueAnimator.duration = 1000
+                            valueAnimator.interpolator = LinearInterpolator()
+                            valueAnimator.addUpdateListener { animation ->
+                                val v = animation.animatedFraction
+                                val newPosition = LatLng(
+                                    startPosition.latitude * (1 - v) + endPosition.latitude * v,
+                                    startPosition.longitude * (1 - v) + endPosition.longitude * v
+                                )
+                                myLocationMarker!!.position = newPosition
+                            }
+                            valueAnimator.start()
                         }
-                        valueAnimator.start()
                     }
                 }
             }
-        }
 
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            fusedLocationClient.requestLocationUpdates(
-                locationRequest,
-                locationCallback,
-                Looper.getMainLooper()
-            )
-            mMap.isMyLocationEnabled = false
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                fusedLocationClient.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback,
+                    Looper.getMainLooper()
+                )
+                mMap.isMyLocationEnabled = false
+            }
+        } catch (e: Exception) {
+            Log.e("INFOG", "${e.message}")
         }
     }
+
 
 
     override fun onCreateView(
@@ -495,7 +521,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         eventEcoVM = ViewModelProvider(requireActivity()).get(EventEcoVM::class.java)
         saveStateMapVM = ViewModelProvider(requireActivity()).get(SaveStateMapsVM::class.java)
 
-        Log.d("INFOG", auth.currentUser!!.uid)
 
         dbRef_user = FirebaseDatabase.getInstance().getReference()
         dbRef_friends = FirebaseDatabase.getInstance().getReference()
@@ -505,6 +530,18 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         val view = binding.root
         return view
+    }
+
+    private fun createDrawableFromView(view: View): Bitmap {
+        val spec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        view.measure(spec, spec)
+        val measuredWidth = view.measuredWidth
+        val measuredHeight = view.measuredHeight
+        view.layout(0, 0, measuredWidth, measuredHeight)
+        val bitmap = Bitmap.createBitmap(measuredWidth, measuredHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
+        return bitmap
     }
 
     private fun findPersonOnMap() {
@@ -726,17 +763,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             markerMap.forEach { it.value.isVisible = true }
         else
             markerMap.forEach { it.value.isVisible = false }
-    }
-    private fun createDrawableFromView(view: View): Bitmap {
-        val spec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        view.measure(spec, spec)
-        val measuredWidth = view.measuredWidth
-        val measuredHeight = view.measuredHeight
-        view.layout(0, 0, measuredWidth, measuredHeight)
-        val bitmap = Bitmap.createBitmap(measuredWidth, measuredHeight, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        view.draw(canvas)
-        return bitmap
     }
 
 

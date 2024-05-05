@@ -158,7 +158,7 @@ class ProfileFragment : Fragment() {
                     }
             }
         } else if(type == "avatar") {
-            val storageRef = FirebaseStorage.getInstance().getReference("avatar")
+            val storageRef = FirebaseStorage.getInstance().getReference("avatars")
             imageUri.let { uri ->
                 val uid: String = auth.currentUser!!.uid
                 val imageRef = storageRef.child(uid)
