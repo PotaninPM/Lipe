@@ -10,6 +10,11 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
+import android.graphics.RectF
 import android.graphics.drawable.ColorDrawable
 import androidx.fragment.app.Fragment
 import android.os.Bundle
@@ -436,28 +441,29 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                             val storage = FirebaseStorage.getInstance().getReference("avatars/${auth.currentUser!!.uid}")
                             storage.downloadUrl.addOnSuccessListener { url ->
                                 lifecycleScope.launch {
-                                    val bitmap: Bitmap = withContext(Dispatchers.IO) {
-                                        Coil.imageLoader(requireContext()).execute(
-                                            ImageRequest.Builder(requireContext())
-                                                .data(url)
-                                                .build()
-                                        ).drawable?.toBitmap()!!
+
+                                    try{
+                                        val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                                            val hardwareBitmap = Coil.imageLoader(requireContext()).execute(
+                                                ImageRequest.Builder(requireContext())
+                                                    .data(url)
+                                                    .build()
+                                            ).drawable?.toBitmap()!!
+
+                                            getRoundedCornerBitmap(hardwareBitmap.copy(Bitmap.Config.ARGB_8888, true), 10)
+                                        }
+
+                                        markerImageView.setImageBitmap(bitmap)
+
+                                        val markerOptions = MarkerOptions()
+                                            .position(LatLng(location.latitude, location.longitude))
+                                            .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
+                                            .anchor(0.5f, 1f)
+
+                                        myLocationMarker = mMap.addMarker(markerOptions)
+                                    } catch (e: Exception) {
+                                        Log.e("INFOG", e.message.toString())
                                     }
-
-                                    markerImageView.setImageBitmap(bitmap)
-
-                                    val markerOptions = MarkerOptions()
-                                        .position(LatLng(location.latitude, location.longitude))
-                                        .icon(
-                                            BitmapDescriptorFactory.fromBitmap(
-                                                createDrawableFromView(
-                                                    markerLayout
-                                                )
-                                            )
-                                        )
-                                        .anchor(0.5f, 1f)
-
-                                    myLocationMarker = mMap.addMarker(markerOptions)
                                 }
                             }
 
@@ -504,6 +510,26 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         } catch (e: Exception) {
             Log.e("INFOG", "${e.message}")
         }
+    }
+
+    fun getRoundedCornerBitmap(bitmap: Bitmap, pixels: Int): Bitmap {
+        val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(output)
+        val color = 0xff424242.toInt()
+        val paint = Paint()
+        val rect = Rect(0, 0, bitmap.width, bitmap.height)
+        val rectF = RectF(rect)
+        val roundPx = pixels.toFloat()
+
+        paint.isAntiAlias = true
+        canvas.drawARGB(0, 0, 0, 0)
+        paint.color = color
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint)
+
+        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+        canvas.drawBitmap(bitmap, rect, rect, paint)
+
+        return output
     }
 
 
