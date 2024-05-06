@@ -21,7 +21,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
-class ChatFragment : Fragment() {
+class ChatFragment(val chatUid: String) : Fragment() {
 
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
@@ -40,6 +40,8 @@ class ChatFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
 
+        fillOponentData()
+
         val view = binding.root
         return view
     }
@@ -47,7 +49,8 @@ class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        db = FirebaseDatabase.getInstance().getReference("chats/300f91a7-9112-426a-ab01-25729c986e9f/messages")
+        Log.d("INFOG", chatUid)
+        db = FirebaseDatabase.getInstance().getReference("chats/${chatUid}/messages")
 
         binding.recyclerViewChat.layoutManager = LinearLayoutManager(requireContext()).apply {
             reverseLayout = false
@@ -102,6 +105,55 @@ class ChatFragment : Fragment() {
 
 
     }
+
+    private fun fillOponentData() {
+        val myUid = auth.currentUser!!.uid
+        val dbRef_find_oponent = FirebaseDatabase.getInstance().getReference("chats/${chatUid}")
+
+        dbRef_find_oponent.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.child("user1_uid").value != myUid) {
+                    val dbRef_oponent = FirebaseDatabase.getInstance().getReference("users/${snapshot.value}")
+                    dbRef_oponent.addValueEventListener(object: ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val firstName = snapshot.child("firstName").value.toString()
+                            val lastName = snapshot.child("lastName").value.toString()
+                            val status = snapshot.child("status").value.toString()
+
+                            chatVM.setInfo(firstName + lastName, "online", chatUid)
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            TODO("Not yet implemented")
+                        }
+
+                    })
+                } else {
+                    val dbRef_oponent = FirebaseDatabase.getInstance().getReference("users/${snapshot.child("user2_uid").value}")
+                    dbRef_oponent.addValueEventListener(object: ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val firstName = snapshot.child("firstName").value.toString()
+                            val lastName = snapshot.child("lastName").value.toString()
+                            val status = snapshot.child("status").value.toString()
+
+                            chatVM.setInfo(firstName + lastName, "online", chatUid)
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            TODO("Not yet implemented")
+                        }
+
+                    })
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
 

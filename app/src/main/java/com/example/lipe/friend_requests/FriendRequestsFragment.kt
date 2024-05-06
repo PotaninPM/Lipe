@@ -75,6 +75,7 @@ class FriendRequestsFragment : Fragment() {
                             val uid: String = snapshot.child("uid").value.toString()
                             getUserPhotoUrl(queries.value.toString()) {url ->
                                 if(url != "-") {
+                                    Log.d("INFOG", username)
                                     val request = Request(url, username, uid, auth.currentUser!!.uid)
                                     requests.add(request)
                                     adapter.updateRequests(requests)
@@ -109,7 +110,7 @@ class FriendRequestsFragment : Fragment() {
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = childFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.all, fragment)
+        fragmentTransaction.replace(R.id.all_fr_req, fragment)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }

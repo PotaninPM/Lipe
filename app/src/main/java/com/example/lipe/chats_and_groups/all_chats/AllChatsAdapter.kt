@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.graphics.drawable.toBitmap
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import coil.Coil
@@ -17,6 +19,7 @@ import coil.request.ImageRequest
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.chat_fr.ChatFragment
 import com.example.lipe.databinding.ChatItemBinding
+import com.example.lipe.viewModels.AppVM
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -40,9 +43,11 @@ class AllChatsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.Ad
     private val lifecycleScope: LifecycleCoroutineScope = lifecycleScope
     inner class ChatsHolder(item: View): RecyclerView.ViewHolder(item) {
 
+
         val binding = ChatItemBinding.bind(item)
 
         fun bind(chat: ChatItem) = with(binding) {
+
             all.visibility = View.GONE
             avatar.visibility = View.GONE
 
@@ -116,7 +121,7 @@ class AllChatsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.Ad
                 if (context is AppCompatActivity) {
                     val bottomNavigationView = context.findViewById<BottomNavigationView>(R.id.bottom_navigation)
                     bottomNavigationView.visibility = View.GONE
-                    val fragment = ChatFragment()
+                    val fragment = ChatFragment(chat.uid)
                     val fragmentManager = context.supportFragmentManager
                     fragmentManager.beginTransaction()
                         .replace(R.id.all_chats_and_groups, fragment)

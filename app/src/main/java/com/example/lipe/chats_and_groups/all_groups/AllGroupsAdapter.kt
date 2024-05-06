@@ -87,7 +87,7 @@ class AllGroupsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.A
                 if (context is AppCompatActivity) {
                     val bottomNavigationView = context.findViewById<BottomNavigationView>(R.id.bottom_navigation)
                     bottomNavigationView.visibility = View.GONE
-                    val fragment = ChatFragment()
+                    val fragment = ChatFragment("-")
                     val fragmentManager = context.supportFragmentManager
                     fragmentManager.beginTransaction()
                         .replace(R.id.all_chats_and_groups, fragment)

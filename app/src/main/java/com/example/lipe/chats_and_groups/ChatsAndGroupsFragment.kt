@@ -75,7 +75,7 @@ class ChatsAndGroupsFragment : Fragment() {
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = childFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.all, fragment)
+        fragmentTransaction.replace(R.id.all_chats_and_groups, fragment)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }

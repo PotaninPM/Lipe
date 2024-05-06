@@ -18,4 +18,10 @@ class ChatVM : ViewModel() {
     private var _chatUid = MutableLiveData<String>()
     val chatUid: LiveData<String> = _chatUid
 
+    fun setInfo(name_ :String, status_: String, chatUid_:String) {
+        _name.value = name_
+        _status.value = status_
+        _chatUid.value = chatUid_
+    }
+
 }

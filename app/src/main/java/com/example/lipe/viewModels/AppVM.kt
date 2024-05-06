@@ -21,6 +21,8 @@ class AppVM: ViewModel() {
     var markersType: String = ""
 
     var sender: String = ""
+
+    var chat: String = ""
     fun setCoord(lat: Double, long: Double) {
         latitude = lat
         longtitude = long

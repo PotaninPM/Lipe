@@ -8,8 +8,8 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/shapeableImageView"
-        android:layout_width="@dimen/_52sdp"
-        android:layout_height="@dimen/_52sdp"
+        android:layout_width="@dimen/_46sdp"
+        android:layout_height="@dimen/_46sdp"
         android:scaleType="centerCrop"
         android:src="@drawable/ex2"
         app:layout_constraintStart_toStartOf="parent"

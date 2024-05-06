@@ -286,23 +286,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-
-
-
-    //smth wrong with that function, for tommorow
-//    private fun updateMarkerStatusView(marker: Marker?, status: String) {
-//        marker?.let { marker ->
-//            val markerLayout = marker.tag as? View
-//            if (markerLayout != null) {
-//                val statusView = markerLayout.findViewById<View>(R.id.statusView)
-//                when (status) {
-//                    "online" -> statusView.setBackgroundResource(R.drawable.online_spot)
-//                    "offline" -> statusView.setBackgroundResource(R.drawable.offline_spot)
-//                }
-//            }
-//        }
-//    }
-
     private fun addAllEvents() {
         dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
         // show all markers on map
