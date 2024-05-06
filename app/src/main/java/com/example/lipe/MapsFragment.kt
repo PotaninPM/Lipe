@@ -239,7 +239,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 if ((latitude != "null" && longitude != "null") && (latitude != "-" && longitude != "-")) {
                     val latLng = LatLng(latitude.toDouble(), longitude.toDouble())
                     updateFriendMarkerPosition(friendUid, latLng)
-
                 }
             }
 
@@ -250,12 +249,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         val statusListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val status = dataSnapshot.value as? String
-                if (status != null) {
-                    val marker = friendsMarkersMap[friendUid]
-                    if (marker != null) {
-                        //updateMarkerStatusView(marker, status)
-                    }
+                val status = dataSnapshot.value.toString()
+                if (status != "null" && friendsMarkersMap[friendUid] != null) {
+                    updateMarkerStatusView(friendUid, status)
                 }
                 Log.d("INFOG", "checkStatus $status")
             }
@@ -270,6 +266,26 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val dbRef_status = FirebaseDatabase.getInstance().getReference("users/${friendUid}/status")
         dbRef_status.addValueEventListener(statusListener)
     }
+
+    private fun updateMarkerStatusView(friendUid: String, status: String) {
+        try {
+            val marker = friendsMarkersMap[friendUid]
+            val markerLayout = marker?.tag as? View
+            if (markerLayout != null) {
+                val statusView = markerLayout.findViewById<View>(R.id.statusView)
+                if(status == "online") {
+                    statusView.setBackgroundResource(R.drawable.online_spot)
+                } else {
+                    statusView.setBackgroundResource(R.drawable.offline_spot)
+                }
+
+                marker.setIcon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
+            }
+        } catch (e: Exception) {
+            Log.e("INFOG", e.message.toString())
+        }
+    }
+
 
 
 
@@ -355,56 +371,73 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker_friend, null)
                 val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
 
+                val status_ref = FirebaseDatabase.getInstance().getReference("users/$friendUid/status")
                 val storage = FirebaseStorage.getInstance().getReference("avatars/$friendUid")
-                storage.downloadUrl.addOnSuccessListener { url ->
-                    lifecycleScope.launch {
-                        try {
-                            val bitmap: Bitmap = withContext(Dispatchers.Main.immediate) {
-                                Coil.imageLoader(requireContext()).execute(
-                                    ImageRequest.Builder(requireContext())
-                                        .data(url)
-                                        .allowHardware(false)
-                                        .build()
-                                ).drawable?.toBitmap()!!
-                            }
+                status_ref.addListenerForSingleValueEvent(object: ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val status = snapshot.value.toString()
+                        storage.downloadUrl.addOnSuccessListener { url ->
+                            lifecycleScope.launch {
+                                try {
+                                    val bitmap: Bitmap = withContext(Dispatchers.Main.immediate) {
+                                        Coil.imageLoader(requireContext()).execute(
+                                            ImageRequest.Builder(requireContext())
+                                                .data(url)
+                                                .allowHardware(false)
+                                                .build()
+                                        ).drawable?.toBitmap()!!
+                                    }
 
-                            markerImageView.setImageBitmap(bitmap)
+                                    markerImageView.setImageBitmap(bitmap)
+                                    if(status == "online") {
+                                        markerLayout.findViewById<View>(R.id.statusView).setBackgroundResource(R.drawable.online_spot)
+                                    } else {
+                                        markerLayout.findViewById<View>(R.id.statusView).setBackgroundResource(R.drawable.offline_spot)
+                                    }
 
-                            val markerOptions = MarkerOptions()
-                                .position(latLng)
-                                .icon(
-                                    BitmapDescriptorFactory.fromBitmap(
-                                        createDrawableFromView(
-                                            markerLayout
+                                    val markerOptions = MarkerOptions()
+                                        .position(latLng)
+                                        .icon(
+                                            BitmapDescriptorFactory.fromBitmap(
+                                                createDrawableFromView(
+                                                    markerLayout
+                                                )
+                                            )
                                         )
-                                    )
-                                )
-                                .anchor(0.5f, 1f)
+                                        .anchor(0.5f, 1f)
 
-                            val marker = mMap.addMarker(markerOptions)
+                                    val marker = mMap.addMarker(markerOptions)
+                                    marker?.tag = markerLayout
 
-                            val startPosition = marker!!.position
-                            val endPosition = latLng
+                                    val startPosition = marker!!.position
+                                    val endPosition = latLng
 
-                            val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
-                            valueAnimator.duration = 1000
-                            valueAnimator.interpolator = LinearInterpolator()
-                            valueAnimator.addUpdateListener { animation ->
-                                val v = animation.animatedFraction
-                                val newPosition = LatLng(
-                                    startPosition.latitude * (1 - v) + endPosition.latitude * v,
-                                    startPosition.longitude * (1 - v) + endPosition.longitude * v
-                                )
-                                marker.position = newPosition
+                                    val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
+                                    valueAnimator.duration = 1000
+                                    valueAnimator.interpolator = LinearInterpolator()
+                                    valueAnimator.addUpdateListener { animation ->
+                                        val v = animation.animatedFraction
+                                        val newPosition = LatLng(
+                                            startPosition.latitude * (1 - v) + endPosition.latitude * v,
+                                            startPosition.longitude * (1 - v) + endPosition.longitude * v
+                                        )
+                                        marker.position = newPosition
+                                    }
+                                    valueAnimator.start()
+
+                                    friendsMarkersMap[friendUid] = marker
+                                } catch (e: Exception) {
+                                    Log.e("INFOG", "Ошибка при загрузке изображения: ${e.message}")
+                                }
                             }
-                            valueAnimator.start()
-
-                            friendsMarkersMap[friendUid] = marker
-                        } catch (e: Exception) {
-                            Log.e("INFOG", "Ошибка при загрузке изображения: ${e.message}")
                         }
                     }
-                }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
             }
         } catch (e : Exception) {
             Log.e("INFOG", "${e}")
