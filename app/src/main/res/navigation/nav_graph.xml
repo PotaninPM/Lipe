@@ -107,7 +107,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.lipe.your_profile.ProfileFragment"
+        android:name="com.example.lipe.all_profiles.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action

@@ -39,7 +39,7 @@ import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.create_events.CreateEventFragment
 import com.example.lipe.databinding.FragmentMapsBinding
-import com.example.lipe.other_profile.OtherProfileFragment
+import com.example.lipe.all_profiles.other_profile.OtherProfileFragment
 import com.example.lipe.viewModels.EventEcoVM
 import com.example.lipe.view_events.EventFragment
 import com.example.lipe.viewModels.EventEntVM
@@ -679,7 +679,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 R.id.profile -> replaceFragment(ProfileFragment())
                 R.id.map -> replaceFragment(MapsFragment())
                 //R.id.rating -> replaceFragment(RatingFragment())
-                R.id.rating -> replaceFragment(OtherProfileFragment())
+                R.id.rating -> replaceFragment(OtherProfileFragment("2cncxoQcdpMuw9HyFUjljxYf4iv2"))
                 R.id.chats -> replaceFragment(ChatsAndGroupsFragment())
                 else -> {
 

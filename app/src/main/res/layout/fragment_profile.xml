@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".your_profile.ProfileFragment">
+    tools:context=".all_profiles.ProfileFragment">
     <data>
         <variable
             name="viewModel"

@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FFFFFF"
-    tools:context=".other_profile.OtherProfileFragment">
+    tools:context=".all_profiles.other_profile.OtherProfileFragment">
     <data>
         <variable
             name="viewModel"
-            type="com.example.lipe.viewModels.ProfileVM" />
+            type="com.example.lipe.viewModels.OtherProfileVM" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="@dimen/_50sdp"
-    tools:context=".your_profile.cur_events.CurEventsInProfileFragment">
+    tools:context=".all_profiles.cur_events.CurEventsInProfileFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
