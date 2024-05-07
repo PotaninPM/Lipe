@@ -43,6 +43,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/avatar_chat_group"
         android:layout_width="@dimen/_42sdp"
         android:layout_height="@dimen/_42sdp"
         android:src="@drawable/ex2"

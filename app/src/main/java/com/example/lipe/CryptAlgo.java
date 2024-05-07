@@ -19,11 +19,8 @@ public class CryptAlgo {
     }
 
     public static String encrypt(String s) {
-
         StringBuilder res = new StringBuilder();
-
         ArrayList<Integer> num = new ArrayList<>();
-
         char[] symbols = {
                 'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м',
                 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ',
@@ -39,12 +36,11 @@ public class CryptAlgo {
                 '/', '~', ' ', '»', '«', '—', '"', '\''
         };
 
-        for(int i = 1; i < s.length(); i++) {
+        for(int i = 1; i < s.length() - 3; i++) {
             boolean fir = searchChar(s.charAt(i));
             boolean sec = searchChar(s.charAt(i + 1));
             boolean thir = searchChar(s.charAt(i + 2));
             boolean four = searchChar(s.charAt(i + 3));
-
             if((fir && thir && !sec) || (fir && !thir && !sec && !four)) {
                 num.add(Integer.parseInt(String.valueOf(s.charAt(i))));
                 i+=1;
@@ -67,6 +63,7 @@ public class CryptAlgo {
 
         return res.toString();
     }
+
     public static String crypt(String s) {
 
         StringBuilder res = new StringBuilder();

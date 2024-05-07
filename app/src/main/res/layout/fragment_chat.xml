@@ -9,6 +9,10 @@
         <variable
             name="viewModel"
             type="com.example.lipe.viewModels.ChatVM" />
+
+        <variable
+            name="ChatFragment"
+            type="com.example.lipe.chats_and_groups.chat_fr.ChatFragment" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -45,7 +49,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/avatar"
+                    android:id="@+id/avatar_chat"
                     android:layout_width="@dimen/_38sdp"
                     android:layout_height="@dimen/_38sdp"
                     android:layout_marginStart="@dimen/_15sdp"
@@ -64,8 +68,8 @@
                     android:fontFamily="@font/roboto_bold"
                     android:text="@{viewModel.name}"
                     android:textSize="@dimen/_14sdp"
-                    app:layout_constraintStart_toEndOf="@+id/avatar"
-                    app:layout_constraintTop_toTopOf="@+id/avatar" />
+                    app:layout_constraintStart_toEndOf="@+id/avatar_chat"
+                    app:layout_constraintTop_toTopOf="@+id/avatar_chat" />
 
                 <TextView
                     android:id="@+id/online_or_offline"
@@ -77,8 +81,8 @@
                     android:textColor="#32D04C"
                     android:textFontWeight="400"
                     android:textSize="@dimen/_12sdp"
-                    app:layout_constraintBottom_toBottomOf="@+id/avatar"
-                    app:layout_constraintStart_toEndOf="@+id/avatar"
+                    app:layout_constraintBottom_toBottomOf="@+id/avatar_chat"
+                    app:layout_constraintStart_toEndOf="@+id/avatar_chat"
                     app:layout_constraintTop_toBottomOf="@+id/name" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.appcompat.widget.Toolbar>
@@ -89,7 +93,6 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_42sdp"
             android:background="#F7FAFF"
-
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:orientation="horizontal">

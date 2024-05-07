@@ -1,25 +1,34 @@
 package com.example.lipe.chats_and_groups.chat_fr
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.Coil
+import coil.memory.MemoryCache
+import coil.request.ImageRequest
 import com.example.lipe.CryptAlgo
-import com.example.lipe.MapsFragment
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.chats_and_groups.Message
-import com.example.lipe.chats_and_groups.all_chats.AllChatsFragment
 import com.example.lipe.databinding.FragmentChatBinding
 import com.example.lipe.viewModels.ChatVM
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ChatFragment(val chatUid: String) : Fragment() {
 
@@ -40,7 +49,12 @@ class ChatFragment(val chatUid: String) : Fragment() {
 
         auth = FirebaseAuth.getInstance()
 
-        fillOponentData()
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = chatVM
+
+            fillOponentData()
+        }
 
         val view = binding.root
         return view
@@ -49,7 +63,6 @@ class ChatFragment(val chatUid: String) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("INFOG", chatUid)
         db = FirebaseDatabase.getInstance().getReference("chats/${chatUid}/messages")
 
         binding.recyclerViewChat.layoutManager = LinearLayoutManager(requireContext()).apply {
@@ -62,9 +75,13 @@ class ChatFragment(val chatUid: String) : Fragment() {
 
         binding.sendBtn.setOnClickListener {
             val messageText = binding.messageInput.text.toString().trim()
-            if(messageText.isNotEmpty()) {
+            if (messageText.isNotEmpty()) {
                 val currentUser = FirebaseAuth.getInstance().currentUser
-                val message = Message(CryptAlgo.crypt(messageText), currentUser?.uid ?: "", System.currentTimeMillis())
+                val message = Message(
+                    CryptAlgo.crypt(messageText),
+                    currentUser?.uid ?: "",
+                    System.currentTimeMillis()
+                )
                 db.push().setValue(message)
                 binding.messageInput.text?.clear()
             }
@@ -79,7 +96,8 @@ class ChatFragment(val chatUid: String) : Fragment() {
                 .addToBackStack(null)
                 .commit()
 
-            val bottomNav = (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
+            val bottomNav =
+                (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
             bottomNav.visibility = View.VISIBLE
         }
 
@@ -89,7 +107,8 @@ class ChatFragment(val chatUid: String) : Fragment() {
                 for (messageSnapshot in snapshot.children) {
                     val text = messageSnapshot.child("text").getValue(String::class.java)
                     val senderId = messageSnapshot.child("senderId").getValue(String::class.java)
-                    val timestamp = messageSnapshot.child("time").getValue(Long::class.java)
+                    val timestamp =
+                        messageSnapshot.child("time").getValue(Long::class.java)
                     val message = Message(text ?: "", senderId ?: "", timestamp ?: 0)
                     messages.add(message)
                 }
@@ -108,43 +127,48 @@ class ChatFragment(val chatUid: String) : Fragment() {
 
     private fun fillOponentData() {
         val myUid = auth.currentUser!!.uid
-        val dbRef_find_oponent = FirebaseDatabase.getInstance().getReference("chats/${chatUid}")
+        val dbRef_find_oponent =
+            FirebaseDatabase.getInstance().getReference("chats/${chatUid}")
 
-        dbRef_find_oponent.addListenerForSingleValueEvent(object: ValueEventListener {
+        dbRef_find_oponent.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.child("user1_uid").value != myUid) {
-                    val dbRef_oponent = FirebaseDatabase.getInstance().getReference("users/${snapshot.value}")
-                    dbRef_oponent.addValueEventListener(object: ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            val firstName = snapshot.child("firstName").value.toString()
-                            val lastName = snapshot.child("lastName").value.toString()
-                            val status = snapshot.child("status").value.toString()
+                val user1_uid = snapshot.child("user1_uid").value.toString()
+                val user2_uid = snapshot.child("user2_uid").value.toString()
 
-                            chatVM.setInfo(firstName + lastName, "online", chatUid)
+                val opponentUid = if (myUid == user1_uid) user2_uid else user1_uid
+
+                val dbRef_oponent =
+                    FirebaseDatabase.getInstance().getReference("users/${opponentUid}")
+
+                val storage_oponent = FirebaseStorage.getInstance().getReference("avatars/${opponentUid}")
+                storage_oponent.downloadUrl.addOnSuccessListener {url ->
+                    lifecycleScope.launch {
+                        val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                            Coil.imageLoader(requireContext()).execute(
+                                ImageRequest.Builder(requireContext())
+                                    .data(url)
+                                    .build()
+                            ).drawable?.toBitmap()!!
                         }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            TODO("Not yet implemented")
-                        }
-
-                    })
-                } else {
-                    val dbRef_oponent = FirebaseDatabase.getInstance().getReference("users/${snapshot.child("user2_uid").value}")
-                    dbRef_oponent.addValueEventListener(object: ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            val firstName = snapshot.child("firstName").value.toString()
-                            val lastName = snapshot.child("lastName").value.toString()
-                            val status = snapshot.child("status").value.toString()
-
-                            chatVM.setInfo(firstName + lastName, "online", chatUid)
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            TODO("Not yet implemented")
-                        }
-
-                    })
+                        binding.avatarChat.setImageBitmap(bitmap)
+                    }
                 }
+
+                dbRef_oponent.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val firstName = snapshot.child("firstName").value.toString()
+                        val lastName = snapshot.child("lastName").value.toString()
+                        val status = snapshot.child("status").value.toString()
+
+                        chatVM.setInfo("$firstName $lastName", status, chatUid)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.d("INFOG", "error")
+                    }
+
+                })
+
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -157,7 +181,8 @@ class ChatFragment(val chatUid: String) : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        val bottomNav = (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        val bottomNav =
+            (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNav.visibility = View.VISIBLE
 
         _binding = null

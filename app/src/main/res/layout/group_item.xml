@@ -6,7 +6,7 @@
     android:layout_height="@dimen/_62sdp">
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/avatar"
+        android:id="@+id/avatar_chat"
         android:layout_width="@dimen/_45sdp"
         android:layout_height="@dimen/_45sdp"
         android:layout_marginStart="@dimen/_12sdp"
@@ -26,8 +26,8 @@
         android:fontFamily="@font/roboto_bold"
         android:text="Mike Potanin"
         android:textSize="@dimen/_13sdp"
-        app:layout_constraintStart_toEndOf="@+id/avatar"
-        app:layout_constraintTop_toTopOf="@+id/avatar" />
+        app:layout_constraintStart_toEndOf="@+id/avatar_chat"
+        app:layout_constraintTop_toTopOf="@+id/avatar_chat" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,7 +37,7 @@
         android:textSize="@dimen/_12sdp"
         android:layout_marginStart="@dimen/_12sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/avatar"
+        app:layout_constraintStart_toEndOf="@+id/avatar_chat"
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <View

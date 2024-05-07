@@ -90,8 +90,6 @@ class EventEntFragment : BottomSheetDialogFragment() {
             }
         }
 
-
-        //eventEntVM = ViewModelProvider(requireActivity()).get(EventEntVM::class.java)
         val view = binding.root
         return view
     }

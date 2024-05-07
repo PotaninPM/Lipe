@@ -1,220 +1,317 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FFFFFF"
-    tools:context=".OtherProfileFragment">
+    tools:context=".other_profile.OtherProfileFragment">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.lipe.viewModels.ProfileVM" />
+    </data>
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/imageView9"
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_202sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/backgr"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        android:layout_height="match_parent">
 
-    <!--    <LinearLayout-->
-<!--        android:id="@+id/lay1"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content">-->
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/eventAvatar"
-        android:layout_width="@dimen/_116sdp"
-        android:layout_height="@dimen/_116sdp"
-        android:layout_marginTop="148dp"
-        android:src="@drawable/upload_photo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <LinearLayout
-        android:id="@+id/lay1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/_6sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventAvatar">
-
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="wrap_content"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/all"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="@font/interextrabold"
-            android:text="Mark Zackerberg"
-            android:textAlignment="center"
-            android:textSize="@dimen/_17sdp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-<!--    </LinearLayout>-->
-
-
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="@dimen/_22sdp"
-        android:layout_height="@dimen/_22sdp"
-        android:src="@drawable/menu_in_other_profile"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:layout_marginEnd="@dimen/_10sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="match_parent"
-        android:background="@drawable/profile_rates"
-        android:layout_height="@dimen/_62sdp"
-        android:layout_marginStart="@dimen/_10sdp"
-        android:layout_marginEnd="@dimen/_10sdp"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/_6sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lay1">
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:clipToPadding="false">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="152"
-                android:textSize="@dimen/_17sdp"
-                android:textStyle="bold" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/nunito_sans"
-                android:text="Рейтинг"
-                android:textSize="@dimen/_15sdp" />
+                <ProgressBar
+                    android:id="@+id/loadingProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/allProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/linearLayout"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/theme"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_132sdp"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/ImageStyle_theme"
+                        app:srcCompat="@drawable/profile_theme" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="15"
-                android:textSize="@dimen/_17sdp"
-                android:textStyle="bold" />
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/avatar"
+                        android:layout_width="@dimen/_120sdp"
+                        android:layout_height="@dimen/_120sdp"
+                        android:layout_marginTop="@dimen/_62sdp"
+                        android:padding="@dimen/_2sdp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ex2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.476"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/ImageStyle_Circle"
+                        app:strokeColor="#015EFF"
+                        app:strokeWidth="@dimen/_2sdp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/nunito_sans"
-                android:text="Друзей"
-                android:textColor="#4A4949"
-                android:textSize="@dimen/_15sdp" />
+                    <LinearLayout
+                        android:id="@+id/lay1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/avatar">
 
-        </LinearLayout>
+                        <TextView
+                            android:id="@+id/textView6"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:fontFamily="@font/interextrabold"
+                            android:text="@{viewModel.nameLastName}"
+                            android:textAlignment="center"
+                            android:textSize="@dimen/_17sdp"
+                            android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout"
-            app:layout_constraintTop_toTopOf="parent">
+                    </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="15"
-                android:textSize="@dimen/_17sdp"
-                android:textStyle="bold" />
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/constraintLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_62sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:background="@drawable/profile_rates"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/lay1">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@font/nunito_sans"
-                android:text="Событий"
-                android:textSize="@dimen/_15sdp" />
+                        <LinearLayout
+                            android:id="@+id/linearLayout10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@{viewModel.ratingPoints}"
+                                android:textSize="@dimen/_17sdp"
+                                android:textStyle="bold" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/getPoints"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_35sdp"
-        android:layout_marginStart="@dimen/_16sdp"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:layout_marginEnd="@dimen/_16sdp"
-        android:background="@drawable/add_to_friend_btn"
-        android:text="Добавить в друзья"
-        android:textColor="@color/quantum_white_100"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/nunito_sans"
+                                android:text="Рейтинг"
+                                android:textSize="@dimen/_15sdp" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:background="@color/quantum_white_100"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/getPoints">
+                        </LinearLayout>
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="События" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/linearLayout10"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Посты" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@{viewModel.friendsAmount}"
+                                android:textSize="@dimen/_17sdp"
+                                android:textStyle="bold" />
 
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Отзывы" />
-    </com.google.android.material.tabs.TabLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/nunito_sans"
+                                android:text="Друзей"
+                                android:textSize="@dimen/_15sdp" />
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/switcher"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+                        </LinearLayout>
 
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/linearLayout10"
+                            app:layout_constraintTop_toTopOf="parent">
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@{viewModel.eventsAmount}"
+                                android:textSize="@dimen/_17sdp"
+                                android:textStyle="bold" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:fontFamily="@font/nunito_sans"
+                                android:text="Событий"
+                                android:textSize="@dimen/_15sdp" />
+
+                        </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/linearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:layout_marginEnd="@dimen/_15sdp"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+                        <Button
+                            android:id="@+id/elevatedButton"
+                            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" Написать другу"
+                            app:icon="@drawable/lock"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <Button
+                            android:id="@+id/button"
+                            style="@style/Widget.Material3.Button.Icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Добавить друга"
+                            app:icon="@drawable/add"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/linearTab"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_50sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:background="@drawable/profiletabs"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                        tools:layout_editor_absoluteX="11dp">
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnCurEvent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="@dimen/_8sdp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:background="@drawable/profiletabsbtns"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/nunitosanssemibold"
+                            android:gravity="center"
+                            android:paddingStart="@dimen/_14sdp"
+                            android:paddingEnd="@dimen/_14sdp"
+                            android:singleLine="true"
+                            android:text="Текущие"
+                            android:textAllCaps="false"
+                            android:textColor="@color/quantum_white_100"
+                            app:layout_constraintStart_toStartOf="parent"
+                            tools:ignore="TextSizeCheck"
+                            tools:layout_editor_absoluteY="5dp" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnPastEvent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:background="@drawable/profiletabsbtns"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/nunitosanssemibold"
+                            android:gravity="center"
+                            android:paddingStart="@dimen/_14sdp"
+                            android:paddingEnd="@dimen/_14sdp"
+                            android:singleLine="true"
+                            android:text="Прошедшие"
+                            android:textAllCaps="false"
+                            android:textColor="@color/quantum_white_100"
+                            app:layout_constraintEnd_toStartOf="@+id/btnYourEvents"
+                            app:layout_constraintStart_toEndOf="@+id/btnCurEvent"
+                            tools:ignore="TextSizeCheck"
+                            tools:layout_editor_absoluteY="5dp" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnYourEvents"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:background="@drawable/profiletabsbtns"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/nunitosanssemibold"
+                            android:gravity="center"
+                            android:paddingStart="@dimen/_14sdp"
+                            android:paddingEnd="@dimen/_14sdp"
+                            android:singleLine="true"
+                            android:text="Созданные"
+                            android:textAllCaps="false"
+                            android:textColor="@color/quantum_white_100"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            tools:ignore="TextSizeCheck" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/switcher"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearTab" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.drawerlayout.widget.DrawerLayout></layout>

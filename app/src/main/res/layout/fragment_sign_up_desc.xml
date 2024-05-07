@@ -62,7 +62,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/avatar"
+                        android:id="@+id/avatar_upload"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:padding="@dimen/_2sdp"

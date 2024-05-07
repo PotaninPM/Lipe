@@ -158,8 +158,8 @@ class SignUpDescFragment : Fragment() {
         if (uri != null) {
             binding.imageArrowup.visibility = View.GONE
             binding.txtUpload.visibility = View.GONE
-            binding.avatar.setImageURI(uri)
-            binding.avatar.setStrokeColorResource(R.color.green)
+            binding.avatarUpload.setImageURI(uri)
+            binding.avatarUpload.setStrokeColorResource(R.color.green)
             upload_photo = true
             imageUri = uri
             Log.d("INFOG", imageUri.toString())
