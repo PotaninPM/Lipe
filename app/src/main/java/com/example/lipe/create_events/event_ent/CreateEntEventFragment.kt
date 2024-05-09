@@ -137,9 +137,6 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         val adapter = CustomAdapter(requireContext(), items)
 
         spinner.adapter = adapter
-//        binding.setDateLay.setOnClickListener {
-//            getDateTime()
-//        }
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -178,6 +175,10 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             }
         }
 
+        binding.dateLay.setOnClickListener {
+            getDateTime()
+        }
+
         binding.photoLay1.setOnClickListener {
             selectImage1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
@@ -192,6 +193,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     val selectImage1 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             binding.photo1.setImageURI(uri)
+            binding.arrowUp.visibility = View.GONE
+            binding.textImg.visibility = View.GONE
             imageUri1 = uri
             image1 = "1"
             Log.d("INFOG", imageUri1.toString())
@@ -202,6 +205,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     val selectImage2 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             binding.photo2.setImageURI(uri)
+            binding.arrowUp1.visibility = View.GONE
+            binding.textImg1.visibility = View.GONE
             imageUri2 = uri
             image2 = "1"
             Log.d("INFOG", imageUri1.toString())
@@ -212,6 +217,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     val selectImage3 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             binding.photo3.setImageURI(uri)
+            binding.arrowUp2.visibility = View.GONE
+            binding.textImg2.visibility = View.GONE
             imageUri3 = uri
             image3 = "1"
             Log.d("INFOG", imageUri1.toString())
@@ -425,17 +432,24 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             timePicker.addOnPositiveButtonClickListener {
                 savedHour = timePicker.hour
                 savedMinute = timePicker.minute
-                //onTimeSet_()
+                onTimeSet_()
             }
             timePicker.show(childFragmentManager, "time_picker_tag")
         }
 
         datePicker.show(childFragmentManager, "date_picker_tag")
     }
-//    fun onTimeSet_() {
-//        binding.setDateLay.setBackgroundResource(R.drawable.choose_date_success)
-//        binding.setDate.setText("$savedYear.$savedMonth.$savedDay в $savedHour:$savedMinute")
-//    }
+    fun onTimeSet_() {
+        binding.notifySetDate.visibility = View.GONE
+        binding.timeText.visibility = View.VISIBLE
+        binding.timeText.text = String.format("%02d:%02d", savedHour, savedMinute)
+
+        val months = resources.getStringArray(R.array.months)
+        val monthName = months[savedMonth]
+
+        binding.dateText.visibility = View.VISIBLE
+        binding.dateText.text = String.format("%d %s %d года", savedDay, monthName, savedYear)
+    }
 
     override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
         TODO("Not yet implemented")

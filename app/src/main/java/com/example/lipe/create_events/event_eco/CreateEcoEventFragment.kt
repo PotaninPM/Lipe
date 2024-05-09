@@ -254,9 +254,8 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
                 var title = binding.etNameinput.text.toString().trim()
 
-                var adress = binding.adressText.text.toString().trim()
                 var coord: List<Double> = listOf(appVM.latitude, appVM.longtitude)
-                var date_of_meeting: String = binding.setDate.text.toString()
+                //var date_of_meeting: String = binding.text.toString()
                 val minPeople: Int = binding.etMinInputText.text.toString().trim().toInt()
                 var maxPeople: Int = binding.etMaxInputText.text.toString().trim().toInt()
                 var desc: String = binding.etDescInputText.text.toString().trim()
@@ -273,10 +272,10 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     auth.currentUser?.uid.toString(),
                     current,
                     title,
-                    adress,
+                    "-",
                     coord,
                     9,
-                    date_of_meeting,
+                    "-",
                     minPeople,
                     maxPeople,
                     desc,
@@ -373,7 +372,7 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     }
     fun onTimeSet_() {
         binding.setDateLay.setBackgroundResource(R.drawable.choose_date_success)
-        binding.setDate.setText("$savedYear.$savedMonth.$savedDay в $savedHour:$savedMinute")
+        //binding.setDate.setText("$savedYear.$savedMonth.$savedDay в $savedHour:$savedMinute")
     }
 
     override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {

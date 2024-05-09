@@ -28,7 +28,7 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/photo_lay_1"
                         android:layout_width="@dimen/_290sdp"
                         android:layout_height="@dimen/_210sdp"
@@ -37,19 +37,31 @@
                         <ImageView
                             android:id="@+id/photo1"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-                        <!--                            <ImageView-->
-                        <!--                                android:layout_width="wrap_content"-->
-                        <!--                                android:layout_height="wrap_content"-->
-                        <!--                                android:layout_gravity="center"-->
-                        <!--                                android:src="@drawable/img_arrowup" />-->
+                            android:layout_height="match_parent" />
 
+                        <ImageView
+                            android:id="@+id/arrowUp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/img_arrowup"
+                            app:layout_constraintBottom_toTopOf="@+id/textImg"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
 
+                        <TextView
+                            android:id="@+id/textImg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="Нажмите, чтобы загрузить фото"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-                    </LinearLayout>
-
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/photo_lay_2"
                         android:layout_width="@dimen/_290sdp"
                         android:layout_height="@dimen/_210sdp"
@@ -60,9 +72,29 @@
                             android:id="@+id/photo2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"/>
-                    </LinearLayout>
+                        <ImageView
+                            android:id="@+id/arrowUp1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/img_arrowup"
+                            app:layout_constraintBottom_toTopOf="@+id/textImg1"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
 
-                    <LinearLayout
+                        <TextView
+                            android:id="@+id/textImg1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="Нажмите, чтобы загрузить фото"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/photo_lay_3"
                         android:layout_width="@dimen/_290sdp"
                         android:layout_height="@dimen/_210sdp"
@@ -74,7 +106,27 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"/>
 
-                    </LinearLayout>
+                        <ImageView
+                            android:id="@+id/arrowUp2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/img_arrowup"
+                            app:layout_constraintBottom_toTopOf="@+id/textImg2"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textImg2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="Нажмите, чтобы загрузить фото"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </LinearLayout>
 
@@ -150,70 +202,14 @@
                         android:layout_height="@dimen/_36sdp"
                         android:background="@drawable/choose_date_lay"
                         android:orientation="horizontal"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:layout_editor_absoluteX="7dp">
+                        app:layout_constraintTop_toTopOf="parent">
 
-                        <ImageView
-                            android:layout_width="@dimen/_24sdp"
-                            android:layout_height="@dimen/_24sdp"
-                            android:layout_marginStart="@dimen/_4sdp"
-                            android:src="@drawable/calendar"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/setDate"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="@dimen/_26sdp"
-                            android:layout_marginTop="@dimen/_3sdp"
-                            android:layout_marginEnd="@dimen/_6sdp"
-                            android:layout_marginBottom="@dimen/_3sdp"
-                            android:gravity="center"
-                            android:text="Выберите время встречи"
-                            android:textSize="@dimen/_13sdp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-
-                <LinearLayout
-                    android:id="@+id/adress"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_36sdp"
-                    android:layout_marginStart="@dimen/_6sdp"
-                    android:layout_marginEnd="@dimen/_6sdp"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/choose_date_lay"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="@dimen/_24sdp"
-                        android:layout_height="@dimen/_24sdp"
-                        android:src="@drawable/location"
-                        android:layout_marginStart="@dimen/_4sdp"
-                        android:layout_gravity="center"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <TextView
-                        android:id="@+id/adress_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="@dimen/_6sdp"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        android:layout_marginBottom="@dimen/_3sdp"
-                        android:text="Адрес"
-                        android:gravity="center"
-                        android:textSize="@dimen/_13sdp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

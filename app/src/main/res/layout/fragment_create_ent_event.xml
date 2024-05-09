@@ -42,17 +42,17 @@
                             android:layout_height="match_parent" />
 
                         <ImageView
-                            android:id="@+id/imageView3"
+                            android:id="@+id/arrowUp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:src="@drawable/img_arrowup"
-                            app:layout_constraintBottom_toTopOf="@+id/textView10"
+                            app:layout_constraintBottom_toTopOf="@+id/textImg"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
 
                         <TextView
-                            android:id="@+id/textView10"
+                            android:id="@+id/textImg"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
@@ -75,17 +75,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"/>
                         <ImageView
-                            android:id="@+id/imageView4"
+                            android:id="@+id/arrowUp1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:src="@drawable/img_arrowup"
-                            app:layout_constraintBottom_toTopOf="@+id/textView11"
+                            app:layout_constraintBottom_toTopOf="@+id/textImg1"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
 
                         <TextView
-                            android:id="@+id/textView11"
+                            android:id="@+id/textImg1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
@@ -96,7 +96,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/photo_lay_3"
                         android:layout_width="@dimen/_290sdp"
                         android:layout_height="@dimen/_210sdp"
@@ -108,7 +108,27 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"/>
 
-                    </LinearLayout>
+                        <ImageView
+                            android:id="@+id/arrowUp2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/img_arrowup"
+                            app:layout_constraintBottom_toTopOf="@+id/textImg2"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textImg2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="Нажмите, чтобы загрузить фото"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </LinearLayout>
 
@@ -167,33 +187,51 @@
                         android:textColor="#FFFFFF" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/dateLay"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_42sdp"
                     android:orientation="horizontal"
                     android:gravity="start"
+                    android:background="@drawable/choose_date_lay"
                     android:layout_marginStart="@dimen/_8sdp"
                     android:layout_marginEnd="@dimen/_8sdp"
                     android:layout_marginTop="@dimen/_8sdp">
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        app:boxStrokeColor="?attr/colorControlNormal">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/dateText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Максимум людей"
-                            android:inputType="number"
-                            android:gravity="center"
-                            android:singleLine="true"
-                            android:textColor="#FFFFFF"
-                            tools:ignore="Autofill" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/notify_set_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textSize="@dimen/_13sdp"
+                        android:text="Нажмите, чтобы установить дату встречи"/>
+
+                    <TextView
+                        android:id="@+id/timeText"
+                        android:visibility="invisible"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:fontFamily="@font/nunitosansextrabold"
+                        android:text="13:25"
+                        android:textSize="@dimen/_20sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/dateText"
+                        android:visibility="invisible"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunitosansregular"
+                        android:text="25 октября 2024 года"
+                        android:textSize="@dimen/_16sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/timeText"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/spinner1"
