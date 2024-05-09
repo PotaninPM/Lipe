@@ -102,9 +102,6 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         val adapter = CustomAdapter(requireContext(), items)
 
         spinner.adapter = adapter
-        binding.setDateLay.setOnClickListener {
-            getDateTime()
-        }
 
         val view = binding.root
         return view
@@ -128,6 +125,10 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     setDialog("Вы не загрузили ни одного фото", "Вы должны загрузить минимум одно фото", "Хорошо")
                 }
             }
+        }
+
+        binding.dateLay.setOnClickListener {
+            getDateTime()
         }
 
         binding.photoLay1.setOnClickListener {
@@ -371,8 +372,17 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         datePicker.show(childFragmentManager, "date_picker_tag")
     }
     fun onTimeSet_() {
-        binding.setDateLay.setBackgroundResource(R.drawable.choose_date_success)
-        //binding.setDate.setText("$savedYear.$savedMonth.$savedDay в $savedHour:$savedMinute")
+        binding.notifySetDate.visibility = View.GONE
+        binding.timeText.visibility = View.VISIBLE
+        binding.timeText.text = String.format("%02d:%02d", savedHour, savedMinute)
+
+        val months = resources.getStringArray(R.array.months)
+        val monthName = months[savedMonth]
+
+        binding.dateText.visibility = View.VISIBLE
+        binding.dateText.text = String.format("%d %s %d года", savedDay, monthName, savedYear)
+
+        binding.dateLay.setBackgroundResource(R.drawable.chosen_date_lay)
     }
 
     override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {

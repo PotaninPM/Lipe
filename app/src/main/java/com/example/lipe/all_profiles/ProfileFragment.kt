@@ -1,4 +1,6 @@
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
@@ -20,6 +22,7 @@ import com.example.lipe.databinding.FragmentProfileBinding
 import com.example.lipe.viewModels.ProfileVM
 import com.example.lipe.all_profiles.cur_events.CurEventsInProfileFragment
 import com.example.lipe.all_profiles.cur_events.YourEventsFragment
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -39,17 +42,67 @@ class ProfileFragment : Fragment() {
 
     private val profileVM: ProfileVM by activityViewModels()
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        switchTabs(0)
+
+        binding.apply {
+            theme.setOnClickListener {
+                selectImageTheme.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+
+            avatar.setOnClickListener {
+                selectImageAvatar.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+
+            binding.buttonCur.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0067cf"))
+
+            binding.toggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
+                val buttons = arrayOf(
+                    R.id.buttonCur,
+                    R.id.buttonPast,
+                    R.id.buttonMy
+                )
+
+                if (isChecked) {
+                    group.findViewById<MaterialButton>(checkedId).backgroundTintList = ColorStateList.valueOf(
+                        Color.parseColor("#0067cf"))
+                    group.findViewById<MaterialButton>(checkedId).isChecked = true
+
+                    buttons.forEach { buttonId ->
+                        if (buttonId != checkedId) {
+                            group.findViewById<MaterialButton>(buttonId).backgroundTintList = ColorStateList.valueOf(
+                                Color.TRANSPARENT)
+                            group.findViewById<MaterialButton>(buttonId).isChecked = false
+                        }
+                    }
+
+                    when (checkedId) {
+                        R.id.buttonCur -> {
+                            switchTabs(0)
+                        }
+                        R.id.buttonPast -> {
+                            switchTabs(1)
+                        }
+                        R.id.buttonMy -> {
+                            switchTabs(2)
+                        }
+                    }
+                }
+            }
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val view = binding.root
-        originalBackground = binding.btnCurEvent.background
+//        originalBackground = binding.btnCurEvent.background
 
-        binding.btnYourEvents.setBackgroundResource(0)
-        binding.btnPastEvent.setBackgroundResource(0)
-        binding.btnCurEvent.background = originalBackground
+//        binding.btnYourEvents.setBackgroundResource(0)
+//        binding.btnPastEvent.setBackgroundResource(0)
+//        binding.btnCurEvent.background = originalBackground
 
         dbRef = FirebaseDatabase.getInstance().getReference("users")
         auth = FirebaseAuth.getInstance()
@@ -80,33 +133,6 @@ class ProfileFragment : Fragment() {
                     loadingProgressBar.visibility = View.GONE
                     allProfile.visibility = View.VISIBLE
                 }
-            }
-
-            theme.setOnClickListener {
-                selectImageTheme.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            }
-
-            avatar.setOnClickListener {
-                selectImageAvatar.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            }
-
-            btnCurEvent.setOnClickListener {
-                switchTabs(0)
-                btnYourEvents.setBackgroundResource(0)
-                btnPastEvent.setBackgroundResource(0)
-                btnCurEvent.background = originalBackground
-            }
-            btnPastEvent.setOnClickListener {
-                switchTabs(1)
-                btnYourEvents.setBackgroundResource(0)
-                btnCurEvent.setBackgroundResource(0)
-                btnPastEvent.background = originalBackground
-            }
-            btnYourEvents.setOnClickListener {
-                switchTabs(2)
-                btnCurEvent.setBackgroundResource(0)
-                btnPastEvent.setBackgroundResource(0)
-                btnYourEvents.background = originalBackground
             }
         }
 
@@ -262,11 +288,6 @@ class ProfileFragment : Fragment() {
                 .replace(R.id.switcher, it)
                 .commit()
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        switchTabs(0)
     }
 
     override fun onDestroyView() {

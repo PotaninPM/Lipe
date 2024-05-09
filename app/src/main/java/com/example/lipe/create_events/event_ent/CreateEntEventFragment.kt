@@ -449,6 +449,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
         binding.dateText.visibility = View.VISIBLE
         binding.dateText.text = String.format("%d %s %d года", savedDay, monthName, savedYear)
+
+        binding.dateLay.setBackgroundResource(R.drawable.chosen_date_lay)
     }
 
     override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {

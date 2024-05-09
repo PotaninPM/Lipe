@@ -188,82 +188,112 @@
                         </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/linearTab"
+<!--                    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                        android:id="@+id/linearTab"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="@dimen/_50sdp"-->
+<!--                        android:layout_marginTop="@dimen/_12sdp"-->
+<!--                        android:layout_marginStart="@dimen/_10sdp"-->
+<!--                        android:layout_marginEnd="@dimen/_10sdp"-->
+<!--                        android:background="@drawable/profiletabs"-->
+<!--                        android:gravity="center_horizontal"-->
+<!--                        android:orientation="horizontal"-->
+<!--                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"-->
+<!--                        tools:layout_editor_absoluteX="11dp">-->
+
+<!--                        <androidx.appcompat.widget.AppCompatButton-->
+<!--                            android:id="@+id/btnCurEvent"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:layout_marginStart="@dimen/_8sdp"-->
+<!--                            android:layout_marginTop="@dimen/_8sdp"-->
+<!--                            android:layout_marginBottom="@dimen/_8sdp"-->
+<!--                            android:background="@drawable/profiletabsbtns"-->
+<!--                            android:ellipsize="end"-->
+<!--                            android:fontFamily="@font/nunitosanssemibold"-->
+<!--                            android:gravity="center"-->
+<!--                            android:paddingStart="@dimen/_14sdp"-->
+<!--                            android:paddingEnd="@dimen/_14sdp"-->
+<!--                            android:singleLine="true"-->
+<!--                            android:text="Текущие"-->
+<!--                            android:textAllCaps="false"-->
+<!--                            android:textColor="@color/quantum_white_100"-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            tools:ignore="TextSizeCheck"-->
+<!--                            tools:layout_editor_absoluteY="5dp" />-->
+
+<!--                        <androidx.appcompat.widget.AppCompatButton-->
+<!--                            android:id="@+id/btnPastEvent"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:layout_marginTop="@dimen/_8sdp"-->
+<!--                            android:layout_marginBottom="@dimen/_8sdp"-->
+<!--                            android:background="@drawable/profiletabsbtns"-->
+<!--                            android:ellipsize="end"-->
+<!--                            android:fontFamily="@font/nunitosanssemibold"-->
+<!--                            android:gravity="center"-->
+<!--                            android:paddingStart="@dimen/_14sdp"-->
+<!--                            android:paddingEnd="@dimen/_14sdp"-->
+<!--                            android:singleLine="true"-->
+<!--                            android:text="Прошедшие"-->
+<!--                            android:textAllCaps="false"-->
+<!--                            android:textColor="@color/quantum_white_100"-->
+<!--                            app:layout_constraintEnd_toStartOf="@+id/btnYourEvents"-->
+<!--                            app:layout_constraintStart_toEndOf="@+id/btnCurEvent"-->
+<!--                            tools:ignore="TextSizeCheck"-->
+<!--                            tools:layout_editor_absoluteY="5dp" />-->
+
+<!--                        <androidx.appcompat.widget.AppCompatButton-->
+<!--                            android:id="@+id/btnYourEvents"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:layout_marginTop="@dimen/_8sdp"-->
+<!--                            android:layout_marginEnd="@dimen/_8sdp"-->
+<!--                            android:layout_marginBottom="@dimen/_8sdp"-->
+<!--                            android:background="@drawable/profiletabsbtns"-->
+<!--                            android:ellipsize="end"-->
+<!--                            android:fontFamily="@font/nunitosanssemibold"-->
+<!--                            android:gravity="center"-->
+<!--                            android:paddingStart="@dimen/_14sdp"-->
+<!--                            android:paddingEnd="@dimen/_14sdp"-->
+<!--                            android:singleLine="true"-->
+<!--                            android:text="Ваши"-->
+<!--                            android:textAllCaps="false"-->
+<!--                            android:textColor="@color/quantum_white_100"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            tools:ignore="TextSizeCheck" />-->
+<!--                    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/toggleButton"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_50sdp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_12sdp"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:background="@drawable/profiletabs"
-                        android:gravity="center_horizontal"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-                        tools:layout_editor_absoluteX="11dp">
+                        android:gravity="center"
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btnCurEvent"
+                        <Button
+                            android:id="@+id/buttonCur"
+                            style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/_8sdp"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:layout_marginBottom="@dimen/_8sdp"
-                            android:background="@drawable/profiletabsbtns"
-                            android:ellipsize="end"
-                            android:fontFamily="@font/nunitosanssemibold"
-                            android:gravity="center"
-                            android:paddingStart="@dimen/_14sdp"
-                            android:paddingEnd="@dimen/_14sdp"
-                            android:singleLine="true"
-                            android:text="Текущие"
-                            android:textAllCaps="false"
-                            android:textColor="@color/quantum_white_100"
-                            app:layout_constraintStart_toStartOf="parent"
-                            tools:ignore="TextSizeCheck"
-                            tools:layout_editor_absoluteY="5dp" />
+                            android:layout_height="wrap_content"
+                            android:text="Текущие" />
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btnPastEvent"
+                        <Button
+                            android:id="@+id/buttonPast"
+                            style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:layout_marginBottom="@dimen/_8sdp"
-                            android:background="@drawable/profiletabsbtns"
-                            android:ellipsize="end"
-                            android:fontFamily="@font/nunitosanssemibold"
-                            android:gravity="center"
-                            android:paddingStart="@dimen/_14sdp"
-                            android:paddingEnd="@dimen/_14sdp"
-                            android:singleLine="true"
-                            android:text="Прошедшие"
-                            android:textAllCaps="false"
-                            android:textColor="@color/quantum_white_100"
-                            app:layout_constraintEnd_toStartOf="@+id/btnYourEvents"
-                            app:layout_constraintStart_toEndOf="@+id/btnCurEvent"
-                            tools:ignore="TextSizeCheck"
-                            tools:layout_editor_absoluteY="5dp" />
+                            android:layout_height="wrap_content"
+                            android:text="Прошедшие" />
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btnYourEvents"
+                        <Button
+                            android:id="@+id/buttonMy"
+                            style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:layout_marginBottom="@dimen/_8sdp"
-                            android:background="@drawable/profiletabsbtns"
-                            android:ellipsize="end"
-                            android:fontFamily="@font/nunitosanssemibold"
-                            android:gravity="center"
-                            android:paddingStart="@dimen/_14sdp"
-                            android:paddingEnd="@dimen/_14sdp"
-                            android:singleLine="true"
-                            android:text="Ваши"
-                            android:textAllCaps="false"
-                            android:textColor="@color/quantum_white_100"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            tools:ignore="TextSizeCheck" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                            android:layout_height="wrap_content"
+                            android:text="Мои" />
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
 
                     <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/switcher"
@@ -272,7 +302,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearTab" />
+                        app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>

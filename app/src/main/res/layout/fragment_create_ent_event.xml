@@ -174,7 +174,8 @@
                     android:layout_gravity="center"
                     android:paddingBottom="@dimen/_6sdp"
                     app:boxStrokeColor="?attr/colorControlNormal"
-                    app:endIconMode="custom">
+                    app:endIconMode="custom"
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etNameinputText"
@@ -194,9 +195,8 @@
                     android:orientation="horizontal"
                     android:gravity="start"
                     android:background="@drawable/choose_date_lay"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_8sdp">
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_marginEnd="@dimen/_6sdp">
 
                     <TextView
                         android:id="@+id/notify_set_date"
@@ -275,7 +275,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         app:startIconDrawable="@drawable/profile_icon"
-                        app:boxStrokeColor="?attr/colorControlNormal">
+                        app:boxStrokeColor="?attr/colorControlNormal"
+                        app:errorEnabled="true">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etMaxInputText"
@@ -293,26 +294,24 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/etDescInputLay"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_156sdp"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/_1sdp"
                     android:layout_marginStart="@dimen/_6sdp"
                     android:layout_marginEnd="@dimen/_6sdp"
-                    android:layout_marginTop="@dimen/_6sdp"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/_14sdp"
+                    app:errorEnabled="true"
                     app:boxStrokeColor="?attr/colorControlNormal">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etDescInputText"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_150sdp"
+                        android:layout_height="@dimen/_140sdp"
                         android:hint="Подробное описание события"
                         android:inputType="textMultiLine"
                         android:gravity="top"
                         android:singleLine="true"
-                        android:textColor="#FFFFFF"
-                        tools:ignore="Autofill" />
+                        android:textColor="#FFFFFF" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.appcompat.widget.AppCompatButton

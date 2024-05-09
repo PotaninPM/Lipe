@@ -1,17 +1,15 @@
 package com.example.lipe.database_models
 
 data class HelpEventModelDB(
-    var event_id: Int,
+    var event_id: String,
     var creator_id: String,
+    var type: String,
     var time_of_creation: String,
-    var title: String,
-    var adress: String,
-    var coordinates: String,
+    var price: Int,
+    var peopleNeed: Int,
+    var coordinates: HashMap<String, Double>,
     var date_of_meeting: String ?= null,
     var description: String,
-    var photo_one_id: String,
-    var photo_two_id: String,
-    var photo_three_id: String,
-    var people_want_id: Array<String>,
-    var award: Int
+    var photos: ArrayList<String>,
+    var people_want_id: Array<String>? = null,
 )

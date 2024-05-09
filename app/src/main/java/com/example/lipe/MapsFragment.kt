@@ -136,6 +136,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
 
+        findPersonOnMap()
         setMapStyle()
 
         val currentUser = auth.currentUser
@@ -567,8 +568,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         dbRef_user = FirebaseDatabase.getInstance().getReference()
         dbRef_friends = FirebaseDatabase.getInstance().getReference()
         dbRef_status = FirebaseDatabase.getInstance().getReference()
-
-        findPersonOnMap()
 
         val view = binding.root
         return view
