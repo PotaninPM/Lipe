@@ -308,7 +308,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             val current = formatter.format(time)
 
             var title = binding.etNameinputText.text.toString().trim()
-            var coord: List<Double> = listOf(appVM.latitude, appVM.longtitude)
+            var coord: HashMap<String, Double> = hashMapOf("latitude" to appVM.latitude, "longitude" to appVM.longtitude)
             var date_of_meeting: String = binding.etNameinputText.text.toString()
             var maxPeople: Int = binding.etMaxInputText.text.toString().trim().toInt()
             var desc: String = binding.etDescInputText.text.toString().trim()

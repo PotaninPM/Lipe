@@ -9,7 +9,7 @@ data class EcoEventModelDB(
     var time_of_creation: String,
     var title: String,
     var adress: String,
-    var coordinates: List<Double>,
+    var coordinates: HashMap<String, Double>,
     var power_of_pollution: Int,
     var date_of_meeting: String ?= null,
     var min_people: Int,

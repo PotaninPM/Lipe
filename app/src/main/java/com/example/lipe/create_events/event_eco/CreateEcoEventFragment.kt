@@ -255,7 +255,7 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
                 var title = binding.etNameinput.text.toString().trim()
 
-                var coord: List<Double> = listOf(appVM.latitude, appVM.longtitude)
+                var coord: HashMap<String, Double> = hashMapOf("latitude" to appVM.latitude, "longitude" to appVM.longtitude)
                 //var date_of_meeting: String = binding.text.toString()
                 val minPeople: Int = binding.etMinInputText.text.toString().trim().toInt()
                 var maxPeople: Int = binding.etMaxInputText.text.toString().trim().toInt()

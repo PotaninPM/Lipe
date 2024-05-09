@@ -8,7 +8,7 @@ data class EntEventModelDB(
     var sport_type: String,
     var title: String,
     var adress: String,
-    var coordinates: List<Double>,
+    var coordinates: HashMap<String, Double>,
     var date_of_meeting: String,
     var max_people: Int,
     var age: String,

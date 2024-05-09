@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.R
 import com.example.lipe.database_models.EcoEventModelDB
+import com.example.lipe.database_models.GroupModel
 import com.example.lipe.database_models.HelpEventModelDB
 import com.example.lipe.databinding.FragmentCreateEcoEventBinding
 import com.example.lipe.databinding.FragmentCreateHelpEventBinding
@@ -138,6 +139,8 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
     val selectImage1 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             binding.photo1.setImageURI(uri)
+            binding.arrowUp.visibility = View.GONE
+            binding.textImg.visibility = View.GONE
             imageUri1 = uri
             image1 = "1"
             Log.d("INFOG", imageUri1.toString())
@@ -148,6 +151,8 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
     val selectImage2 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             binding.photo2.setImageURI(uri)
+            binding.arrowUp1.visibility = View.GONE
+            binding.textImg1.visibility = View.GONE
             imageUri2 = uri
             image2 = "1"
             Log.d("INFOG", imageUri1.toString())
@@ -158,6 +163,8 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
     val selectImage3 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             binding.photo3.setImageURI(uri)
+            binding.arrowUp2.visibility = View.GONE
+            binding.textImg2.visibility = View.GONE
             imageUri3 = uri
             image3 = "1"
             Log.d("INFOG", imageUri1.toString())
@@ -248,7 +255,7 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
 
             var price = binding.etPriceinputText.text.toString().trim().toInt()
 
-            var coord: HashMap<String, Double> = hashMapOf("latitude" to appVM.latitude, "logitude" to appVM.longtitude)
+            var coord: HashMap<String, Double> = hashMapOf("latitude" to appVM.latitude, "longitude" to appVM.longtitude)
             var maxPeople: Int = binding.etMaxInputText.text.toString().trim().toInt()
             var desc: String = binding.etDescInputText.text.toString().trim()
 
@@ -267,8 +274,12 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
                 photos
             )
 
+            val dbRef_user_your = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/yourCreatedEvents")
+
             dbRef.child(eventId).setValue(event).addOnSuccessListener {
-                //do pop up notif and navigate to maps
+                dbRef_user_your.child(eventId).setValue(eventId).addOnSuccessListener {
+                    //do pop up notif and navigate to maps
+                }
             }
         }
     }

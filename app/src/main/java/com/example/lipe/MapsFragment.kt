@@ -292,10 +292,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         // show all markers on map
         dbRef_event.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-                val coordinates: List<Double>? = dataSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
+                val coordinates: ArrayList<Double>? = arrayListOf(dataSnapshot.child("coordinates").child("latitude").value.toString().toDouble(), dataSnapshot.child("coordinates").child("longitude").value.toString().toDouble())
                 val eventId: String = dataSnapshot.child("event_id").value.toString()
                 val type = dataSnapshot.child("type_of_event").value?.toString() ?: "def_type"
 
+                Log.d("INFOG", coordinates?.get(0).toString() + " "+ coordinates?.get(1).toString())
                 var sport_type = "-"
 
                 if(type == "ent") {
@@ -728,6 +729,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         var sportType: Int = 0
 
+        Log.d("INFOG", type)
+
         if(sport_type != "-") {
             if(sport_type == "Воллейбол") {
                 sportType = R.drawable.volleyball_2
@@ -746,6 +749,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val markerImageResource = when (type) {
             "eco" -> R.drawable.leaf
             "ent" -> sportType
+            "help" -> R.drawable.dollar
             else -> R.drawable.basketball_32
         }
 
