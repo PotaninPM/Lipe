@@ -59,7 +59,6 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
         storageRef = FirebaseStorage.getInstance().reference
 
         originalBackground = binding.btnCurEvent.background
-        switchTabs(0)
 
         binding.btnYourEvents.setBackgroundResource(0)
         binding.btnPastEvent.setBackgroundResource(0)
@@ -163,7 +162,7 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val name: String = dataSnapshot.child("firstName").value.toString()
                 val lastName: String = dataSnapshot.child("lastName").value.toString()
-                val ratingAmount: Int = dataSnapshot.child("rating").value.toString().toInt()
+                val ratingAmount: Int= dataSnapshot.child("rating").value.toString().toInt()
                 val friendsAmount: Int = dataSnapshot.child("friends_amount").value.toString().toInt()
                 val eventsAmount: Int = dataSnapshot.child("events_amount").value.toString().toInt()
 
@@ -171,7 +170,7 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                     UserData(
                         name,
                         lastName,
-                        ratingAmount,
+                        0,
                         friendsAmount,
                         eventsAmount,
                     )

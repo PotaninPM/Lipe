@@ -1,17 +1,23 @@
 package com.example.lipe.view_events.event_ent
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.toBitmap
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import coil.Coil
+import coil.request.ImageRequest
 import com.example.lipe.MapsFragment
 import com.example.lipe.R
 import com.example.lipe.databinding.FragmentEventEntBinding
@@ -30,6 +36,9 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EventEntFragment : BottomSheetDialogFragment() {
     private lateinit var auth: FirebaseAuth
@@ -100,6 +109,9 @@ class EventEntFragment : BottomSheetDialogFragment() {
         binding.allEntEvent.visibility = View.GONE
         binding.loadingProgressBar.visibility = View.VISIBLE
 
+        binding.creator.setOnClickListener {
+
+        }
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = eventEntVM
@@ -230,6 +242,13 @@ class EventEntFragment : BottomSheetDialogFragment() {
         callback(reg)
     }
 
+//    private fun replaceFragment(fragment: Fragment) {
+//        val fragmentManager = childFragmentManager
+//        val fragmentTransaction = fragmentManager.beginTransaction()
+//        fragmentTransaction.replace(R.id., fragment)
+//        fragmentTransaction.commit()
+//    }
+
 
     private fun loadAllImages(callback: (Boolean) -> Unit) {
         if(eventEntVM.creatorUsername.value == "Удаленный аккаунт") {
@@ -246,12 +265,28 @@ class EventEntFragment : BottomSheetDialogFragment() {
 
             val tokenTask2 = userAvatarRef.downloadUrl
 
-            tokenTask.addOnSuccessListener { uri ->
-                val imageUrl = uri.toString()
-                //Picasso.get().load(imageUrl).into(binding.image)
-                tokenTask2.addOnSuccessListener { uri ->
-                    val imageUrl2 = uri.toString()
-                    //Picasso.get().load(imageUrl2).into(binding.eventAvatar)
+            tokenTask.addOnSuccessListener { url ->
+                lifecycleScope.launch {
+                    val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                        Coil.imageLoader(requireContext()).execute(
+                            ImageRequest.Builder(requireContext())
+                                .data(url)
+                                .build()
+                        ).drawable?.toBitmap()!!
+                    }
+                    binding.image.setImageBitmap(bitmap)
+                }
+                tokenTask2.addOnSuccessListener { url_2 ->
+                    lifecycleScope.launch {
+                        val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                            Coil.imageLoader(requireContext()).execute(
+                                ImageRequest.Builder(requireContext())
+                                    .data(url_2)
+                                    .build()
+                            ).drawable?.toBitmap()!!
+                        }
+                        binding.eventAvatar.setImageBitmap(bitmap)
+                    }
                     callback(true)
                 }.addOnFailureListener {
 

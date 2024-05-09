@@ -137,9 +137,9 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         val adapter = CustomAdapter(requireContext(), items)
 
         spinner.adapter = adapter
-        binding.setDateLay.setOnClickListener {
-            getDateTime()
-        }
+//        binding.setDateLay.setOnClickListener {
+//            getDateTime()
+//        }
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -301,9 +301,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             val current = formatter.format(time)
 
             var title = binding.etNameinputText.text.toString().trim()
-            var adress = binding.adressText.text.toString().trim()
             var coord: List<Double> = listOf(appVM.latitude, appVM.longtitude)
-            var date_of_meeting: String = binding.setDate.text.toString()
+            var date_of_meeting: String = binding.etNameinputText.text.toString()
             var maxPeople: Int = binding.etMaxInputText.text.toString().trim().toInt()
             var desc: String = binding.etDescInputText.text.toString().trim()
 
@@ -320,7 +319,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     current,
                     type_sport,
                     title,
-                    adress,
+                    "smth",
                     coord,
                     date_of_meeting,
                     maxPeople,
@@ -426,17 +425,17 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             timePicker.addOnPositiveButtonClickListener {
                 savedHour = timePicker.hour
                 savedMinute = timePicker.minute
-                onTimeSet_()
+                //onTimeSet_()
             }
             timePicker.show(childFragmentManager, "time_picker_tag")
         }
 
         datePicker.show(childFragmentManager, "date_picker_tag")
     }
-    fun onTimeSet_() {
-        binding.setDateLay.setBackgroundResource(R.drawable.choose_date_success)
-        binding.setDate.setText("$savedYear.$savedMonth.$savedDay в $savedHour:$savedMinute")
-    }
+//    fun onTimeSet_() {
+//        binding.setDateLay.setBackgroundResource(R.drawable.choose_date_success)
+//        binding.setDate.setText("$savedYear.$savedMonth.$savedDay в $savedHour:$savedMinute")
+//    }
 
     override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
         TODO("Not yet implemented")

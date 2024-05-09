@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import java.time.LocalDate
 
@@ -139,7 +140,7 @@ class SignUpDescFragment : Fragment() {
                     binding.progressBar.visibility = View.GONE
                     Toast.makeText(requireContext(), "Smth went wrong", Toast.LENGTH_LONG).show()
 
-                    Log.d("INFOG", "NO!")
+                    Log.d("INFOG", it.message.toString())
                 }
             } else {
                 checkForEmpty(desc)
@@ -187,42 +188,48 @@ class SignUpDescFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun addUserToDb(username: String, email: String, pass: String, phone: String, name: String, lastName: String, desc: String, view: View) {
-        val user_DB_info = UserDB(
-            auth.currentUser?.uid,
-            LocalDate.now().toString(),
-            0,
-            0,
-            0,
-            desc,
-            username,
-            email,
-            "7" + phone,
-            pass,
-            name,
-            lastName,
-            -1,
-            arrayListOf(),
-            arrayListOf(),
-            arrayListOf(),
-            0,
-            arrayListOf(),
-            arrayListOf(),
-            0,
-            arrayListOf(),
-            arrayListOf()
-        )
+        FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+            val user_DB_info = UserDB(
+                auth.currentUser?.uid,
+                LocalDate.now().toString(),
+                0,
+                0,
+                0,
+                desc,
+                username,
+                email,
+                "7" + phone,
+                pass,
+                name,
+                lastName,
+                -1,
+                arrayListOf(),
+                arrayListOf(),
+                arrayListOf(),
+                0,
+                arrayListOf(),
+                arrayListOf(),
+                0,
+                arrayListOf(),
+                arrayListOf(),
+                "online",
+                token
+            )
 
-        FirebaseDatabase.getInstance().getReference("location").child(auth.currentUser!!.uid).setValue(
-            hashMapOf("latitude" to "-", "longitude" to "-")
-        ).addOnSuccessListener {
-            dbRef.child(auth.currentUser!!.uid).setValue(user_DB_info).addOnSuccessListener {
+            FirebaseDatabase.getInstance().getReference("location").child(auth.currentUser!!.uid).setValue(
+                hashMapOf("latitude" to "-", "longitude" to "-")
+            ).addOnSuccessListener {
+                dbRef.child(auth.currentUser!!.uid).setValue(user_DB_info).addOnSuccessListener {
 
-                val navController = view.findNavController()
-                navController.navigate(R.id.action_signUpDescFragment_to_mapsFragment)
+                    val navController = view.findNavController()
+                    navController.navigate(R.id.action_signUpDescFragment_to_mapsFragment)
 
-            }.addOnFailureListener {
-                Log.d("INFOG", it.toString())
+                }.addOnFailureListener {
+                    Log.d("INFOG", it.toString())
+                }
             }
+        }.addOnFailureListener {
+            Log.d("INFOG", "Failed to get FCM token")
         }
     }
 

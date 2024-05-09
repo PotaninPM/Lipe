@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,6 +7,7 @@
     android:layout_marginStart="@dimen/_6sdp"
     android:layout_marginEnd="@dimen/_6sdp"
     tools:context=".create_events.event_ent.CreateEntEventFragment">
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -29,7 +30,7 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/photo_lay_1"
                         android:layout_width="@dimen/_290sdp"
                         android:layout_height="@dimen/_210sdp"
@@ -38,19 +39,31 @@
                         <ImageView
                             android:id="@+id/photo1"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-<!--                            <ImageView-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:src="@drawable/img_arrowup" />-->
+                            android:layout_height="match_parent" />
 
+                        <ImageView
+                            android:id="@+id/imageView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/img_arrowup"
+                            app:layout_constraintBottom_toTopOf="@+id/textView10"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
 
+                        <TextView
+                            android:id="@+id/textView10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="Нажмите, чтобы загрузить фото"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-                    </LinearLayout>
-
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/photo_lay_2"
                         android:layout_width="@dimen/_290sdp"
                         android:layout_height="@dimen/_210sdp"
@@ -61,7 +74,27 @@
                             android:id="@+id/photo2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"/>
-                    </LinearLayout>
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/img_arrowup"
+                            app:layout_constraintBottom_toTopOf="@+id/textView11"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView11"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="Нажмите, чтобы загрузить фото"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <LinearLayout
                         android:id="@+id/photo_lay_3"
@@ -134,84 +167,32 @@
                         android:textColor="#FFFFFF" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_4sdp"
+                    android:orientation="horizontal"
+                    android:gravity="start"
+                    android:layout_marginStart="@dimen/_8sdp"
                     android:layout_marginEnd="@dimen/_8sdp"
-                    android:layout_marginStart="@dimen/_8sdp">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/setDate_lay"
+                    android:layout_marginTop="@dimen/_8sdp">
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/date"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_36sdp"
-                        android:background="@drawable/choose_date_lay"
-                        android:orientation="horizontal"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent">
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        app:boxStrokeColor="?attr/colorControlNormal">
 
-                        <ImageView
-                            android:id="@+id/calendar"
-                            android:layout_width="@dimen/_24sdp"
-                            android:layout_height="@dimen/_24sdp"
-                            android:layout_marginStart="@dimen/_4sdp"
-                            android:src="@drawable/calendar"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/setDate"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/dateText"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="@dimen/_26sdp"
-                            android:layout_marginTop="@dimen/_3sdp"
-                            android:layout_marginEnd="@dimen/_6sdp"
-                            android:layout_marginBottom="@dimen/_3sdp"
+                            android:layout_height="wrap_content"
+                            android:hint="Максимум людей"
+                            android:inputType="number"
                             android:gravity="center"
-                            android:text="Выберите время встречи"
-                            android:textSize="@dimen/_13sdp"
-                            android:textColor="@color/quantum_white_100"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-                <LinearLayout
-                    android:id="@+id/adress"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_36sdp"
-                    android:layout_marginStart="@dimen/_6sdp"
-                    android:layout_marginEnd="@dimen/_6sdp"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/choose_date_lay"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="@dimen/_24sdp"
-                        android:layout_height="@dimen/_24sdp"
-                        android:src="@drawable/location"
-                        android:layout_marginStart="@dimen/_4sdp"
-                        android:layout_gravity="center"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <TextView
-                        android:id="@+id/adress_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="@dimen/_6sdp"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        android:layout_marginBottom="@dimen/_3sdp"
-                        android:text="Адрес"
-                        android:gravity="center"
-                        android:textSize="@dimen/_13sdp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                            android:singleLine="true"
+                            android:textColor="#FFFFFF"
+                            tools:ignore="Autofill" />
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatSpinner
@@ -318,4 +299,4 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

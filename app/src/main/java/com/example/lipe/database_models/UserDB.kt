@@ -23,5 +23,6 @@ data class UserDB(
     val events_amount: Int? = 0,
     val chats: ArrayList<String>? = null,
     val groups: ArrayList<String> ?= null,
-    val status: String = "online"
+    val status: String = "online",
+    val userToken: String ?= null
 )

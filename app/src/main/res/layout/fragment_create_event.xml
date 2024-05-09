@@ -44,70 +44,34 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <LinearLayout android:gravity="center_horizontal"
-                android:id="@+id/linearTab"
-                android:layout_height="@dimen/_32sdp"
-                android:layout_marginEnd="@dimen/_6sdp"
-                android:layout_marginStart="@dimen/_6sdp"
-                android:layout_marginTop="@dimen/_7sdp"
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggleButton"
                 android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:background="@drawable/change_event_back">
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnEco"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+                <Button
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:id="@+id/buttonEco"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/_2sdp"
-                    android:layout_marginEnd="@dimen/_4sdp"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:background="@drawable/create_event_change_type_btn"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:paddingStart="@dimen/_18sdp"
-                    android:paddingEnd="@dimen/_18sdp"
-                    android:singleLine="true"
+                    android:layout_height="wrap_content"
                     android:text="Экология"
-                    android:textAllCaps="false"
-                    android:textColor="@color/quantum_white_100"
-                    tools:ignore="TextSizeCheck" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnEnt"
-                    android:background="@drawable/create_event_change_type_btn"
+                    />
+                <Button
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:id="@+id/buttonEnt"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/_2sdp"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:ellipsize="end"
-                    android:textColor="@color/quantum_white_100"
-                    android:gravity="center"
-                    android:paddingStart="@dimen/_18sdp"
-                    android:paddingEnd="@dimen/_18sdp"
-                    android:singleLine="true"
+                    android:layout_height="wrap_content"
                     android:text="Развлечения"
-                    android:textAllCaps="false"
-                    tools:ignore="TextSizeCheck" />
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnHelp"
-                    android:background="@drawable/create_event_change_type_btn"
+                    />
+                <Button
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:id="@+id/buttonHelp"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/_4sdp"
-                    android:layout_marginTop="@dimen/_2sdp"
-                    android:layout_marginBottom="@dimen/_2sdp"
-                    android:ellipsize="end"
-                    android:textColor="@color/quantum_white_100"
-                    android:gravity="center"
-                    android:paddingStart="@dimen/_18sdp"
-                    android:paddingEnd="@dimen/_18sdp"
-                    android:singleLine="true"
+                    android:layout_height="wrap_content"
                     android:text="Помощь"
-                    android:textAllCaps="false"
-                    tools:ignore="TextSizeCheck" />
-            </LinearLayout>
-
+                    />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/create_event_lay"
                 android:layout_width="match_parent"

@@ -46,7 +46,6 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val view = binding.root
         originalBackground = binding.btnCurEvent.background
-        switchTabs(0)
 
         binding.btnYourEvents.setBackgroundResource(0)
         binding.btnPastEvent.setBackgroundResource(0)
@@ -252,7 +251,7 @@ class ProfileFragment : Fragment() {
     private fun switchTabs(position: Int) {
         val fragment = when (position) {
             //0 -> CurEventsInProfileFragment(auth.currentUser!!.uid)
-            0 -> ChatsAndGroupsFragment()
+            0 -> CurEventsInProfileFragment(auth.currentUser!!.uid)
             1 -> ChatsAndGroupsFragment()
             2 -> YourEventsFragment()
             else -> null
@@ -263,6 +262,11 @@ class ProfileFragment : Fragment() {
                 .replace(R.id.switcher, it)
                 .commit()
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        switchTabs(0)
     }
 
     override fun onDestroyView() {

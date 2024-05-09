@@ -390,7 +390,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                                         .anchor(0.5f, 1f)
 
                                     val marker = mMap.addMarker(markerOptions)
-                                    marker?.tag = markerLayout
+                                    //marker?.tag = markerLayout
 
                                     val startPosition = marker!!.position
                                     val endPosition = latLng

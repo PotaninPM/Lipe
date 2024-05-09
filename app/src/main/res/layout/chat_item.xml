@@ -46,11 +46,9 @@
         app:layout_constraintStart_toEndOf="@+id/avatar"
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
-    <View
-        android:id="@+id/line"
-        android:layout_width="@dimen/_292sdp"
-        android:layout_height="@dimen/_1sdp"
-        android:background="@color/quantum_bluegrey50"
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

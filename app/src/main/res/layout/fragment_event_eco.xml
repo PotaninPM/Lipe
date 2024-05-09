@@ -165,21 +165,21 @@
                         </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/addToFriendBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_26sdp"
-                        android:layout_marginEnd="@dimen/_6sdp"
-                        android:background="@drawable/subscribe_btn"
-                        android:paddingStart="@dimen/_8sdp"
-                        android:paddingEnd="@dimen/_6sdp"
-                        android:text="Добавить в друзья"
-                        android:textSize="@dimen/_10sdp"
-                        android:textAllCaps="false"
-                        android:textColor="@color/quantum_white_100"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+<!--                    <Button-->
+<!--                        android:id="@+id/addToFriendBtn"-->
+<!--                        style="@style/Widget.Material3.Button.ElevatedButton.Icon"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="@dimen/_26sdp"-->
+<!--                        android:layout_marginEnd="@dimen/_6sdp"-->
+<!--                        android:paddingStart="@dimen/_8sdp"-->
+<!--                        android:paddingEnd="@dimen/_6sdp"-->
+<!--                        android:text="Добавить в друзья"-->
+<!--                        android:textSize="@dimen/_10sdp"-->
+<!--                        android:textAllCaps="false"-->
+<!--                        android:textColor="@color/quantum_white_100"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View
@@ -365,32 +365,33 @@
                     android:layout_marginStart="@dimen/_12sdp"
                     android:fontFamily="@font/mulish"
                     android:text="@{viewModel.eventDesc}"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_14sdp"
                     android:layout_marginEnd="@dimen/_12sdp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/about_event" />
 
-                <androidx.appcompat.widget.AppCompatButton
+                <Button
                     android:id="@+id/btnRegToEvent"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_40sdp"
-                    android:layout_marginStart="@dimen/_22sdp"
-                    android:layout_marginEnd="@dimen/_22sdp"
-                    android:layout_marginTop="@dimen/_12sdp"
-                    android:background="@drawable/sign_in_start_btn"
-                    android:ellipsize="end"
+                    style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
                     android:gravity="center"
                     android:singleLine="true"
+                    android:backgroundTint="@color/green"
                     android:text="Зарегистрироваться"
-                    android:textAllCaps="false"
+                    app:icon = "@drawable/filter"
                     android:textColor="@color/quantum_white_100"
-                    android:textFontWeight="600"
                     android:textSize="@dimen/_12sdp"
-                    android:layout_marginBottom="@dimen/_8sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView9"
-                    tools:ignore="TextSizeCheck" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView9" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#46C6E3"
+                    style="@style/Widget.Material3.Button.ElevatedButton.Icon"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

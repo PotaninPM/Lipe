@@ -31,7 +31,11 @@ class SetOnlineOrOffline : Application() {
 
             override fun onActivityResumed(activity: Activity) {}
 
-            override fun onActivityPaused(activity: Activity) {}
+            override fun onActivityPaused(activity: Activity) {
+                if(user != null) {
+                    setUserStatus("offline")
+                }
+            }
 
             override fun onActivityStopped(activity: Activity) {
                 if(user != null) {

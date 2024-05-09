@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorOnSurfaceInverse"
     tools:context=".chats_and_groups.all_chats.AllChatsFragment">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
