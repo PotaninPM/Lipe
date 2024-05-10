@@ -11,18 +11,23 @@ import android.view.ViewGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import coil.Coil
 import coil.request.ImageRequest
+import com.example.lipe.GetPointsFragment
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.databinding.FragmentProfileBinding
 import com.example.lipe.viewModels.ProfileVM
 import com.example.lipe.all_profiles.cur_events.CurEventsInProfileFragment
 import com.example.lipe.all_profiles.cur_events.YourEventsFragment
+import com.example.lipe.start_frs.StartFragment
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
@@ -90,6 +95,38 @@ class ProfileFragment : Fragment() {
                     }
                 }
             }
+            val navView: NavigationView = binding.navView
+            navView.setNavigationItemSelectedListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.nav_edit_info -> {
+                        childFragmentManager.beginTransaction()
+                            .replace(R.id.drawer_layout, ChatsAndGroupsFragment())
+                            .commit()
+                    }
+                    R.id.get_points -> {
+                        childFragmentManager.beginTransaction()
+                            .replace(R.id.drawer_layout, GetPointsFragment())
+                            .commit()
+                        Log.d("INFOG", "2")
+                    }
+                    R.id.nav_settings -> {
+//                        childFragmentManager.beginTransaction()
+//                            .replace(R.id.all_profile, ChatsAndGroupsFragment())
+//                            .commit()
+                        Log.d("INFOG", "3")
+                    }
+                    R.id.nav_logout -> {
+                        auth.signOut()
+//                        childFragmentManager.beginTransaction()
+//                            .replace(R.id.all_profile, StartFragment())
+//                            .commit()
+                        Log.d("INFOG", "4")
+                    }
+                }
+                drawerLayout.closeDrawer(GravityCompat.END)
+                menuItem.isChecked = true
+                true
+            }
         }
     }
     override fun onCreateView(
@@ -103,6 +140,7 @@ class ProfileFragment : Fragment() {
 //        binding.btnYourEvents.setBackgroundResource(0)
 //        binding.btnPastEvent.setBackgroundResource(0)
 //        binding.btnCurEvent.background = originalBackground
+
 
         dbRef = FirebaseDatabase.getInstance().getReference("users")
         auth = FirebaseAuth.getInstance()

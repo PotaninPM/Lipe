@@ -251,6 +251,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val statusListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val status = dataSnapshot.value.toString()
+                Log.d("INFOG", "friend: $friendUid status: $status")
                 if (status != "null" && friendsMarkersMap[friendUid] != null) {
                     updateMarkerStatusView(friendUid, status)
                 }
@@ -264,9 +265,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         val dbRef_location = FirebaseDatabase.getInstance().getReference("location/${friendUid}")
         dbRef_location.addValueEventListener(locationListener)
+
         val dbRef_status = FirebaseDatabase.getInstance().getReference("users/${friendUid}/status")
         dbRef_status.addValueEventListener(statusListener)
+
+        Coil.imageLoader(requireContext()).memoryCache?.clear()
     }
+
 
     private fun updateMarkerStatusView(friendUid: String, status: String) {
         try {
@@ -358,19 +363,21 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
                 val status_ref = FirebaseDatabase.getInstance().getReference("users/$friendUid/status")
                 val storage = FirebaseStorage.getInstance().getReference("avatars/$friendUid")
+
                 status_ref.addListenerForSingleValueEvent(object: ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val status = snapshot.value.toString()
                         storage.downloadUrl.addOnSuccessListener { url ->
                             lifecycleScope.launch {
                                 try {
-                                    val bitmap: Bitmap = withContext(Dispatchers.Main.immediate) {
-                                        Coil.imageLoader(requireContext()).execute(
+                                    val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                                        val hardwareBitmap = Coil.imageLoader(requireContext()).execute(
                                             ImageRequest.Builder(requireContext())
                                                 .data(url)
-                                                .allowHardware(false)
                                                 .build()
                                         ).drawable?.toBitmap()!!
+
+                                        getRoundedCornerBitmap(hardwareBitmap.copy(Bitmap.Config.ARGB_8888, true), 10)
                                     }
 
                                     markerImageView.setImageBitmap(bitmap)
@@ -392,7 +399,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                                         .anchor(0.5f, 1f)
 
                                     val marker = mMap.addMarker(markerOptions)
-                                    //marker?.tag = markerLayout
+                                    marker?.tag = markerLayout
 
                                     val startPosition = marker!!.position
                                     val endPosition = latLng
@@ -698,7 +705,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             var done = 0
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for(eventSnapshot in dataSnapshot.children) {
-                    val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
+                    val coordinates: List<Double>? = listOf(eventSnapshot.child("coordinates").child("latitude").value.toString().toDouble(), eventSnapshot.child("coordinates").child("longitude").value.toString().toDouble())
                     if(coordinates != null && coordinates[0] == coord1 && coordinates[1] == coord2) {
                         val type = eventSnapshot.child("type_of_event").value.toString()
                         val eventId: String = eventSnapshot.child("event_id").value.toString()

@@ -15,7 +15,6 @@
         android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/all"
             android:background="?attr/colorOnSurfaceInverse"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -316,6 +315,7 @@
             android:layout_gravity="end"
             android:fitsSystemWindows="true"
             app:headerLayout="@layout/nav_profile_header"
+            app:itemTextColor="#00A966"
             app:menu="@menu/profile_drawer" />
 
     </androidx.drawerlayout.widget.DrawerLayout>

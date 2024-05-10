@@ -308,7 +308,7 @@ class EventEntFragment : BottomSheetDialogFragment() {
         dbRefEvent.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for(eventSnapshot in dataSnapshot.children) {
-                    val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
+                    val coordinates: List<Double>? = listOf(eventSnapshot.child("coordinates").child("latitude").value.toString().toDouble(), eventSnapshot.child("coordinates").child("longitude").value.toString().toDouble())
                     if(coordinates != null && coordinates[0] == coord1 && coordinates[1] == coord2) {
                         val type = eventSnapshot.child("type_of_event").value.toString()
                         val id = eventSnapshot.child("event_id").value.toString()

@@ -5,25 +5,31 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/get_points"
-            android:icon="@drawable/calendar"
-            android:title="Получить баллы" />
-        <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/calendar"
+            android:id="@+id/nav_edit_info"
+            android:icon="@drawable/pencil"
             android:title="Изменить информацию" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/calendar"
+            android:id="@+id/get_points"
+            android:icon="@drawable/get_points"
+            android:title="Получить баллы" />
+        <item
+            android:id="@+id/nav_wallet"
+            android:icon="@drawable/wallet_arrow"
             android:title="Кошелек" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/calendar"
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/settings"
             android:title="Настройки" />
 
-        <item
-            android:id="@+id/sign_out"
-            android:icon="@drawable/calendar"
-            android:title="Выйти" />
     </group>
+
+    <item android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/exit"
+                android:title="Выйти"/>
+        </menu>
+    </item>
+
 </menu>

@@ -45,9 +45,16 @@ class SignUpFragment : Fragment() {
         appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
         signUpVM = ViewModelProvider(requireActivity()).get(SignUpVM::class.java)
 
+        binding.signUpWithGoogle.setOnClickListener {
+            signInWithGoogle()
+        }
         val view = binding.root
 
         return view
+    }
+
+    private fun signInWithGoogle() {
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
