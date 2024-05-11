@@ -1,10 +1,15 @@
 package com.example.lipe.rating_board
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.graphics.drawable.toBitmap
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.Coil
 import coil.ImageLoader
@@ -47,6 +52,10 @@ class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope) :  RecyclerView
                 else -> R.drawable.rating_item_source
             }
             ratingItem.setBackgroundResource(backgroundResId)
+
+            binding.ratingItem.setOnClickListener {
+
+            }
         }
     }
 

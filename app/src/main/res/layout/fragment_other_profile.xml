@@ -54,6 +54,16 @@
                         app:shapeAppearanceOverlay="@style/ImageStyle_theme"
                         app:srcCompat="@drawable/profile_theme" />
 
+                    <ImageView
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:backgroundTint="?attr/colorOnSurfaceInverse"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:src="@drawable/arrow_small_left"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/avatar"
                         android:layout_width="@dimen/_120sdp"

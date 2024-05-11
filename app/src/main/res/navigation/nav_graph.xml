@@ -121,7 +121,11 @@
         android:id="@+id/ratingFragment"
         android:name="com.example.lipe.rating_board.RatingFragment"
         android:label="fragment_rating"
-        tools:layout="@layout/fragment_rating" />
+        tools:layout="@layout/fragment_rating" >
+        <action
+            android:id="@+id/action_ratingFragment_to_otherProfileFragment"
+            app:destination="@id/otherProfileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/chatsFragment"
         android:name="com.example.lipe.chats_and_groups.all_chats.AllChatsFragment"
@@ -141,4 +145,9 @@
             android:id="@+id/action_chatsAndGroupsFragment_to_friendRequestsFragment"
             app:destination="@id/friendRequestsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/otherProfileFragment"
+        android:name="com.example.lipe.all_profiles.other_profile.OtherProfileFragment"
+        android:label="fragment_other_profile"
+        tools:layout="@layout/fragment_other_profile" />
 </navigation>
