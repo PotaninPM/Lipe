@@ -60,7 +60,15 @@ class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope) :  RecyclerView
     override fun getItemCount(): Int {
         return ratingList.size
     }
-
+    fun filter(text: String) {
+        val filteredList = ArrayList<RatingItem>()
+        for (item in ratingList) {
+            if (item.username.contains(text, ignoreCase = true)) {
+                filteredList.add(item)
+            }
+        }
+        updateRequests(filteredList)
+    }
     fun removeRequest(position: Int) {
         if (position in 0 until ratingList.size) {
             ratingList.removeAt(position)

@@ -23,7 +23,8 @@ class RatingFragment : Fragment() {
     private var _binding: FragmentRatingBinding? = null
     private val binding get() = _binding!!
 
-    private var rateList = ArrayList<RatingItem>()
+    private var rateList = mutableListOf<RatingItem>()
+
     private lateinit var adapter: RatingAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +39,24 @@ class RatingFragment : Fragment() {
         binding.recyclerView.adapter = adapter
 
         binding.recyclerView.setHasFixedSize(true)
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    if(it.isEmpty()) {
+                        adapter.updateRequests(rateList)
+                    } else {
+                        adapter.filter(it)
+                    }
+
+                }
+                return true
+            }
+        })
 
         addPeople()
 //        binding.searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
@@ -67,7 +86,6 @@ class RatingFragment : Fragment() {
         val dbRef_rating = FirebaseDatabase.getInstance().getReference("rating")
         dbRef_rating.orderByKey().addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val rateList = mutableListOf<RatingItem>()
 
                 snapshot.children.sortedBy { it.child("place").value.toString().toInt() }.forEach { ratingSnapshot ->
                     val place = ratingSnapshot.child("place").value.toString()
@@ -89,9 +107,8 @@ class RatingFragment : Fragment() {
                         }
 
                         override fun onCancelled(error: DatabaseError) {
-                            TODO("Not yet implemented")
-                        }
 
+                        }
                     })
                 }
             }
