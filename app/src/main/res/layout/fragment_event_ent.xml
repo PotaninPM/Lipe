@@ -52,55 +52,55 @@
                         android:src="@drawable/ex1" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/linearLayout6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_28sdp"
-                    android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_marginTop="@dimen/_7sdp"
-                    android:background="@drawable/type_event_form"
-                    android:paddingStart="@dimen/_7sdp"
-                    android:paddingEnd="@dimen/_4sdp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/title">
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/linearLayout6"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="@dimen/_28sdp"-->
+<!--                    android:layout_marginStart="@dimen/_12sdp"-->
+<!--                    android:layout_marginTop="@dimen/_7sdp"-->
+<!--                    android:background="@drawable/type_event_form"-->
+<!--                    android:paddingStart="@dimen/_7sdp"-->
+<!--                    android:paddingEnd="@dimen/_4sdp"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/title">-->
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:fontFamily="@font/mulishsemibold"
-                        android:gravity="center"
-                        android:text="@{viewModel.type}"
-                        android:textColor="#2629FF"
-                        android:textSize="@dimen/_10sdp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+<!--                    <TextView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:fontFamily="@font/mulishsemibold"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="@{viewModel.type}"-->
+<!--                        android:textColor="#2629FF"-->
+<!--                        android:textSize="@dimen/_10sdp"-->
+<!--                        android:textStyle="bold" />-->
+<!--                </LinearLayout>-->
 
-                <LinearLayout
-                    android:id="@+id/linearLayout3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_22sdp"
-                    android:layout_marginStart="@dimen/_12sdp"
-                    app:layout_constraintBottom_toBottomOf="@+id/linearLayout6"
-                    app:layout_constraintStart_toEndOf="@+id/linearLayout6"
-                    app:layout_constraintTop_toTopOf="@+id/linearLayout6">
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/linearLayout3"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="@dimen/_22sdp"-->
+<!--                    android:layout_marginStart="@dimen/_12sdp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/linearLayout6"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/linearLayout6"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/linearLayout6">-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:fontFamily="@font/inter"
-                        android:gravity="center"
-                        android:text="@{viewModel.amount_reg_people.toString()}"
-                        android:textSize="@dimen/_13sdp" />
-                </LinearLayout>
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:clickable="true"-->
+<!--                        android:focusable="true"-->
+<!--                        android:fontFamily="@font/inter"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="@{viewModel.amount_reg_people.toString()}"-->
+<!--                        android:textSize="@dimen/_13sdp" />-->
+<!--                </LinearLayout>-->
 
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:fontFamily="@font/nunitosansbold"
                     android:text="@{viewModel.title}"
                     android:textSize="@dimen/_19sdp"
@@ -108,15 +108,26 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/photo_lay_1" />
 
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:textSize="@dimen/_12sdp"
+                    android:fontFamily="@font/roboto_bold"
+                    android:text="@{viewModel.time_of_creation}"
+                    app:layout_constraintStart_toStartOf="@+id/title"
+                    app:layout_constraintTop_toBottomOf="@+id/title" />
+
                 <View
                     android:id="@+id/lineLineTwo"
                     android:layout_width="@dimen/_292sdp"
                     android:layout_height="@dimen/_1sdp"
-                    android:layout_marginTop="@dimen/_6sdp"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:background="@color/quantum_bluegrey50"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -166,30 +177,42 @@
                             android:textSize="@dimen/_12sdp" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/status"
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/_28sdp"
-                        android:layout_marginTop="@dimen/_7sdp"
-                        android:background="@drawable/type_event_form"
-                        android:paddingStart="@dimen/_7sdp"
-                        android:paddingEnd="@dimen/_4sdp"
+                        android:layout_height="wrap_content"
+                        android:text="Добавить в друзья"
+                        android:textColor="#0054D0"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/nunitosansextrabold"
                         android:layout_marginEnd="@dimen/_12sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/statusText"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/mulishsemibold"
-                            android:gravity="center"
-                            android:text="@{viewModel.friend}"
-                            android:textColor="#2629FF"
-                            android:textSize="@dimen/_10sdp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/status"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="@dimen/_28sdp"-->
+<!--                        android:layout_marginTop="@dimen/_7sdp"-->
+<!--                        android:background="@drawable/type_event_form"-->
+<!--                        android:paddingStart="@dimen/_7sdp"-->
+<!--                        android:paddingEnd="@dimen/_4sdp"-->
+<!--                        android:layout_marginEnd="@dimen/_12sdp"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent">-->
+
+<!--                        <TextView-->
+<!--                            android:id="@+id/statusText"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:fontFamily="@font/mulishsemibold"-->
+<!--                            android:gravity="center"-->
+<!--                            android:text="@{viewModel.friend}"-->
+<!--                            android:textColor="#2629FF"-->
+<!--                            android:textSize="@dimen/_10sdp"-->
+<!--                            android:textStyle="bold" />-->
+<!--                    </LinearLayout>-->
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View
@@ -227,60 +250,28 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunitosanssemibold"
-                            android:text="@{viewModel.dateRussianMonthDayYear}"
+                            android:text="10 мая 2024 года в 15:20"
+                            android:layout_gravity="center"
                             android:textSize="@dimen/_15sdp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Суббота, 14:00 - 15:00"
-                            android:textSize="@dimen/_12sdp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayout8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_marginTop="@dimen/_12sdp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
-
-                    <ImageView
-                        android:layout_width="@dimen/_37sdp"
-                        android:layout_height="@dimen/_37sdp"
-                        android:src="@drawable/address" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="@dimen/_8sdp"
-                        android:orientation="vertical">
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunitosanssemibold"
-                            android:text="Зеленый парк"
-                            android:textSize="@dimen/_15sdp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Россия, Москва, сиреневый бульвар 44 к1"
-                            android:textSize="@dimen/_12sdp" />
+                            android:text="Дата сбора"
+                            android:textSize="@dimen/_14sdp" />
+<!--                        app:text="@{viewModel.dateRussianMonthDayYear}"-->
                     </LinearLayout>
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/sport"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_14sdp"
                     android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_marginTop="@dimen/_12sdp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout8">
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
 
                     <ImageView
                         android:layout_width="@dimen/_37sdp"
@@ -313,9 +304,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_14sdp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/sport">
+
 
                     <ImageView
                         android:layout_width="@dimen/_37sdp"
@@ -326,14 +318,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/_8sdp"
-                        android:layout_marginEnd="@dimen/_22sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunitosanssemibold"
-                            android:text="Свободных мест"
+                            android:text="Свободных мест - 5"
                             android:textSize="@dimen/_15sdp" />
 
                         <ProgressBar
@@ -350,8 +342,8 @@
                     android:id="@+id/lineLineThree"
                     android:layout_width="@dimen/_292sdp"
                     android:layout_height="@dimen/_1sdp"
-                    android:layout_marginTop="@dimen/_8sdp"
                     android:layout_weight="0.39"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:background="@color/quantum_bluegrey50"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -361,11 +353,11 @@
                     android:id="@+id/about_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_marginTop="@dimen/_6sdp"
                     android:fontFamily="@font/nunitosansbold"
                     android:text="О событии"
-                    android:textSize="@dimen/_16sdp"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:textSize="@dimen/_17sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/lineLineThree" />
 
@@ -375,9 +367,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_12sdp"
                     android:layout_marginEnd="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:fontFamily="@font/mulish"
+                    android:gravity="center"
                     android:text="@{viewModel.eventDesc}"
-                    android:textSize="@dimen/_13sdp"
+                    android:textSize="@dimen/_15sdp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/about_event" />
 
@@ -393,7 +387,7 @@
                     android:ellipsize="end"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="Зарегистрироваться"
+                    android:text="Хочу на событие"
                     android:textAllCaps="false"
                     android:textColor="@color/quantum_white_100"
                     android:textFontWeight="600"

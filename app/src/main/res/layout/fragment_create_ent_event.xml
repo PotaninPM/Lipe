@@ -244,17 +244,18 @@
                     android:layout_marginStart="@dimen/_6sdp"
                     android:layout_marginEnd="@dimen/_6sdp"/>
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/levelspinner"
+                    android:id="@+id/ageSpinnerLayout"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:hint="Возвраст"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_46sdp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:spinnerMode="dropdown"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:layout_marginStart="@dimen/_6sdp"
                     android:layout_marginEnd="@dimen/_6sdp">
                     <AutoCompleteTextView
+                        android:id="@+id/ageSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="none"

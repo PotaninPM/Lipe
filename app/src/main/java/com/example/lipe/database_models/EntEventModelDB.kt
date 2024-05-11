@@ -7,7 +7,6 @@ data class EntEventModelDB(
     var time_of_creation: String,
     var sport_type: String,
     var title: String,
-    var adress: String,
     var coordinates: HashMap<String, Double>,
     var date_of_meeting: String,
     var max_people: Int,
@@ -17,5 +16,6 @@ data class EntEventModelDB(
     var reg_people_id: ArrayList<String?>,
     var amount_reg_people: Int,
     var status: String,
-    var groupUid: String
+    var groupUid: String,
+    var timestamp: Long
 )

@@ -2,15 +2,20 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rating_item"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_62sdp"
-    android:background="@drawable/rating_item_source">
+    android:layout_height="@dimen/_58sdp"
+    android:layout_marginTop="@dimen/_6sdp"
+    android:background="@drawable/rating_item_source_third">
 
         <TextView
             android:id="@+id/place"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_12sdp"
             android:text="1"
+            android:fontFamily="@font/nunitosansextrabold"
+            android:textSize="@dimen/_14sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -20,6 +25,8 @@
             android:layout_width="@dimen/_42sdp"
             android:layout_height="@dimen/_42sdp"
             android:src="@drawable/ex2"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/username"
             app:layout_constraintTop_toTopOf="parent"
@@ -27,9 +34,11 @@
 
         <TextView
             android:id="@+id/username"
-            android:layout_width="57dp"
-            android:layout_height="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="MikePM"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="@dimen/_14sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -40,6 +49,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2000"
+            android:textSize="@dimen/_14sdp"
+            android:fontFamily="@font/nunitosansbold"
+            android:layout_marginEnd="@dimen/_12sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 

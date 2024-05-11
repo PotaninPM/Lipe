@@ -202,7 +202,6 @@ class SignUpDescFragment : Fragment() {
                 pass,
                 name,
                 lastName,
-                -1,
                 arrayListOf(),
                 arrayListOf(),
                 arrayListOf(),
@@ -215,6 +214,34 @@ class SignUpDescFragment : Fragment() {
                 "online",
                 token
             )
+
+            val dbRef_rating = FirebaseDatabase.getInstance().getReference("rating")
+            val newRatingRef = dbRef_rating.push()
+
+            dbRef_rating.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val count = snapshot.childrenCount
+
+                    val user = mapOf(
+                        "userUid" to auth.currentUser!!.uid,
+                        "points" to 0,
+                        "place" to count + 1
+                    )
+
+                    newRatingRef.setValue(user)
+                        .addOnSuccessListener {
+                            Log.d("INFOG", "User added")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("INFOG", "Error adding", e)
+                        }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("INFOG", "Error reading number of users from rating", error.toException())
+                }
+            })
+
 
             FirebaseDatabase.getInstance().getReference("location").child(auth.currentUser!!.uid).setValue(
                 hashMapOf("latitude" to "-", "longitude" to "-")

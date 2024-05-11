@@ -3,13 +3,22 @@ package com.example.lipe.rating_board
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
+import coil.Coil
+import coil.ImageLoader
+import coil.request.ImageRequest
 import com.example.lipe.R
 import com.example.lipe.databinding.RatingItemBinding
 import com.google.firebase.database.DatabaseReference
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.collections.ArrayList
 
-class RatingAdapter :  RecyclerView.Adapter<RatingAdapter.RatingHolder>() {
+class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope) :  RecyclerView.Adapter<RatingAdapter.RatingHolder>() {
+
     val ratingList = ArrayList<RatingItem>()
     inner class RatingHolder(item: View): RecyclerView.ViewHolder(item) {
 
@@ -17,10 +26,27 @@ class RatingAdapter :  RecyclerView.Adapter<RatingAdapter.RatingHolder>() {
 
         val binding = RatingItemBinding.bind(item)
         fun bind(rating: RatingItem) = with(binding) {
-            //Picasso.get().load(rating.avatarUrl).into(persImage)
+            lifecycleScope.launch {
+                val bitmap = withContext(Dispatchers.IO) {
+                    Coil.imageLoader(itemView.context).execute(
+                        ImageRequest.Builder(itemView.context)
+                            .data(rating.avatarUrl)
+                            .build()
+                    ).drawable?.toBitmap()
+                }
+                binding.persImage.setImageBitmap(bitmap)
+            }
             username.text = rating.username
             ratingScore.text = rating.score.toString()
             place.text = rating.place.toString()
+
+            val backgroundResId = when (rating.place) {
+                1 -> R.drawable.rating_item_source_first
+                2 -> R.drawable.rating_item_source_second
+                3 -> R.drawable.rating_item_source_third
+                else -> R.drawable.rating_item_source
+            }
+            ratingItem.setBackgroundResource(backgroundResId)
         }
     }
 

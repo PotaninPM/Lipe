@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.Spinner
@@ -54,6 +55,8 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     private var image1: String = "-"
     private var image2: String = "-"
     private var image3: String = "-"
+
+    private var selectedpower = "-"
 
     private var imagesUid: ArrayList<String> = arrayListOf("-", "-", "-")
 
@@ -97,12 +100,6 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
         setDesignToFields()
 
-        spinner = binding.spinner1
-
-        val adapter = CustomAdapter(requireContext(), items)
-
-        spinner.adapter = adapter
-
         val view = binding.root
         return view
     }
@@ -116,6 +113,14 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         dbRef_id = FirebaseDatabase.getInstance().getReference("id_event")
 
         auth = FirebaseAuth.getInstance()
+
+        val items = listOf("Не очень сильный", "Достаточно много", "Очень много", "Похоже на свалку")
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, items)
+        val autoCompleteTextView = view.findViewById<AutoCompleteTextView>(R.id.pollutionSpinner)
+        autoCompleteTextView.setAdapter(adapter)
+        autoCompleteTextView.setOnItemClickListener { parent, view, position, id ->
+            selectedpower = parent.getItemAtPosition(position).toString()
+        }
 
         binding.btnCreateEvent.setOnClickListener {
             uploadImage {photos ->

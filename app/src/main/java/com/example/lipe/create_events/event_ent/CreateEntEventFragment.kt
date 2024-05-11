@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.Spinner
@@ -25,6 +26,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.CryptAlgo
+import com.example.lipe.EventApi
 import com.example.lipe.R
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.databinding.FragmentCreateEntEventBinding
@@ -32,6 +34,7 @@ import com.example.lipe.database_models.EntEventModelDB
 import com.example.lipe.database_models.GroupModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
@@ -40,7 +43,15 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.squareup.okhttp.Callback
+import com.squareup.okhttp.Response
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.util.ArrayList
 import java.util.Calendar
 import java.util.Date
@@ -54,9 +65,13 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
     var type_sport = "1"
 
+    private var selectedAge: String = "-"
+
     private lateinit var imageUri1: Uri
     private lateinit var imageUri2: Uri
     private lateinit var imageUri3: Uri
+
+    private lateinit var api: EventApi
 
     private var image1: String = "-"
     private var image2: String = "-"
@@ -98,12 +113,6 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         SpinnerItem("Программирование", R.drawable.programming)
     )
 
-    private var levels: List<SpinnerItem> = listOf(
-        SpinnerItem("Для любого возраста", R.drawable.light_bulb),
-        SpinnerItem("Для детей(6 - 14 лет)", R.drawable.img_basketballimg),
-        SpinnerItem("Для подростков(14 - 18)", R.drawable.volleyball_2),
-        SpinnerItem("Для взрослых(более 18)", R.drawable.football),
-    )
 
     private lateinit var dbRef_events: DatabaseReference
     private lateinit var dbRef_users: DatabaseReference
@@ -153,7 +162,6 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         return view
     }
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -162,6 +170,14 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         dbRef_users = FirebaseDatabase.getInstance().getReference("users")
 
         auth = FirebaseAuth.getInstance()
+
+        val items = listOf("Любой возраст", "Больше 18", "До 18")
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, items)
+        val autoCompleteTextView = view.findViewById<AutoCompleteTextView>(R.id.ageSpinner)
+        autoCompleteTextView.setAdapter(adapter)
+        autoCompleteTextView.setOnItemClickListener { parent, view, position, id ->
+            selectedAge = parent.getItemAtPosition(position).toString()
+        }
 
         binding.btnCreateEvent.setOnClickListener {
 //            binding.scrollView.visibility = View.GONE
@@ -309,7 +325,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
             var title = binding.etNameinputText.text.toString().trim()
             var coord: HashMap<String, Double> = hashMapOf("latitude" to appVM.latitude, "longitude" to appVM.longtitude)
-            var date_of_meeting: String = binding.etNameinputText.text.toString()
+            var date_of_meeting: String = binding.timeText.text.toString() + " " + binding.dateText.text.toString()
             var maxPeople: Int = binding.etMaxInputText.text.toString().trim().toInt()
             var desc: String = binding.etDescInputText.text.toString().trim()
 
@@ -318,7 +334,6 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             if(type_sport == "1" || type_sport == "Выберите тип развлечения") {
                 Toast.makeText(requireContext(), "Введите спорт!", Toast.LENGTH_LONG).show()
             } else {
-                val uidGroup = UUID.randomUUID().toString()
                 var event = EntEventModelDB(
                     eventId,
                     type,
@@ -326,17 +341,17 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     current,
                     type_sport,
                     title,
-                    "smth",
                     coord,
                     date_of_meeting,
                     maxPeople,
-                    "16-18",
+                    selectedAge,
                     desc,
                     photos,
                     arrayListOf(auth.currentUser?.uid),
                     1,
                     "ok",
-                    uidGroup
+                    eventId,
+                    Instant.now().epochSecond
                 )
 
                 val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/curRegEventsId")
@@ -349,9 +364,9 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                 dbRef_events.child(eventId).setValue(event).addOnSuccessListener {
                     dbRef_user.child(eventId).setValue(eventId).addOnSuccessListener {
                         dbRef_user_your.child(eventId).setValue(eventId).addOnSuccessListener {
-                            val group = GroupModel(uidGroup, title, photos.get(0), arrayListOf(auth.currentUser!!.uid), arrayListOf())
-                            dbRef_group.child(uidGroup).setValue(group).addOnSuccessListener {
-                                dbRef_user_groups.child(uidGroup).setValue(uidGroup).addOnSuccessListener {
+                            val group = GroupModel(eventId, title, photos.get(0), arrayListOf(auth.currentUser!!.uid), arrayListOf())
+                            dbRef_group.child(eventId).setValue(group).addOnSuccessListener {
+                                dbRef_user_groups.child(eventId).setValue(eventId).addOnSuccessListener {
                                     //do smth
                                 }
                             }
@@ -374,6 +389,18 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         }
         if(binding.etMaxInputText.text.toString().isEmpty()) {
             setError("Введите количество людей!", binding.etMaxInputText)
+            check = false
+        }
+        if(selectedAge == "-") {
+            setDialog("Вы не выбрали возраст", "Вы должны выбрать возраст участия в вашем событии", "Хорошо")
+            check = false
+        }
+        if(savedYear == 0) {
+            setDialog("Вы не выбрали дату начала события", "Вы должны выбрать дату начала события, то есть дату сбора всех зарегистрировавшихся", "Хорошо")
+            check = false
+        }
+        if(type_sport == "1") {
+            setDialog("Вы не выбрали вид спорта события", "Вы должны выбрать вид спорта события", "Хорошо")
             check = false
         }
         return check

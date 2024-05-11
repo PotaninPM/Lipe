@@ -13,7 +13,6 @@ data class UserDB(
     val password: String?= null,
     val firstName: String?= null,
     val lastName: String ?= null,
-    val place_in_total_rating: Int?= null,
     val hobbies: ArrayList<String> ?= null,
     val query_friends: ArrayList<String> ?= null,
     val friends: ArrayList<String> ?= null,

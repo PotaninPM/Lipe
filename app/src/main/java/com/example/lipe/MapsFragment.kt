@@ -40,6 +40,7 @@ import com.example.lipe.viewModels.AppVM
 import com.example.lipe.create_events.CreateEventFragment
 import com.example.lipe.databinding.FragmentMapsBinding
 import com.example.lipe.all_profiles.other_profile.OtherProfileFragment
+import com.example.lipe.rating_board.RatingFragment
 import com.example.lipe.viewModels.EventEcoVM
 import com.example.lipe.view_events.EventFragment
 import com.example.lipe.viewModels.EventEntVM
@@ -64,7 +65,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
@@ -321,6 +321,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 } else if(type == "eco") {
                     ecoEventsMarkersMap[eventId]?.remove()
                     ecoEventsMarkersMap.remove(eventId)
+                } else if(type == "help") {
+                    helpEventsMarkersMap[eventId]?.remove()
+                    helpEventsMarkersMap.remove(eventId)
                 }
             }
 
@@ -686,7 +689,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 R.id.profile -> replaceFragment(ProfileFragment())
                 R.id.map -> replaceFragment(MapsFragment())
                 //R.id.rating -> replaceFragment(RatingFragment())
-                R.id.rating -> replaceFragment(OtherProfileFragment("2cncxoQcdpMuw9HyFUjljxYf4iv2"))
+                R.id.rating -> replaceFragment(RatingFragment())
                 R.id.chats -> replaceFragment(ChatsAndGroupsFragment())
                 else -> {
 

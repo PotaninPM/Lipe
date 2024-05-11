@@ -317,7 +317,6 @@ class EventEntFragment : BottomSheetDialogFragment() {
                         val description = eventSnapshot.child("description").value.toString()
                         val creatorUid = eventSnapshot.child("creator_id").value.toString()
                         val photos = arrayListOf(eventSnapshot.child("photos").value.toString())
-                        val address = eventSnapshot.child("adress").value.toString()
                         val freePlaces = maxPeople - eventSnapshot.child("amount_reg_people").value.toString().toInt()
                         val timeOfCreation = eventSnapshot.child("time_of_creation").value.toString()
                         val dateOfMeeting = eventSnapshot.child("date_of_meeting").value.toString()
@@ -344,7 +343,6 @@ class EventEntFragment : BottomSheetDialogFragment() {
                                                         creatorUsername,
                                                         photos,
                                                         arrayListOf("1"),
-                                                        address,
                                                         freePlaces,
                                                         age,
                                                         description,
@@ -370,7 +368,6 @@ class EventEntFragment : BottomSheetDialogFragment() {
                                                     "Удаленный аккаунт",
                                                     photos,
                                                     arrayListOf("1"),
-                                                    address,
                                                     freePlaces,
                                                     age,
                                                     description,

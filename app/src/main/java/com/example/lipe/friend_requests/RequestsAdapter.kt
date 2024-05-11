@@ -1,19 +1,29 @@
 package com.example.lipe.friend_requests
 
+import android.graphics.Bitmap
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import coil.Coil
+import coil.request.ImageRequest
 import com.example.lipe.R
 import com.example.lipe.database_models.ChatModelDB
 import com.example.lipe.databinding.FriendRequestItemBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.ArrayList
 import java.util.UUID
 
-class RequestsAdapter: RecyclerView.Adapter<RequestsAdapter.RequestsHolder>() {
+class RequestsAdapter(val lifecycleScope: LifecycleCoroutineScope): RecyclerView.Adapter<RequestsAdapter.RequestsHolder>() {
 
     val requestList = ArrayList<Request>()
     inner class RequestsHolder(item: View): RecyclerView.ViewHolder(item) {
@@ -21,7 +31,19 @@ class RequestsAdapter: RecyclerView.Adapter<RequestsAdapter.RequestsHolder>() {
 
         val binding = FriendRequestItemBinding.bind(item)
         fun bind(request: Request) = with(binding) {
-            //Picasso.get().load(request.avatarUrl).into(shapeableImageView)
+
+            lifecycleScope.launch {
+                lifecycleScope.launch {
+                    val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                        Coil.imageLoader(itemView.context).execute(
+                            ImageRequest.Builder(itemView.context)
+                                .data(request.avatarUrl)
+                                .build()
+                        ).drawable?.toBitmap()!!
+                    }
+                    binding.avatarRequest.setImageBitmap(bitmap)
+                }
+            }
 
             username.text = request.username
 

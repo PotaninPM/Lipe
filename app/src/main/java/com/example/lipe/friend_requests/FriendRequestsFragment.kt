@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
@@ -51,7 +52,7 @@ class FriendRequestsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = RequestsAdapter()
+        adapter = RequestsAdapter(lifecycleScope)
         binding.recyclerReq.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerReq.adapter = adapter
 

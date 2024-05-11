@@ -1,9 +1,14 @@
 package com.example.lipe.viewModels
 
+import android.content.res.Resources
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.lipe.R
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class EventEntVM: ViewModel() {
 
@@ -66,21 +71,21 @@ class EventEntVM: ViewModel() {
         longtitude = long
     }
 
-    fun setInfo(id_: String, maxPeople_: Int, title_: String, creator_: String, creatorUsername_: String, photos_: ArrayList<String>, peopleGo_: List<String>, adress_: String, freePlaces_: Int, age_: String, eventDesc_: String, time_of_creation_: String, date_: String, type_sport_: String, amount_reg_people_: Int, friend_: String) {
+    fun setInfo(id_: String, maxPeople_: Int, title_: String, creator_: String, creatorUsername_: String, photos_: ArrayList<String>, peopleGo_: List<String>, freePlaces_: Int, age_: String, eventDesc_: String, time_of_creation_: String, date_: String, type_sport_: String, amount_reg_people_: Int, friend_: String) {
         _id.value = id_
         _maxPeople.value = maxPeople_
         _title.value = title_
         _creator.value = creator_
         _photos.value = photos_
         _peopleGo.value = peopleGo_
-        _adress.value = adress_
         _eventDesc.value = eventDesc_
         _date.value = date_
         _type_sport.value = type_sport_
-        _type.value = "Развлечение"
         _time_of_creation.value = time_of_creation_
         _amount_reg_people.value = amount_reg_people_
         _freePlaces.value = 100 - 100 * amount_reg_people.value!! / maxPeople.value!!
+
+        _time_of_creation.value = formatDate(time_of_creation_)
 
         _friend.value = friend_
 
@@ -90,23 +95,18 @@ class EventEntVM: ViewModel() {
         setDate(date_)
     }
 
+    fun formatDate(dateString: String): String {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("Создано d MMMM yyyy года HH:mm", Locale("ru"))
+        val date = inputFormat.parse(dateString)
+        return outputFormat.format(date)
+    }
+
     private var _dateRussianMonthDayYear = MutableLiveData<String>()
     val dateRussianMonthDayYear: LiveData<String> = _dateRussianMonthDayYear
 
     fun setDate(date: String) {
-
-        val months = arrayListOf("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь")
-
-//        var year:String = date[0].toString() + date[1].toString() + date[2].toString() + date[3].toString()
-//        var month: String = date[5].toString() + date[6].toString()
-//        var day: String = date[8].toString() + date[9].toString()
-        //var time:String = date[11].toString() + date[12].toString() + ":" + date[14].toString() + date[15].toString()
-
-//        _dateRussianMonthDayYear.value = day + " " + months[month.toInt() - 1] + ", " + year
-        _dateRussianMonthDayYear.value = "11"
-        //Log.d("INFOG", dateRussianMonthDayYear.value.toString())
-
-
+        _dateRussianMonthDayYear.value = date
     }
 
 //    fun setProgress(freePlaces: Int, maxPeople: Int) {

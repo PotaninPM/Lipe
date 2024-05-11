@@ -1,15 +1,22 @@
 package com.example.lipe.rating_board
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lipe.databinding.FragmentRatingBinding
 import com.example.lipe.friend_requests.RequestsAdapter
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
 
 class RatingFragment : Fragment() {
 
@@ -26,7 +33,7 @@ class RatingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = RatingAdapter()
+        adapter = RatingAdapter(lifecycleScope)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
@@ -46,13 +53,6 @@ class RatingFragment : Fragment() {
 //        })
     }
 
-    private fun filterList(query: String) {
-        if(query != null) {
-            val filteredList = ArrayList<RatingItem>()
-
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,12 +64,42 @@ class RatingFragment : Fragment() {
     }
 
     private fun addPeople() {
-        //val dbRef_user = FirebaseDatabase.getInstance().getReference("rating/${auth.currentUser!!.uid}/query_friends")
-        rateList.add(RatingItem("1", "https://s0.rbk.ru/v6_top_pics/media/img/0/95/346980502063950.webp", 1, "MikePM", 123))
-        rateList.add(RatingItem("1", "https://s0.rbk.ru/v6_top_pics/media/img/0/95/346980502063950.webp", 1, "MikePM", 123))
-        rateList.add(RatingItem("1", "https://s0.rbk.ru/v6_top_pics/media/img/0/95/346980502063950.webp", 1, "MikePM", 123))
+        val dbRef_rating = FirebaseDatabase.getInstance().getReference("rating")
+        dbRef_rating.orderByKey().addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val rateList = mutableListOf<RatingItem>()
 
-        adapter.updateRequests(rateList)
+                snapshot.children.sortedBy { it.child("place").value.toString().toInt() }.forEach { ratingSnapshot ->
+                    val place = ratingSnapshot.child("place").value.toString()
+                    val points = ratingSnapshot.child("points").value.toString()
+                    val userUid = ratingSnapshot.child("userUid").value.toString()
+
+                    val dbRef_user = FirebaseDatabase.getInstance().getReference("users/$userUid/username")
+                    dbRef_user.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val nickname = snapshot.value.toString()
+                            val storageRef = FirebaseStorage.getInstance().getReference("avatars/$userUid")
+
+                            storageRef.downloadUrl.addOnSuccessListener { url ->
+                                rateList.add(RatingItem(userUid, url.toString(), place.toInt(), nickname, points.toInt()))
+                                adapter.updateRequests(rateList)
+                            }.addOnFailureListener {
+                                Log.e("INFOG", "Rating smth wrong")
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            TODO("Not yet implemented")
+                        }
+
+                    })
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Обработка ошибок
+            }
+        })
     }
 
     override fun onDestroy() {

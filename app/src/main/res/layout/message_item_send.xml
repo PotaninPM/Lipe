@@ -11,23 +11,46 @@
         android:layout_height="wrap_content"
         android:background="@drawable/message_sender_background"
         android:padding="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_3sdp"
         app:layout_constraintWidth_max="@dimen/_262sdp"
         android:layout_marginEnd="@dimen/_3sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/sender_message_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_regular"
-            android:textColor="@color/quantum_black_100"
-            android:textSize="@dimen/_14sdp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/sender_message_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/roboto_regular"
+                android:textColor="@color/quantum_black_100"
+                android:textSize="@dimen/_14sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+<!--            <TextView-->
+<!--                android:id="@+id/time"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="@dimen/_3sdp"-->
+<!--                android:text="13:23"-->
+<!--                android:layout_gravity="bottom"-->
+<!--                android:textSize="@dimen/_8sdp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/sender_message_text" />-->
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -181,14 +181,6 @@
                         tools:ignore="Autofill" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <androidx.appcompat.widget.AppCompatSpinner
-                    android:id="@+id/spinner1"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_46sdp"
-                    android:layout_gravity="center"
-                    android:spinnerMode="dropdown"
-                    android:layout_marginStart="@dimen/_6sdp"
-                    android:layout_marginEnd="@dimen/_6sdp"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/dateLay"
@@ -197,9 +189,8 @@
                     android:orientation="horizontal"
                     android:gravity="start"
                     android:background="@drawable/choose_date_lay"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_8sdp">
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_marginEnd="@dimen/_6sdp">
 
                     <TextView
                         android:id="@+id/notify_set_date"
@@ -235,6 +226,25 @@
                         app:layout_constraintStart_toEndOf="@+id/timeText"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/pollutionSpinnerLayout"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:hint="Уровень загрязнения"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:spinnerMode="dropdown"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:layout_marginEnd="@dimen/_6sdp">
+                    <AutoCompleteTextView
+                        android:id="@+id/pollutionSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="none"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
