@@ -56,8 +56,25 @@ class AllChatsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.Ad
 
             val firstNameRef = dbRef.child("users").child(chat.partnerUid).child("firstName")
             val lastNameRef = dbRef.child("users").child(chat.partnerUid).child("lastName")
+            val status = dbRef.child("users").child(chat.partnerUid).child("status")
 
             val lastMessage_db = dbRef.child("chats").child(chat.uid).child("last_message")
+
+            status.addValueEventListener(object: ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    var status_user = snapshot.value.toString()
+                    if(status_user == "online") {
+                        binding.statusViewGroup.visibility = View.VISIBLE
+                    } else {
+                        binding.statusViewGroup.visibility = View.GONE
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+            })
 
             firstNameRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {

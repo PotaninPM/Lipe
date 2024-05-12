@@ -21,6 +21,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/ImageStyle_Circle" />
 
+    <View
+        android:id="@+id/statusViewGroup"
+        android:layout_width="@dimen/_12sdp"
+        android:layout_height="@dimen/_12sdp"
+        android:background="@drawable/online_spot"
+        app:layout_constraintBottom_toBottomOf="@+id/avatar"
+        app:layout_constraintEnd_toEndOf="@+id/avatar" />
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
