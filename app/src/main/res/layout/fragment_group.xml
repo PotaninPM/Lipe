@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#DAFFFC"
-    android:id="@+id/all_chat"
+    android:id="@+id/all_group"
     tools:context=".chats_and_groups.chat_fr.ChatFragment">
     <data>
         <variable
             name="viewModel"
-            type="com.example.lipe.viewModels.ChatVM" />
+            type="com.example.lipe.viewModels.GroupVM" />
 
         <variable
             name="ChatFragment"
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewChat"
+            android:id="@+id/recyclerViewGroup"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/_3sdp"
@@ -66,20 +66,20 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_6sdp"
                     android:fontFamily="@font/roboto_bold"
+                    android:gravity="center_vertical"
                     android:text="@{viewModel.name}"
                     android:textSize="@dimen/_14sdp"
                     app:layout_constraintStart_toEndOf="@+id/avatar_chat"
                     app:layout_constraintTop_toTopOf="@+id/avatar_chat" />
 
                 <TextView
-                    android:id="@+id/online_or_offline"
+                    android:id="@+id/countMembers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_6sdp"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="@{viewModel.status}"
-                    android:textColor="#32D04C"
-                    android:textFontWeight="400"
+                    android:gravity="center_vertical"
+                    android:text="@{viewModel.countMembers}"
                     android:textSize="@dimen/_12sdp"
                     app:layout_constraintBottom_toBottomOf="@+id/avatar_chat"
                     app:layout_constraintStart_toEndOf="@+id/avatar_chat"

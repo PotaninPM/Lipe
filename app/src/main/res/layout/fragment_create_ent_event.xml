@@ -16,124 +16,56 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <HorizontalScrollView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/horizontalScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_210sdp"
                 android:fillViewport="true"
                 android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/photo_lay_1"
+                    android:layout_width="@dimen/_290sdp"
+                    android:layout_height="@dimen/_210sdp"
+                    android:background="@drawable/upload_photo_event"
+                    android:gravity="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/photo_lay_1"
-                        android:layout_width="@dimen/_290sdp"
-                        android:layout_height="@dimen/_210sdp"
-                        android:layout_marginEnd="@dimen/_6sdp"
-                        android:background="@drawable/upload_photo_event">
-                        <ImageView
-                            android:id="@+id/photo1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
+                    <ImageView
+                        android:id="@+id/photo1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
-                        <ImageView
-                            android:id="@+id/arrowUp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/img_arrowup"
-                            app:layout_constraintBottom_toTopOf="@+id/textImg"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
+                    <ImageView
+                        android:id="@+id/arrowUp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/img_arrowup"
+                        app:layout_constraintBottom_toTopOf="@+id/textImg"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
 
-                        <TextView
-                            android:id="@+id/textImg"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:text="Нажмите, чтобы загрузить фото"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/photo_lay_2"
-                        android:layout_width="@dimen/_290sdp"
-                        android:layout_height="@dimen/_210sdp"
-                        android:layout_marginEnd="@dimen/_6sdp"
-                        android:background="@drawable/upload_photo_event">
-
-                        <ImageView
-                            android:id="@+id/photo2"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-                        <ImageView
-                            android:id="@+id/arrowUp1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/img_arrowup"
-                            app:layout_constraintBottom_toTopOf="@+id/textImg1"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
-
-                        <TextView
-                            android:id="@+id/textImg1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:text="Нажмите, чтобы загрузить фото"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/photo_lay_3"
-                        android:layout_width="@dimen/_290sdp"
-                        android:layout_height="@dimen/_210sdp"
-                        android:layout_marginEnd="@dimen/_6sdp"
-                        android:background="@drawable/upload_photo_event">
-
-                        <ImageView
-                            android:id="@+id/photo3"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
-
-                        <ImageView
-                            android:id="@+id/arrowUp2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/img_arrowup"
-                            app:layout_constraintBottom_toTopOf="@+id/textImg2"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
-
-                        <TextView
-                            android:id="@+id/textImg2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:text="Нажмите, чтобы загрузить фото"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/textImg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="Нажмите, чтобы загрузить фото"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            </HorizontalScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
                 android:id="@+id/lineVectorOne"
@@ -332,6 +264,7 @@
                     android:textFontWeight="600"
                     android:textSize="@dimen/_12sdp"
                     tools:ignore="TextSizeCheck" />
+
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

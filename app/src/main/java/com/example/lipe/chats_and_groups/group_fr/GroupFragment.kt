@@ -1,60 +1,197 @@
 package com.example.lipe.chats_and_groups.group_fr
 
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.toBitmap
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import coil.Coil
+import coil.request.ImageRequest
+import com.example.lipe.CryptAlgo
 import com.example.lipe.R
+import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
+import com.example.lipe.chats_and_groups.Message
+import com.example.lipe.chats_and_groups.chat_fr.ChatAdapter
+import com.example.lipe.databinding.FragmentChatBinding
+import com.example.lipe.databinding.FragmentGroupBinding
+import com.example.lipe.viewModels.ChatVM
+import com.example.lipe.viewModels.GroupVM
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class GroupFragment(val groupUid: String) : Fragment() {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [GroupFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class GroupFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentGroupBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var groupAdapter: GroupAdapter
+    private lateinit var db: DatabaseReference
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var auth: FirebaseAuth
+
+    private val groupVM: GroupVM by activityViewModels()
+
+    private lateinit var yourFirstName: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_group, container, false)
+    ): View {
+        _binding = FragmentGroupBinding.inflate(inflater, container, false)
+
+        auth = FirebaseAuth.getInstance()
+
+
+        FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/firstName").addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                yourFirstName = snapshot.value.toString()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = groupVM
+
+            fillGroupData()
+        }
+
+        val view = binding.root
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment GroupFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            GroupFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        db = FirebaseDatabase.getInstance().getReference("groups/${groupUid}/messages")
+
+        binding.recyclerViewGroup.layoutManager = LinearLayoutManager(requireContext()).apply {
+            reverseLayout = false
+            stackFromEnd = true
+        }
+
+        groupAdapter = GroupAdapter(listOf(), auth.currentUser!!.uid, lifecycleScope)
+        binding.recyclerViewGroup.adapter = groupAdapter
+
+        val dbRef_chatLastMessage = FirebaseDatabase.getInstance().getReference("groups/${groupUid}")
+
+        binding.sendBtn.setOnClickListener {
+            val messageText = binding.messageInput.text.toString().trim()
+            if (messageText.isNotEmpty()) {
+                val currentUser = FirebaseAuth.getInstance().currentUser
+                val message = Message(
+                    CryptAlgo.crypt(messageText),
+                    currentUser?.uid ?: "",
+                    System.currentTimeMillis()
+                )
+
+                val lastMessage = hashMapOf("name" to yourFirstName, "lastMessage" to messageText)
+                dbRef_chatLastMessage.child("last_message").setValue(lastMessage).addOnSuccessListener {
+
                 }
+
+                db.push().setValue(message)
+                binding.messageInput.text?.clear()
             }
+
+        }
+
+        binding.backBtn.setOnClickListener {
+            val fragment = ChatsAndGroupsFragment()
+            val fragmentManager = childFragmentManager
+            fragmentManager.beginTransaction()
+                .replace(R.id.all_group, fragment)
+                .addToBackStack(null)
+                .commit()
+
+            val bottomNav =
+                (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
+            bottomNav.visibility = View.VISIBLE
+        }
+
+        db.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val messages = mutableListOf<Message>()
+                for (messageSnapshot in snapshot.children) {
+                    val text = messageSnapshot.child("text").getValue(String::class.java)
+                    val senderId = messageSnapshot.child("senderId").getValue(String::class.java)
+                    val timestamp =
+                        messageSnapshot.child("time").getValue(Long::class.java)
+                    val message = Message(text ?: "", senderId ?: "", timestamp ?: 0)
+                    messages.add(message)
+                }
+                groupAdapter.messages = messages
+                groupAdapter.notifyDataSetChanged()
+                binding.recyclerViewGroup.smoothScrollToPosition(messages.size)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+        })
+
+
+    }
+
+    private fun fillGroupData() {
+        val myUid = auth.currentUser!!.uid
+        val dbRef_find_group =
+            FirebaseDatabase.getInstance().getReference("groups/${groupUid}")
+
+        dbRef_find_group.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                groupVM.setInfo(snapshot.child("title").value.toString(), groupUid, snapshot.child("members").childrenCount.toString())
+
+                val storage_group = FirebaseStorage.getInstance().getReference("event_images/${snapshot.child("imageUid").value}")
+                storage_group.downloadUrl.addOnSuccessListener {url ->
+                    lifecycleScope.launch {
+                        val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                            Coil.imageLoader(requireContext()).execute(
+                                ImageRequest.Builder(requireContext())
+                                    .data(url)
+                                    .build()
+                            ).drawable?.toBitmap()!!
+                        }
+                        binding.avatarChat.setImageBitmap(bitmap)
+                    }
+                }
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        val bottomNav =
+            (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNav.visibility = View.VISIBLE
+
+        _binding = null
     }
 }

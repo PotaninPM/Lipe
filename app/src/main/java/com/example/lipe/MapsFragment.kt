@@ -756,19 +756,33 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         Log.d("INFOG", type)
 
-        if(sport_type != "-") {
-            if(sport_type == "Воллейбол") {
-                sportType = R.drawable.volleyball_2
-            } else if(sport_type == "Футбол") {
-                sportType = R.drawable.football
-            } else if(sport_type == "Рэгби") {
-                sportType = R.drawable.rugby_ball
-            } else if(sport_type == "Баскетбол") {
-                sportType = R.drawable.img_basketballimg
-            } else if(sport_type == "Теннис") {
-                sportType = R.drawable.tennis
-            } else if(sport_type == "Лыжи") {
-                sportType = R.drawable.skiing_1
+        if (sport_type != "-") {
+            sportType = when (sport_type) {
+                "Баскетбол" -> R.drawable.img_basketballimg
+                "Воллейбол" -> R.drawable.volleyball_2
+                "Футбол" -> R.drawable.football
+                "Рэгби" -> R.drawable.rugby_ball
+                "Воркаут" -> R.drawable.weights
+                "Большой тенис" -> R.drawable.tennis
+                "Бадминтон" -> R.drawable.shuttlecock
+                "Пинпонг" -> R.drawable.table_tennis
+                "Гимнастика" -> R.drawable.gymnastic_rings
+                "Фехтование" -> R.drawable.fencing
+                "Бег" -> R.drawable.running_shoe
+                "Кёрлинг" -> R.drawable.curling
+                "Хоккей" -> R.drawable.ice_hockey
+                "Катание на коньках" -> R.drawable.ice_skate
+                "Лыжная ходьба" -> R.drawable.skiing_1
+                "Горные лыжи" -> R.drawable.skiing
+                "Теннис" -> R.drawable.tennis
+                "Сноуборд" -> R.drawable.snowboarding
+                "Настольные игры" -> R.drawable.board_game
+                "Мобильные игры" -> R.drawable.mobile_game
+                "Шахматы" -> R.drawable.chess_2
+                "Программирование" -> R.drawable.programming
+                else -> {
+                    0
+                }
             }
         }
         val markerImageResource = when (type) {

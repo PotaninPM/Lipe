@@ -14,6 +14,7 @@ import coil.request.ImageRequest
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.all_chats.ChatItem
 import com.example.lipe.chats_and_groups.chat_fr.ChatFragment
+import com.example.lipe.chats_and_groups.group_fr.GroupFragment
 import com.example.lipe.databinding.ChatItemBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.DataSnapshot
@@ -51,9 +52,16 @@ class AllGroupsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.A
 
             lastMessageRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    var last_message = dataSnapshot.value
-                    if(last_message != null) {
-                        lastMessage.text = last_message.toString()
+                    Log.d("INFOG", dataSnapshot.value.toString())
+                    if(dataSnapshot.value != null) {
+                        var last_message = dataSnapshot.child("lastMessage").value.toString()
+                        val name = dataSnapshot.child("name").value.toString()
+                        if (last_message != null) {
+                            lastMessage.text = "$name: $last_message"
+                        }
+                        binding.lastMessage.visibility = View.VISIBLE
+                    } else {
+                        binding.lastMessage.visibility = View.GONE
                     }
                 }
 
@@ -86,7 +94,7 @@ class AllGroupsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.A
                 if (context is AppCompatActivity) {
                     val bottomNavigationView = context.findViewById<BottomNavigationView>(R.id.bottom_navigation)
                     bottomNavigationView.visibility = View.GONE
-                    val fragment = ChatFragment("-")
+                    val fragment = GroupFragment(group.uid)
                     val fragmentManager = context.supportFragmentManager
                     fragmentManager.beginTransaction()
                         .replace(R.id.all_chats_and_groups, fragment)

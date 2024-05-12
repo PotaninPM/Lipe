@@ -79,7 +79,7 @@ class EventEntVM: ViewModel() {
         _photos.value = photos_
         _peopleGo.value = peopleGo_
         _eventDesc.value = eventDesc_
-        _date.value = date_
+        _date.value = date_.substring(6, date_.length) + " в " + date_.substring(0, 5)
         _type_sport.value = type_sport_
         _time_of_creation.value = time_of_creation_
         _amount_reg_people.value = amount_reg_people_

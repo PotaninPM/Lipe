@@ -250,15 +250,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunitosanssemibold"
-                            android:text="10 мая 2024 года в 15:20"
-                            android:layout_gravity="center"
+                            android:text="@{viewModel.date}"
                             android:textSize="@dimen/_15sdp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunitosanssemibold"
                             android:text="Дата сбора"
-                            android:textSize="@dimen/_14sdp" />
+                            android:textSize="@dimen/_12sdp" />
 <!--                        app:text="@{viewModel.dateRussianMonthDayYear}"-->
                     </LinearLayout>
                 </LinearLayout>

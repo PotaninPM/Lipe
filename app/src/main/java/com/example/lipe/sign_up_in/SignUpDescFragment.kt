@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.ImageView
@@ -18,6 +19,7 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.lipe.R
@@ -53,6 +55,8 @@ class SignUpDescFragment : Fragment() {
 
     private var _binding: FragmentSignUpDescBinding? = null
     private val binding get() = _binding!!
+
+    private var selectedItems: MutableList<SpinnerItem> = mutableListOf()
 
     private var items: List<SpinnerItem> = listOf(
         SpinnerItem("Ваши увлечения", R.drawable.light_bulb),
@@ -103,9 +107,26 @@ class SignUpDescFragment : Fragment() {
         binding.all.visibility = View.VISIBLE
         binding.progressBar.visibility = View.GONE
 
-        val adapter = CustomAdapter(requireContext(), items)
+        val adapter = CustomAdapter(requireContext(), items, appVM.selectedItems)
 
         spinner.adapter = adapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedItem = adapter.getItem(position)
+                if (selectedItem != null) {
+                    if (appVM.selectedItems.value?.contains(selectedItem) == true) {
+                        appVM.removeItem(selectedItem)
+                    } else {
+                        appVM.addItem(selectedItem)
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Do nothing
+            }
+        }
 
         val view = binding.root
         return view
@@ -263,20 +284,41 @@ class SignUpDescFragment : Fragment() {
 
     data class SpinnerItem(val name: String, val imageResourceId: Int)
 
-    private class CustomAdapter(context: Context, private val items: List<SpinnerItem>) : ArrayAdapter<SpinnerItem>(context,
-        R.layout.spinner_multi_chose, items) {
+    private class CustomAdapter(
+        context: Context,
+        private val items: List<SpinnerItem>,
+        private val selectedItems: MutableLiveData<MutableList<SpinnerItem>>
+    ) : ArrayAdapter<SpinnerItem>(context, R.layout.spinner_multi_chose, items) {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.spinner_multi_chose, parent, false)
+            val view = convertView ?: LayoutInflater.from(context)
+                .inflate(R.layout.spinner_multi_chose, parent, false)
 
             val checkBox = view.findViewById<CheckBox>(R.id.checkBox)
             val imageView = view.findViewById<ImageView>(R.id.imageView)
             val textView = view.findViewById<TextView>(R.id.textView)
 
-            if(position == 0) {
+            if (position == 0) {
                 checkBox.visibility = View.GONE
             } else {
                 checkBox.visibility = View.VISIBLE
+                val item = getItem(position)
+                checkBox.isChecked = selectedItems.value?.contains(item) ?: false
+                checkBox.setOnCheckedChangeListener { _, isChecked ->
+                    val selectedItem = getItem(position)
+                    selectedItem?.let {
+                        val currentList = selectedItems.value ?: mutableListOf()
+                        if (isChecked) {
+                            if (!currentList.contains(selectedItem)) {
+                                currentList.add(selectedItem)
+                                selectedItems.value = currentList
+                            }
+                        } else {
+                            currentList.remove(selectedItem)
+                            selectedItems.value = currentList
+                        }
+                    }
+                }
             }
 
             val item = getItem(position)
@@ -285,10 +327,12 @@ class SignUpDescFragment : Fragment() {
 
             return view
         }
+
         override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
             return getView(position, convertView, parent)
         }
     }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
