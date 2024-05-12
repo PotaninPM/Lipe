@@ -37,11 +37,10 @@ class RatingFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
 
     private val ratingVM: RatingVM by activityViewModels()
+
+    private lateinit var ratingListener: ValueEventListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        auth = FirebaseAuth.getInstance()
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,7 +69,9 @@ class RatingFragment : Fragment() {
             }
         })
 
-        loadDataOfUser()
+        binding.placeInRating.setOnClickListener {
+            //adapter.filter()
+        }
 
         addPeople()
     }
@@ -90,9 +91,23 @@ class RatingFragment : Fragment() {
                 }.drawable?.toBitmap()
 
                 binding.userRatingAvatar.setImageBitmap(bitmap)
+
+                val dbRef_user = FirebaseDatabase.getInstance().getReference("users/$user")
+                dbRef_user.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        ratingVM.setInfo(
+                            snapshot.child("points").value.toString(),
+                            snapshot.child("place_in_rating").value.toString(),
+                            it.toString()
+                        )
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+                })
             }
         }
-        val dbRef_user = FirebaseDatabase.getInstance().getReference("users")
     }
 
     override fun onCreateView(
@@ -101,16 +116,26 @@ class RatingFragment : Fragment() {
     ): View? {
         _binding = FragmentRatingBinding.inflate(inflater, container, false)
 
+        auth = FirebaseAuth.getInstance()
+
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = ratingVM
+
+            loadDataOfUser()
+        }
+
         val view = binding.root
         return view
     }
 
     private fun addPeople() {
         val dbRef_rating = FirebaseDatabase.getInstance().getReference("rating")
-        dbRef_rating.orderByKey().addListenerForSingleValueEvent(object : ValueEventListener {
+        ratingListener = dbRef_rating.orderByKey().addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val all = snapshot.childrenCount.toInt()
                 var completedCount = 0
+                val newRateList = mutableListOf<RatingItem>()
 
                 snapshot.children.forEach { ratingSnapshot ->
                     val place = ratingSnapshot.key
@@ -124,20 +149,20 @@ class RatingFragment : Fragment() {
                             val storageRef = FirebaseStorage.getInstance().getReference("avatars/$userUid")
 
                             storageRef.downloadUrl.addOnSuccessListener { url ->
-                                rateList.add(RatingItem(userUid, url.toString(), place!!.toInt(), nickname, points.toInt()))
+                                newRateList.add(RatingItem(userUid, url.toString(), place!!.toInt(), nickname, points.toInt()))
                                 completedCount++
                                 if (completedCount == all) {
-                                    rateList.sortBy { it.place }
-                                    adapter.updateRequests(rateList)
-                                    Log.d("INFOG", rateList.size.toString())
+                                    newRateList.sortBy { it.place }
+                                    adapter.updateRequests(newRateList)
+                                    Log.d("INFOG", newRateList.size.toString())
                                 }
                             }.addOnFailureListener {
                                 Log.e("INFOG", "Rating smth wrong")
                                 completedCount++
                                 if (completedCount == all) {
-                                    rateList.sortBy { it.place }
-                                    adapter.updateRequests(rateList)
-                                    Log.d("INFOG", rateList.size.toString())
+                                    newRateList.sortBy { it.place }
+                                    adapter.updateRequests(newRateList)
+                                    Log.d("INFOG", newRateList.size.toString())
                                 }
                             }
                         }
@@ -145,9 +170,9 @@ class RatingFragment : Fragment() {
                         override fun onCancelled(error: DatabaseError) {
                             completedCount++
                             if (completedCount == all) {
-                                rateList.sortBy { it.place }
-                                adapter.updateRequests(rateList)
-                                Log.d("INFOG", rateList.size.toString())
+                                newRateList.sortBy { it.place }
+                                adapter.updateRequests(newRateList)
+                                Log.d("INFOG", newRateList.size.toString())
                             }
                         }
                     })
@@ -162,8 +187,11 @@ class RatingFragment : Fragment() {
 
 
 
+
     override fun onDestroy() {
         super.onDestroy()
+        val dbRef_rating = FirebaseDatabase.getInstance().getReference("rating")
+        dbRef_rating.removeEventListener(ratingListener)
         _binding = null
     }
 }

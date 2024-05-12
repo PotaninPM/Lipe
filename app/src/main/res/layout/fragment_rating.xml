@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/colorOnSurfaceInverse"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
     tools:context=".rating_board.RatingFragment">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.lipe.viewModels.RatingVM" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
@@ -30,7 +33,7 @@
                 app:layout_constraintTop_toTopOf="@+id/userRatingAvatar">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/linearLayout5"
+                    android:id="@+id/place_in_rating"
                     android:layout_width="@dimen/_142sdp"
                     android:layout_height="@dimen/_27sdp"
                     android:background="@drawable/rating_info"
@@ -49,10 +52,11 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/place_in_rating_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_bold"
-                        android:text="Место: 5"
+                        android:text="@{viewModel.place}"
                         android:textSize="@dimen/_13sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -80,10 +84,11 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/points_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_bold"
-                        android:text="Баллы: 105"
+                        android:text="@{viewModel.ratingPoints}"
                         android:textSize="@dimen/_13sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -117,7 +122,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView10">
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/searchView"
@@ -128,18 +133,6 @@
                 app:queryBackground="@android:color/transparent"
                 app:queryHint="Введите логин человека" />
         </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/nunitosansregular"
-            android:text="Обновление рейтинга через 13:41"
-            android:textFontWeight="600"
-            android:textSize="@dimen/_12sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -154,4 +147,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.core.widget.NestedScrollView>
+</layout>

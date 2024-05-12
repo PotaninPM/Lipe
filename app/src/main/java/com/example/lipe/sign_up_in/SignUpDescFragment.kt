@@ -189,38 +189,39 @@ class SignUpDescFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     fun addUserToDb(username: String, email: String, pass: String, phone: String, name: String, lastName: String, desc: String, view: View) {
         FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
-            val user_DB_info = UserDB(
-                auth.currentUser?.uid,
-                LocalDate.now().toString(),
-                0,
-                0,
-                0,
-                desc,
-                username,
-                email,
-                "7" + phone,
-                pass,
-                name,
-                lastName,
-                arrayListOf(),
-                arrayListOf(),
-                arrayListOf(),
-                0,
-                arrayListOf(),
-                arrayListOf(),
-                0,
-                arrayListOf(),
-                arrayListOf(),
-                "online",
-                token
-            )
-
             val dbRef_rating = FirebaseDatabase.getInstance().getReference("rating")
 
             dbRef_rating.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+
                     val count = snapshot.childrenCount
 
+                    val user_DB_info = UserDB(
+                        auth.currentUser?.uid,
+                        LocalDate.now().toString(),
+                        0,
+                        0,
+                        0,
+                        desc,
+                        username,
+                        email,
+                        "7" + phone,
+                        pass,
+                        name,
+                        lastName,
+                        arrayListOf(),
+                        arrayListOf(),
+                        arrayListOf(),
+                        0,
+                        arrayListOf(),
+                        arrayListOf(),
+                        0,
+                        count + 1,
+                        arrayListOf(),
+                        arrayListOf(),
+                        "online",
+                        token
+                    )
                     val user = mapOf(
                         "userUid" to auth.currentUser!!.uid,
                         "points" to 0,
@@ -233,26 +234,22 @@ class SignUpDescFragment : Fragment() {
                         .addOnFailureListener { e ->
                             Log.e("INFOG", "Error adding", e)
                         }
+                    FirebaseDatabase.getInstance().getReference("location").child(auth.currentUser!!.uid).setValue(hashMapOf("latitude" to "-", "longitude" to "-")).addOnSuccessListener {
+                        dbRef.child(auth.currentUser!!.uid).setValue(user_DB_info).addOnSuccessListener {
+
+                            val navController = view.findNavController()
+                            navController.navigate(R.id.action_signUpDescFragment_to_mapsFragment)
+
+                        }.addOnFailureListener {
+                            Log.d("INFOG", it.toString())
+                        }
+                    }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
                     Log.e("INFOG", "Error reading number of users from rating", error.toException())
                 }
             })
-
-
-            FirebaseDatabase.getInstance().getReference("location").child(auth.currentUser!!.uid).setValue(
-                hashMapOf("latitude" to "-", "longitude" to "-")
-            ).addOnSuccessListener {
-                dbRef.child(auth.currentUser!!.uid).setValue(user_DB_info).addOnSuccessListener {
-
-                    val navController = view.findNavController()
-                    navController.navigate(R.id.action_signUpDescFragment_to_mapsFragment)
-
-                }.addOnFailureListener {
-                    Log.d("INFOG", it.toString())
-                }
-            }
         }.addOnFailureListener {
             Log.d("INFOG", "Failed to get FCM token")
         }
