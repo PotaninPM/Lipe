@@ -25,9 +25,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_65sdp"
                 android:layout_marginStart="@dimen/_14sdp"
-                app:layout_constraintBottom_toBottomOf="@+id/shapeableImageView2"
+                app:layout_constraintBottom_toBottomOf="@+id/userRatingAvatar"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/shapeableImageView2">
+                app:layout_constraintTop_toTopOf="@+id/userRatingAvatar">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/linearLayout5"
@@ -94,7 +94,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/shapeableImageView2"
+                android:id="@+id/userRatingAvatar"
                 android:layout_width="@dimen/_95sdp"
                 android:layout_height="@dimen/_95sdp"
                 android:layout_marginEnd="@dimen/_12sdp"
@@ -135,7 +135,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/nunitosansregular"
             android:text="Обновление рейтинга через 13:41"
-            android:textColor="?attr/colorOnSurfaceInverse"
             android:textFontWeight="600"
             android:textSize="@dimen/_12sdp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -146,6 +145,8 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
             android:layout_marginBottom="@dimen/_35sdp"
             android:paddingBottom="@dimen/_12sdp"
             app:layout_constraintBottom_toBottomOf="parent"

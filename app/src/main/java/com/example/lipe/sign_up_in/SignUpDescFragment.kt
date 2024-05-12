@@ -216,7 +216,6 @@ class SignUpDescFragment : Fragment() {
             )
 
             val dbRef_rating = FirebaseDatabase.getInstance().getReference("rating")
-            val newRatingRef = dbRef_rating.push()
 
             dbRef_rating.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -225,10 +224,9 @@ class SignUpDescFragment : Fragment() {
                     val user = mapOf(
                         "userUid" to auth.currentUser!!.uid,
                         "points" to 0,
-                        "place" to count + 1
                     )
 
-                    newRatingRef.setValue(user)
+                    dbRef_rating.child((count + 1).toString()).setValue(user)
                         .addOnSuccessListener {
                             Log.d("INFOG", "User added")
                         }

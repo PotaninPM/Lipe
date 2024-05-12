@@ -7,12 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import coil.ImageLoader
+import coil.request.ImageRequest
 import com.example.lipe.databinding.FragmentRatingBinding
-import com.example.lipe.friend_requests.RequestsAdapter
 import com.example.lipe.viewModels.RatingVM
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -20,6 +21,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RatingFragment : Fragment() {
 
@@ -37,7 +41,6 @@ class RatingFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         auth = FirebaseAuth.getInstance()
-
 
     }
 
@@ -62,13 +65,34 @@ class RatingFragment : Fragment() {
                     } else {
                         adapter.filter(it)
                     }
-
                 }
                 return true
             }
         })
 
+        loadDataOfUser()
+
         addPeople()
+    }
+
+    private fun loadDataOfUser() {
+        val user = auth.currentUser!!.uid
+
+        val storage = FirebaseStorage.getInstance().getReference("avatars/$user")
+        storage.downloadUrl.addOnSuccessListener {
+            lifecycleScope.launch {
+                val bitmap = withContext(Dispatchers.IO) {
+                    ImageLoader(requireContext()).execute(
+                        ImageRequest.Builder(requireContext())
+                            .data(it)
+                            .build()
+                    )
+                }.drawable?.toBitmap()
+
+                binding.userRatingAvatar.setImageBitmap(bitmap)
+            }
+        }
+        val dbRef_user = FirebaseDatabase.getInstance().getReference("users")
     }
 
     override fun onCreateView(
@@ -85,9 +109,11 @@ class RatingFragment : Fragment() {
         val dbRef_rating = FirebaseDatabase.getInstance().getReference("rating")
         dbRef_rating.orderByKey().addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                val all = snapshot.childrenCount.toInt()
+                var completedCount = 0
 
-                snapshot.children.sortedBy { it.child("place").value.toString().toInt() }.forEach { ratingSnapshot ->
-                    val place = ratingSnapshot.child("place").value.toString()
+                snapshot.children.forEach { ratingSnapshot ->
+                    val place = ratingSnapshot.key
                     val points = ratingSnapshot.child("points").value.toString()
                     val userUid = ratingSnapshot.child("userUid").value.toString()
 
@@ -98,15 +124,31 @@ class RatingFragment : Fragment() {
                             val storageRef = FirebaseStorage.getInstance().getReference("avatars/$userUid")
 
                             storageRef.downloadUrl.addOnSuccessListener { url ->
-                                rateList.add(RatingItem(userUid, url.toString(), place.toInt(), nickname, points.toInt()))
-                                adapter.updateRequests(rateList)
+                                rateList.add(RatingItem(userUid, url.toString(), place!!.toInt(), nickname, points.toInt()))
+                                completedCount++
+                                if (completedCount == all) {
+                                    rateList.sortBy { it.place }
+                                    adapter.updateRequests(rateList)
+                                    Log.d("INFOG", rateList.size.toString())
+                                }
                             }.addOnFailureListener {
                                 Log.e("INFOG", "Rating smth wrong")
+                                completedCount++
+                                if (completedCount == all) {
+                                    rateList.sortBy { it.place }
+                                    adapter.updateRequests(rateList)
+                                    Log.d("INFOG", rateList.size.toString())
+                                }
                             }
                         }
 
                         override fun onCancelled(error: DatabaseError) {
-
+                            completedCount++
+                            if (completedCount == all) {
+                                rateList.sortBy { it.place }
+                                adapter.updateRequests(rateList)
+                                Log.d("INFOG", rateList.size.toString())
+                            }
                         }
                     })
                 }
@@ -117,6 +159,8 @@ class RatingFragment : Fragment() {
             }
         })
     }
+
+
 
     override fun onDestroy() {
         super.onDestroy()
