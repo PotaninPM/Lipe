@@ -57,6 +57,8 @@ class AllChatsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.Ad
             val firstNameRef = dbRef.child("users").child(chat.partnerUid).child("firstName")
             val lastNameRef = dbRef.child("users").child(chat.partnerUid).child("lastName")
 
+            val lastMessage_db = dbRef.child("chats").child(chat.uid).child("last_message")
+
             firstNameRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val firstName = dataSnapshot.value.toString()
@@ -69,6 +71,17 @@ class AllChatsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.Ad
                                 append(" ")
                                 append(lastName)
                             }
+
+                            lastMessage_db.addValueEventListener(object: ValueEventListener {
+                                override fun onDataChange(snapshot: DataSnapshot) {
+                                    lastMessage.text = snapshot.value.toString()
+                                }
+
+                                override fun onCancelled(error: DatabaseError) {
+                                    TODO("Not yet implemented")
+                                }
+
+                            })
 
                             all.visibility = View.VISIBLE
                             avatar.visibility = View.VISIBLE

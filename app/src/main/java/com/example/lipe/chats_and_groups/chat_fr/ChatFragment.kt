@@ -73,6 +73,7 @@ class ChatFragment(val chatUid: String) : Fragment() {
         chatAdapter = ChatAdapter(listOf(), auth.currentUser!!.uid)
         binding.recyclerViewChat.adapter = chatAdapter
 
+        val dbRef_chatLastMessage = FirebaseDatabase.getInstance().getReference("chats/${chatUid}/last_message")
         binding.sendBtn.setOnClickListener {
             val messageText = binding.messageInput.text.toString().trim()
             if (messageText.isNotEmpty()) {
@@ -82,6 +83,11 @@ class ChatFragment(val chatUid: String) : Fragment() {
                     currentUser?.uid ?: "",
                     System.currentTimeMillis()
                 )
+
+                dbRef_chatLastMessage.setValue(messageText).addOnSuccessListener {
+
+                }
+
                 db.push().setValue(message)
                 binding.messageInput.text?.clear()
             }

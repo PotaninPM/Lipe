@@ -254,7 +254,7 @@ class ProfileFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val name: String = dataSnapshot.child("firstName").value.toString()
                 val lastName: String = dataSnapshot.child("lastName").value.toString()
-                val ratingAmount: Int = dataSnapshot.child("rating").value.toString().toInt()
+                val ratingAmount: Int = dataSnapshot.child("points").value.toString().toInt()
                 val friendsAmount: Int = dataSnapshot.child("friends_amount").value.toString().toInt()
                 val eventsAmount: Int = dataSnapshot.child("events_amount").value.toString().toInt()
 

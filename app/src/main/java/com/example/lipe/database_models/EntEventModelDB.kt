@@ -16,6 +16,5 @@ data class EntEventModelDB(
     var reg_people_id: ArrayList<String?>,
     var amount_reg_people: Int,
     var status: String,
-    var groupUid: String,
     var timestamp: Long
 )
