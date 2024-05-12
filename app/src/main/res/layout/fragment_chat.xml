@@ -30,7 +30,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="#F7FAFF"
+            android:background="?attr/colorOnSurfaceInverse"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -92,32 +92,22 @@
             android:id="@+id/constraintLayout4"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_42sdp"
-            android:background="#F7FAFF"
+            android:background="?attr/colorOnSurfaceInverse"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/imageView5"
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:src="@drawable/emoji_btn"
-                android:layout_marginLeft="@dimen/_4sdp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/messageInput"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:background="@null"
-                android:hint="Сообщение"
-                android:layout_marginStart="@dimen/_4sdp"
                 android:layout_marginEnd="@dimen/_6sdp"
+                android:background="@null"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:hint="Сообщение"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/sendBtn"
-                app:layout_constraintStart_toEndOf="@+id/imageView5"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView

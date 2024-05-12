@@ -47,14 +47,13 @@ class AllGroupsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.A
             storageRef = FirebaseStorage.getInstance().reference
             dbRef = FirebaseDatabase.getInstance().reference
 
-            val lastNameRef = dbRef.child("groups/${group.uid}/last_message")
-            lastNameRef.addValueEventListener(object : ValueEventListener {
+            val lastMessageRef = dbRef.child("groups/${group.uid}/last_message")
+
+            lastMessageRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     var last_message = dataSnapshot.value
                     if(last_message != null) {
                         lastMessage.text = last_message.toString()
-                    } else {
-                        lastMessage.visibility = View.GONE
                     }
                 }
 

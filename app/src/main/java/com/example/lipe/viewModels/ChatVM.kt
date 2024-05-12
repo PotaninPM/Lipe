@@ -17,10 +17,13 @@ class ChatVM : ViewModel() {
 
     private var _chatUid = MutableLiveData<String>()
     val chatUid: LiveData<String> = _chatUid
-
     fun setInfo(name_ :String, status_: String, chatUid_:String) {
         _name.value = name_
-        _status.value = status_
+        if(status_ == "online"){
+            _status.value = "в сети"
+        } else if(status_ == "offline") {
+            _status.value = "не в сети"
+        }
         _chatUid.value = chatUid_
     }
 
