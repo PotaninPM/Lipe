@@ -106,6 +106,7 @@ class SignUpDescFragment : Fragment() {
 
         binding.all.visibility = View.VISIBLE
         binding.progressBar.visibility = View.GONE
+        binding.progressText.visibility = View.GONE
 
         val adapter = CustomAdapter(requireContext(), items, appVM.selectedItems)
 
@@ -140,6 +141,7 @@ class SignUpDescFragment : Fragment() {
 
             binding.all.visibility = View.GONE
             binding.progressBar.visibility = View.VISIBLE
+            binding.progressText.visibility = View.VISIBLE
 
             var desc: String = binding.descText.text.toString().trim()
 
@@ -159,6 +161,7 @@ class SignUpDescFragment : Fragment() {
                 }.addOnFailureListener {
                     binding.all.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.GONE
+                    binding.progressText.visibility = View.GONE
                     Toast.makeText(requireContext(), "Smth went wrong", Toast.LENGTH_LONG).show()
 
                     Log.d("INFOG", it.message.toString())
@@ -167,6 +170,7 @@ class SignUpDescFragment : Fragment() {
                 checkForEmpty(desc)
                 binding.all.visibility = View.VISIBLE
                 binding.progressBar.visibility = View.GONE
+                binding.progressText.visibility = View.GONE
             }
 
         }

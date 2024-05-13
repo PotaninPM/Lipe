@@ -79,13 +79,56 @@ class EventEntFragment : BottomSheetDialogFragment() {
         dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
 
         searchEvent(appVM.latitude, appVM.longtitude) {ready ->
+            val sportType = appVM.type_sport
+                val imageSport = when (sportType) {
+                    "Баскетбол" -> R.drawable.img_basketballimg
+                    "Воллейбол" -> R.drawable.volleyball_2
+                    "Футбол" -> R.drawable.football
+                    "Рэгби" -> R.drawable.rugby_ball
+                    "Воркаут" -> R.drawable.weights
+                    "Большой тенис" -> R.drawable.tennis
+                    "Бадминтон" -> R.drawable.shuttlecock
+                    "Пинпонг" -> R.drawable.table_tennis
+                    "Гимнастика" -> R.drawable.gymnastic_rings
+                    "Фехтование" -> R.drawable.fencing
+                    "Бег" -> R.drawable.running_shoe
+                    "Кёрлинг" -> R.drawable.curling
+                    "Хоккей" -> R.drawable.ice_hockey
+                    "Катание на коньках" -> R.drawable.ice_skate
+                    "Лыжная ходьба" -> R.drawable.skiing_1
+                    "Горные лыжи" -> R.drawable.skiing
+                    "Теннис" -> R.drawable.tennis
+                    "Сноуборд" -> R.drawable.snowboarding
+                    "Настольные игры" -> R.drawable.board_game
+                    "Мобильные игры" -> R.drawable.mobile_game
+                    "Шахматы" -> R.drawable.chess_2
+                    "Программирование" -> R.drawable.programming
+                    else -> {
+                        0
+                    }
+                }
+            val user = auth.currentUser!!.uid
+            binding.typeSport.setImageResource(imageSport)
             if(ready) {
                 loadAllImages {ready->
                     if(ready) {
                         checkIfUserAlreadyReg(auth.currentUser!!.uid, eventEntVM.id.value.toString()) {ans ->
                             if(ans) {
                                 binding.btnRegToEvent.visibility = View.GONE
-                                binding.deleteOrLeave.visibility = View.VISIBLE
+
+                                if(eventEntVM.creator.value == user) {
+                                    binding.deleteOrLeave.visibility = View.VISIBLE
+                                    binding.deleteOrLeave.setText("Удалить событие")
+
+                                    binding.finishEvent.setText("Завершить")
+                                    binding.finishEvent.visibility = View.VISIBLE
+                                } else {
+                                    binding.deleteOrLeave.setText("Покинуть")
+                                    binding.deleteOrLeave.visibility = View.VISIBLE
+
+                                    binding.finishEvent.setText("Список")
+                                    binding.finishEvent.visibility = View.VISIBLE
+                                }
 
                                 binding.allEntEvent.visibility = View.VISIBLE
                                 binding.loadingProgressBar.visibility = View.GONE

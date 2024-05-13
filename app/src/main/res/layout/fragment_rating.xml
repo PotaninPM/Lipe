@@ -104,7 +104,6 @@
                 android:layout_height="@dimen/_95sdp"
                 android:layout_marginEnd="@dimen/_12sdp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ex2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

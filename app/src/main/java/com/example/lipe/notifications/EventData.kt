@@ -1,3 +1,8 @@
 package com.example.lipe.notifications
 
-data class EventData(val creatorUid: String, val latitude: Double, val longitude: Double)
+import com.google.gson.annotations.SerializedName
+data class EventData(
+    @SerializedName("latitude") val latitude: String,
+    @SerializedName("longitude") val longitude: String,
+    @SerializedName("creatorUid") val creatorUid: String
+)

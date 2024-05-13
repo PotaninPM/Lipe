@@ -60,41 +60,37 @@ class ProfileFragment : Fragment() {
                 selectImageAvatar.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
 
-//            binding.buttonCur.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0067cf"))
-//
-//            binding.toggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
-//                val buttons = arrayOf(
-//                    R.id.buttonCur,
-//                    R.id.buttonPast,
-//                    R.id.buttonMy
-//                )
-//
-//                if (isChecked) {
-//                    group.findViewById<MaterialButton>(checkedId).backgroundTintList = ColorStateList.valueOf(
-//                        Color.parseColor("#0067cf"))
-//                    group.findViewById<MaterialButton>(checkedId).isChecked = true
-//
-//                    buttons.forEach { buttonId ->
-//                        if (buttonId != checkedId) {
-//                            group.findViewById<MaterialButton>(buttonId).backgroundTintList = ColorStateList.valueOf(
-//                                Color.TRANSPARENT)
-//                            group.findViewById<MaterialButton>(buttonId).isChecked = false
-//                        }
-//                    }
-//
-//                    when (checkedId) {
-//                        R.id.buttonCur -> {
-//                            switchTabs(0)
-//                        }
-//                        R.id.buttonPast -> {
-//                            switchTabs(1)
-//                        }
-//                        R.id.buttonMy -> {
-//                            switchTabs(2)
-//                        }
-//                    }
-//                }
-//            }
+            binding.buttonCur.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0067cf"))
+
+            binding.toggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
+                val buttons = arrayOf(
+                    R.id.buttonCur,
+                    R.id.buttonMy
+                )
+
+                if (isChecked) {
+                    group.findViewById<MaterialButton>(checkedId).backgroundTintList = ColorStateList.valueOf(
+                        Color.parseColor("#0067cf"))
+                    group.findViewById<MaterialButton>(checkedId).isChecked = true
+
+                    buttons.forEach { buttonId ->
+                        if (buttonId != checkedId) {
+                            group.findViewById<MaterialButton>(buttonId).backgroundTintList = ColorStateList.valueOf(
+                                Color.TRANSPARENT)
+                            group.findViewById<MaterialButton>(buttonId).isChecked = false
+                        }
+                    }
+
+                    when (checkedId) {
+                        R.id.buttonCur -> {
+                            switchTabs(0)
+                        }
+                        R.id.buttonMy -> {
+                            switchTabs(1)
+                        }
+                    }
+                }
+            }
             val navView: NavigationView = binding.navView
             navView.setNavigationItemSelectedListener { menuItem ->
                 when (menuItem.itemId) {
@@ -316,8 +312,7 @@ class ProfileFragment : Fragment() {
         val fragment = when (position) {
             //0 -> CurEventsInProfileFragment(auth.currentUser!!.uid)
             0 -> CurEventsInProfileFragment(auth.currentUser!!.uid)
-            1 -> ChatsAndGroupsFragment()
-            2 -> YourEventsFragment()
+            1 -> YourEventsFragment()
             else -> null
         }
 

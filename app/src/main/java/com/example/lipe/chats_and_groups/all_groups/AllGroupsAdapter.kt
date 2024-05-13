@@ -50,6 +50,8 @@ class AllGroupsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.A
 
             val lastMessageRef = dbRef.child("groups/${group.uid}/last_message")
 
+            binding.statusViewGroup.visibility = View.GONE
+
             lastMessageRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     Log.d("INFOG", dataSnapshot.value.toString())

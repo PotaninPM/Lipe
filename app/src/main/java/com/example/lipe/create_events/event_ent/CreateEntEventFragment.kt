@@ -25,15 +25,11 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
-import retrofit2.Call
-import com.example.lipe.EventApi
 import com.example.lipe.R
-import com.example.lipe.RetrofitInstance
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.databinding.FragmentCreateEntEventBinding
 import com.example.lipe.database_models.EntEventModelDB
 import com.example.lipe.database_models.GroupModel
-import com.example.lipe.notifications.EventData
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -44,8 +40,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import retrofit2.Callback
-import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.ArrayList
@@ -66,8 +60,6 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     private lateinit var imageUri1: Uri
     private lateinit var imageUri2: Uri
     private lateinit var imageUri3: Uri
-
-    private lateinit var api: EventApi
 
     private var image1: String = "-"
     private var image2: String = "-"
@@ -326,37 +318,37 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                 val dbRef_group = FirebaseDatabase.getInstance().getReference("groups")
 
 
-                val eventData = EventData(auth.currentUser!!.uid, coord["latitude"]!!, coord["longitude"]!!)
-
-                val call: Call<Void> = RetrofitInstance.api.sendEventData(eventData)
-
-                call.enqueue(object : Callback<Void> {
-                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                        if (response.isSuccessful) {
-                            Log.d("INFOG", "ok notif were sent")
-                        } else {
-                            Log.d("INFOG", "${response.message()}")
-                        }
-                    }
-
-                    override fun onFailure(call: Call<Void>, t: Throwable) {
-                        Log.d("INFOG", "${t.message}")
-                    }
-                })
-
-//                dbRef_events.child(eventId).setValue(event).addOnSuccessListener {
-//                    dbRef_user.child(eventId).setValue(eventId).addOnSuccessListener {
-//                        dbRef_user_your.child(eventId).setValue(eventId).addOnSuccessListener {
-//                            val group = GroupModel(eventId, title, photos.get(0), arrayListOf(auth.currentUser!!.uid), arrayListOf())
-//                            dbRef_group.child(eventId).setValue(group).addOnSuccessListener {
-//                                dbRef_user_groups.child(eventId).setValue(eventId).addOnSuccessListener {
+//                val eventData = EventData(auth.currentUser!!.uid, appVM.latitude.toString(), appVM.longtitude.toString())
 //
+//                val call: Call<Void> = RetrofitInstance.api.sendEventData(eventData)
 //
-//                                }
-//                            }
+//                call.enqueue(object : Callback<Void> {
+//                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+//                        if (response.isSuccessful) {
+//                            Log.d("INFOG", "OK, notifications were sent")
+//                        } else {
+//                            Log.d("INFOG", "${response.message()}")
 //                        }
 //                    }
-//                }
+//
+//                    override fun onFailure(call: Call<Void>, t: Throwable) {
+//                        Log.d("INFOG", "${t.message}")
+//                    }
+//                })
+
+                dbRef_events.child(eventId).setValue(event).addOnSuccessListener {
+                    dbRef_user.child(eventId).setValue(eventId).addOnSuccessListener {
+                        dbRef_user_your.child(eventId).setValue(eventId).addOnSuccessListener {
+                            val group = GroupModel(eventId, title, photos.get(0), arrayListOf(auth.currentUser!!.uid), arrayListOf())
+                            dbRef_group.child(eventId).setValue(group).addOnSuccessListener {
+                                dbRef_user_groups.child(eventId).setValue(eventId).addOnSuccessListener {
+
+
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

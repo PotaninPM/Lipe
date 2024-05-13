@@ -54,7 +54,6 @@
                     android:layout_height="@dimen/_38sdp"
                     android:layout_marginStart="@dimen/_15sdp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ex2"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/back_btn"
                     app:layout_constraintTop_toTopOf="parent"

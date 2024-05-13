@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".PushNotifReceive"
+            android:name=".notifications.PushNotifReceive"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>

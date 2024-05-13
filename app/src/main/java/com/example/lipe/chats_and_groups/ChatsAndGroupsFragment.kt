@@ -18,7 +18,10 @@ import com.example.lipe.databinding.FragmentChatsAndGroupsBinding
 import com.example.lipe.friend_requests.FriendRequestsFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
@@ -56,6 +59,21 @@ class ChatsAndGroupsFragment : Fragment() {
 
         binding.viewPager.adapter = adapter
 
+        val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
+        dbRef_user.child("query_friends").addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(!snapshot.exists() || snapshot.childrenCount.toInt() == 0) {
+                    binding.indexNotif.visibility = View.GONE
+                } else {
+                    binding.indexNotif.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
         storage.downloadUrl.addOnSuccessListener {url ->
             lifecycleScope.launch {
                 val bitmap: Bitmap = withContext(Dispatchers.IO) {

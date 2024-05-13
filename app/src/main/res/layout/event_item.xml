@@ -15,12 +15,11 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageEvent"
             app:shapeAppearanceOverlay="@style/ImageStyle_eventProfile"
-            android:layout_width="@dimen/_270sdp"
-            android:layout_height="@dimen/_170sdp"
+            android:layout_width="@dimen/_290sdp"
+            android:layout_height="@dimen/_190sdp"
             android:scaleType="centerCrop"
             app:strokeWidth="@dimen/_1sdp"
             app:strokeColor="@color/indigo"
-            android:src="@drawable/ex2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -28,8 +27,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearRow"
             style="@style/event_bottom"
-            android:layout_width="@dimen/_270sdp"
-            android:layout_height="@dimen/_50sdp"
+            android:layout_width="@dimen/_290sdp"
+            android:layout_height="@dimen/_55sdp"
             android:gravity="end"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="@+id/imageEvent"
@@ -54,7 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="Футбол в гольяново для людей" />
+                    android:text="" />
 
                 <TextView
                     android:id="@+id/date_time"
@@ -64,7 +63,7 @@
                     android:layout_marginTop="@dimen/_4pxv"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="21 октября 2023" />
+                    android:text="" />
             </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatButton
