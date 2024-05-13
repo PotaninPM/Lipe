@@ -65,14 +65,13 @@ class EventEcoVM: ViewModel() {
         longtitude = long
     }
 
-    fun setInfo(id_: String, maxPeople_: Int, minPeople_: Int, powerPollution_: Int, title_: String, creator_: String, creatorUsername_: String, photosBefore_: ArrayList<String>, peopleGo_: ArrayList<String>, adress_: String, freePlaces_: Int, eventDesc_: String, time_of_creation_: String, date_: String, amount_reg_people_: Int, getPoints_: Int) {
+    fun setInfo(id_: String, maxPeople_: Int, minPeople_: Int, powerPollution_: String, title_: String, creator_: String, creatorUsername_: String, photosBefore_: ArrayList<String>, peopleGo_: ArrayList<String>, freePlaces_: Int, eventDesc_: String, time_of_creation_: String, date_: String, amount_reg_people_: Int, getPoints_: Int) {
         _id.value = id_
         _maxPeople.value = maxPeople_
         _title.value = title_
         _creator.value = creator_
         _photosBefore.value = photosBefore_
         _peopleGo.value = peopleGo_
-        _adress.value = adress_
         _eventDesc.value = eventDesc_
         _date.value = date_
         _type.value = "Экология"

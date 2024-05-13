@@ -6,9 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.viewModelFactory
+import coil.ImageLoader
+import coil.request.ImageRequest
 import com.example.lipe.R
 import com.example.lipe.databinding.FragmentEventEcoBinding
 import com.example.lipe.databinding.FragmentProfileBinding
@@ -23,6 +27,9 @@ import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.ArrayList
 
 class EventEcoFragment : Fragment() {
@@ -92,10 +99,34 @@ class EventEcoFragment : Fragment() {
         val photoRef = storageRef.child("event_images/$uid")
         val tokenTask = photoRef.downloadUrl
 
-        tokenTask.addOnSuccessListener { uri ->
-            val imageUrl = uri.toString()
-            //Picasso.get().load(imageUrl).into(binding.image)
-            Thread.sleep(1000)
+        val userAvatarRef = storageRef.child("avatars/${eventEcoVM.creator.value}")
+
+        userAvatarRef.downloadUrl.addOnSuccessListener {url ->
+            lifecycleScope.launch {
+                val bitmap = withContext(Dispatchers.IO) {
+                    ImageLoader(requireContext()).execute(
+                        ImageRequest.Builder(requireContext())
+                            .data(url)
+                            .build()
+                    )
+                }.drawable?.toBitmap()
+
+                binding.eventAvatar.setImageBitmap(bitmap)
+            }
+        }
+
+        tokenTask.addOnSuccessListener { url ->
+            lifecycleScope.launch {
+                val bitmap = withContext(Dispatchers.IO) {
+                    ImageLoader(requireContext()).execute(
+                        ImageRequest.Builder(requireContext())
+                            .data(url)
+                            .build()
+                    )
+                }.drawable?.toBitmap()
+
+                binding.image.setImageBitmap(bitmap)
+            }
             callback(true)
 
         }.addOnFailureListener {
@@ -110,7 +141,7 @@ class EventEcoFragment : Fragment() {
         dbRefEvent.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for(eventSnapshot in dataSnapshot.children) {
-                    val coordinates: List<Double>? = eventSnapshot.child("coordinates").getValue(object : GenericTypeIndicator<List<Double>>() {})
+                    val coordinates: List<Double>? = listOf(eventSnapshot.child("coordinates").child("latitude").value.toString().toDouble(), eventSnapshot.child("coordinates").child("longitude").value.toString().toDouble())
                     if(coordinates != null && coordinates[0] == coord1 && coordinates[1] == coord2) {
                         val type = eventSnapshot.child("type_of_event").value.toString()
                         val id = eventSnapshot.child("event_id").value.toString()
@@ -120,14 +151,13 @@ class EventEcoFragment : Fragment() {
                         val description = eventSnapshot.child("description").value.toString()
                         val creatorUid = eventSnapshot.child("creator_id").value.toString()
                         val photosBefore = arrayListOf(eventSnapshot.child("photo_before_id").value.toString())
-                        val address = eventSnapshot.child("adress").value.toString()
                         val freePlaces = maxPeople - eventSnapshot.child("amount_reg_people").value.toString().toInt()
                         val timeOfCreation = eventSnapshot.child("time_of_creation").value.toString()
                         val dateOfMeeting = eventSnapshot.child("date_of_meeting").value.toString()
                         val amountRegPeople = eventSnapshot.child("amount_reg_people").value.toString().toInt()
                         //val peopleGo = eventSnapshot.child("reg_people_id").value
                         val getPoints:Int = eventSnapshot.child("get_points").value.toString().toInt()
-                        val powerPollution:Int = eventSnapshot.child("power_of_pollution").value.toString().toInt()
+                        val powerPollution: String = eventSnapshot.child("power_of_pollution").value.toString()
 
                         when(type) {
                             "eco" -> {
@@ -149,7 +179,6 @@ class EventEcoFragment : Fragment() {
                                                     creatorUsername,
                                                     photosBefore,
                                                     arrayListOf("1"),
-                                                    address,
                                                     freePlaces,
                                                     description,
                                                     timeOfCreation,
@@ -173,7 +202,6 @@ class EventEcoFragment : Fragment() {
                                                 "Удаленный аккаунт",
                                                 photosBefore,
                                                 arrayListOf("1"),
-                                                address,
                                                 freePlaces,
                                                 description,
                                                 timeOfCreation,

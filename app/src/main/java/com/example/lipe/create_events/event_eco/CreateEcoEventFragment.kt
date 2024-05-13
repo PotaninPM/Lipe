@@ -25,6 +25,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.R
 import com.example.lipe.database_models.EcoEventModelDB
+import com.example.lipe.database_models.GroupModel
 import com.example.lipe.databinding.FragmentCreateEcoEventBinding
 import com.example.lipe.viewModels.AppVM
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -56,7 +57,7 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     private var image2: String = "-"
     private var image3: String = "-"
 
-    private var selectedpower = "-"
+    private var selectedPower = "-"
 
     private var imagesUid: ArrayList<String> = arrayListOf("-", "-", "-")
 
@@ -119,7 +120,7 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         val autoCompleteTextView = view.findViewById<AutoCompleteTextView>(R.id.pollutionSpinner)
         autoCompleteTextView.setAdapter(adapter)
         autoCompleteTextView.setOnItemClickListener { parent, view, position, id ->
-            selectedpower = parent.getItemAtPosition(position).toString()
+            selectedPower = parent.getItemAtPosition(position).toString()
         }
 
         binding.btnCreateEvent.setOnClickListener {
@@ -139,39 +140,16 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         binding.photoLay1.setOnClickListener {
             selectImage1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
-        binding.photoLay2.setOnClickListener {
-            selectImage2.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-        binding.photoLay3.setOnClickListener {
-            selectImage3.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
     }
 
     val selectImage1 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             binding.photo1.setImageURI(uri)
+            binding.arrowUp.visibility = View.GONE
+            binding.textImg.visibility = View.GONE
+
             imageUri1 = uri
             image1 = "1"
-            Log.d("INFOG", imageUri1.toString())
-        } else {
-            Log.d("INFOG", "No media selected")
-        }
-    }
-    val selectImage2 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) {
-            binding.photo2.setImageURI(uri)
-            imageUri2 = uri
-            image2 = "1"
-            Log.d("INFOG", imageUri1.toString())
-        } else {
-            Log.d("INFOG", "No media selected")
-        }
-    }
-    val selectImage3 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) {
-            binding.photo3.setImageURI(uri)
-            imageUri3 = uri
-            image3 = "1"
             Log.d("INFOG", imageUri1.toString())
         } else {
             Log.d("INFOG", "No media selected")
@@ -266,8 +244,18 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                 var maxPeople: Int = binding.etMaxInputText.text.toString().trim().toInt()
                 var desc: String = binding.etDescInputText.text.toString().trim()
 
+                var date_of_meeting: String = binding.timeText.text.toString() + " " + binding.dateText.text.toString()
+
                 //need to be repaired
-                var getPoints: Int = 10
+                var getPoints: Int = -1
+
+                getPoints = when(selectedPower) {
+                    "Не очень сильный" -> 5
+                    "Достаточно много" -> 7
+                    "Очень много" -> 10
+                    "Похоже на свалку" -> 15
+                    else -> 0
+                }
 
 
                 var type: String = "eco"
@@ -278,10 +266,9 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     auth.currentUser?.uid.toString(),
                     current,
                     title,
-                    "-",
                     coord,
-                    9,
-                    "-",
+                    selectedPower,
+                    date_of_meeting,
                     minPeople,
                     maxPeople,
                     desc,
@@ -293,8 +280,24 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     "ok"
                 )
 
+                val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/curRegEventsId")
+                val dbRef_user_your = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/yourCreatedEvents")
+                val dbRef_user_groups = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/groups")
+
+                val dbRef_group = FirebaseDatabase.getInstance().getReference("groups")
+
                 dbRef.child(eventId).setValue(event).addOnSuccessListener {
-                    //do pop up notif and navigate to maps
+                    dbRef_user.child(eventId).setValue(eventId).addOnSuccessListener {
+                        dbRef_user_your.child(eventId).setValue(eventId).addOnSuccessListener {
+                            val group = GroupModel(eventId, title, photosBefore.get(0), arrayListOf(auth.currentUser!!.uid), arrayListOf())
+                            dbRef_group.child(eventId).setValue(group).addOnSuccessListener {
+                                dbRef_user_groups.child(eventId).setValue(eventId).addOnSuccessListener {
+
+
+                                }
+                            }
+                        }
+                    }
                 }
             }
     }

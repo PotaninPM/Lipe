@@ -60,20 +60,14 @@ class EventFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        //searchEvent(appVM.latitude, appVM.longtitude) { ready ->
-            //if (ready == true) {
                 if(appVM.type == "ent") {
                     switchFragments(0)
-                    //Log.d("INFOG", eventEntVM.id.toString())
                 } else if(appVM.type == "eco") {
                     switchFragments(1)
                 } else {
-                    //Log.d("INFOG", eventEntVM.id.toString())
                     switchFragments(0)
                 }
 
-        //Log.d("INFOG", appVM.event)
 
     }
 

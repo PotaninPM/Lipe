@@ -305,7 +305,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     selectedAge,
                     desc,
                     photos,
-                    arrayListOf(auth.currentUser?.uid),
+                    hashMapOf(auth.currentUser?.uid to auth.currentUser?.uid),
                     1,
                     "ok",
                     Instant.now().epochSecond

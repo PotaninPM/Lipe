@@ -128,12 +128,6 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
         binding.photoLay1.setOnClickListener {
             selectImage1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
-        binding.photoLay2.setOnClickListener {
-            selectImage2.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-        binding.photoLay3.setOnClickListener {
-            selectImage3.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
     }
 
     val selectImage1 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -148,30 +142,7 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
             Log.d("INFOG", "No media selected")
         }
     }
-    val selectImage2 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) {
-            binding.photo2.setImageURI(uri)
-            binding.arrowUp1.visibility = View.GONE
-            binding.textImg1.visibility = View.GONE
-            imageUri2 = uri
-            image2 = "1"
-            Log.d("INFOG", imageUri1.toString())
-        } else {
-            Log.d("INFOG", "No media selected")
-        }
-    }
-    val selectImage3 = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) {
-            binding.photo3.setImageURI(uri)
-            binding.arrowUp2.visibility = View.GONE
-            binding.textImg2.visibility = View.GONE
-            imageUri3 = uri
-            image3 = "1"
-            Log.d("INFOG", imageUri1.toString())
-        } else {
-            Log.d("INFOG", "No media selected")
-        }
-    }
+
     private fun uploadImage(callback: (photos: ArrayList<String>) -> Unit) {
         val storageRef = FirebaseStorage.getInstance().getReference("event_images")
 

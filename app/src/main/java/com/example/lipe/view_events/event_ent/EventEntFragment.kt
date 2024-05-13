@@ -40,7 +40,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class EventEntFragment : BottomSheetDialogFragment() {
+class EventEntFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
 
     private lateinit var dbRef: DatabaseReference
@@ -56,9 +56,6 @@ class EventEntFragment : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     private val eventEntVM: EventEntVM by activityViewModels()
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -155,6 +152,7 @@ class EventEntFragment : BottomSheetDialogFragment() {
         binding.creator.setOnClickListener {
 
         }
+
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = eventEntVM
@@ -180,6 +178,9 @@ class EventEntFragment : BottomSheetDialogFragment() {
                     deleteEvent(eventEntVM.id.value.toString())
                 } else {
                     deleteUserFromEvent(eventEntVM.id.value.toString())
+
+                    binding.deleteOrLeave.visibility = View.GONE
+                    binding.finishEvent.visibility = View.GONE
                 }
             }
 
@@ -301,12 +302,12 @@ class EventEntFragment : BottomSheetDialogFragment() {
             val uid = eventEntVM.photos.value?.get(0).toString().removeSurrounding("[", "]")
 
             val userAvatarRef = storageRef.child("avatars/${eventEntVM.creator.value}")
+            val tokenTask2 = userAvatarRef.downloadUrl
 
             val photoRef = storageRef.child("event_images/$uid")
 
             val tokenTask = photoRef.downloadUrl
 
-            val tokenTask2 = userAvatarRef.downloadUrl
 
             tokenTask.addOnSuccessListener { url ->
                 lifecycleScope.launch {
@@ -377,7 +378,6 @@ class EventEntFragment : BottomSheetDialogFragment() {
                                                 if (creatorUid == userEventSnapshot.child("uid").value) {
                                                     val creatorUsername =
                                                         userEventSnapshot.child("username").value.toString()
-                                                    val userPhoto = "1"
                                                     eventEntVM.setInfo(
                                                         id,
                                                         maxPeople,
@@ -445,11 +445,18 @@ class EventEntFragment : BottomSheetDialogFragment() {
     private fun deleteEvent(uid: String) {
         val dbRef_user = FirebaseDatabase.getInstance().getReference("users").child(auth.currentUser!!.uid).child("curRegEventsId").child(uid)
         val curPeople = dbRef_event.child(eventEntVM.id.value.toString())
+        val dbRef_group = FirebaseDatabase.getInstance().getReference("groups").child(eventEntVM.id.toString())
+
         dbRef_user.removeValue().addOnSuccessListener {
             curPeople.removeValue()
                 .addOnSuccessListener {
-                    binding.deleteOrLeave.visibility = View.GONE
-                    binding.btnRegToEvent.visibility = View.VISIBLE
+                    dbRef_group.removeValue().addOnSuccessListener {
+                        val eventFragment = parentFragment as? EventFragment
+                        eventFragment?.dismiss()
+
+                        binding.deleteOrLeave.visibility = View.GONE
+                        binding.btnRegToEvent.visibility = View.VISIBLE
+                    }
                 }
                 .addOnFailureListener {
                     Log.e("INFOG", "ErLeaveEvent")
@@ -563,21 +570,6 @@ class EventEntFragment : BottomSheetDialogFragment() {
                 Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
             }
         })
-    }
-
-
-    companion object {
-        fun newInstance(): EventEntFragment {
-            return EventEntFragment()
-        }
-
-        fun show(fragmentManager: FragmentManager) {
-            newInstance().show(fragmentManager, "MyBottomFragment")
-        }
-
-        fun hideBottomSheet(bottomSheet: BottomSheetDialogFragment) {
-            bottomSheet.dismiss()
-        }
     }
 
     override fun onDestroy() {

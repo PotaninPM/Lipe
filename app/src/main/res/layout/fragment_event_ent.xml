@@ -48,8 +48,7 @@
                     <ImageView
                         android:id="@+id/image"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ex1" />
+                        android:layout_height="match_parent" />
                 </LinearLayout>
 
 <!--                <LinearLayout-->
@@ -145,7 +144,6 @@
                         android:layout_height="@dimen/_40sdp"
                         android:padding="@dimen/_2sdp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ex2"
                         android:layout_marginStart="@dimen/_8sdp"
                         app:shapeAppearanceOverlay="@style/ImageStyle_Circle"
                         app:layout_constraintStart_toStartOf="parent"
@@ -275,8 +273,7 @@
                     <ImageView
                         android:id="@+id/typeSport"
                         android:layout_width="@dimen/_37sdp"
-                        android:layout_height="@dimen/_37sdp"
-                        android:src="@drawable/img_basketballimg" />
+                        android:layout_height="@dimen/_37sdp" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -325,7 +322,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunitosanssemibold"
-                            android:text="Свободных мест - 5"
+                            android:text="Свободных мест"
                             android:textSize="@dimen/_15sdp" />
 
                         <ProgressBar
@@ -385,6 +382,7 @@
                     android:backgroundTint="@color/green"
                     android:ellipsize="end"
                     android:gravity="center"
+                    android:layout_marginBottom="@dimen/_32sdp"
                     android:singleLine="true"
                     android:text="Хочу на событие"
                     android:textAllCaps="false"
@@ -424,7 +422,7 @@
                     android:layout_marginTop="@dimen/_12sdp"
                     android:backgroundTint="#2494EA"
                     android:ellipsize="end"
-                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginStart="@dimen/_14sdp"
                     android:gravity="center"
                     android:singleLine="true"
                     android:textAllCaps="false"
