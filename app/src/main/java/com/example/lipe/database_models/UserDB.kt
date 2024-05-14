@@ -9,7 +9,6 @@ data class UserDB(
     val about_you: String ?= null,
     val username: String? = null,
     val email: String? = null,
-    val phone: String? = null,
     val password: String?= null,
     val firstAndLastName: String?= null,
     val hobbies: ArrayList<String> ?= null,

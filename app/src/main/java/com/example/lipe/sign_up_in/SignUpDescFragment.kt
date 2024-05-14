@@ -162,7 +162,9 @@ class SignUpDescFragment : Fragment() {
                     binding.all.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.GONE
                     binding.progressText.visibility = View.GONE
-                    Toast.makeText(requireContext(), "Smth went wrong", Toast.LENGTH_LONG).show()
+
+                    if(it.message.toString() == "The email address is already in use by another account.")
+                        Toast.makeText(requireContext(), "Такой почтовый адрес уже используется", Toast.LENGTH_LONG).show()
 
                     Log.d("INFOG", it.message.toString())
                 }
@@ -230,7 +232,6 @@ class SignUpDescFragment : Fragment() {
                         desc,
                         username,
                         email,
-                        "7" + phone,
                         pass,
                         names,
                         arrayListOf(),
@@ -246,7 +247,9 @@ class SignUpDescFragment : Fragment() {
                         "online",
                         token
                     )
+
                     val user = mapOf(
+                        "place" to count + 1,
                         "userUid" to auth.currentUser!!.uid,
                         "points" to 0,
                     )

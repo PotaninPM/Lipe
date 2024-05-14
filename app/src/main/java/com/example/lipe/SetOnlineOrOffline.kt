@@ -15,44 +15,52 @@ class SetOnlineOrOffline : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        auth = FirebaseAuth.getInstance()
+        try {
+            auth = FirebaseAuth.getInstance()
 
-        val user = auth.currentUser?.uid
+            val user = auth.currentUser?.uid
 
-        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
-            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
+            Log.d("INFOG1", user.toString())
 
-            override fun onActivityStarted(activity: Activity) {
-                if(user != null) {
-                    setUserStatus("online")
-                }
-                Log.d("INFOG", "activityStarted")
+            if(user != "null") {
+                registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
+                    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
+
+                    override fun onActivityStarted(activity: Activity) {
+                        if (user != null) {
+                            setUserStatus("online")
+                        }
+                        Log.d("INFOG", "activityStarted")
+                    }
+
+                    override fun onActivityResumed(activity: Activity) {}
+
+                    override fun onActivityPaused(activity: Activity) {
+                        if (user != null) {
+                            setUserStatus("offline")
+                        }
+                    }
+
+                    override fun onActivityStopped(activity: Activity) {
+                        if (user != null) {
+                            setUserStatus("offline")
+                        }
+                        Log.d("INFOG", "activityStopped")
+                    }
+
+                    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
+
+                    override fun onActivityDestroyed(activity: Activity) {
+                        if (user != null) {
+                            setUserStatus("offline")
+                        }
+                        Log.d("INFOG", "activityDestroyed")
+                    }
+                })
             }
-
-            override fun onActivityResumed(activity: Activity) {}
-
-            override fun onActivityPaused(activity: Activity) {
-                if(user != null) {
-                    setUserStatus("offline")
-                }
-            }
-
-            override fun onActivityStopped(activity: Activity) {
-                if(user != null) {
-                    setUserStatus("offline")
-                }
-                Log.d("INFOG", "activityStopped")
-            }
-
-            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
-
-            override fun onActivityDestroyed(activity: Activity) {
-                if(user != null) {
-                    setUserStatus("offline")
-                }
-                Log.d("INFOG", "activityDestroyed")
-            }
-        })
+        } catch (e: Exception) {
+            Log.e("INFOG1", e.message.toString())
+        }
     }
 
     private fun setUserStatus(status: String) {

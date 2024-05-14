@@ -24,11 +24,11 @@
             android:id="@+id/persImage"
             android:layout_width="@dimen/_42sdp"
             android:layout_height="@dimen/_42sdp"
-            android:src="@drawable/ex2"
-            android:layout_marginEnd="@dimen/_6sdp"
+            android:layout_marginStart="@dimen/_90sdp"
             android:scaleType="centerCrop"
+            android:src="@drawable/ex2"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/username"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/ImageStyle_Circle" />
 
@@ -36,12 +36,12 @@
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MikePM"
             android:fontFamily="@font/roboto_bold"
+            android:text="MikePM"
+            android:layout_marginStart="@dimen/_12sdp"
             android:textSize="@dimen/_14sdp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/persImage"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

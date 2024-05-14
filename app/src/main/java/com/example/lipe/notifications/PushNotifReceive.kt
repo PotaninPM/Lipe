@@ -17,24 +17,35 @@ class PushNotifReceive : FirebaseMessagingService() {
     private lateinit var auth: FirebaseAuth
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
+        auth = FirebaseAuth.getInstance()
 
-        if (remoteMessage.data.isNotEmpty()) {
-            val title = remoteMessage.data["title"]
-            val message = remoteMessage.data["message"]
+        val user = auth.currentUser!!.uid
+        if(user != null) {
+            if (remoteMessage.data.isNotEmpty()) {
+                val title = remoteMessage.data["title"]
+                val message = remoteMessage.data["message"]
 
-            Log.d("INFOG", title.toString())
-            showNotification(title, message)
+                Log.d("INFOG", title.toString())
+                showNotification(title, message)
+            }
         }
     }
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         auth = FirebaseAuth.getInstance()
-        if(auth.currentUser!!.uid != null) {
-            val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/userToken")
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            val userId = currentUser.uid
+            Log.d("INFOG1", "$userId!!!")
+            val dbRef_user = FirebaseDatabase.getInstance().getReference("users/$userId/userToken")
             dbRef_user.setValue(token)
+        } else {
+            Log.d("INFOG1", "Текущий пользователь равен null")
         }
     }
+
 
     private fun showNotification(title: String?, message: String?) {
         val channelId = "channel_id"

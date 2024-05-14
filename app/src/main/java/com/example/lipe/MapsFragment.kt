@@ -632,7 +632,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
         if(appVM.reg == "yes") {
-            showSuccessRegWindow()
+            //showSuccessRegWindow()
             appVM.reg = "no"
         }
 
@@ -880,19 +880,19 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
 
-    private fun showSuccessRegWindow() {
-        val pop_up_menu = layoutInflater.inflate(R.layout.pop_up_notification_success_sign_up, null)
-        val pop_up = Dialog(requireContext())
-        pop_up.setContentView(pop_up_menu)
-        pop_up.setCancelable(false)
-        pop_up.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        pop_up.show()
-        val closeBtn = pop_up.findViewById<Button>(R.id.close_ad)
-        val goTraneBtn = pop_up.findViewById<Button>(R.id.go_trane)
-        closeBtn.setOnClickListener {
-            pop_up.dismiss()
-        }
-    }
+//    private fun showSuccessRegWindow() {
+//        val pop_up_menu = layoutInflater.inflate(R.layout.pop_up_notification_success_sign_up, null)
+//        val pop_up = Dialog(requireContext())
+//        pop_up.setContentView(pop_up_menu)
+//        pop_up.setCancelable(false)
+//        pop_up.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        pop_up.show()
+//        val closeBtn = pop_up.findViewById<Button>(R.id.close_ad)
+//        val goTraneBtn = pop_up.findViewById<Button>(R.id.go_trane)
+//        closeBtn.setOnClickListener {
+//            pop_up.dismiss()
+//        }
+//    }
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1

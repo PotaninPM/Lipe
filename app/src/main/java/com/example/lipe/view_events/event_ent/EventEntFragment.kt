@@ -37,6 +37,7 @@ import com.google.firebase.database.getValue
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExecutorCoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -181,6 +182,8 @@ class EventEntFragment : Fragment() {
 
                     binding.deleteOrLeave.visibility = View.GONE
                     binding.finishEvent.visibility = View.GONE
+
+                    binding.btnRegToEvent.visibility = View.VISIBLE
                 }
             }
 
@@ -467,13 +470,20 @@ class EventEntFragment : Fragment() {
     fun deleteUserFromEvent(uid: String) {
         val dbRef_user = FirebaseDatabase.getInstance().getReference("users").child(auth.currentUser!!.uid).child("curRegEventsId").child(uid)
         val userInEventRef = dbRef_event.child(eventEntVM.id.value.toString()).child("reg_people_id").child(auth.currentUser!!.uid)
-        val curPeople = dbRef_event.child(eventEntVM.id.value.toString()).child("amount_reg_people").toString()
-        Log.d("INFOG", curPeople)
+        val curPeople = dbRef_event.child(eventEntVM.id.value.toString()).child("amount_reg_people")
+        val groupRef = FirebaseDatabase.getInstance().getReference("groups/${eventEntVM.id.value}/members/${auth.currentUser!!.uid}")
+        val groupInProfile = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/groups/$uid")
         dbRef_user.removeValue().addOnSuccessListener {
             userInEventRef.removeValue()
                 .addOnSuccessListener {
-                    binding.deleteOrLeave.visibility = View.GONE
-                    binding.btnRegToEvent.visibility = View.VISIBLE
+                    groupRef.removeValue().addOnSuccessListener {
+                        curPeople.setValue(eventEntVM.amount_reg_people.value?.minus(1)).addOnSuccessListener {
+                            groupInProfile.removeValue().addOnSuccessListener {
+                                binding.deleteOrLeave.visibility = View.GONE
+                                binding.btnRegToEvent.visibility = View.VISIBLE
+                            }
+                        }
+                    }
                 }
                 .addOnFailureListener {
                     Log.e("INFOG", "ErLeaveEvent")
@@ -493,83 +503,91 @@ class EventEntFragment : Fragment() {
 
 
     private fun checkIfUserAlreadyReg(curUid: String, eventId: String, callback: (Boolean) -> Unit) {
-        dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
-        dbRef_event.child(eventId).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val regPeopleSnapshot = dataSnapshot.child("reg_people_id")
-                var isUserRegistered = false
-                for (childSnapshot in regPeopleSnapshot.children) {
-                    val uid = childSnapshot.getValue(String::class.java)
-                    if(uid == curUid) {
-                        isUserRegistered = true
-                        break
+        try {
+            dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
+            dbRef_event.child(eventId).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val regPeopleSnapshot = dataSnapshot.child("reg_people_id")
+                    var isUserRegistered = false
+                    for (childSnapshot in regPeopleSnapshot.children) {
+                        val uid = childSnapshot.getValue(String::class.java)
+                        if(uid == curUid) {
+                            isUserRegistered = true
+                            break
+                        }
                     }
+                    callback(isUserRegistered)
                 }
-                callback(isUserRegistered)
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("INFOG", "Ошибка Firebase ${databaseError.message}")
-            }
-        })
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.e("INFOG", "Ошибка Firebase ${databaseError.message}")
+                }
+            })
+        } catch (e: Exception) {
+            Log.d("INFOG", e.message.toString())
+        }
     }
 
 
     private fun regUserToEvent(curUid: String, callback: (Boolean) -> Unit) {
-        val dbRef_users = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
-        val dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
+        try {
+            val dbRef_users = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
+            val dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
 
-        val event_id = eventEntVM.id.value.toString()
+            val event_id = eventEntVM.id.value.toString()
 
-        dbRef_event.child(event_id).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    val max = dataSnapshot.child("max_people").getValue(Int::class.java) ?: 0
-                    val reg_people = dataSnapshot.child("amount_reg_people").getValue(Int::class.java) ?: 0
+            dbRef_event.child(event_id).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if(dataSnapshot.exists()) {
+                        val max = dataSnapshot.child("max_people").getValue(Int::class.java) ?: 0
+                        val reg_people = dataSnapshot.child("amount_reg_people").getValue(Int::class.java) ?: 0
 
-                    if (max - reg_people > 0) {
-                        val regPeopleRef = dbRef_event.child(event_id).child("reg_people_id").child(auth.currentUser!!.uid)
+                        if (max - reg_people > 0) {
+                            val regPeopleRef = dbRef_event.child(event_id).child("reg_people_id").child(auth.currentUser!!.uid)
 
-                        regPeopleRef.setValue(curUid)
-                            .addOnSuccessListener {
-                                dbRef_event.child(event_id).child("amount_reg_people").setValue(reg_people + 1)
-                                    .addOnSuccessListener {
-                                        dbRef_users.child("curRegEventsId").child(event_id).setValue(event_id)
-                                            .addOnSuccessListener {
-                                                binding.btnRegToEvent.visibility = View.GONE
-                                                binding.deleteOrLeave.visibility = View.VISIBLE
+                            regPeopleRef.setValue(curUid)
+                                .addOnSuccessListener {
+                                    dbRef_event.child(event_id).child("amount_reg_people").setValue(reg_people + 1)
+                                        .addOnSuccessListener {
+                                            dbRef_users.child("curRegEventsId").child(event_id).setValue(event_id)
+                                                .addOnSuccessListener {
+                                                    binding.btnRegToEvent.visibility = View.GONE
+                                                    binding.deleteOrLeave.visibility = View.VISIBLE
 
-                                                callback(true)
-                                            }
-                                            .addOnFailureListener { e ->
-                                                callback(false)
-                                                Log.e("FirebaseError", "Ошибка Firebase при записи ID события в curRegEventsId пользователя: ${e.message}")
-                                            }
-                                    }
-                                    .addOnFailureListener { e ->
-                                        callback(false)
-                                        Log.e("FirebaseError", "Ошибка Firebase при обновлении счетчика участников: ${e.message}")
-                                    }
-                            }
-                            .addOnFailureListener { e ->
-                                callback(false)
-                                Log.e("FirebaseError", "Ошибка Firebase при добавлении пользователя к событию: ${e.message}")
-                            }
+                                                    callback(true)
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    callback(false)
+                                                    Log.e("FirebaseError", "Ошибка Firebase при записи ID события в curRegEventsId пользователя: ${e.message}")
+                                                }
+                                        }
+                                        .addOnFailureListener { e ->
+                                            callback(false)
+                                            Log.e("FirebaseError", "Ошибка Firebase при обновлении счетчика участников: ${e.message}")
+                                        }
+                                }
+                                .addOnFailureListener { e ->
+                                    callback(false)
+                                    Log.e("FirebaseError", "Ошибка Firebase при добавлении пользователя к событию: ${e.message}")
+                                }
+                        } else {
+                            callback(false)
+                            Log.e("FirebaseError", "Достигнуто максимальное количество участников")
+                        }
                     } else {
                         callback(false)
-                        Log.e("FirebaseError", "Достигнуто максимальное количество участников")
+                        Log.e("FirebaseError", "Мероприятие с ID $event_id не найдено")
                     }
-                } else {
-                    callback(false)
-                    Log.e("FirebaseError", "Мероприятие с ID $event_id не найдено")
                 }
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                callback(false)
-                Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
-            }
-        })
+                override fun onCancelled(databaseError: DatabaseError) {
+                    callback(false)
+                    Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
+                }
+            })
+        } catch (e: Exception) {
+            Log.e("INFOG", e.message.toString())
+        }
     }
 
     override fun onDestroy() {
