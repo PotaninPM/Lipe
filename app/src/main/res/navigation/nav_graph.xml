@@ -46,11 +46,11 @@
         android:name="com.example.lipe.start_frs.StartFragment"
         android:label="StartFragment" >
         <action
-            android:id="@+id/action_startFragment2_to_startDescFirstFragment"
-            app:destination="@id/startDescFirstFragment" />
-        <action
             android:id="@+id/action_startFragment2_to_mapsFragment"
             app:destination="@id/mapsFragment" />
+        <action
+            android:id="@+id/action_startFragment2_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapsFragment"
@@ -78,33 +78,6 @@
         android:name="com.example.lipe.GetPointsFragment"
         android:label="fragment_get_points"
         tools:layout="@layout/fragment_get_points" />
-    <fragment
-        android:id="@+id/startDescFirstFragment"
-        android:name="com.example.lipe.start_frs.StartDescFirstFragment"
-        android:label="fragment_start_desc_first"
-        tools:layout="@layout/fragment_start_desc_first" >
-        <action
-            android:id="@+id/action_startDescFirstFragment_to_startDescSecondFragment"
-            app:destination="@id/startDescSecondFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/startDescSecondFragment"
-        android:name="com.example.lipe.start_frs.StartDescSecondFragment"
-        android:label="fragment_start_desc_second"
-        tools:layout="@layout/fragment_start_desc_second" >
-        <action
-            android:id="@+id/action_startDescSecondFragment_to_startDescThirdFragment"
-            app:destination="@id/startDescThirdFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/startDescThirdFragment"
-        android:name="com.example.lipe.start_frs.StartDescThirdFragment"
-        android:label="fragment_start_desc_third"
-        tools:layout="@layout/fragment_start_desc_third" >
-        <action
-            android:id="@+id/action_startDescThirdFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
-    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.lipe.all_profiles.ProfileFragment"

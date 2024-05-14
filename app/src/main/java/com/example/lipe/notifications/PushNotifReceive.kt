@@ -30,8 +30,10 @@ class PushNotifReceive : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         auth = FirebaseAuth.getInstance()
-        val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/userToken")
-        dbRef_user.setValue(token)
+        if(auth.currentUser!!.uid != null) {
+            val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/userToken")
+            dbRef_user.setValue(token)
+        }
     }
 
     private fun showNotification(title: String?, message: String?) {

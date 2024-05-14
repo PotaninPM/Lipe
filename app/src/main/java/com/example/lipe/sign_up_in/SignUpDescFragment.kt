@@ -151,7 +151,7 @@ class SignUpDescFragment : Fragment() {
                         uploadImage {uid ->
                             if(uid != "null") {
                                 appVM.reg = "yes"
-                                addUserToDb(signUpVM.login, signUpVM.email, signUpVM.pass, signUpVM.number, signUpVM.name, signUpVM.lastName, desc, view)
+                                addUserToDb(signUpVM.login, signUpVM.email, signUpVM.pass, signUpVM.email, signUpVM.nameAndSurname, desc, view)
                             } else {
                                 Log.d("INFOG", "Что-то пошло не так")
                                 Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_LONG).show()
@@ -212,7 +212,7 @@ class SignUpDescFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun addUserToDb(username: String, email: String, pass: String, phone: String, name: String, lastName: String, desc: String, view: View) {
+    fun addUserToDb(username: String, email: String, pass: String, phone: String, names: String, desc: String, view: View) {
         FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
             val dbRef_rating = FirebaseDatabase.getInstance().getReference("rating")
 
@@ -232,8 +232,7 @@ class SignUpDescFragment : Fragment() {
                         email,
                         "7" + phone,
                         pass,
-                        name,
-                        lastName,
+                        names,
                         arrayListOf(),
                         arrayListOf(),
                         arrayListOf(),

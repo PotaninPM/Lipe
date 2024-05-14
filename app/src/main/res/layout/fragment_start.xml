@@ -3,35 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/get_started_logo">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/baloo_tamma2"
-                    android:text="Lipe"
-                    android:textColor="@color/quantum_white_100"
-                    android:textSize="@dimen/_46sdp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.54" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/nextBtn"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_55sdp"
+            android:layout_height="@dimen/_45sdp"
             android:layout_marginStart="@dimen/_60sdp"
             android:layout_marginEnd="@dimen/_60sdp"
             android:layout_marginBottom="@dimen/_36sdp"
@@ -39,10 +16,10 @@
             android:gravity="center"
             android:layout_gravity="bottom"
             android:singleLine="true"
-            android:text="Начать"
+            android:text="Начнем"
             android:textAllCaps="false"
             android:textColor="@color/quantum_white_100"
             android:textFontWeight="600"
-            android:textSize="@dimen/_20sdp"
+            android:textSize="@dimen/_15sdp"
             tools:ignore="TextSizeCheck" />
 </FrameLayout>

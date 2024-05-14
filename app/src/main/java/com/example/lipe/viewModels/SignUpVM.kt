@@ -3,19 +3,15 @@ package com.example.lipe.viewModels
 import androidx.lifecycle.ViewModel
 
 class SignUpVM: ViewModel() {
-    var lastName = ""
-    var name = ""
+    var nameAndSurname = ""
     var login = ""
     var email = ""
-    var number = ""
     var pass = ""
 
-    fun setData(lastName_: String, name_: String, login_: String, email_: String, number_: String, pass_: String) {
-        lastName = lastName_
-        name = name_
+    fun setData(nameAndSurname_: String, login_: String, email_: String, pass_: String) {
+        nameAndSurname = nameAndSurname_
         login = login_
         email = email_
-        number = number_
         pass = pass_
     }
 }

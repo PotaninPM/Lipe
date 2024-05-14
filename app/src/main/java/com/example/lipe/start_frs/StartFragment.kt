@@ -31,7 +31,7 @@ class StartFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.nextBtn.setOnClickListener {
-            view.findNavController().navigate(R.id.action_startFragment2_to_startDescFirstFragment)
+            view.findNavController().navigate(R.id.action_startFragment2_to_signUpFragment)
         }
     }
 

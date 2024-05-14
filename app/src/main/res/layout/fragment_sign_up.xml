@@ -29,49 +29,27 @@
                 android:singleLine="true"
                 android:textStyle="bold"
                 android:text="Создай аккаунт" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="@dimen/_145sdp"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/_6sdp"
-                    android:layout_marginTop="@dimen/_8sdp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etLastNameinput"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_6sdp"
-                        android:hint="Ваша фамилия"
-                        android:inputType="text"
-                        android:singleLine="true"
-                        tools:ignore="Autofill" />
-                </com.google.android.material.textfield.TextInputLayout>
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/_6sdp"
-                    android:layout_marginTop="@dimen/_8sdp">
+                    android:layout_marginTop="@dimen/_8sdp"
+                    app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etNameinput"
+                        android:id="@+id/etNameAndSurnameinput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Ваше имя"
+                        android:hint="Ваши имя и фамилия"
                         android:inputType="text"
                         android:singleLine="true"
                         tools:ignore="Autofill" />
                 </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/_6sdp"
-                android:layout_marginTop="@dimen/_8sdp"
-   >
+                app:errorEnabled="true"
+                app:counterMaxLength="30">
                 <com.google.android.material.textfield.TextInputEditText
                     android:hint="Введите логин"
                     android:id="@+id/etLogininput"
@@ -85,10 +63,9 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/_6sdp"
-                android:layout_marginTop="@dimen/_8sdp">
+                app:errorEnabled="true">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:hint="Введите почту"
+                    android:hint="Введите электроную почту"
                     android:id="@+id/etEmailinput"
                     android:inputType="textEmailAddress"
                     android:layout_height="wrap_content"
@@ -97,38 +74,19 @@
                     tools:ignore="Autofill"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/_6sdp"
-                android:layout_marginTop="@dimen/_8sdp"
-                app:prefixText="+7 ">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:hint="Введите номер телефона"
-                    android:id="@+id/etPhoneinput"
-                    android:inputType="phone"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:singleLine="true"
-                    android:textColorHint="@color/quantum_black_100"
-                    tools:ignore="Autofill"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:paddingBottom="@dimen/_6sdp"
-                app:passwordToggleEnabled="true">
+                app:passwordToggleEnabled="true"
+                app:errorEnabled="true">
                 <com.google.android.material.textfield.TextInputEditText
                     android:hint="Введите пароль"
                     android:id="@+id/etPassinput"
                     android:inputType="textPassword"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
-                    android:singleLine="true"
-                    android:textColorHint="@color/quantum_black_100" />
+                    android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
             <LinearLayout android:gravity="start"
                 android:id="@+id/linearRowvectortwo"
@@ -157,12 +115,13 @@
             </LinearLayout>
 
 
-            <androidx.appcompat.widget.AppCompatButton
+            <Button
                 android:id="@+id/btnNext"
+                style="@style/Widget.Material3.Button.Icon"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_16sdp"
-                android:background="@drawable/sign_in_start_btn"
+                android:backgroundTint="@color/green"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:singleLine="true"
