@@ -90,7 +90,7 @@ class ChoosePeopleFragment : DialogFragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Обработка ошибок
+
             }
         })
     }
@@ -124,6 +124,23 @@ class ChoosePeopleFragment : DialogFragment() {
                 }
             })
         }
+        val dbRefRating = database.getReference("rating")
+        dbRefRating.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val uid = snapshot.child("userUid").value.toString()
+                if(selectedUsers.contains(uid)) {
+                    val curPoints = snapshot.child("points").value.toString().toInt()
+//                    dbRefRating.child().child("points").setValue(curPoints + points).addOnSuccessListener {
+//
+//                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
     private fun deleteEvent(uid: String) {
         val dbRef_user = FirebaseDatabase.getInstance().getReference("users").child(auth.currentUser!!.uid).child("curRegEventsId").child(uid)

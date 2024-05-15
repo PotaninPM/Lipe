@@ -199,6 +199,7 @@
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.BottomNavigationView"
         app:itemIconSize="@dimen/_16sdp"
+        android:background="?attr/colorOnSurfaceInverse"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,5 +1,6 @@
 package com.example.lipe.rating_board
 
+import android.text.TextUtils.replace
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import coil.Coil
 import coil.ImageLoader
 import coil.request.ImageRequest
 import com.example.lipe.R
+import com.example.lipe.all_profiles.other_profile.OtherProfileFragment
 import com.example.lipe.databinding.RatingItemBinding
 import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.Dispatchers
@@ -54,7 +56,8 @@ class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope) :  RecyclerView
             ratingItem.setBackgroundResource(backgroundResId)
 
             binding.ratingItem.setOnClickListener {
-
+//                val action = RatingFragmentDirections.actionRatingFragmentToOtherProfileFragment(rating.uid)
+//                it.findNavController().navigate(action)
             }
         }
     }

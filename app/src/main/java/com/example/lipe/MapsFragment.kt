@@ -77,6 +77,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private var _binding: FragmentMapsBinding? = null
 
+    private var currentFragment: Fragment? = null
+
     //View Model
     private lateinit var appVM: AppVM
 
@@ -571,6 +573,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         _binding = FragmentMapsBinding.inflate(inflater, container, false)
 
+        currentFragment = MapsFragment()
 
         auth = FirebaseAuth.getInstance()
         appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
@@ -699,13 +702,28 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        binding.bottomNavigation.setOnItemSelectedListener {
-            when(it.itemId) {
-                R.id.profile -> replaceFragment(ProfileFragment())
-                R.id.map -> replaceFragment(MapsFragment())
-                //R.id.rating -> replaceFragment(RatingFragment())
-                R.id.rating -> replaceFragment(RatingFragment())
-                R.id.chats -> replaceFragment(ChatsAndGroupsFragment())
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.profile -> {
+                    if (currentFragment !is ProfileFragment) {
+                        replaceFragment(ProfileFragment())
+                    }
+                }
+                R.id.map -> {
+                    if (currentFragment !is MapsFragment) {
+                        replaceFragment(MapsFragment())
+                    }
+                }
+                R.id.rating -> {
+                    if (currentFragment !is RatingFragment) {
+                        replaceFragment(RatingFragment())
+                    }
+                }
+                R.id.chats -> {
+                    if (currentFragment !is ChatsAndGroupsFragment) {
+                        replaceFragment(ChatsAndGroupsFragment())
+                    }
+                }
                 else -> {
 
                 }
@@ -873,6 +891,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         binding.helpEvents.setBackgroundResource(if(type == "help") R.drawable.vary_of_events else 0)
     }
     private fun replaceFragment(fragment: Fragment) {
+        currentFragment = fragment
+
         val fragmentManager = childFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.map, fragment)

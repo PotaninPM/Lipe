@@ -238,30 +238,34 @@ class ProfileFragment : Fragment() {
     }
 
     private fun findAccount(callback: (UserData?) -> Unit) {
-        val dbRef_user =
-            FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
-        dbRef_user.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val name: String = dataSnapshot.child("firstAndLastName").value.toString()
-                val ratingAmount: Int = dataSnapshot.child("points").value.toString().toInt()
-                val friendsAmount: Int = dataSnapshot.child("friends_amount").value.toString().toInt()
-                val eventsAmount: Int = dataSnapshot.child("events_amount").value.toString().toInt()
+        try {
+            val dbRef_user =
+                FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
+            dbRef_user.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val name: String = dataSnapshot.child("firstAndLastName").value.toString()
+                    val ratingAmount: Int = dataSnapshot.child("points").value.toString().toInt()
+                    val friendsAmount: Int = dataSnapshot.child("friends_amount").value.toString().toInt()
+                    val eventsAmount: Int = dataSnapshot.child("events_amount").value.toString().toInt()
 
-                callback(
-                    UserData(
-                        name,
-                        ratingAmount,
-                        friendsAmount,
-                        eventsAmount,
+                    callback(
+                        UserData(
+                            name,
+                            ratingAmount,
+                            friendsAmount,
+                            eventsAmount,
+                        )
                     )
-                )
-            }
+                }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
-                callback(null)
-            }
-        })
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
+                    callback(null)
+                }
+            })
+        } catch (e: Exception) {
+            Log.e("INFOG", e.message.toString())
+        }
     }
 
     private fun setProfilePhotos(callback: (Boolean) -> Unit) {

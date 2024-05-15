@@ -33,36 +33,44 @@ class ChatsAndGroupsFragment : Fragment() {
     private var _binding: FragmentChatsAndGroupsBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var adapter : ChatsAndGroupsTabAdapter
+    private lateinit var adapter: ChatsAndGroupsTabAdapter
 
     private lateinit var auth: FirebaseAuth
 
     private lateinit var storage: StorageReference
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentChatsAndGroupsBinding.inflate(inflater, container, false)
+        val view = binding.root
 
         adapter = ChatsAndGroupsTabAdapter(childFragmentManager, lifecycle)
 
         auth = FirebaseAuth.getInstance()
         storage = FirebaseStorage.getInstance().reference.child("avatars/${auth.currentUser!!.uid}")
 
-        binding.tableLayout.addTab(binding.tableLayout.newTab().setText("Чаты"))
-        binding.tableLayout.addTab(binding.tableLayout.newTab().setText("Группы"))
+        view.findViewById<TabLayout>(R.id.tableLayout).apply {
+            addTab(newTab().setText("Чаты"))
+            addTab(newTab().setText("Группы"))
+            addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    binding.viewPager.currentItem = tab!!.position
+                }
+
+                override fun onTabUnselected(p0: TabLayout.Tab?) {}
+
+                override fun onTabReselected(p0: TabLayout.Tab?) {}
+            })
+        }
 
         binding.viewPager.adapter = adapter
 
         val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
-        dbRef_user.child("query_friends").addValueEventListener(object: ValueEventListener{
+        dbRef_user.child("query_friends").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if(!snapshot.exists() || snapshot.childrenCount.toInt() == 0) {
+                if (!snapshot.exists() || snapshot.childrenCount.toInt() == 0) {
                     binding.indexNotif.visibility = View.GONE
                 } else {
                     binding.indexNotif.visibility = View.VISIBLE
@@ -70,11 +78,11 @@ class ChatsAndGroupsFragment : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                // Handle error
             }
-
         })
-        storage.downloadUrl.addOnSuccessListener {url ->
+
+        storage.downloadUrl.addOnSuccessListener { url ->
             lifecycleScope.launch {
                 val bitmap: Bitmap = withContext(Dispatchers.IO) {
                     Coil.imageLoader(requireContext()).execute(
@@ -87,38 +95,18 @@ class ChatsAndGroupsFragment : Fragment() {
             }
         }
 
-        binding.tableLayout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                binding.viewPager.currentItem = tab!!.position
-            }
-
-            override fun onTabUnselected(p0: TabLayout.Tab?) {
-
-            }
-
-            override fun onTabReselected(p0: TabLayout.Tab?) {
-
-            }
-
-        })
-
-        binding.viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                binding.tableLayout.selectTab(binding.tableLayout.getTabAt(position))
+                binding.tableLayout?.selectTab(binding.tableLayout.getTabAt(position))
             }
         })
 
         binding.notificationChats.setOnClickListener {
             replaceFragment(FriendRequestsFragment())
         }
-        val view = binding.root
+
         return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -133,5 +121,4 @@ class ChatsAndGroupsFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
-
 }

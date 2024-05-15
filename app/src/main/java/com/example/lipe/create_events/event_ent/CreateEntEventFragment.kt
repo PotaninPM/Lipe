@@ -3,6 +3,7 @@ package com.example.lipe.create_events.event_ent
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
@@ -24,13 +25,14 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.ViewModelProvider
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import com.example.lipe.R
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.databinding.FragmentCreateEntEventBinding
 import com.example.lipe.database_models.EntEventModelDB
 import com.example.lipe.database_models.GroupModel
-import com.example.lipe.notifications.EventData
+import com.example.lipe.notifications.EntEventData
 import com.example.lipe.notifications.RetrofitInstance
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -56,7 +58,7 @@ import java.util.UUID
 
 class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
     //view model
-    private lateinit var appVM: AppVM
+    private val appVM: AppVM by activityViewModels()
 
     var type_sport = "1"
 
@@ -164,7 +166,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
         auth = FirebaseAuth.getInstance()
 
-        val items = listOf("Любой возраст", "Больше 18", "До 18")
+        val items = listOf("Любой возраст", "Больше 18 лет", "До 18 лет")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, items)
         val autoCompleteTextView = view.findViewById<AutoCompleteTextView>(R.id.ageSpinner)
         autoCompleteTextView.setAdapter(adapter)
@@ -173,13 +175,16 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         }
 
         binding.btnCreateEvent.setOnClickListener {
-            binding.btnCreateEvent.isClickable = false
-//            binding.scrollView.visibility = View.GONE
-//            binding.loadingProgressBar.visibility = View.VISIBLE
+
+            binding.btnCreateEvent.isEnabled = false
+            binding.btnCreateEvent.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+
             uploadImage {photos ->
-                if(photos[0] != "-" || photos[1] != "-" || photos[2] != "-") {
+                if(photos[0] != "-") {
                     createEvent(photos)
                 } else {
+                    binding.btnCreateEvent.isEnabled = true
+                    binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
                     setDialog("Вы не загрузили ни одного фото", "Вы должны загрузить минимум одно фото", "Хорошо")
                 }
             }
@@ -210,8 +215,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         val storageRef = FirebaseStorage.getInstance().getReference("event_images")
 
         val photos: ArrayList<String> = arrayListOf()
-        if (image1 == "-" && image2 == "-" && image3 == "-") {
-            callback(arrayListOf("-", "-", "-"))
+        if (image1 == "-") {
+            callback(arrayListOf("-"))
         } else {
             var used: Int = 0
             if(image1 != "-") {
@@ -221,51 +226,21 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     imageRef.putFile(uri)
                         .addOnSuccessListener { task ->
                             task.storage.downloadUrl.addOnSuccessListener { url ->
-                                photos.add(uid)
+                                photos.add(url.toString())
                                 callback(photos)
                             }
                         }
                         .addOnFailureListener { exception ->
-                            callback(arrayListOf("-", "-", "-"))
+                            binding.btnCreateEvent.isEnabled = true
+                            binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
+                            callback(arrayListOf("-"))
                             used = -1
                         }
                 }
+            } else {
+                binding.btnCreateEvent.isEnabled = true
+                binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
             }
-//
-//            if(image2 != "-") {
-//                imageUri2.let { uri ->
-//                    val uid: String = UUID.randomUUID().toString()
-//                    val imageRef = storageRef.child(uid)
-//                    imageRef.putFile(uri)
-//                        .addOnSuccessListener { task ->
-//                            task.storage.downloadUrl.addOnSuccessListener { url ->
-//                                photos.add(uid)
-//                            }
-//                        }
-//                        .addOnFailureListener { exception ->
-//                            callback(arrayListOf("-", "-", "-"))
-//                            used = -1
-//                        }
-//                }
-//            }
-//
-//            if(image3 != "-") {
-//                imageUri3.let { uri ->
-//                    val uid: String = UUID.randomUUID().toString()
-//                    val imageRef = storageRef.child(uid)
-//                    imageRef.putFile(uri)
-//                        .addOnSuccessListener { task ->
-//                            task.storage.downloadUrl.addOnSuccessListener { url ->
-//                                photos.add(uid)
-//                            }
-//                        }
-//                        .addOnFailureListener { exception ->
-//                            callback(arrayListOf("-", "-", "-"))
-//                            used = -1
-//                        }
-//                }
-//            }
-//
         }
     }
 
@@ -280,7 +255,9 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     }
 
     private fun createEvent(photos: ArrayList<String>) {
-        appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
+        binding.btnCreateEvent.isEnabled = false
+        binding.btnCreateEvent.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+
         if (checkForEmpty() == true) {
             eventId = UUID.randomUUID().toString()
             val time = Calendar.getInstance().time
@@ -298,7 +275,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             if(type_sport == "1" || type_sport == "Выберите тип развлечения") {
                 Toast.makeText(requireContext(), "Введите спорт!", Toast.LENGTH_LONG).show()
             } else {
-                var event = EntEventModelDB(
+                var event = EntEventData(
                     eventId,
                     type,
                     auth.currentUser?.uid.toString(),
@@ -317,16 +294,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     Instant.now().epochSecond
                 )
 
-                val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/curRegEventsId")
-                val dbRef_user_your = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/yourCreatedEvents")
-                val dbRef_user_groups = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/groups")
-
-                val dbRef_group = FirebaseDatabase.getInstance().getReference("groups")
-
-
-                val eventData = EventData(auth.currentUser!!.uid, appVM.latitude.toString(), appVM.longtitude.toString())
-
-                val call: Call<Void> = RetrofitInstance.api.sendEventData(eventData)
+                val call: Call<Void> = RetrofitInstance.api.sendEventData(event)
 
                 Log.d("INFOG", call.request().toString())
 
@@ -343,21 +311,10 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                         Log.d("INFOG", "${t.message}")
                     }
                 })
-
-                dbRef_events.child(eventId).setValue(event).addOnSuccessListener {
-                    dbRef_user.child(eventId).setValue(eventId).addOnSuccessListener {
-                        dbRef_user_your.child(eventId).setValue(eventId).addOnSuccessListener {
-                            val group = GroupModel(eventId, title, photos.get(0), arrayListOf(auth.currentUser!!.uid), arrayListOf())
-                            dbRef_group.child(eventId).setValue(group).addOnSuccessListener {
-                                dbRef_user_groups.child(eventId).setValue(eventId).addOnSuccessListener {
-
-
-                                }
-                            }
-                        }
-                    }
-                }
             }
+        }else {
+            binding.btnCreateEvent.isEnabled = true
+            binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
         }
     }
 

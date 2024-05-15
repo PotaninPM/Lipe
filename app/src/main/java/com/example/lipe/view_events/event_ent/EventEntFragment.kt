@@ -21,6 +21,7 @@ import coil.Coil
 import coil.request.ImageRequest
 import com.example.lipe.MapsFragment
 import com.example.lipe.R
+import com.example.lipe.all_profiles.other_profile.OtherProfileFragment
 import com.example.lipe.choose_people.ChoosePeopleFragment
 import com.example.lipe.databinding.FragmentEventEntBinding
 import com.example.lipe.people_go_to_event.PeopleGoToEventFragment
@@ -55,9 +56,10 @@ class EventEntFragment : Fragment() {
 
     private lateinit var storageRef : StorageReference
 
-    private lateinit var appVM: AppVM
-    private var _binding: FragmentEventEntBinding? = null
+    private val appVM: AppVM by activityViewModels()
     private val binding get() = _binding!!
+
+    private var _binding: FragmentEventEntBinding? = null
 
     private val eventEntVM: EventEntVM by activityViewModels()
 
@@ -71,78 +73,6 @@ class EventEntFragment : Fragment() {
     ): View? {
         _binding = FragmentEventEntBinding.inflate(inflater, container, false)
 
-        auth = FirebaseAuth.getInstance()
-
-        appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
-
-        storageRef = FirebaseStorage.getInstance().reference
-
-        dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
-
-        searchEvent(appVM.latitude, appVM.longtitude) {ready ->
-            val sportType = appVM.type_sport
-                val imageSport = when (sportType) {
-                    "Баскетбол" -> R.drawable.img_basketballimg
-                    "Воллейбол" -> R.drawable.volleyball_2
-                    "Футбол" -> R.drawable.football
-                    "Рэгби" -> R.drawable.rugby_ball
-                    "Воркаут" -> R.drawable.weights
-                    "Большой тенис" -> R.drawable.tennis
-                    "Бадминтон" -> R.drawable.shuttlecock
-                    "Пинпонг" -> R.drawable.table_tennis
-                    "Гимнастика" -> R.drawable.gymnastic_rings
-                    "Фехтование" -> R.drawable.fencing
-                    "Бег" -> R.drawable.running_shoe
-                    "Кёрлинг" -> R.drawable.curling
-                    "Хоккей" -> R.drawable.ice_hockey
-                    "Катание на коньках" -> R.drawable.ice_skate
-                    "Лыжная ходьба" -> R.drawable.skiing_1
-                    "Горные лыжи" -> R.drawable.skiing
-                    "Теннис" -> R.drawable.tennis
-                    "Сноуборд" -> R.drawable.snowboarding
-                    "Настольные игры" -> R.drawable.board_game
-                    "Мобильные игры" -> R.drawable.mobile_game
-                    "Шахматы" -> R.drawable.chess_2
-                    "Программирование" -> R.drawable.programming
-                    else -> {
-                        0
-                    }
-                }
-            val user = auth.currentUser!!.uid
-            binding.typeSport.setImageResource(imageSport)
-            if(ready) {
-                loadAllImages {ready->
-                    if(ready) {
-                        checkIfUserAlreadyReg(auth.currentUser!!.uid, eventEntVM.id.value.toString()) {ans ->
-                            if(ans) {
-                                binding.btnRegToEvent.visibility = View.GONE
-
-                                if(eventEntVM.creator.value == user) {
-                                    binding.deleteOrLeave.visibility = View.VISIBLE
-                                    binding.deleteOrLeave.setText("Завершить")
-
-                                    binding.listUsers.setText("Список")
-                                    binding.listUsers.visibility = View.VISIBLE
-                                } else {
-                                    binding.deleteOrLeave.setText("Покинуть")
-                                    binding.deleteOrLeave.visibility = View.VISIBLE
-
-                                    binding.listUsers.setText("Список")
-                                    binding.listUsers.visibility = View.VISIBLE
-                                }
-
-                                binding.allEntEvent.visibility = View.VISIBLE
-                                binding.loadingProgressBar.visibility = View.GONE
-                            } else {
-                                binding.allEntEvent.visibility = View.VISIBLE
-                                binding.loadingProgressBar.visibility = View.GONE
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         val view = binding.root
         return view
     }
@@ -150,63 +80,126 @@ class EventEntFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.allEntEvent.visibility = View.GONE
-        binding.loadingProgressBar.visibility = View.VISIBLE
+        auth = FirebaseAuth.getInstance()
 
-        binding.creator.setOnClickListener {
+        storageRef = FirebaseStorage.getInstance().reference
+
+        dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
+
+        searchEvent(appVM.latitude, appVM.longtitude) { ready ->
+            val sportType = appVM.type_sport
+            val imageSport = when (sportType) {
+                "Баскетбол" -> R.drawable.img_basketballimg
+                "Воллейбол" -> R.drawable.volleyball_2
+                "Футбол" -> R.drawable.football
+                "Рэгби" -> R.drawable.rugby_ball
+                "Воркаут" -> R.drawable.weights
+                "Большой тенис" -> R.drawable.tennis
+                "Бадминтон" -> R.drawable.shuttlecock
+                "Пинпонг" -> R.drawable.table_tennis
+                "Гимнастика" -> R.drawable.gymnastic_rings
+                "Фехтование" -> R.drawable.fencing
+                "Бег" -> R.drawable.running_shoe
+                "Кёрлинг" -> R.drawable.curling
+                "Хоккей" -> R.drawable.ice_hockey
+                "Катание на коньках" -> R.drawable.ice_skate
+                "Лыжная ходьба" -> R.drawable.skiing_1
+                "Горные лыжи" -> R.drawable.skiing
+                "Теннис" -> R.drawable.tennis
+                "Сноуборд" -> R.drawable.snowboarding
+                "Настольные игры" -> R.drawable.board_game
+                "Мобильные игры" -> R.drawable.mobile_game
+                "Шахматы" -> R.drawable.chess_2
+                "Программирование" -> R.drawable.programming
+                else -> 0
+            }
+            val user = auth.currentUser!!.uid
+            binding?.typeSport?.setImageResource(imageSport)
+            if (ready) {
+                loadAllImages { ready ->
+                    if (ready) {
+                        checkIfUserAlreadyReg(
+                            auth.currentUser!!.uid,
+                            eventEntVM.id.value.toString()
+                        ) { ans ->
+                            if (ans) {
+                                binding?.btnRegToEvent?.visibility = View.GONE
+
+                                if (eventEntVM.creator.value == user) {
+                                    binding?.deleteOrLeave?.visibility = View.VISIBLE
+                                    binding?.deleteOrLeave?.setText("Завершить")
+
+                                    binding?.listUsers?.setText("Список")
+                                    binding?.listUsers?.visibility = View.VISIBLE
+                                } else {
+                                    binding?.deleteOrLeave?.setText("Покинуть")
+                                    binding?.deleteOrLeave?.visibility = View.VISIBLE
+
+                                    binding?.listUsers?.setText("Список")
+                                    binding?.listUsers?.visibility = View.VISIBLE
+                                }
+
+                                binding?.allEntEvent?.visibility = View.VISIBLE
+                                binding?.loadingProgressBar?.visibility = View.GONE
+                            } else {
+                                binding?.allEntEvent?.visibility = View.VISIBLE
+                                binding?.loadingProgressBar?.visibility = View.GONE
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        binding?.allEntEvent?.visibility = View.GONE
+        binding?.loadingProgressBar?.visibility = View.VISIBLE
+
+        binding?.creator?.setOnClickListener {
 
         }
 
-        binding.apply {
+        binding?.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = eventEntVM
 
-//            if(eventEntVM.creator.value == auth.currentUser!!.uid) {
-//                binding.btnRegToEvent.visibility = View.GONE
-//                binding.viewQr.visibility = View.VISIBLE
-//                binding.deleteOrLeave.visibility = View.VISIBLE
-//            } else {
-//                checkIfUserAlreadyReg(auth.currentUser!!.uid, eventEntVM.id.value!!) { ans ->
-//                    if(ans) {
-//                        binding.btnRegToEvent.visibility = View.GONE
-//                        binding.viewQr.visibility = View.VISIBLE
-//                        binding.deleteOrLeave.visibility = View.VISIBLE
-//                    }
-//                }
-//            }
-
-                //}
-            //}
-            listUsers.setOnClickListener {
+            listUsers?.setOnClickListener {
                 showPeopleGoDialog(0)
             }
 
-            deleteOrLeave.setOnClickListener {
-                if(auth.currentUser!!.uid == eventEntVM.creator.value) {
+            deleteOrLeave?.setOnClickListener {
+                if (auth.currentUser!!.uid == eventEntVM.creator.value) {
                     showPeopleGoDialog(1)
                     //deleteEvent(eventEntVM.id.value.toString())
                 } else {
                     deleteUserFromEvent(eventEntVM.id.value.toString())
 
-                    binding.deleteOrLeave.visibility = View.GONE
-                    binding.listUsers.visibility = View.GONE
+                    binding?.deleteOrLeave?.visibility = View.GONE
+                    binding?.listUsers?.visibility = View.GONE
 
-                    binding.btnRegToEvent.visibility = View.VISIBLE
+                    binding?.btnRegToEvent?.visibility = View.VISIBLE
                 }
             }
 
 
-            btnRegToEvent.setOnClickListener {
+            btnRegToEvent?.setOnClickListener {
                 val curUid = auth.currentUser?.uid
                 if (curUid != null) {
                     checkIfUserAlreadyReg(curUid, eventEntVM.id.value!!) { isUserAlreadyRegistered ->
                         if (!isUserAlreadyRegistered) {
                             regUserToEvent(curUid) { result ->
-                                if(result == true) {
-                                    setDialog("Успешная регистрация", "Поздравляем, регистрация на событие прошла успешно", "Отлично!")
+                                if (result == true) {
+                                    setDialog(
+                                        "Успешная регистрация",
+                                        "Поздравляем, регистрация на событие прошла успешно",
+                                        "Отлично!"
+                                    )
                                 } else {
                                     //fail
-                                    setDialog("Ошибка при регистрации", "Что-то пошло не так, попробуйте зарегистрироваться еще раз","Хорошо")
+                                    setDialog(
+                                        "Ошибка при регистрации",
+                                        "Что-то пошло не так, попробуйте зарегистрироваться еще раз",
+                                        "Хорошо"
+                                    )
                                 }
                             }
                         } else {
@@ -217,20 +210,9 @@ class EventEntFragment : Fragment() {
                     Log.e("INFOG", "UID пользователя не найден")
                 }
             }
-
-//            addToFriendBtn.setOnClickListener {
-//                val status: String = eventEntVM.friend.value.toString()
-//                if(status == "Добавить в друзья") {
-//                    sendFriendRequest()
-//                    eventEntVM._friend.value = "Отменить заявку"
-//                } else if(status == "Удалить из друзей") {
-//
-//                } else if(status == "Отменить заявку") {
-//
-//                }
-//            }
         }
     }
+
 
     private fun showPeopleGoDialog(lay: Int) {
         var dialog: DialogFragment ?= null
@@ -321,27 +303,19 @@ class EventEntFragment : Fragment() {
             binding.eventAvatar.setImageResource(R.drawable.block_user)
             callback(true)
         } else {
-            val uid = eventEntVM.photos.value?.get(0).toString().removeSurrounding("[", "]")
+            val url = eventEntVM.photos.value?.get(0).toString().removeSurrounding("[", "]")
 
             val userAvatarRef = storageRef.child("avatars/${eventEntVM.creator.value}")
             val tokenTask2 = userAvatarRef.downloadUrl
-
-            val photoRef = storageRef.child("event_images/$uid")
-
-            val tokenTask = photoRef.downloadUrl
-
-
-            tokenTask.addOnSuccessListener { url ->
-                lifecycleScope.launch {
-                    val bitmap: Bitmap = withContext(Dispatchers.IO) {
-                        Coil.imageLoader(requireContext()).execute(
-                            ImageRequest.Builder(requireContext())
-                                .data(url)
-                                .build()
-                        ).drawable?.toBitmap()!!
-                    }
-                    binding.image.setImageBitmap(bitmap)
+            lifecycleScope.launch {
+                val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                    Coil.imageLoader(requireContext()).execute(
+                        ImageRequest.Builder(requireContext())
+                            .data(url)
+                            .build()
+                    ).drawable?.toBitmap()!!
                 }
+                binding.image.setImageBitmap(bitmap)
                 tokenTask2.addOnSuccessListener { url_2 ->
                     lifecycleScope.launch {
                         val bitmap: Bitmap = withContext(Dispatchers.IO) {
@@ -357,14 +331,9 @@ class EventEntFragment : Fragment() {
                 }.addOnFailureListener {
 
                 }
-                Thread.sleep(1000)
 
-            }.addOnFailureListener {
-                callback(false)
             }
-
         }
-
     }
 
     private fun searchEvent(coord1: Double, coord2: Double, callback: (ready: Boolean) -> Unit) {
@@ -530,7 +499,7 @@ class EventEntFragment : Fragment() {
         try {
             val dbRef_users = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
             val dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
-
+            val dbRef_groups = FirebaseDatabase.getInstance().getReference("groups/${eventEntVM.id.value}/members")
             val event_id = eventEntVM.id.value.toString()
 
             dbRef_event.child(event_id).addListenerForSingleValueEvent(object : ValueEventListener {
@@ -548,8 +517,10 @@ class EventEntFragment : Fragment() {
                                         .addOnSuccessListener {
                                             dbRef_users.child("curRegEventsId").child(event_id).setValue(event_id)
                                                 .addOnSuccessListener {
-                                                    binding.btnRegToEvent.visibility = View.GONE
-                                                    binding.deleteOrLeave.visibility = View.VISIBLE
+                                                    dbRef_groups.child(auth.currentUser!!.uid).setValue(auth.currentUser!!.uid).addOnSuccessListener {
+                                                        binding.btnRegToEvent.visibility = View.GONE
+                                                        binding.deleteOrLeave.visibility = View.VISIBLE
+                                                    }
 
                                                     callback(true)
                                                 }
