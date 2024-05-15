@@ -61,7 +61,20 @@ class PeopleGoToEventFragment : DialogFragment() {
             adapter = peopleGoAdapter
         }
 
+        binding.close.setOnClickListener {
+            dismiss()
+        }
+
         loadData(eventVM.id.value.toString())
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        dialog?.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            (resources.displayMetrics.heightPixels * 0.7).toInt()
+        )
     }
 
     private fun loadData(eventUid: String) {
@@ -80,7 +93,7 @@ class PeopleGoToEventFragment : DialogFragment() {
                             val storageRef = FirebaseStorage.getInstance().getReference("avatars/$userUid")
 
                             storageRef.downloadUrl.addOnSuccessListener { url ->
-                                newPeopleList.add(PersoneGoItem(nickname, url.toString()))
+                                newPeopleList.add(PersoneGoItem(userUid.toString(), nickname, url.toString()))
                                 peopleGoAdapter.updateRequests(newPeopleList)
                                 Log.d("INFOG", newPeopleList.size.toString())
                             }.addOnFailureListener {

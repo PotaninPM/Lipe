@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toBitmap
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
@@ -20,6 +21,7 @@ import coil.Coil
 import coil.request.ImageRequest
 import com.example.lipe.MapsFragment
 import com.example.lipe.R
+import com.example.lipe.choose_people.ChoosePeopleFragment
 import com.example.lipe.databinding.FragmentEventEntBinding
 import com.example.lipe.people_go_to_event.PeopleGoToEventFragment
 import com.example.lipe.viewModels.AppVM
@@ -117,7 +119,7 @@ class EventEntFragment : Fragment() {
 
                                 if(eventEntVM.creator.value == user) {
                                     binding.deleteOrLeave.visibility = View.VISIBLE
-                                    binding.deleteOrLeave.setText("Удалить событие")
+                                    binding.deleteOrLeave.setText("Завершить")
 
                                     binding.listUsers.setText("Список")
                                     binding.listUsers.visibility = View.VISIBLE
@@ -176,12 +178,13 @@ class EventEntFragment : Fragment() {
                 //}
             //}
             listUsers.setOnClickListener {
-                showPeopleGoDialog()
+                showPeopleGoDialog(0)
             }
 
             deleteOrLeave.setOnClickListener {
                 if(auth.currentUser!!.uid == eventEntVM.creator.value) {
-                    deleteEvent(eventEntVM.id.value.toString())
+                    showPeopleGoDialog(1)
+                    //deleteEvent(eventEntVM.id.value.toString())
                 } else {
                     deleteUserFromEvent(eventEntVM.id.value.toString())
 
@@ -229,8 +232,14 @@ class EventEntFragment : Fragment() {
         }
     }
 
-    private fun showPeopleGoDialog() {
-        val dialog = PeopleGoToEventFragment()
+    private fun showPeopleGoDialog(lay: Int) {
+        var dialog: DialogFragment ?= null
+
+        dialog = when(lay) {
+            0 -> PeopleGoToEventFragment()
+            1 -> ChoosePeopleFragment()
+            else -> DialogFragment()
+        }
         dialog.show(childFragmentManager, "PeopleGoDialog")
     }
 
@@ -453,28 +462,6 @@ class EventEntFragment : Fragment() {
                 Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
             }
         })
-    }
-
-    private fun deleteEvent(uid: String) {
-        val dbRef_user = FirebaseDatabase.getInstance().getReference("users").child(auth.currentUser!!.uid).child("curRegEventsId").child(uid)
-        val curPeople = dbRef_event.child(eventEntVM.id.value.toString())
-        val dbRef_group = FirebaseDatabase.getInstance().getReference("groups").child(eventEntVM.id.toString())
-
-        dbRef_user.removeValue().addOnSuccessListener {
-            curPeople.removeValue()
-                .addOnSuccessListener {
-                    dbRef_group.removeValue().addOnSuccessListener {
-                        val eventFragment = parentFragment as? EventFragment
-                        eventFragment?.dismiss()
-
-                        binding.deleteOrLeave.visibility = View.GONE
-                        binding.btnRegToEvent.visibility = View.VISIBLE
-                    }
-                }
-                .addOnFailureListener {
-                    Log.e("INFOG", "ErLeaveEvent")
-                }
-        }
     }
 
     fun deleteUserFromEvent(uid: String) {
