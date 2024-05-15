@@ -3,6 +3,8 @@ package com.example.lipe.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class EventEcoVM: ViewModel() {
 
@@ -65,6 +67,13 @@ class EventEcoVM: ViewModel() {
         longtitude = long
     }
 
+    fun formatDate(dateString: String): String {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("Создано d MMMM yyyy года HH:mm", Locale("ru"))
+        val date = inputFormat.parse(dateString)
+        return outputFormat.format(date)
+    }
+
     fun setInfo(id_: String, maxPeople_: Int, minPeople_: Int, powerPollution_: String, title_: String, creator_: String, creatorUsername_: String, photosBefore_: ArrayList<String>, peopleGo_: ArrayList<String>, freePlaces_: Int, eventDesc_: String, time_of_creation_: String, date_: String, amount_reg_people_: Int, getPoints_: Int) {
         _id.value = id_
         _maxPeople.value = maxPeople_
@@ -75,7 +84,7 @@ class EventEcoVM: ViewModel() {
         _eventDesc.value = eventDesc_
         _date.value = date_
         _type.value = "Экология"
-        _time_of_creation.value = time_of_creation_
+        _time_of_creation.value = formatDate(time_of_creation_)
         _amount_reg_people.value = amount_reg_people_
         _freePlaces.value = 100 - 100 * amount_reg_people.value!! / maxPeople.value!!
         _powerPollution.value = powerPollution_.toString()

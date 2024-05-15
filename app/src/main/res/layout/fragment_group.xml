@@ -2,8 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#DAFFFC"
-    android:id="@+id/all_group"
     tools:context=".chats_and_groups.chat_fr.ChatFragment">
     <data>
         <variable
@@ -15,6 +13,7 @@
             type="com.example.lipe.chats_and_groups.group_fr.GroupFragment" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/all_group"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <androidx.recyclerview.widget.RecyclerView
@@ -54,7 +53,6 @@
                     android:layout_height="@dimen/_38sdp"
                     android:layout_marginStart="@dimen/_15sdp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ex2"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/back_btn"
                     app:layout_constraintTop_toTopOf="parent"

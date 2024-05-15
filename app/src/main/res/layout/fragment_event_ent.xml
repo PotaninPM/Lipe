@@ -413,7 +413,7 @@
                     tools:ignore="TextSizeCheck" />
 
                 <Button
-                    android:id="@+id/finishEvent"
+                    android:id="@+id/listUsers"
                     style="@style/Widget.Material3.Button.Icon"
                     android:layout_width="@dimen/_140sdp"
                     android:layout_height="@dimen/_40sdp"

@@ -1,5 +1,6 @@
 package com.example.lipe.chats_and_groups.chat_fr
 
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -48,6 +49,13 @@ class ChatFragment(val chatUid: String) : Fragment() {
         _binding = FragmentChatBinding.inflate(inflater, container, false)
 
         auth = FirebaseAuth.getInstance()
+
+        val nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        if (nightMode == Configuration.UI_MODE_NIGHT_YES) {
+            binding.allChat.setBackgroundResource(R.drawable.fon_2)
+        } else {
+            binding.allChat.setBackgroundResource(R.drawable.fon_light)
+        }
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner

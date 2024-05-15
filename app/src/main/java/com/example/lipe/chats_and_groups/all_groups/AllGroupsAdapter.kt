@@ -58,7 +58,8 @@ class AllGroupsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.A
                     if(dataSnapshot.value != null) {
                         var last_message = dataSnapshot.child("lastMessage").value.toString()
                         val name = dataSnapshot.child("name").value.toString()
-                        if (last_message != null) {
+
+                        if (last_message != "null" && name != "null") {
                             lastMessage.text = "$name: $last_message"
                         }
                         binding.lastMessage.visibility = View.VISIBLE

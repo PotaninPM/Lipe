@@ -95,9 +95,9 @@
                         android:id="@+id/constraintLayout"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_60sdp"
-                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginStart="@dimen/_15sdp"
                         android:layout_marginTop="@dimen/_6sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_15sdp"
                         android:background="@drawable/profile_rates"
                         android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -214,13 +214,12 @@
                     <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/switcher"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

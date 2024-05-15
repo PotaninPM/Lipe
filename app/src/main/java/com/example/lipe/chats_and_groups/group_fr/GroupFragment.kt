@@ -1,5 +1,6 @@
 package com.example.lipe.chats_and_groups.group_fr
 
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -56,10 +57,24 @@ class GroupFragment(val groupUid: String) : Fragment() {
 
         auth = FirebaseAuth.getInstance()
 
+        val nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        if (nightMode == Configuration.UI_MODE_NIGHT_YES) {
+            binding.allGroup.setBackgroundResource(R.drawable.fon_2)
+        } else {
+            binding.allGroup.setBackgroundResource(R.drawable.fon_light)
+        }
 
-        FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/firstName").addValueEventListener(object: ValueEventListener {
+        FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/firstAndLastName").addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                yourFirstName = snapshot.value.toString()
+                var name = ""
+                for(i in snapshot.value.toString()) {
+                    if(i == ' ') {
+                        break
+                    } else {
+                        name+=i
+                    }
+                }
+                yourFirstName = name
             }
 
             override fun onCancelled(error: DatabaseError) {

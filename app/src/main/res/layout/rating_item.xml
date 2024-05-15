@@ -26,7 +26,6 @@
             android:layout_height="@dimen/_42sdp"
             android:layout_marginStart="@dimen/_90sdp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ex2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

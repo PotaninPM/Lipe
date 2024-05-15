@@ -5,6 +5,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_friends"
+            android:icon="@drawable/friends_img"
+            android:title="Друзья" />
+        <item
             android:id="@+id/nav_edit_info"
             android:icon="@drawable/pencil"
             android:title="Изменить информацию" />
@@ -12,14 +16,6 @@
             android:id="@+id/get_points"
             android:icon="@drawable/get_points"
             android:title="Получить баллы" />
-        <item
-            android:id="@+id/nav_wallet"
-            android:icon="@drawable/wallet_arrow"
-            android:title="Кошелек" />
-        <item
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/settings"
-            android:title="Настройки" />
 
     </group>
 

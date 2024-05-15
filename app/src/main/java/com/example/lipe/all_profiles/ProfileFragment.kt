@@ -105,18 +105,12 @@ class ProfileFragment : Fragment() {
                             .commit()
                         Log.d("INFOG", "2")
                     }
-                    R.id.nav_settings -> {
-//                        childFragmentManager.beginTransaction()
-//                            .replace(R.id.all_profile, ChatsAndGroupsFragment())
-//                            .commit()
-                        Log.d("INFOG", "3")
-                    }
                     R.id.nav_logout -> {
                         auth.signOut()
 //                        childFragmentManager.beginTransaction()
 //                            .replace(R.id.all_profile, StartFragment())
 //                            .commit()
-                        Log.d("INFOG", "4")
+//                        Log.d("INFOG", "4")
                     }
                 }
                 drawerLayout.closeDrawer(GravityCompat.END)

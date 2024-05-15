@@ -1,7 +1,7 @@
 
 <resources>
     <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">#08D1F4</item>
+        <item name="colorPrimary">#EAEAEA</item>
         <item name="colorOnPrimary">#311178</item>
         <item name="colorPrimaryContainer">#381299</item>
         <item name="colorOnPrimaryContainer">@color/md_theme_dark_onPrimaryContainer</item>

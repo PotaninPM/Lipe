@@ -21,6 +21,7 @@ import coil.request.ImageRequest
 import com.example.lipe.MapsFragment
 import com.example.lipe.R
 import com.example.lipe.databinding.FragmentEventEntBinding
+import com.example.lipe.people_go_to_event.PeopleGoToEventFragment
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.viewModels.EventEntVM
 import com.example.lipe.view_events.EventFragment
@@ -118,14 +119,14 @@ class EventEntFragment : Fragment() {
                                     binding.deleteOrLeave.visibility = View.VISIBLE
                                     binding.deleteOrLeave.setText("Удалить событие")
 
-                                    binding.finishEvent.setText("Завершить")
-                                    binding.finishEvent.visibility = View.VISIBLE
+                                    binding.listUsers.setText("Список")
+                                    binding.listUsers.visibility = View.VISIBLE
                                 } else {
                                     binding.deleteOrLeave.setText("Покинуть")
                                     binding.deleteOrLeave.visibility = View.VISIBLE
 
-                                    binding.finishEvent.setText("Список")
-                                    binding.finishEvent.visibility = View.VISIBLE
+                                    binding.listUsers.setText("Список")
+                                    binding.listUsers.visibility = View.VISIBLE
                                 }
 
                                 binding.allEntEvent.visibility = View.VISIBLE
@@ -174,6 +175,10 @@ class EventEntFragment : Fragment() {
 
                 //}
             //}
+            listUsers.setOnClickListener {
+                showPeopleGoDialog()
+            }
+
             deleteOrLeave.setOnClickListener {
                 if(auth.currentUser!!.uid == eventEntVM.creator.value) {
                     deleteEvent(eventEntVM.id.value.toString())
@@ -181,7 +186,7 @@ class EventEntFragment : Fragment() {
                     deleteUserFromEvent(eventEntVM.id.value.toString())
 
                     binding.deleteOrLeave.visibility = View.GONE
-                    binding.finishEvent.visibility = View.GONE
+                    binding.listUsers.visibility = View.GONE
 
                     binding.btnRegToEvent.visibility = View.VISIBLE
                 }
@@ -222,6 +227,11 @@ class EventEntFragment : Fragment() {
 //                }
 //            }
         }
+    }
+
+    private fun showPeopleGoDialog() {
+        val dialog = PeopleGoToEventFragment()
+        dialog.show(childFragmentManager, "PeopleGoDialog")
     }
 
     private fun sendFriendRequest() {

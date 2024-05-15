@@ -4,18 +4,4 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/_140sdp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    android:background="#2BDCEA">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/nunitosansregular"
-        android:text="Ваш баланс: 2000"
-        android:textColor="@color/quantum_black_100"
-        android:textSize="@dimen/_18sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    android:background="#2BDCEA"/>

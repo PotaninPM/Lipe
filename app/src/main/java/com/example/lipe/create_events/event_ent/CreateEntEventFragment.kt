@@ -173,6 +173,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         }
 
         binding.btnCreateEvent.setOnClickListener {
+            binding.btnCreateEvent.isClickable = false
 //            binding.scrollView.visibility = View.GONE
 //            binding.loadingProgressBar.visibility = View.VISIBLE
             uploadImage {photos ->
@@ -343,19 +344,19 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     }
                 })
 
-//                dbRef_events.child(eventId).setValue(event).addOnSuccessListener {
-//                    dbRef_user.child(eventId).setValue(eventId).addOnSuccessListener {
-//                        dbRef_user_your.child(eventId).setValue(eventId).addOnSuccessListener {
-//                            val group = GroupModel(eventId, title, photos.get(0), arrayListOf(auth.currentUser!!.uid), arrayListOf())
-//                            dbRef_group.child(eventId).setValue(group).addOnSuccessListener {
-//                                dbRef_user_groups.child(eventId).setValue(eventId).addOnSuccessListener {
-//
-//
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
+                dbRef_events.child(eventId).setValue(event).addOnSuccessListener {
+                    dbRef_user.child(eventId).setValue(eventId).addOnSuccessListener {
+                        dbRef_user_your.child(eventId).setValue(eventId).addOnSuccessListener {
+                            val group = GroupModel(eventId, title, photos.get(0), arrayListOf(auth.currentUser!!.uid), arrayListOf())
+                            dbRef_group.child(eventId).setValue(group).addOnSuccessListener {
+                                dbRef_user_groups.child(eventId).setValue(eventId).addOnSuccessListener {
+
+
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
