@@ -94,7 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunitosansextrabold"
-                        android:text="@{viewModel.nameLastName}"
+                        android:text="@{viewModel.nickname}"
                         android:textSize="@dimen/_16sdp"
                         android:layout_marginTop="@dimen/_12sdp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -117,7 +117,7 @@
                     <Button
                         android:id="@+id/changeYourInfo"
                         style="@style/Widget.Material3.Button.IconButton.Filled"
-                        android:layout_width="@dimen/_170sdp"
+                        android:layout_width="@dimen/_175sdp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_12sdp"
                         android:text="Изменить ваши данные"

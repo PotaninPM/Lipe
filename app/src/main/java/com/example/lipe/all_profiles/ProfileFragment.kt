@@ -20,6 +20,7 @@ import coil.Coil
 import coil.request.ImageRequest
 import com.example.lipe.GetPointsFragment
 import com.example.lipe.R
+import com.example.lipe.all_profiles.ChangeInfoBottomSheet
 import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.databinding.FragmentProfileBinding
 import com.example.lipe.viewModels.ProfileVM
@@ -54,6 +55,11 @@ class ProfileFragment : Fragment() {
         binding.apply {
             theme.setOnClickListener {
                 selectImageTheme.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+
+            changeYourInfo.setOnClickListener {
+                val bottomSheet = ChangeInfoBottomSheet()
+                bottomSheet.show(childFragmentManager, "ChangeInfoBottomSheet")
             }
 
             avatar.setOnClickListener {
@@ -146,10 +152,12 @@ class ProfileFragment : Fragment() {
             findAccount { userData ->
                 if(userData != null) {
                     profileVM.setInfo(
-                         userData.name,
+                        userData.nickname,
                         userData.friendsAmount,
                         userData.eventsAmount,
-                        userData.ratingPoints
+                        userData.ratingPoints,
+                        userData.desc,
+                        userData.name
                     )
                     loadingProgressBar.visibility = View.GONE
                     allProfile.visibility = View.VISIBLE
@@ -243,17 +251,21 @@ class ProfileFragment : Fragment() {
                 FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
             dbRef_user.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val name: String = dataSnapshot.child("username").value.toString()
+                    val desc = dataSnapshot.child("about_you").value.toString()
+                    val name = dataSnapshot.child("firstAndLastName").value.toString()
+                    val username: String = dataSnapshot.child("username").value.toString()
                     val ratingAmount: Int = dataSnapshot.child("points").value.toString().toInt()
                     val friendsAmount: Int = dataSnapshot.child("friends_amount").value.toString().toInt()
                     val eventsAmount: Int = dataSnapshot.child("events_amount").value.toString().toInt()
 
                     callback(
                         UserData(
-                            name,
+                            username,
                             ratingAmount,
                             friendsAmount,
                             eventsAmount,
+                            desc,
+                            name
                         )
                     )
                 }
@@ -276,6 +288,7 @@ class ProfileFragment : Fragment() {
         val tokenTaskTheme = themeRef.downloadUrl
 
         tokenTaskAvatar.addOnSuccessListener { url_avatar ->
+//            profileVM.
             lifecycleScope.launch {
                 val bitmap: Bitmap = withContext(Dispatchers.IO) {
                     Coil.imageLoader(requireContext()).execute(
@@ -326,8 +339,10 @@ class ProfileFragment : Fragment() {
 }
 
 data class UserData(
-    val name: String,
+    val nickname: String,
     val ratingPoints: Int,
     val friendsAmount: Int,
     val eventsAmount: Int,
+    val desc: String,
+    val name: String
 )
