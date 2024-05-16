@@ -24,6 +24,9 @@ class ProfileVM: ViewModel() {
     private var _desc = MutableLiveData<String>()
     val desc: LiveData<String> = _desc
 
+    var _avatar = MutableLiveData<String>()
+    val avatar: LiveData<String> = _avatar
+
 
     fun setInfo(nickname_: String, friendsAmount_: Int, eventsAmount_: Int, ratingPoints_: Int, desc: String, name_: String) {
         _nickname.value = nickname_
@@ -36,5 +39,9 @@ class ProfileVM: ViewModel() {
 //
 //        _age.value = age_
 //        _creatorUsername.value = creatorUsername_
+    }
+
+    fun setPhoto(avatar_: String) {
+        _avatar.value = avatar_
     }
 }

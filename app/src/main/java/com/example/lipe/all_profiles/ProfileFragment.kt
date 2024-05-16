@@ -288,7 +288,7 @@ class ProfileFragment : Fragment() {
         val tokenTaskTheme = themeRef.downloadUrl
 
         tokenTaskAvatar.addOnSuccessListener { url_avatar ->
-//            profileVM.
+            profileVM.setPhoto(url_avatar.toString())
             lifecycleScope.launch {
                 val bitmap: Bitmap = withContext(Dispatchers.IO) {
                     Coil.imageLoader(requireContext()).execute(
