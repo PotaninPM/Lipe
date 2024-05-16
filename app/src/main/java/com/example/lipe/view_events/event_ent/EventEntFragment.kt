@@ -114,7 +114,7 @@ class EventEntFragment : Fragment() {
                 else -> 0
             }
             val user = auth.currentUser!!.uid
-            binding?.typeSport?.setImageResource(imageSport)
+            binding.typeSport.setImageResource(imageSport)
             if (ready) {
                 loadAllImages { ready ->
                     if (ready) {

@@ -129,7 +129,6 @@ class RatingFragment : Fragment() {
         return view
     }
 
-
     private fun addPeople() {
         val dbRef_rating = FirebaseDatabase.getInstance().getReference("rating")
         ratingListener = dbRef_rating.orderByKey().addValueEventListener(object : ValueEventListener {

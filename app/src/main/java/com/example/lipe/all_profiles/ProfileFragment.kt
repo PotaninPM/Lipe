@@ -146,7 +146,7 @@ class ProfileFragment : Fragment() {
             findAccount { userData ->
                 if(userData != null) {
                     profileVM.setInfo(
-                         userData.name + " ⓘ",
+                         userData.name,
                         userData.friendsAmount,
                         userData.eventsAmount,
                         userData.ratingPoints
@@ -243,7 +243,7 @@ class ProfileFragment : Fragment() {
                 FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
             dbRef_user.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val name: String = dataSnapshot.child("firstAndLastName").value.toString()
+                    val name: String = dataSnapshot.child("username").value.toString()
                     val ratingAmount: Int = dataSnapshot.child("points").value.toString().toInt()
                     val friendsAmount: Int = dataSnapshot.child("friends_amount").value.toString().toInt()
                     val eventsAmount: Int = dataSnapshot.child("events_amount").value.toString().toInt()
