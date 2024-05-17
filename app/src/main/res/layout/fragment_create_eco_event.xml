@@ -52,7 +52,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        android:text="Нажмите, чтобы загрузить фото"
+                        android:text="@string/tap_to_upload"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +86,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Детали события"
+                    android:text="@string/event_details"
                     android:layout_gravity="center"
                     android:textSize="@dimen/_22sdp"
                     android:textStyle="bold" />
@@ -105,7 +105,7 @@
                         android:id="@+id/etNameinput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Введите название события"
+                        android:hint="@string/event_name"
                         android:inputType="text"
                         android:singleLine="true"
                         tools:ignore="Autofill" />
@@ -128,7 +128,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:textSize="@dimen/_13sdp"
-                        android:text="Нажмите, чтобы установить дату встречи"/>
+                        android:text="@string/meeting_date"/>
 
                     <TextView
                         android:id="@+id/timeText"
@@ -160,7 +160,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/pollutionSpinnerLayout"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:hint="Уровень загрязнения"
+                    android:hint="@string/power_of_pollution"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -197,7 +197,7 @@
                             android:id="@+id/etMinInputText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Мин. людей"
+                            android:hint="@string/min_people"
                             android:gravity="center"
                             android:inputType="number"
                             android:singleLine="true"
@@ -239,7 +239,7 @@
                         android:id="@+id/etDescInputText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_140sdp"
-                        android:hint="Подробное описание события"
+                        android:hint="@string/detailed_desc"
                         android:inputType="textMultiLine"
                         android:gravity="top"
                         android:singleLine="true"
@@ -257,7 +257,7 @@
                     android:gravity="center"
                     android:singleLine="true"
                     android:layout_marginBottom="@dimen/_8sdp"
-                    android:text="Создать событие"
+                    android:text="@string/create_event"
                     android:textAllCaps="false"
                     android:textColor="@color/quantum_white_100"
                     android:textFontWeight="600"

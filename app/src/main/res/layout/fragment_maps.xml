@@ -69,7 +69,7 @@
                         android:layout_gravity="center"
                         android:layout_marginEnd="@dimen/_8sdp"
                         android:gravity="center"
-                        android:text="Все"
+                        android:text="@string/all"
                         android:textSize="@dimen/_12sdp" />
                 </LinearLayout>
 
@@ -97,7 +97,7 @@
                         android:layout_marginEnd="@dimen/_8sdp"
 
                         android:gravity="center"
-                        android:text="Друзья"
+                        android:text="@string/friends_amount"
                         android:textSize="@dimen/_12sdp" />
                 </LinearLayout>
 
@@ -123,7 +123,7 @@
                         android:layout_marginStart="@dimen/_3sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
                         android:gravity="center"
-                        android:text="Экология"
+                        android:text="@string/eco"
                         android:textSize="@dimen/_12sdp" />
                 </LinearLayout>
 
@@ -149,7 +149,7 @@
                         android:layout_marginStart="@dimen/_3sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
                         android:gravity="center"
-                        android:text="Развлечения"
+                        android:text="@string/ent"
                         android:textSize="@dimen/_12sdp" />
                 </LinearLayout>
 
@@ -175,7 +175,7 @@
                         android:layout_marginStart="@dimen/_3sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
                         android:gravity="center"
-                        android:text="Помощь"
+                        android:text="@string/help"
                         android:textSize="@dimen/_12sdp" />
                 </LinearLayout>
 

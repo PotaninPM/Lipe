@@ -97,32 +97,6 @@ class ProfileFragment : Fragment() {
                     }
                 }
             }
-            val navView: NavigationView = binding.navView
-            navView.setNavigationItemSelectedListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.nav_edit_info -> {
-                        childFragmentManager.beginTransaction()
-                            .replace(R.id.drawer_layout, ChatsAndGroupsFragment())
-                            .commit()
-                    }
-                    R.id.get_points -> {
-                        childFragmentManager.beginTransaction()
-                            .replace(R.id.drawer_layout, GetPointsFragment())
-                            .commit()
-                        Log.d("INFOG", "2")
-                    }
-                    R.id.nav_logout -> {
-                        auth.signOut()
-//                        childFragmentManager.beginTransaction()
-//                            .replace(R.id.all_profile, StartFragment())
-//                            .commit()
-//                        Log.d("INFOG", "4")
-                    }
-                }
-                drawerLayout.closeDrawer(GravityCompat.END)
-                menuItem.isChecked = true
-                true
-            }
         }
     }
     override fun onCreateView(

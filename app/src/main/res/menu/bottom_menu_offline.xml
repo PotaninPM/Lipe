@@ -10,7 +10,7 @@
         android:id="@+id/rating"
         android:enabled="true"
         android:icon="@drawable/rating_users"
-        android:title="Рейтинг" />
+        android:title="@string/rating" />
     <item
         android:id="@+id/chats"
         android:enabled="true"

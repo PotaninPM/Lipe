@@ -102,27 +102,14 @@
                         app:layout_constraintTop_toBottomOf="@+id/theme" />
 
                     <Button
-                        android:id="@+id/friendsBtn"
-                        style="@style/Widget.Material3.Button.IconButton.Filled"
-                        android:layout_width="@dimen/_100sdp"
-                        android:layout_height="wrap_content"
-                        android:text="Друзья"
-                        android:textColor="@color/quantum_white_100"
-                        android:backgroundTint="#11B22C"
-                        app:layout_constraintBottom_toTopOf="@+id/toggleButton"
-                        app:layout_constraintEnd_toStartOf="@+id/changeYourInfo"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/avatar" />
-
-                    <Button
                         android:id="@+id/changeYourInfo"
-                        style="@style/Widget.Material3.Button.IconButton.Filled"
-                        android:layout_width="@dimen/_175sdp"
+                        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                        android:layout_width="match_parent"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_12sdp"
-                        android:text="Изменить ваши данные"
-                        android:textColor="@color/quantum_white_100"
-                        android:backgroundTint="#2D5FE6"
+                        android:text="@string/change_data"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/avatar"
                         app:layout_constraintTop_toBottomOf="@+id/avatar" />
@@ -160,7 +147,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:fontFamily="@font/nunito_sans"
-                                android:text="Рейтинг"
+                                android:text="@string/rating"
                                 android:textSize="@dimen/_13sdp" />
 
                         </LinearLayout>
@@ -187,7 +174,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:fontFamily="@font/nunito_sans"
-                                android:text="Друзей"
+                                android:text="@string/friends_amount"
                                 android:textSize="@dimen/_13sdp" />
 
                         </LinearLayout>
@@ -214,7 +201,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:fontFamily="@font/nunito_sans"
-                                android:text="Событий"
+                                android:text="@string/events_amount"
                                 android:textSize="@dimen/_13sdp" />
 
                         </LinearLayout>
@@ -234,7 +221,7 @@
                             style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Текущие события" />
+                            android:text="@string/cur_events" />
 
 
                         <Button
@@ -242,7 +229,7 @@
                             style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Созданные вами" />
+                            android:text="@string/your_events" />
                     </com.google.android.material.button.MaterialButtonToggleGroup>
 
                     <androidx.fragment.app.FragmentContainerView
@@ -257,17 +244,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
-
-        <!-- Выдвижная панель -->
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/nav_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:fitsSystemWindows="true"
-            app:headerLayout="@layout/nav_profile_header"
-            app:itemTextColor="#00A966"
-            app:menu="@menu/profile_drawer" />
 
     </androidx.drawerlayout.widget.DrawerLayout>
 

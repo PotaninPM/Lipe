@@ -57,7 +57,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        android:text="Нажмите, чтобы загрузить фото"
+                        android:text="@string/tap_to_upload"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +91,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Детали события"
+                    android:text="@string/event_details"
                     android:layout_gravity="center"
                     android:textSize="@dimen/_22sdp"
                     android:textStyle="bold" />
@@ -113,7 +113,7 @@
                         android:id="@+id/etNameinputText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Введите название события"
+                        android:hint="@string/event_name"
                         android:inputType="text"
                         android:singleLine="true"
                         tools:ignore="Autofill"
@@ -136,7 +136,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:textSize="@dimen/_13sdp"
-                        android:text="Нажмите, чтобы установить дату встречи"/>
+                        android:text="@string/meeting_date"/>
 
                     <TextView
                         android:id="@+id/timeText"
@@ -145,7 +145,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_12sdp"
                         android:fontFamily="@font/nunitosansextrabold"
-                        android:text="13:25"
                         android:textSize="@dimen/_20sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -157,7 +156,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunitosansregular"
-                        android:text="25 октября 2024 года"
                         android:textSize="@dimen/_16sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -172,18 +170,18 @@
                     android:layout_height="@dimen/_46sdp"
                     android:layout_gravity="center"
                     android:spinnerMode="dropdown"
-                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_18sdp"
                     android:layout_marginStart="@dimen/_6sdp"
                     android:layout_marginEnd="@dimen/_6sdp"/>
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/ageSpinnerLayout"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:hint="Возвраст"
+                    android:hint="@string/age"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:spinnerMode="dropdown"
-                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_18sdp"
                     android:layout_marginStart="@dimen/_6sdp"
                     android:layout_marginEnd="@dimen/_6sdp">
                     <AutoCompleteTextView
@@ -201,7 +199,7 @@
                     android:gravity="start"
                     android:layout_marginStart="@dimen/_8sdp"
                     android:layout_marginEnd="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_8sdp">
+                    android:layout_marginTop="@dimen/_18sdp">
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/etMaxInputLay"
                         android:layout_width="match_parent"
@@ -215,7 +213,7 @@
                             android:id="@+id/etMaxInputText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Максимум людей"
+                            android:hint="@string/max_people"
                             android:inputType="number"
                             android:gravity="center"
                             android:singleLine="true"
@@ -240,7 +238,7 @@
                         android:id="@+id/etDescInputText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_140sdp"
-                        android:hint="Подробное описание события"
+                        android:hint="@string/detailed_desc"
                         android:inputType="textMultiLine"
                         android:gravity="top"
                         android:singleLine="true"
@@ -258,7 +256,7 @@
                     android:gravity="center"
                     android:layout_marginBottom="@dimen/_8sdp"
                     android:singleLine="true"
-                    android:text="Создать событие"
+                    android:text="@string/create_event"
                     android:textAllCaps="false"
                     android:textColor="@color/quantum_white_100"
                     android:textFontWeight="600"

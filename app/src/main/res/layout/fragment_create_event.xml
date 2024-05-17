@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="Создайте событие"
+                    android:text="@string/create_event"
                     android:textSize="@dimen/_20sdp"
                     android:fontFamily="@font/nunito_sans"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -55,21 +55,21 @@
                     android:id="@+id/buttonEco"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Экология"
+                    android:text="@string/eco"
                     />
                 <Button
                     style="?attr/materialButtonOutlinedStyle"
                     android:id="@+id/buttonEnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Развлечения"
+                    android:text="@string/ent"
                     />
                 <Button
                     style="?attr/materialButtonOutlinedStyle"
                     android:id="@+id/buttonHelp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Помощь"
+                    android:text="@string/help"
                     />
             </com.google.android.material.button.MaterialButtonToggleGroup>
             <androidx.fragment.app.FragmentContainerView

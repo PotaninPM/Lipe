@@ -173,14 +173,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:text="Создатель"
+                            android:text="@string/creator"
                             android:textSize="@dimen/_12sdp" />
                     </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Добавить в друзья"
+                        android:text="@string/add_to_friends"
                         android:textColor="#0054D0"
                         android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/nunitosansextrabold"
@@ -256,7 +256,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunitosanssemibold"
-                            android:text="Дата сбора"
+                            android:text="@string/date_of_meting"
                             android:textSize="@dimen/_12sdp" />
                         <!--                        app:text="@{viewModel.dateRussianMonthDayYear}"-->
                     </LinearLayout>
@@ -288,7 +288,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunitosanssemibold"
-                            android:text="@{viewModel.type}"
+                            android:text="@string/eco"
                             android:textSize="@dimen/_15sdp" />
 
                         <TextView
@@ -325,7 +325,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunitosanssemibold"
-                            android:text="Свободных мест"
+                            android:text="@string/free_places"
                             android:textSize="@dimen/_15sdp" />
 
                         <ProgressBar
@@ -355,7 +355,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_6sdp"
                     android:fontFamily="@font/nunitosansbold"
-                    android:text="О событии"
+                    android:text="@string/about_event"
                     android:textSize="@dimen/_17sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -387,7 +387,7 @@
                     android:gravity="center"
                     android:layout_marginBottom="@dimen/_32sdp"
                     android:singleLine="true"
-                    android:text="Хочу на событие"
+                    android:text="@string/want_to_event"
                     android:textAllCaps="false"
                     android:textColor="@color/quantum_white_100"
                     android:textFontWeight="600"

@@ -131,7 +131,7 @@
                 android:background="?attr/colorOnSurfaceInverse"
                 app:iconifiedByDefault="false"
                 app:queryBackground="@android:color/transparent"
-                app:queryHint="Введите логин человека" />
+                app:queryHint="@string/search_by_login" />
         </com.google.android.material.card.MaterialCardView>
 
         <androidx.recyclerview.widget.RecyclerView
