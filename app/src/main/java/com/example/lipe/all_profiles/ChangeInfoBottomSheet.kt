@@ -16,7 +16,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import coil.Coil
 import coil.request.ImageRequest
-import com.example.lipe.databinding.BottomSheetLayoutBinding
+import com.example.lipe.databinding.BottomSheetChangeYourInfoLayoutBinding
 import com.example.lipe.viewModels.ProfileVM
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ChangeInfoBottomSheet : BottomSheetDialogFragment() {
-    private var _binding: BottomSheetLayoutBinding? = null
+    private var _binding: BottomSheetChangeYourInfoLayoutBinding? = null
     private val binding get() = _binding!!
 
     private val profileVM: ProfileVM by activityViewModels()
@@ -36,7 +36,7 @@ class ChangeInfoBottomSheet : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = BottomSheetLayoutBinding.inflate(inflater, container, false)
+        _binding = BottomSheetChangeYourInfoLayoutBinding.inflate(inflater, container, false)
         return binding.root
     }
 

@@ -156,7 +156,7 @@
                         android:id="@+id/descText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_130sdp"
-                        android:hint="Немного о вас"
+                        android:hint="@string/about_you"
                         android:inputType="textMultiLine"
                         android:gravity="top"
                         android:singleLine="true" />

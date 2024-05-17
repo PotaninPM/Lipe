@@ -26,6 +26,7 @@ import com.example.lipe.databinding.FragmentProfileBinding
 import com.example.lipe.viewModels.ProfileVM
 import com.example.lipe.all_profiles.cur_events.CurEventsInProfileFragment
 import com.example.lipe.all_profiles.cur_events.YourEventsFragment
+import com.example.lipe.all_profiles.friends.FriendsBottomSheet
 import com.example.lipe.start_frs.StartFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.navigation.NavigationView
@@ -64,6 +65,11 @@ class ProfileFragment : Fragment() {
 
             avatar.setOnClickListener {
                 selectImageAvatar.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+
+            friendsAmountLay.setOnClickListener {
+                val friendBottomSheet = FriendsBottomSheet()
+                friendBottomSheet.show(childFragmentManager, "FriendsBottomSheet")
             }
 
             binding.buttonCur.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#0067cf"))
