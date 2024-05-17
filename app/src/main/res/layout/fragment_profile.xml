@@ -208,30 +208,25 @@
                         </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.google.android.material.button.MaterialButtonToggleGroup
-                        android:id="@+id/toggleButton"
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/tabLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
+                        android:background="?attr/colorOnSurfaceInverse"
                         android:layout_marginTop="@dimen/_12sdp"
-                        android:gravity="center"
-                        app:layout_constraintTop_toBottomOf="@+id/changeYourInfo"
-                        tools:layout_editor_absoluteX="0dp">
+                        app:tabIndicatorGravity="center"
+                        app:tabMode="fixed"
+                        app:tabIndicatorColor="@null"
+                        app:tabRippleColor="@null"
+                        app:tabIndicator="@drawable/tab_events"
+                        app:tabIndicatorHeight="@dimen/_32sdp"
+                        app:tabIndicatorFullWidth="true"
+                        app:tabIndicatorAnimationMode="elastic"
+                        app:layout_constraintTop_toBottomOf="@+id/changeYourInfo">
 
-                        <Button
-                            android:id="@+id/buttonCur"
-                            style="?attr/materialButtonOutlinedStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/cur_events" />
-
-
-                        <Button
-                            android:id="@+id/buttonMy"
-                            style="?attr/materialButtonOutlinedStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/your_events" />
-                    </com.google.android.material.button.MaterialButtonToggleGroup>
+                    </com.google.android.material.tabs.TabLayout>
 
                     <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/switcher"
@@ -241,7 +236,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
+                        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>

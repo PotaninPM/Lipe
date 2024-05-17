@@ -49,4 +49,6 @@
     <string name="notifications">Notifications</string>
     <string name="all">All</string>
     <string name="search_by_login">Search by login</string>
+    <string name="current">Current</string>
+    <string name="your">Your</string>
 </resources>

@@ -301,49 +301,69 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         // show all markers on map
         dbRef_event.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-                val coordinates: ArrayList<Double>? = arrayListOf(dataSnapshot.child("coordinates").child("latitude").value.toString().toDouble(), dataSnapshot.child("coordinates").child("longitude").value.toString().toDouble())
-                val eventId: String = dataSnapshot.child("event_id").value.toString()
-                val type = dataSnapshot.child("type_of_event").value?.toString() ?: "def_type"
+                try {
+                    val coordinates: ArrayList<Double>? = arrayListOf(
+                        dataSnapshot.child("coordinates").child("latitude").value.toString().toDouble(),
+                        dataSnapshot.child("coordinates").child("longitude").value.toString().toDouble()
+                    )
+                    val eventId: String = dataSnapshot.child("event_id").value.toString()
+                    val type = dataSnapshot.child("type_of_event").value?.toString() ?: "def_type"
 
-                Log.d("INFOG", coordinates?.get(0).toString() + " "+ coordinates?.get(1).toString())
-                var sport_type = "-"
+                    Log.d("INFOG", "${coordinates?.get(0)} ${coordinates?.get(1)}")
+                    var sport_type = "-"
 
-                if(type == "ent") {
-                    sport_type = dataSnapshot.child("sport_type").value.toString()
-                }
-                if (coordinates != null) {
-                    addMarker(LatLng(coordinates[0], coordinates[1]), type, eventId, sport_type)
+                    if (type == "ent") {
+                        sport_type = dataSnapshot.child("sport_type").value.toString()
+                    }
+                    if (coordinates != null) {
+                        if (isAdded) {
+                            addMarker(LatLng(coordinates[0], coordinates[1]), type, eventId, sport_type)
+                        } else {
+                            Log.e("MapsFragment", "Fragment not attached to a context.")
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.e("FirebaseError", "Error adding marker: ${e.message}")
                 }
             }
 
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-                val eventId: String = dataSnapshot.child("event_id").value.toString()
-                val type: String = dataSnapshot.child("type_of_event").value.toString()
-                if(type == "ent") {
-                    entEventsMarkersMap[eventId]?.remove()
-                    entEventsMarkersMap.remove(eventId)
-                } else if(type == "eco") {
-                    ecoEventsMarkersMap[eventId]?.remove()
-                    ecoEventsMarkersMap.remove(eventId)
-                } else if(type == "help") {
-                    helpEventsMarkersMap[eventId]?.remove()
-                    helpEventsMarkersMap.remove(eventId)
+                try {
+                    val eventId: String = dataSnapshot.child("event_id").value.toString()
+                    val type: String = dataSnapshot.child("type_of_event").value.toString()
+                    when (type) {
+                        "ent" -> {
+                            entEventsMarkersMap[eventId]?.remove()
+                            entEventsMarkersMap.remove(eventId)
+                        }
+                        "eco" -> {
+                            ecoEventsMarkersMap[eventId]?.remove()
+                            ecoEventsMarkersMap.remove(eventId)
+                        }
+                        "help" -> {
+                            helpEventsMarkersMap[eventId]?.remove()
+                            helpEventsMarkersMap.remove(eventId)
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.e("FirebaseError", "Error removing marker: ${e.message}")
                 }
             }
 
             override fun onChildChanged(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-
+                // Handle changes if needed
             }
 
             override fun onChildMoved(dataSnapshot: DataSnapshot, prevChildKey: String?) {
-
+                // Handle moves if needed
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
+                Log.e("FirebaseError", "Firebase error: ${databaseError.message}")
             }
         })
     }
+
 
     private fun updateFriendMarkerPosition(friendUid: String, latLng: LatLng) {
         try {

@@ -46,6 +46,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class EventEntFragment : Fragment() {
+
     private lateinit var auth: FirebaseAuth
 
     private lateinit var dbRef: DatabaseReference
@@ -57,7 +58,7 @@ class EventEntFragment : Fragment() {
     private lateinit var storageRef : StorageReference
 
     private val appVM: AppVM by activityViewModels()
-    private val binding get() = _binding!!
+    private val binding get() = _binding ?: throw IllegalStateException("Binding is not available")
 
     private var _binding: FragmentEventEntBinding? = null
 
@@ -558,8 +559,8 @@ class EventEntFragment : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 }

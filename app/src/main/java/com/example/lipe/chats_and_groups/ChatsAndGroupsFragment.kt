@@ -98,7 +98,7 @@ class ChatsAndGroupsFragment : Fragment() {
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                binding.tableLayout?.selectTab(binding.tableLayout.getTabAt(position))
+                binding.tableLayout.selectTab(binding.tableLayout.getTabAt(position))
             }
         })
 

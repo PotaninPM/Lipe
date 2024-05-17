@@ -50,4 +50,6 @@
     <string name="notifications">Уведомления</string>
     <string name="all">Все</string>
     <string name="search_by_login" />
+    <string name="current">Текущие</string>
+    <string name="your">Ваши</string>
 </resources>
