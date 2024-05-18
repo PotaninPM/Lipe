@@ -16,7 +16,7 @@
         android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/all"
+            android:background="?attr/colorOnSurfaceInverse"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -32,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/allProfile"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -45,7 +45,7 @@
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/theme"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_132sdp"
+                        android:layout_height="@dimen/_122sdp"
                         android:scaleType="centerCrop"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -54,66 +54,55 @@
                         app:shapeAppearanceOverlay="@style/ImageStyle_theme"
                         app:srcCompat="@drawable/profile_theme" />
 
-                    <ImageView
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
-                        android:layout_marginTop="@dimen/_12sdp"
-                        android:backgroundTint="?attr/colorOnSurfaceInverse"
-                        android:layout_marginStart="@dimen/_12sdp"
-                        android:src="@drawable/arrow_small_left"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/avatar"
                         android:layout_width="@dimen/_120sdp"
                         android:layout_height="@dimen/_120sdp"
-                        android:layout_marginTop="@dimen/_62sdp"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:layout_marginTop="@dimen/_93sdp"
                         android:padding="@dimen/_2sdp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ex2"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.476"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:shapeAppearanceOverlay="@style/ImageStyle_Circle"
-                        app:strokeColor="#015EFF"
+                        app:strokeColor="?attr/colorOnSurfaceInverse"
                         app:strokeWidth="@dimen/_2sdp" />
 
-                    <LinearLayout
-                        android:id="@+id/lay1"
+                    <TextView
+                        android:id="@+id/textView9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_4sdp"
-                        android:orientation="horizontal"
+                        android:fontFamily="@font/nunitosansextrabold"
+                        android:text="@{viewModel.nickname}"
+                        android:textSize="@dimen/_16sdp"
+                        android:layout_marginTop="@dimen/_12sdp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/avatar">
+                        app:layout_constraintStart_toEndOf="@+id/avatar"
+                        app:layout_constraintTop_toBottomOf="@+id/theme" />
 
-                        <TextView
-                            android:id="@+id/textView6"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/interextrabold"
-                            android:text="@{viewModel.nameLastName}"
-                            android:textAlignment="center"
-                            android:textSize="@dimen/_17sdp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
+                    <Button
+                        android:id="@+id/changeYourInfo"
+                        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                        android:layout_width="match_parent"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:textColor="?attr/colorOnPrimary"
+                        android:text="@string/change_data"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/avatar"
+                        app:layout_constraintTop_toBottomOf="@+id/avatar" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/constraintLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_62sdp"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_6sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:background="@drawable/profile_rates"
+                        android:layout_width="@dimen/_190sdp"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        app:layout_constraintBottom_toBottomOf="@+id/avatar"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/lay1">
+                        app:layout_constraintStart_toEndOf="@+id/avatar"
+                        app:layout_constraintTop_toBottomOf="@+id/textView9">
 
                         <LinearLayout
                             android:id="@+id/linearLayout10"
@@ -130,7 +119,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:text="@{viewModel.ratingPoints}"
-                                android:textSize="@dimen/_17sdp"
+                                android:textSize="@dimen/_16sdp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -138,12 +127,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:fontFamily="@font/nunito_sans"
-                                android:text="Рейтинг"
-                                android:textSize="@dimen/_15sdp" />
+                                android:text="@string/rating"
+                                android:textSize="@dimen/_13sdp" />
 
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/friends_amount_lay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
@@ -157,7 +147,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:text="@{viewModel.friendsAmount}"
-                                android:textSize="@dimen/_17sdp"
+                                android:textSize="@dimen/_16sdp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -165,8 +155,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:fontFamily="@font/nunito_sans"
-                                android:text="Друзей"
-                                android:textSize="@dimen/_15sdp" />
+                                android:text="@string/friends_amount"
+                                android:textSize="@dimen/_13sdp" />
 
                         </LinearLayout>
 
@@ -184,7 +174,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:text="@{viewModel.eventsAmount}"
-                                android:textSize="@dimen/_17sdp"
+                                android:textSize="@dimen/_16sdp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -192,136 +182,47 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:fontFamily="@font/nunito_sans"
-                                android:text="Событий"
-                                android:textSize="@dimen/_15sdp" />
+                                android:text="@string/events_amount"
+                                android:textSize="@dimen/_13sdp" />
 
                         </LinearLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/linearLayout"
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/tabLayout"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_40sdp"
-                        android:layout_marginStart="@dimen/_15sdp"
-                        android:layout_marginEnd="@dimen/_15sdp"
-                        android:layout_marginTop="@dimen/_6sdp"
-                        android:orientation="horizontal"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
+                        android:background="?attr/colorOnSurfaceInverse"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        app:tabTextColor="?attr/colorOnPrimary"
+                        app:tabIndicatorGravity="center"
+                        app:tabMode="fixed"
+                        app:tabSelectedTextColor="@color/quantum_white_100"
+                        app:tabIndicatorColor="@null"
+                        app:tabRippleColor="@null"
+                        app:tabIndicator="@drawable/tab_events"
+                        app:tabIndicatorHeight="@dimen/_32sdp"
+                        app:tabIndicatorFullWidth="true"
+                        app:tabIndicatorAnimationMode="elastic"
+                        app:layout_constraintTop_toBottomOf="@+id/changeYourInfo">
 
-                        <Button
-                            android:id="@+id/elevatedButton"
-                            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=" Написать другу"
-                            app:icon="@drawable/lock"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <Button
-                            android:id="@+id/button"
-                            style="@style/Widget.Material3.Button.Icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Добавить друга"
-                            app:icon="@drawable/add"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/linearTab"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_50sdp"
-                        android:layout_marginStart="@dimen/_10sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:layout_marginTop="@dimen/_4sdp"
-                        android:background="@drawable/profiletabs"
-                        android:gravity="center_horizontal"
-                        android:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-                        tools:layout_editor_absoluteX="11dp">
-
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btnCurEvent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="@dimen/_8sdp"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:layout_marginBottom="@dimen/_8sdp"
-                            android:background="@drawable/profiletabsbtns"
-                            android:ellipsize="end"
-                            android:fontFamily="@font/nunitosanssemibold"
-                            android:gravity="center"
-                            android:paddingStart="@dimen/_14sdp"
-                            android:paddingEnd="@dimen/_14sdp"
-                            android:singleLine="true"
-                            android:text="Текущие"
-                            android:textAllCaps="false"
-                            android:textColor="@color/quantum_white_100"
-                            app:layout_constraintStart_toStartOf="parent"
-                            tools:ignore="TextSizeCheck"
-                            tools:layout_editor_absoluteY="5dp" />
-
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btnPastEvent"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:layout_marginBottom="@dimen/_8sdp"
-                            android:background="@drawable/profiletabsbtns"
-                            android:ellipsize="end"
-                            android:fontFamily="@font/nunitosanssemibold"
-                            android:gravity="center"
-                            android:paddingStart="@dimen/_14sdp"
-                            android:paddingEnd="@dimen/_14sdp"
-                            android:singleLine="true"
-                            android:text="Прошедшие"
-                            android:textAllCaps="false"
-                            android:textColor="@color/quantum_white_100"
-                            app:layout_constraintEnd_toStartOf="@+id/btnYourEvents"
-                            app:layout_constraintStart_toEndOf="@+id/btnCurEvent"
-                            tools:ignore="TextSizeCheck"
-                            tools:layout_editor_absoluteY="5dp" />
-
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btnYourEvents"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:layout_marginBottom="@dimen/_8sdp"
-                            android:background="@drawable/profiletabsbtns"
-                            android:ellipsize="end"
-                            android:fontFamily="@font/nunitosanssemibold"
-                            android:gravity="center"
-                            android:paddingStart="@dimen/_14sdp"
-                            android:paddingEnd="@dimen/_14sdp"
-                            android:singleLine="true"
-                            android:text="Созданные"
-                            android:textAllCaps="false"
-                            android:textColor="@color/quantum_white_100"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            tools:ignore="TextSizeCheck" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.google.android.material.tabs.TabLayout>
 
                     <androidx.fragment.app.FragmentContainerView
                         android:id="@+id/switcher"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearTab" />
-
+                        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
-    </androidx.drawerlayout.widget.DrawerLayout></layout>
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+</layout>

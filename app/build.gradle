@@ -45,8 +45,6 @@ dependencies {
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
-    //qr code
-    implementation 'com.google.zxing:core:3.4.1'
 
     implementation 'com.google.android.libraries.places:places:3.4.0'
 

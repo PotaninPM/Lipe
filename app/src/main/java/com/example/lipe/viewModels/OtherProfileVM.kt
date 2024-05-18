@@ -5,8 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class OtherProfileVM : ViewModel() {
-    private var _nameLastName = MutableLiveData<String>()
-    var nameLastName: LiveData<String> = _nameLastName
+    private var _nickname = MutableLiveData<String>()
+    var nickname: LiveData<String> = _nickname
+
+    private var _name = MutableLiveData<String>()
+    var name: LiveData<String> = _name
 
     private var _friendsAmount = MutableLiveData<String>()
     val friendsAmount: LiveData<String> = _friendsAmount
@@ -17,15 +20,27 @@ class OtherProfileVM : ViewModel() {
     private var _ratingPoints = MutableLiveData<String>()
     val ratingPoints: LiveData<String> = _ratingPoints
 
+    private var _desc = MutableLiveData<String>()
+    val desc: LiveData<String> = _desc
 
-    fun setInfo(nameLastName_: String, friendsAmount_: Int, eventsAmount_: Int, ratingPoints_: Int) {
-        _nameLastName.value = nameLastName_
+    var _avatar = MutableLiveData<String>()
+    val avatar: LiveData<String> = _avatar
+
+
+    fun setInfo(nickname_: String, friendsAmount_: Int, eventsAmount_: Int, ratingPoints_: Int, desc: String, name_: String) {
+        _nickname.value = nickname_
         _friendsAmount.value = friendsAmount_.toString()
         _eventsAmount.value = eventsAmount_.toString()
         _ratingPoints.value = ratingPoints_.toString()
+        _desc.value = desc
+        _name.value = name_
 
 //
 //        _age.value = age_
 //        _creatorUsername.value = creatorUsername_
+    }
+
+    fun setPhoto(avatar_: String) {
+        _avatar.value = avatar_
     }
 }
