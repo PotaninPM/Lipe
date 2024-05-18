@@ -82,15 +82,19 @@ class RatingFragment : Fragment() {
         val storage = FirebaseStorage.getInstance().getReference("avatars/$user")
         storage.downloadUrl.addOnSuccessListener {
             lifecycleScope.launch {
-                val bitmap = withContext(Dispatchers.IO) {
-                    ImageLoader(requireContext()).execute(
-                        ImageRequest.Builder(requireContext())
-                            .data(it)
-                            .build()
-                    )
-                }.drawable?.toBitmap()
+                try {
+                    val bitmap = withContext(Dispatchers.IO) {
+                        ImageLoader(requireContext()).execute(
+                            ImageRequest.Builder(requireContext())
+                                .data(it)
+                                .build()
+                        )
+                    }.drawable?.toBitmap()
 
-                binding.userRatingAvatar.setImageBitmap(bitmap)
+                    binding.userRatingAvatar.setImageBitmap(bitmap)
+                } catch (e: Exception) {
+
+                }
 
                 val dbRef_user = FirebaseDatabase.getInstance().getReference("users/$user")
                 dbRef_user.addValueEventListener(object : ValueEventListener {

@@ -274,7 +274,6 @@ class ProfileFragment : Fragment() {
 
     private fun switchTabs(position: Int) {
         val fragment = when (position) {
-            //0 -> CurEventsInProfileFragment(auth.currentUser!!.uid)
             0 -> CurEventsInProfileFragment(auth.currentUser!!.uid)
             1 -> YourEventsFragment()
             else -> null

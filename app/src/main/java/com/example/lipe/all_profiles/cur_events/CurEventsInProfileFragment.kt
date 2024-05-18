@@ -68,7 +68,6 @@ class CurEventsInProfileFragment(val personUid: String) : Fragment() {
                             val title = dataSnapshot.child("title").value.toString()
                             val date_meeting = dataSnapshot.child("date_of_meeting").value.toString()
                             val status = dataSnapshot.child("status").value.toString()
-                            val main_photo = arrayListOf(dataSnapshot.child("photos").value.toString()).get(0).removeSurrounding("[", "]")
 
                             var statusRus = ""
 
@@ -80,7 +79,7 @@ class CurEventsInProfileFragment(val personUid: String) : Fragment() {
                                 statusRus = "Будет удалён"
                             }
 
-                            val photoRef = storageRef.child("event_images/$main_photo")
+                            val photoRef = storageRef.child("event_images/${dataSnapshot.key}")
 
                             val token = photoRef.downloadUrl
 

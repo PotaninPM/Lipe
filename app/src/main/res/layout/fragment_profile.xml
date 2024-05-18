@@ -103,14 +103,14 @@
 
                     <Button
                         android:id="@+id/changeYourInfo"
-                        style="@style/Widget.Material3.Button.IconButton.Filled"
+                        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
                         android:layout_width="match_parent"
                         android:layout_marginStart="@dimen/_12sdp"
                         android:layout_marginEnd="@dimen/_12sdp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="@color/quantum_white_100"
-                        android:text="@string/add_to_friends"
+                        android:textColor="?attr/colorOnPrimary"
+                        android:text="@string/change_data"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/avatar"
                         app:layout_constraintTop_toBottomOf="@+id/avatar" />
@@ -220,7 +220,6 @@
                         app:tabTextColor="?attr/colorOnPrimary"
                         app:tabIndicatorGravity="center"
                         app:tabMode="fixed"
-                        app:tabSelectedTextColor="@color/quantum_white_100"
                         app:tabIndicatorColor="@null"
                         app:tabRippleColor="@null"
                         app:tabIndicator="@drawable/tab_events"
@@ -231,17 +230,19 @@
 
                     </com.google.android.material.tabs.TabLayout>
 
-                    <androidx.fragment.app.FragmentContainerView
-                        android:id="@+id/switcher"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/switcher"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/allProfile" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.core.widget.NestedScrollView>
 
     </androidx.drawerlayout.widget.DrawerLayout>

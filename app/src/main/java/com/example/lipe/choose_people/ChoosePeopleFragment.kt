@@ -130,9 +130,9 @@ class ChoosePeopleFragment : DialogFragment() {
                 val uid = snapshot.child("userUid").value.toString()
                 if(selectedUsers.contains(uid)) {
                     val curPoints = snapshot.child("points").value.toString().toInt()
-//                    dbRefRating.child().child("points").setValue(curPoints + points).addOnSuccessListener {
-//
-//                    }
+                    dbRefRating.child(uid).child("points").setValue(curPoints + points).addOnSuccessListener {
+
+                    }
                 }
             }
 

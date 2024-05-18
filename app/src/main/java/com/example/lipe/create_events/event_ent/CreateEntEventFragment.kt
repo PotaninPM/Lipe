@@ -178,10 +178,10 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
             binding.btnCreateEvent.isEnabled = false
             binding.btnCreateEvent.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
-
-            uploadImage {photos ->
-                if(photos[0] != "-") {
-                    createEvent(photos)
+            val eventUid = UUID.randomUUID().toString()
+            uploadImage(eventUid) {photo ->
+                if(photo != "-") {
+                    createEvent(eventUid, photo)
                 } else {
                     binding.btnCreateEvent.isEnabled = true
                     binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
@@ -211,30 +211,25 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             Log.d("INFOG", "No media selected")
         }
     }
-    private fun uploadImage(callback: (photos: ArrayList<String>) -> Unit) {
+    private fun uploadImage(eventUid: String, callback: (photo: String) -> Unit) {
         val storageRef = FirebaseStorage.getInstance().getReference("event_images")
 
-        val photos: ArrayList<String> = arrayListOf()
         if (image1 == "-") {
-            callback(arrayListOf("-"))
+            callback("-")
         } else {
-            var used: Int = 0
             if(image1 != "-") {
                 imageUri1.let { uri ->
-                    val uid: String = UUID.randomUUID().toString()
-                    val imageRef = storageRef.child(uid)
+                    val imageRef = storageRef.child(eventUid)
                     imageRef.putFile(uri)
                         .addOnSuccessListener { task ->
                             task.storage.downloadUrl.addOnSuccessListener { url ->
-                                photos.add(url.toString())
-                                callback(photos)
+                                callback(url.toString())
                             }
                         }
                         .addOnFailureListener { exception ->
                             binding.btnCreateEvent.isEnabled = true
                             binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
-                            callback(arrayListOf("-"))
-                            used = -1
+                            callback("-")
                         }
                 }
             } else {
@@ -254,12 +249,12 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             .show()
     }
 
-    private fun createEvent(photos: ArrayList<String>) {
+    private fun createEvent(eventUid: String, photos: String) {
         binding.btnCreateEvent.isEnabled = false
         binding.btnCreateEvent.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
 
         if (checkForEmpty() == true) {
-            eventId = UUID.randomUUID().toString()
+            eventId = eventUid
             val time = Calendar.getInstance().time
             val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
             val current = formatter.format(time)

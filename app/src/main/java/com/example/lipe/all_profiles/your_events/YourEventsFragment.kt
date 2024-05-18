@@ -62,13 +62,13 @@ class YourEventsFragment : Fragment() {
         dbRef_your_events.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for(event in snapshot.children) {
+                    Log.d("INFOG", event.value.toString())
                     val dbRef_cur_events = FirebaseDatabase.getInstance().getReference("current_events/${event.value}")
                     dbRef_cur_events.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             val title = dataSnapshot.child("title").value.toString()
                             val date_meeting = dataSnapshot.child("date_of_meeting").value.toString()
                             val status = dataSnapshot.child("status").value.toString()
-                            val main_photo = arrayListOf(dataSnapshot.child("photos").value.toString()).get(0).removeSurrounding("[", "]")
 
                             var statusRus = ""
 
@@ -80,7 +80,7 @@ class YourEventsFragment : Fragment() {
                                 statusRus = "Будет удалён"
                             }
 
-                            val photoRef = storageRef.child("event_images/$main_photo")
+                            val photoRef = storageRef.child("event_images/${event.value}")
 
                             val token = photoRef.downloadUrl
 

@@ -82,14 +82,14 @@
 
                     <Button
                         android:id="@+id/changeYourInfo"
-                        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                        style="@style/Widget.Material3.Button.IconButton.Filled"
                         android:layout_width="match_parent"
                         android:layout_marginStart="@dimen/_12sdp"
                         android:layout_marginEnd="@dimen/_12sdp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="?attr/colorOnPrimary"
-                        android:text="@string/change_data"
+                        android:textColor="@color/quantum_white_100"
+                        android:text="@string/add_to_friends"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/avatar"
                         app:layout_constraintTop_toBottomOf="@+id/avatar" />

@@ -82,17 +82,21 @@ class ChatsAndGroupsFragment : Fragment() {
             }
         })
 
-        storage.downloadUrl.addOnSuccessListener { url ->
-            lifecycleScope.launch {
-                val bitmap: Bitmap = withContext(Dispatchers.IO) {
-                    Coil.imageLoader(requireContext()).execute(
-                        ImageRequest.Builder(requireContext())
-                            .data(url)
-                            .build()
-                    ).drawable?.toBitmap()!!
+        try {
+            storage.downloadUrl.addOnSuccessListener { url ->
+                lifecycleScope.launch {
+                    val bitmap: Bitmap = withContext(Dispatchers.Main.immediate) {
+                        Coil.imageLoader(requireContext()).execute(
+                            ImageRequest.Builder(requireContext())
+                                .data(url)
+                                .build()
+                        ).drawable?.toBitmap()!!
+                    }
+                    binding.avatarChatGroup.setImageBitmap(bitmap)
                 }
-                binding.avatarChatGroup.setImageBitmap(bitmap)
             }
+        } catch (e: Exception) {
+
         }
 
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {

@@ -13,7 +13,7 @@ data class EntEventData(
     @SerializedName("max_people") var max_people: Int,
     @SerializedName("age") var age: String,
     @SerializedName("description") var description: String,
-    @SerializedName("photos") var photos: ArrayList<String>,
+    @SerializedName("photos") var photos: String,
     @SerializedName("reg_people_id") var reg_people_id: HashMap<String?, String?>,
     @SerializedName("amount_reg_people") var amount_reg_people: Int,
     @SerializedName("status") var status: String,

@@ -58,12 +58,6 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
         dbRef = FirebaseDatabase.getInstance().getReference()
         storageRef = FirebaseStorage.getInstance().reference
 
-        originalBackground = binding.btnCurEvent.background
-
-        binding.btnYourEvents.setBackgroundResource(0)
-        binding.btnPastEvent.setBackgroundResource(0)
-        binding.btnCurEvent.background = originalBackground
-
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = otherProfileVM
@@ -74,39 +68,23 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
             findAccount { userData ->
                 if(userData != null) {
                     otherProfileVM.setInfo(
-                        "${userData.firstName} ${userData.lastName}" + " ⓘ",
+                        userData.nickname,
                         userData.friendsAmount,
                         userData.eventsAmount,
-                        userData.ratingPoints
+                        userData.ratingPoints,
+                        userData.desc,
+                        userData.name
                     )
                     loadingProgressBar.visibility = View.GONE
                     allProfile.visibility = View.VISIBLE
                 }
-                setProfilePhotos {
-                    if(it) {
-                        loadingProgressBar.visibility = View.GONE
-                        allProfile.visibility = View.VISIBLE
-                    }
-                }
             }
 
-            btnCurEvent.setOnClickListener {
-                switchTabs(0)
-                btnYourEvents.setBackgroundResource(0)
-                btnPastEvent.setBackgroundResource(0)
-                btnCurEvent.background = originalBackground
-            }
-            btnPastEvent.setOnClickListener {
-                switchTabs(1)
-                btnYourEvents.setBackgroundResource(0)
-                btnCurEvent.setBackgroundResource(0)
-                btnPastEvent.background = originalBackground
-            }
-            btnYourEvents.setOnClickListener {
-                switchTabs(2)
-                btnCurEvent.setBackgroundResource(0)
-                btnPastEvent.setBackgroundResource(0)
-                btnYourEvents.background = originalBackground
+            setProfilePhotos {
+                if(it) {
+                    loadingProgressBar.visibility = View.GONE
+                    allProfile.visibility = View.VISIBLE
+                }
             }
         }
 
@@ -156,32 +134,38 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
         }
     }
     private fun findAccount(callback: (UserData?) -> Unit) {
-        val dbRef_user =
-            FirebaseDatabase.getInstance().getReference("users/${personUid}")
-        dbRef_user.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val name: String = dataSnapshot.child("firstName").value.toString()
-                val lastName: String = dataSnapshot.child("lastName").value.toString()
-                val ratingAmount: Int= dataSnapshot.child("rating").value.toString().toInt()
-                val friendsAmount: Int = dataSnapshot.child("friends_amount").value.toString().toInt()
-                val eventsAmount: Int = dataSnapshot.child("events_amount").value.toString().toInt()
+        try {
+            val dbRef_user =
+                FirebaseDatabase.getInstance().getReference("users/${personUid}")
+            dbRef_user.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val desc = dataSnapshot.child("about_you").value.toString()
+                    val name = dataSnapshot.child("firstAndLastName").value.toString()
+                    val username: String = dataSnapshot.child("username").value.toString()
+                    val ratingAmount: Int = dataSnapshot.child("points").value.toString().toInt()
+                    val friendsAmount: Int = dataSnapshot.child("friends_amount").value.toString().toInt()
+                    val eventsAmount: Int = dataSnapshot.child("events_amount").value.toString().toInt()
 
-                callback(
-                    UserData(
-                        name,
-                        lastName,
-                        0,
-                        friendsAmount,
-                        eventsAmount,
+                    callback(
+                        UserData(
+                            username,
+                            ratingAmount,
+                            friendsAmount,
+                            eventsAmount,
+                            desc,
+                            name
+                        )
                     )
-                )
-            }
+                }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
-                callback(null)
-            }
-        })
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
+                    callback(null)
+                }
+            })
+        } catch (e: Exception) {
+            Log.e("INFOG", e.message.toString())
+        }
     }
 
     private fun switchTabs(position: Int) {
@@ -207,9 +191,10 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
 }
 
 data class UserData(
-    val firstName: String,
-    val lastName: String,
+    val nickname: String,
     val ratingPoints: Int,
     val friendsAmount: Int,
     val eventsAmount: Int,
+    val desc: String,
+    val name: String
 )
