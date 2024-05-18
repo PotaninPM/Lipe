@@ -30,6 +30,8 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -600,7 +602,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         eventEcoVM = ViewModelProvider(requireActivity()).get(EventEcoVM::class.java)
         saveStateMapVM = ViewModelProvider(requireActivity()).get(SaveStateMapsVM::class.java)
 
-
         dbRef_user = FirebaseDatabase.getInstance().getReference()
         dbRef_friends = FirebaseDatabase.getInstance().getReference()
         dbRef_status = FirebaseDatabase.getInstance().getReference()
@@ -650,7 +651,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val mapFragment = childFragmentManager.findFragmentById(R.id.fragment) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
         binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
-        binding.allText.setTextColor(Color.BLACK)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
@@ -678,7 +678,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 resetBackgroundForBtns()
                 showMarkersByType("friends")
                 binding.friends.setBackgroundResource(R.drawable.vary_of_events)
-                binding.friendsText.setTextColor(Color.BLACK)
             }
         }
 
@@ -688,7 +687,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 resetBackgroundForBtns()
                 showMarkersByType("all")
                 binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
-                binding.allText.setTextColor(Color.BLACK)
             }
         }
 
@@ -698,7 +696,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 resetBackgroundForBtns()
                 showMarkersByType("eco")
                 binding.ecoEvents.setBackgroundResource(R.drawable.vary_of_events)
-                binding.ecoText.setTextColor(Color.BLACK)
             }
         }
 
@@ -708,7 +705,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 resetBackgroundForBtns()
                 showMarkersByType("ent")
                 binding.entEvents.setBackgroundResource(R.drawable.vary_of_events)
-                binding.entText.setTextColor(Color.BLACK)
             }
         }
 
@@ -718,7 +714,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 resetBackgroundForBtns()
                 showMarkersByType("help")
                 binding.helpEvents.setBackgroundResource(R.drawable.vary_of_events)
-                binding.helpText.setTextColor(Color.BLACK)
             }
         }
 
