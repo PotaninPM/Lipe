@@ -15,7 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import coil.Coil
 import coil.request.ImageRequest
 import com.example.lipe.R
-import com.example.lipe.all_profiles.ChangeInfoBottomSheet
+import com.example.lipe.all_profiles.change_info_sheet.ChangeInfoBottomSheet
 import com.example.lipe.databinding.FragmentProfileBinding
 import com.example.lipe.viewModels.ProfileVM
 import com.example.lipe.all_profiles.cur_events.CurEventsInProfileFragment
@@ -275,7 +275,7 @@ class ProfileFragment : Fragment() {
     private fun switchTabs(position: Int) {
         val fragment = when (position) {
             0 -> CurEventsInProfileFragment(auth.currentUser!!.uid)
-            1 -> YourEventsFragment()
+            1 -> YourEventsFragment(auth.currentUser!!.uid)
             else -> null
         }
 

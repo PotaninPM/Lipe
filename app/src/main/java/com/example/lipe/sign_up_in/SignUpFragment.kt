@@ -89,7 +89,7 @@ class SignUpFragment : Fragment() {
                                     signUpVM.setData(nameAndSurname, username, email, pass)
                                     view.findNavController().navigate(R.id.action_signUpFragment_to_signUpDescFragment)
                                 } else if(result2 == "noEmail") {
-                                    setError("Эт почта уже занята", binding.etEmailinput)
+                                    setError("Эта почта уже занята", binding.etEmailinput)
                                     binding.etEmailinput.setText("")
                                 } else if(result2 == "Error") {
                                     Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_LONG).show()

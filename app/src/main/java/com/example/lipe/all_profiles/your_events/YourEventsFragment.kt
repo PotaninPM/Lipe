@@ -18,7 +18,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
-class YourEventsFragment : Fragment() {
+class YourEventsFragment(val personUid: String) : Fragment() {
 
     private var _binding: FragmentYourEventsBinding? = null
     private val binding get() = _binding!!
@@ -57,7 +57,7 @@ class YourEventsFragment : Fragment() {
     }
 
     private fun setCurEvents() {
-        val dbRef_your_events = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/yourCreatedEvents")
+        val dbRef_your_events = FirebaseDatabase.getInstance().getReference("users/${personUid}/yourCreatedEvents")
         val yourEvents = ArrayList<EventItem>()
         dbRef_your_events.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

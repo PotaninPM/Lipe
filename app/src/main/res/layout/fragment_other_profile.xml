@@ -10,7 +10,7 @@
             type="com.example.lipe.viewModels.OtherProfileVM" />
     </data>
 
-    <androidx.drawerlayout.widget.DrawerLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -88,6 +88,7 @@
                         android:layout_marginEnd="@dimen/_12sdp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_12sdp"
+                        android:backgroundTint="#00A917"
                         android:textColor="@color/quantum_white_100"
                         android:text="@string/add_to_friends"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -211,7 +212,7 @@
                     </com.google.android.material.tabs.TabLayout>
 
                     <androidx.fragment.app.FragmentContainerView
-                        android:id="@+id/switcher"
+                        android:id="@+id/switcher_other"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -223,6 +224,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
-    </androidx.drawerlayout.widget.DrawerLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

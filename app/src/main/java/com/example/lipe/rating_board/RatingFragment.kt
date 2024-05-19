@@ -46,28 +46,28 @@ class RatingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = RatingAdapter(lifecycleScope)
+        adapter = RatingAdapter(lifecycleScope, this@RatingFragment)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
         binding.recyclerView.setHasFixedSize(true)
 
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let {
-                    if(it.isEmpty()) {
-                        adapter.updateRequests(rateList)
-                    } else {
-                        adapter.filter(it)
-                    }
-                }
-                return true
-            }
-        })
+//        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                return false
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                newText?.let {
+//                    if(it.isEmpty()) {
+//                        adapter.updateRequests(rateList)
+//                    } else {
+//                        adapter.filter(it)
+//                    }
+//                }
+//                return true
+//            }
+//        })
 
         binding.placeInRating.setOnClickListener {
             //adapter.filter()

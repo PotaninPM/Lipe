@@ -1,4 +1,4 @@
-package com.example.lipe.all_profiles
+package com.example.lipe.all_profiles.change_info_sheet
 
 import android.app.Dialog
 import android.graphics.Bitmap
@@ -8,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsetsAnimation.Callback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toBitmap
@@ -18,7 +17,6 @@ import coil.Coil
 import coil.request.ImageRequest
 import com.example.lipe.databinding.BottomSheetChangeYourInfoLayoutBinding
 import com.example.lipe.viewModels.ProfileVM
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase

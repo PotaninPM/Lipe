@@ -134,7 +134,8 @@
                         android:id="@+id/notify_set_date"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_12sdp"
                         android:textSize="@dimen/_13sdp"
                         android:text="@string/meeting_date"/>
 

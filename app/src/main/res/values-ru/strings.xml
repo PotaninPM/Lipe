@@ -52,4 +52,5 @@
     <string name="search_by_login" />
     <string name="current">Текущие</string>
     <string name="your">Ваши</string>
+    <string name="users_events">Созданные юзером</string>
 </resources>

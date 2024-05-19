@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.Coil
 import coil.ImageLoader
 import coil.request.ImageRequest
+import com.example.lipe.MainActivity
 import com.example.lipe.R
 import com.example.lipe.all_profiles.other_profile.OtherProfileFragment
 import com.example.lipe.databinding.RatingItemBinding
@@ -24,7 +25,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.collections.ArrayList
 
-class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope) :  RecyclerView.Adapter<RatingAdapter.RatingHolder>() {
+class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope, private val parentFragment: Fragment) :  RecyclerView.Adapter<RatingAdapter.RatingHolder>() {
 
     val ratingList = ArrayList<RatingItem>()
     inner class RatingHolder(item: View): RecyclerView.ViewHolder(item) {
@@ -56,8 +57,17 @@ class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope) :  RecyclerView
             ratingItem.setBackgroundResource(backgroundResId)
 
             binding.ratingItem.setOnClickListener {
-//                val action = RatingFragmentDirections.actionRatingFragmentToOtherProfileFragment(rating.uid)
-//                it.findNavController().navigate(action)
+                try {
+                    val fragment = OtherProfileFragment(rating.uid)
+
+                    parentFragment.childFragmentManager.beginTransaction().apply {
+                        replace(R.id.allRating, fragment)
+                        addToBackStack(null)
+                        commit()
+                    }
+                } catch (e: Exception) {
+                    Log.e("INFOG", "${e.message.toString()}")
+                }
             }
         }
     }

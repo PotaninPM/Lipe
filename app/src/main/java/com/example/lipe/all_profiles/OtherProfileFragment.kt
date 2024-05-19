@@ -16,9 +16,11 @@ import coil.request.ImageRequest
 import com.example.lipe.R
 import com.example.lipe.databinding.FragmentOtherProfileBinding
 import com.example.lipe.all_profiles.cur_events.CurEventsInProfileFragment
+import com.example.lipe.all_profiles.cur_events.YourEventsFragment
 import com.example.lipe.rating_board.RatingFragment
 import com.example.lipe.sign_up_in.SignUpFragment
 import com.example.lipe.viewModels.OtherProfileVM
+import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -97,6 +99,8 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
 
         switchTabs(0)
 
+        setupTabLayout()
+
     }
     private fun setProfilePhotos(callback: (Boolean) -> Unit) {
         val photoRef = storageRef.child("avatars/${personUid}")
@@ -167,18 +171,35 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
             Log.e("INFOG", e.message.toString())
         }
     }
+    private fun setupTabLayout() {
+        val tabLayout = binding.tabLayout
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.cur_events))
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.users_events)))
+
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> switchTabs(0)
+                    1 -> switchTabs(1)
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+    }
 
     private fun switchTabs(position: Int) {
         val fragment = when(position) {
-            0 -> CurEventsInProfileFragment(auth.currentUser!!.uid)
-            1 -> RatingFragment()
-            2 -> SignUpFragment()
+            0 -> CurEventsInProfileFragment(personUid)
+            1 -> YourEventsFragment(personUid)
             else -> null
         }
 
         fragment?.let {
             childFragmentManager.beginTransaction()
-                .replace(R.id.switcher, it)
+                .replace(R.id.switcher_other, it)
                 .commit()
         }
     }
