@@ -44,13 +44,12 @@
     </style>
     <style name="txtPlusJakartaSansromansemibold11">
         <item name="android:textSize">13dp</item>
-        <item name="android:textColor">#7F4844FB</item>
+        <item name="android:textColor">#7FB5B3FF</item>
         <item name="android:fontFamily">@font/plus_jakarta_sans</item>
         <item name="android:textFontWeight" tools:targetApi="p">600</item>
     </style>
     <style name="txtPlusJakartaSansromanbold14">
         <item name="android:textSize">14dp</item>
-        <item name="android:textColor">#FF343434</item>
         <item name="android:fontFamily">@font/plus_jakarta_sans</item>
         <item name="android:textFontWeight" tools:targetApi="p">700</item>
     </style>

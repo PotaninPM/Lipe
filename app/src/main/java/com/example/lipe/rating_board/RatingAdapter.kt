@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -18,7 +19,9 @@ import coil.request.ImageRequest
 import com.example.lipe.MainActivity
 import com.example.lipe.R
 import com.example.lipe.all_profiles.other_profile.OtherProfileFragment
+import com.example.lipe.chats_and_groups.chat_fr.ChatFragment
 import com.example.lipe.databinding.RatingItemBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -58,12 +61,14 @@ class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope, private val par
 
             binding.ratingItem.setOnClickListener {
                 try {
-                    val fragment = OtherProfileFragment(rating.uid)
-
-                    parentFragment.childFragmentManager.beginTransaction().apply {
-                        replace(R.id.allRating, fragment)
-                        addToBackStack(null)
-                        commit()
+                    val context = it.context
+                    if (context is AppCompatActivity) {
+                        val fragment = OtherProfileFragment(rating.uid)
+                        val fragmentManager = context.supportFragmentManager
+                        fragmentManager.beginTransaction()
+                            .replace(R.id.allRating, fragment)
+                            .addToBackStack(null)
+                            .commit()
                     }
                 } catch (e: Exception) {
                     Log.e("INFOG", "${e.message.toString()}")

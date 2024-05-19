@@ -17,8 +17,10 @@ import com.example.lipe.R
 import com.example.lipe.databinding.FragmentOtherProfileBinding
 import com.example.lipe.all_profiles.cur_events.CurEventsInProfileFragment
 import com.example.lipe.all_profiles.cur_events.YourEventsFragment
-import com.example.lipe.rating_board.RatingFragment
-import com.example.lipe.sign_up_in.SignUpFragment
+import com.example.lipe.chats_and_groups.chat_fr.ChatFragment
+import com.example.lipe.database_models.ChatModelDB
+import com.example.lipe.notifications.FriendRequestData
+import com.example.lipe.notifications.RetrofitInstance
 import com.example.lipe.viewModels.OtherProfileVM
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
@@ -32,6 +34,8 @@ import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import java.util.UUID
 
 class OtherProfileFragment(val personUid: String) : Fragment() {
 
@@ -68,17 +72,20 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
             allProfile.visibility = View.GONE
 
             findAccount { userData ->
-                if(userData != null) {
-                    otherProfileVM.setInfo(
-                        userData.nickname,
-                        userData.friendsAmount,
-                        userData.eventsAmount,
-                        userData.ratingPoints,
-                        userData.desc,
-                        userData.name
-                    )
-                    loadingProgressBar.visibility = View.GONE
-                    allProfile.visibility = View.VISIBLE
+                checkIfUserAlreadyFriend { friendStatus ->
+                    if (userData != null) {
+                        otherProfileVM.setInfo(
+                            userData.nickname,
+                            userData.friendsAmount,
+                            userData.eventsAmount,
+                            userData.ratingPoints,
+                            userData.desc,
+                            userData.name,
+                            friendStatus
+                        )
+                        loadingProgressBar.visibility = View.GONE
+                        allProfile.visibility = View.VISIBLE
+                    }
                 }
             }
 
@@ -101,7 +108,157 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
 
         setupTabLayout()
 
+        binding.addToFriends.setOnClickListener {
+            when(otherProfileVM.friendStatus.value.toString()) {
+                "friend" -> replaceFragment(ChatFragment(""))
+                "not" -> sendFriendsRequest()
+                "query_to_you" -> acceptFriendRequest()
+                "query_from_you" -> deleteFriendRequest()
+            }
+        }
+
     }
+
+    private fun deleteFriendRequest() {
+        val dbRef_accepter_query = FirebaseDatabase.getInstance()
+            .getReference("users/${personUid}/query_friends/${auth.currentUser!!.uid}")
+        dbRef_accepter_query.removeValue().addOnSuccessListener {
+            binding.addToFriends.text = getString(R.string.add_to_friends)
+        }
+    }
+    private fun acceptFriendRequest() {
+        val you = auth.currentUser!!.uid
+        val person = personUid
+        val dbRef_accepter_friends = FirebaseDatabase.getInstance()
+            .getReference("users/${you}/friends")
+        val dbRef_sender_friends = FirebaseDatabase.getInstance()
+            .getReference("users/${personUid}/friends")
+
+        val dbRef_sender_chats = FirebaseDatabase.getInstance()
+            .getReference("users/${personUid}/chats")
+        val dbRef_accepter_chats = FirebaseDatabase.getInstance()
+            .getReference("users/${you}/chats")
+
+        val dbRef_chats = FirebaseDatabase.getInstance()
+            .getReference("chats")
+
+        val dbRef_accepter_query = FirebaseDatabase.getInstance()
+            .getReference("users/${you}/query_friends")
+        val dbRef_sender_query = FirebaseDatabase.getInstance()
+            .getReference("users/${personUid}/query_friends")
+
+        dbRef_accepter_friends.child(personUid).setValue(personUid)
+            .addOnSuccessListener {
+                dbRef_sender_friends.child(you)
+                    .setValue(you).addOnSuccessListener {
+                        dbRef_accepter_query.child(person).removeValue()
+                            .addOnSuccessListener {
+                                dbRef_sender_query.child(you).removeValue()
+                                    .addOnSuccessListener {
+                                        val uid_chat = UUID.randomUUID().toString()
+                                        dbRef_chats.child(uid_chat).setValue(ChatModelDB(you, personUid, "", arrayListOf())).addOnSuccessListener {
+                                            dbRef_sender_chats.child(uid_chat).setValue(uid_chat).addOnSuccessListener {
+                                                dbRef_accepter_chats.child(uid_chat).setValue(uid_chat).addOnSuccessListener {
+                                                    val request = FriendRequestData(personUid, auth.currentUser!!.uid)
+                                                    val call: Call<Void> = RetrofitInstance.api.acceptFriendsRequestData(request)
+
+                                                    binding.addToFriends.text = getString(R.string.write_to_friend)
+                                                }.addOnFailureListener {
+                                                    Log.d("INFOG", "ErrorRequest")
+                                                }
+                                            }.addOnSuccessListener {
+                                                Log.d("INFOG", "ErrorRequest")
+                                            }
+                                        }.addOnFailureListener {
+                                            Log.d("INFOG", "ErrorRequest")
+                                        }
+
+                                    }
+                            }
+                    }.addOnFailureListener {
+                        Log.e("INFOG", "Err Request Friend")
+                    }
+            }.addOnFailureListener {
+                Log.e("INFOG", "Err Request Friend")
+            }
+    }
+
+    private fun sendFriendsRequest() {
+        val dbRef = FirebaseDatabase.getInstance().getReference("users/${personUid}/query_friends")
+        dbRef.child(auth.currentUser!!.uid).setValue(auth.currentUser!!.uid).addOnSuccessListener {
+            val request = FriendRequestData(personUid, auth.currentUser!!.uid)
+            val call: Call<Void> = RetrofitInstance.api.sendFriendsRequestData(request)
+            binding.addToFriends.text = getString(R.string.request_sent)
+        }
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = childFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.allOtherProfile, fragment)
+        fragmentTransaction.commit()
+    }
+    private fun checkIfUserAlreadyFriend(status: (String) -> Unit) {
+        val dbRef_user_friends = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/friends")
+        val dbRef_user_query_friends_to_you = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/query_friends")
+        val dbRef_user_query_friends_to_creator = FirebaseDatabase.getInstance().getReference("users/${personUid}/query_friends")
+
+        dbRef_user_friends.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(user in snapshot.children) {
+                    if(user.value.toString() == personUid) {
+                        binding.addToFriends.text = getString(R.string.write_to_friend)
+                        status("friend")
+                        break
+                        //change color
+                        return
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                return
+            }
+
+        })
+            dbRef_user_query_friends_to_you.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (user in snapshot.children) {
+                        if (user.value == auth.currentUser!!.uid) {
+                            binding.addToFriends.text = getString(R.string.accept_friendsheep)
+                            status("query_to_you")
+                            break
+                            return
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    return
+                }
+
+            })
+
+            dbRef_user_query_friends_to_creator.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (user in snapshot.children) {
+                        if (user.value == auth.currentUser!!.uid) {
+                            binding.addToFriends.text = getString(R.string.request_sent)
+                            status("query_from_you")
+                            break
+                            return
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    return
+                }
+
+            })
+        status("not")
+    }
+
     private fun setProfilePhotos(callback: (Boolean) -> Unit) {
         val photoRef = storageRef.child("avatars/${personUid}")
         val themeRef = storageRef.child("user_theme/${personUid}")
@@ -203,6 +360,14 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                 .commit()
         }
     }
+
+//    private fun replaceFragment(fragment: Fragment) {
+//        val fragmentManager = childFragmentManager
+//        val fragmentTransaction = fragmentManager.beginTransaction()
+//        fragmentTransaction.replace(R.id., fragment)
+//        fragmentTransaction.addToBackStack(null)
+//        fragmentTransaction.commit()
+//    }
 
     override fun onDestroy() {
         super.onDestroy()

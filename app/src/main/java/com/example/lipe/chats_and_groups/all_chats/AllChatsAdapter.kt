@@ -54,8 +54,7 @@ class AllChatsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.Ad
             storageRef = FirebaseStorage.getInstance().reference
             dbRef = FirebaseDatabase.getInstance().reference
 
-            val firstNameRef = dbRef.child("users").child(chat.partnerUid).child("firstName")
-            val lastNameRef = dbRef.child("users").child(chat.partnerUid).child("lastName")
+            val nameRef = dbRef.child("users").child(chat.partnerUid).child("firstAndLastName")
             val status = dbRef.child("users").child(chat.partnerUid).child("status")
 
             val lastMessage_db = dbRef.child("chats").child(chat.uid).child("last_message")
@@ -76,42 +75,27 @@ class AllChatsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.Ad
 
             })
 
-            firstNameRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            nameRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val firstName = dataSnapshot.value.toString()
-                    lastNameRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            val lastName = dataSnapshot.value.toString()
+                      name.text = dataSnapshot.value.toString()
 
-                            name.text = buildString {
-                                append(firstName)
-                                append(" ")
-                                append(lastName)
-                            }
+                      lastMessage_db.addValueEventListener(object: ValueEventListener {
+                          override fun onDataChange(snapshot: DataSnapshot) {
+                              lastMessage.text = snapshot.value.toString()
+                          }
 
-                            lastMessage_db.addValueEventListener(object: ValueEventListener {
-                                override fun onDataChange(snapshot: DataSnapshot) {
-                                    lastMessage.text = snapshot.value.toString()
-                                }
+                          override fun onCancelled(error: DatabaseError) {
+                              TODO("Not yet implemented")
+                          }
 
-                                override fun onCancelled(error: DatabaseError) {
-                                    TODO("Not yet implemented")
-                                }
+                      })
 
-                            })
-
-                            all.visibility = View.VISIBLE
-                            avatar.visibility = View.VISIBLE
-                        }
-
-                        override fun onCancelled(databaseError: DatabaseError) {
-
-                        }
-                    })
+                      all.visibility = View.VISIBLE
+                      avatar.visibility = View.VISIBLE
                 }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
                 }
             })
 

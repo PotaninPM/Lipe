@@ -10,9 +10,9 @@ interface ApiService {
     @POST("/create_ent_event")
     fun sendEventData(@Body entEventData: EntEventData): Call<Void>
 
-    @POST
-    fun sendFriendsRequestData(@Body friendRequestData: FriendRequestData)
+    @POST("/query_to_friend")
+    fun sendFriendsRequestData(@Body friendRequestData: FriendRequestData): Call<Void>
 
-    @POST
-    fun acceptFriendsRequestData(@Body acceptFriendRequest: AcceptFriendRequest)
+    @POST("/accept_query_to_friend")
+    fun acceptFriendsRequestData(@Body acceptFriendRequest: FriendRequestData) : Call<Void>
 }

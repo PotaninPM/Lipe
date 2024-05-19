@@ -191,7 +191,6 @@ class RatingFragment : Fragment() {
 
 
 
-
     override fun onDestroy() {
         super.onDestroy()
         val dbRef_rating = FirebaseDatabase.getInstance().getReference("rating")

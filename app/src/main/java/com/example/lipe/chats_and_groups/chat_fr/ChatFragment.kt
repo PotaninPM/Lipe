@@ -170,11 +170,10 @@ class ChatFragment(val chatUid: String) : Fragment() {
 
                 dbRef_oponent.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        val firstName = snapshot.child("firstName").value.toString()
-                        val lastName = snapshot.child("lastName").value.toString()
+                        val name = snapshot.child("firstAndLastName").value.toString()
                         val status = snapshot.child("status").value.toString()
 
-                        chatVM.setInfo("$firstName $lastName", status, chatUid)
+                        chatVM.setInfo("$name", status, chatUid)
                     }
 
                     override fun onCancelled(error: DatabaseError) {

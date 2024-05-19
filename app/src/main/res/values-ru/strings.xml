@@ -53,4 +53,7 @@
     <string name="current">Текущие</string>
     <string name="your">Ваши</string>
     <string name="users_events">Созданные юзером</string>
+    <string name="write_to_friend">Написать</string>
+    <string name="accept_friendsheep">Принять в друзья</string>
+    <string name="request_sent">Заявка отправлена</string>
 </resources>

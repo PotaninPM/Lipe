@@ -52,4 +52,7 @@
     <string name="current">Current</string>
     <string name="your">Your</string>
     <string name="users_events">User\'s events</string>
+    <string name="write_to_friend">Chat to friend</string>
+    <string name="accept_friendsheep">Accept friendship</string>
+    <string name="request_sent">Request was sent</string>
 </resources>

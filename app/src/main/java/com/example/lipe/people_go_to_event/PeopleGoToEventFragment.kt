@@ -61,10 +61,6 @@ class PeopleGoToEventFragment : DialogFragment() {
             adapter = peopleGoAdapter
         }
 
-        binding.close.setOnClickListener {
-            dismiss()
-        }
-
         loadData(eventVM.id.value.toString())
     }
 
