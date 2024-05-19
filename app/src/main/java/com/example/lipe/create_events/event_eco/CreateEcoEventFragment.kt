@@ -67,8 +67,7 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
     private lateinit var storageRef : StorageReference
 
-    private var _binding: FragmentCreateEcoEventBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentCreateEcoEventBinding
 
     private var items: ArrayList<SpinnerItem> = arrayListOf(
         SpinnerItem("Выберите тип развлечения", R.drawable.light_bulb),
@@ -95,7 +94,7 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentCreateEcoEventBinding.inflate(inflater, container, false)
+        binding = FragmentCreateEcoEventBinding.inflate(inflater, container, false)
 
         storageRef = FirebaseStorage.getInstance().getReference("event_images")
 
@@ -399,11 +398,4 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
         TODO("Not yet implemented")
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
-
 }

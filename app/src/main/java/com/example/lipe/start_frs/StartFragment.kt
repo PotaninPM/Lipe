@@ -13,15 +13,14 @@ import com.google.firebase.auth.FirebaseAuth
 
 class StartFragment : Fragment() {
 
-    private var _binding: FragmentStartBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentStartBinding
 
     private lateinit var auth: FirebaseAuth
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentStartBinding.inflate(inflater, container, false)
+        binding = FragmentStartBinding.inflate(inflater, container, false)
         auth = FirebaseAuth.getInstance()
         val view = binding.root
         return view
@@ -41,10 +40,4 @@ class StartFragment : Fragment() {
             view?.findNavController()?.navigate(R.id.action_startFragment2_to_mapsFragment)
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
 }

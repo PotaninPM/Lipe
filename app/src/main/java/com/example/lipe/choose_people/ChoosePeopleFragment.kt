@@ -32,8 +32,7 @@ class ChoosePeopleFragment : DialogFragment() {
 
     private val peopleGoAdapter by lazy { ChoosePeopleAdapter(viewLifecycleOwner.lifecycleScope) }
 
-    private var _binding: FragmentChoosePeopleBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentChoosePeopleBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -42,7 +41,7 @@ class ChoosePeopleFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentChoosePeopleBinding.inflate(inflater, container, false)
+        binding = FragmentChoosePeopleBinding.inflate(inflater, container, false)
 
         auth = FirebaseAuth.getInstance()
 
@@ -170,10 +169,5 @@ class ChoosePeopleFragment : DialogFragment() {
             ViewGroup.LayoutParams.MATCH_PARENT,
             (resources.displayMetrics.heightPixels * 0.7).toInt()
         )
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

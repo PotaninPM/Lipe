@@ -33,8 +33,7 @@ import kotlinx.coroutines.withContext
 
 class ChatFragment(val chatUid: String) : Fragment() {
 
-    private var _binding: FragmentChatBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentChatBinding
     private lateinit var chatAdapter: ChatAdapter
     private lateinit var db: DatabaseReference
 
@@ -46,7 +45,7 @@ class ChatFragment(val chatUid: String) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentChatBinding.inflate(inflater, container, false)
+        binding = FragmentChatBinding.inflate(inflater, container, false)
 
         auth = FirebaseAuth.getInstance()
 
@@ -197,7 +196,5 @@ class ChatFragment(val chatUid: String) : Fragment() {
         val bottomNav =
             (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNav.visibility = View.VISIBLE
-
-        _binding = null
     }
 }

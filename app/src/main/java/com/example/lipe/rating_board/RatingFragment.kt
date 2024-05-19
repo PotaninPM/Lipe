@@ -27,8 +27,7 @@ import kotlinx.coroutines.withContext
 
 class RatingFragment : Fragment() {
 
-    private var _binding: FragmentRatingBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentRatingBinding
 
     private var rateList = mutableListOf<RatingItem>()
 
@@ -46,7 +45,7 @@ class RatingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = RatingAdapter(lifecycleScope, this@RatingFragment)
+        adapter = RatingAdapter(lifecycleScope)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
@@ -118,7 +117,7 @@ class RatingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentRatingBinding.inflate(inflater, container, false)
+        binding = FragmentRatingBinding.inflate(inflater, container, false)
 
         auth = FirebaseAuth.getInstance()
 
@@ -195,6 +194,5 @@ class RatingFragment : Fragment() {
         super.onDestroy()
         val dbRef_rating = FirebaseDatabase.getInstance().getReference("rating")
         dbRef_rating.removeEventListener(ratingListener)
-        _binding = null
     }
 }

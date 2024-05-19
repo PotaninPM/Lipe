@@ -33,8 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class FriendsBottomSheet : BottomSheetDialogFragment() {
-    private var _binding: FriendsBottomSheetBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FriendsBottomSheetBinding
 
     private lateinit var adapter: FriendsBottomSheetAdapter
 
@@ -46,7 +45,7 @@ class FriendsBottomSheet : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FriendsBottomSheetBinding.inflate(inflater, container, false)
+        binding = FriendsBottomSheetBinding.inflate(inflater, container, false)
 
         auth = FirebaseAuth.getInstance()
 
@@ -145,11 +144,6 @@ class FriendsBottomSheet : BottomSheetDialogFragment() {
             }
         }
         return dialog
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
 }

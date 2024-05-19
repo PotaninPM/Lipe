@@ -20,8 +20,7 @@ import com.google.firebase.storage.StorageReference
 
 class AllGroupsFragment : Fragment() {
 
-    private var _binding: FragmentGroupsBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentGroupsBinding
 
     private lateinit var storageRef : StorageReference
 
@@ -36,7 +35,7 @@ class AllGroupsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentGroupsBinding.inflate(inflater, container, false)
+        binding = FragmentGroupsBinding.inflate(inflater, container, false)
 
         storageRef = FirebaseStorage.getInstance().reference
         auth = FirebaseAuth.getInstance()
@@ -83,10 +82,5 @@ class AllGroupsFragment : Fragment() {
                 Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
             }
         })
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

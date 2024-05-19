@@ -30,8 +30,7 @@ import kotlinx.coroutines.withContext
 
 class PeopleGoToEventFragment : DialogFragment() {
 
-    private var _binding: FragmentPeopleGoToEventBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentPeopleGoToEventBinding
 
     private lateinit var auth: FirebaseAuth
 
@@ -46,7 +45,7 @@ class PeopleGoToEventFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentPeopleGoToEventBinding.inflate(inflater, container, false)
+        binding = FragmentPeopleGoToEventBinding.inflate(inflater, container, false)
 
         auth = FirebaseAuth.getInstance()
 
@@ -109,10 +108,5 @@ class PeopleGoToEventFragment : DialogFragment() {
                 // Обработка ошибок
             }
         })
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

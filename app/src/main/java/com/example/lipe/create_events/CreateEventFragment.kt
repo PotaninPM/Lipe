@@ -20,8 +20,7 @@ import com.google.android.material.button.MaterialButton
 
 class CreateEventFragment : BottomSheetDialogFragment() {
 
-    private var _binding: FragmentCreateEventBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentCreateEventBinding
 
     private lateinit var appVM: AppVM
 
@@ -29,7 +28,7 @@ class CreateEventFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentCreateEventBinding.inflate(inflater, container, false)
+        binding = FragmentCreateEventBinding.inflate(inflater, container, false)
 
         appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
 
@@ -102,10 +101,5 @@ class CreateEventFragment : BottomSheetDialogFragment() {
         fun show(fragmentManager: FragmentManager) {
             newInstance().show(fragmentManager, "MyBottomSheetFragment")
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

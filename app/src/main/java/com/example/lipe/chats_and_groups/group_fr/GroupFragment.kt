@@ -38,8 +38,7 @@ import kotlinx.coroutines.withContext
 
 class GroupFragment(val groupUid: String) : Fragment() {
 
-    private var _binding: FragmentGroupBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentGroupBinding
     private lateinit var groupAdapter: GroupAdapter
     private lateinit var db: DatabaseReference
 
@@ -53,7 +52,7 @@ class GroupFragment(val groupUid: String) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentGroupBinding.inflate(inflater, container, false)
+        binding = FragmentGroupBinding.inflate(inflater, container, false)
 
         auth = FirebaseAuth.getInstance()
 
@@ -206,7 +205,5 @@ class GroupFragment(val groupUid: String) : Fragment() {
         val bottomNav =
             (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNav.visibility = View.VISIBLE
-
-        _binding = null
     }
 }

@@ -20,8 +20,7 @@ import com.google.firebase.storage.StorageReference
 
 class CurEventsInProfileFragment(val personUid: String) : Fragment() {
 
-    private var _binding: FragmentCurEventsInProfileBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentCurEventsInProfileBinding
 
     private lateinit var storageRef : StorageReference
 
@@ -36,7 +35,7 @@ class CurEventsInProfileFragment(val personUid: String) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentCurEventsInProfileBinding.inflate(inflater, container, false)
+        binding = FragmentCurEventsInProfileBinding.inflate(inflater, container, false)
 
         auth = FirebaseAuth.getInstance()
 
@@ -101,9 +100,5 @@ class CurEventsInProfileFragment(val personUid: String) : Fragment() {
             }
 
         })
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

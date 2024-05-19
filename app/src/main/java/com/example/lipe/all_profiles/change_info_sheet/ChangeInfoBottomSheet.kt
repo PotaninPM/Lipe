@@ -28,8 +28,7 @@ import java.security.MessageDigest
 import java.util.concurrent.CountDownLatch
 
 class ChangeInfoBottomSheet : BottomSheetDialogFragment() {
-    private var _binding: BottomSheetChangeYourInfoLayoutBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: BottomSheetChangeYourInfoLayoutBinding
 
     private val profileVM: ProfileVM by activityViewModels()
 
@@ -48,7 +47,7 @@ class ChangeInfoBottomSheet : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = BottomSheetChangeYourInfoLayoutBinding.inflate(inflater, container, false)
+        binding = BottomSheetChangeYourInfoLayoutBinding.inflate(inflater, container, false)
 
         auth = FirebaseAuth.getInstance()
 
@@ -164,11 +163,6 @@ class ChangeInfoBottomSheet : BottomSheetDialogFragment() {
                 Log.d("INFOG", "No media selected")
             }
         }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)

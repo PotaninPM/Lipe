@@ -39,8 +39,7 @@ import java.util.UUID
 
 class OtherProfileFragment(val personUid: String) : Fragment() {
 
-    private var _binding: FragmentOtherProfileBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentOtherProfileBinding
 
     private lateinit var dbRef: DatabaseReference
     private lateinit var auth: FirebaseAuth
@@ -58,7 +57,7 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentOtherProfileBinding.inflate(inflater, container, false)
+        binding = FragmentOtherProfileBinding.inflate(inflater, container, false)
 
         auth = FirebaseAuth.getInstance()
         dbRef = FirebaseDatabase.getInstance().getReference()
@@ -368,11 +367,6 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
 //        fragmentTransaction.addToBackStack(null)
 //        fragmentTransaction.commit()
 //    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
 
 }
 

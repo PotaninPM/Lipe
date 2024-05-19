@@ -58,9 +58,8 @@ class EventEntFragment : Fragment() {
     private lateinit var storageRef : StorageReference
 
     private val appVM: AppVM by activityViewModels()
-    private val binding get() = _binding ?: throw IllegalStateException("Binding is not available")
 
-    private var _binding: FragmentEventEntBinding? = null
+    private lateinit var binding: FragmentEventEntBinding
 
     private val eventEntVM: EventEntVM by activityViewModels()
 
@@ -72,7 +71,7 @@ class EventEntFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentEventEntBinding.inflate(inflater, container, false)
+        binding = FragmentEventEntBinding.inflate(inflater, container, false)
 
         val view = binding.root
         return view
@@ -557,10 +556,5 @@ class EventEntFragment : Fragment() {
         } catch (e: Exception) {
             Log.e("INFOG", e.message.toString())
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

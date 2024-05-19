@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -22,21 +23,24 @@ import com.example.lipe.all_profiles.other_profile.OtherProfileFragment
 import com.example.lipe.chats_and_groups.chat_fr.ChatFragment
 import com.example.lipe.databinding.RatingItemBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.collections.ArrayList
 
-class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope, private val parentFragment: Fragment) :  RecyclerView.Adapter<RatingAdapter.RatingHolder>() {
+class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope) :  RecyclerView.Adapter<RatingAdapter.RatingHolder>() {
 
     val ratingList = ArrayList<RatingItem>()
     inner class RatingHolder(item: View): RecyclerView.ViewHolder(item) {
 
         private lateinit var dbRef: DatabaseReference
+        private lateinit var auth: FirebaseAuth
 
         val binding = RatingItemBinding.bind(item)
         fun bind(rating: RatingItem) = with(binding) {
+            auth = FirebaseAuth.getInstance()
             lifecycleScope.launch {
                 val bitmap = withContext(Dispatchers.IO) {
                     Coil.imageLoader(itemView.context).execute(
@@ -47,7 +51,11 @@ class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope, private val par
                 }
                 binding.persImage.setImageBitmap(bitmap)
             }
-            username.text = rating.username
+            if(rating.uid != auth.currentUser!!.uid) {
+                username.text = rating.username
+            } else {
+                username.text = "Вы"
+            }
             ratingScore.text = rating.score.toString()
             place.text = rating.place.toString()
 
@@ -62,13 +70,18 @@ class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope, private val par
             binding.ratingItem.setOnClickListener {
                 try {
                     val context = it.context
-                    if (context is AppCompatActivity) {
-                        val fragment = OtherProfileFragment(rating.uid)
-                        val fragmentManager = context.supportFragmentManager
-                        fragmentManager.beginTransaction()
-                            .replace(R.id.allRating, fragment)
-                            .addToBackStack(null)
-                            .commit()
+//                    val cardView = context.findViewById<CardView>(R.id.cardView)
+//                    cardView.visibility = View.GONE
+                    if(rating.uid != auth.currentUser!!.uid) {
+                        val context = it.context
+                        if (context is AppCompatActivity) {
+                            val fragment = OtherProfileFragment(rating.uid)
+                            val fragmentManager = context.supportFragmentManager
+                            fragmentManager.beginTransaction()
+                                .replace(R.id.allRating, fragment)
+                                .addToBackStack(null)
+                                .commit()
+                        }
                     }
                 } catch (e: Exception) {
                     Log.e("INFOG", "${e.message.toString()}")

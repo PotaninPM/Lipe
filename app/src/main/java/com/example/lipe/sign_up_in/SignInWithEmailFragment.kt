@@ -19,8 +19,7 @@ import com.google.firebase.database.ValueEventListener
 
 class SignInWithEmailFragment : Fragment() {
 
-    private var _binding: FragmentSignInWithEmailBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentSignInWithEmailBinding
 
     private lateinit var dbRef: DatabaseReference
     private lateinit var auth: FirebaseAuth
@@ -29,7 +28,7 @@ class SignInWithEmailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSignInWithEmailBinding.inflate(inflater, container, false)
+        binding = FragmentSignInWithEmailBinding.inflate(inflater, container, false)
 
         //realtime data
         dbRef = FirebaseDatabase.getInstance().getReference("users")
@@ -76,10 +75,4 @@ class SignInWithEmailFragment : Fragment() {
             }
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
 }

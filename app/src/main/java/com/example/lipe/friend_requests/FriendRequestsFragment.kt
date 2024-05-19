@@ -22,8 +22,7 @@ import com.google.firebase.storage.StorageReference
 
 class FriendRequestsFragment : Fragment() {
 
-    private var _binding: FragmentFriendRequestsBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentFriendRequestsBinding
 
     private  lateinit var dbRef: DatabaseReference
 
@@ -41,7 +40,7 @@ class FriendRequestsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentFriendRequestsBinding.inflate(inflater, container, false)
+        binding = FragmentFriendRequestsBinding.inflate(inflater, container, false)
 
         storageRef = FirebaseStorage.getInstance().reference
         auth = FirebaseAuth.getInstance()
@@ -114,9 +113,5 @@ class FriendRequestsFragment : Fragment() {
         fragmentTransaction.replace(R.id.all_fr_req, fragment)
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

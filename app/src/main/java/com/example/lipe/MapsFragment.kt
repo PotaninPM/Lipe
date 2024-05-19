@@ -77,7 +77,7 @@ import kotlinx.coroutines.withContext
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
-    private var _binding: FragmentMapsBinding? = null
+    private lateinit var binding: FragmentMapsBinding
 
     private var currentFragment: Fragment? = null
 
@@ -89,8 +89,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var eventEcoVM: EventEcoVM
 
     private lateinit var saveStateMapVM: SaveStateMapsVM
-
-    private val binding get() = _binding!!
 
     private lateinit var mMap: GoogleMap
 
@@ -593,7 +591,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMapsBinding.inflate(inflater, container, false)
+        binding = FragmentMapsBinding.inflate(inflater, container, false)
 
         currentFragment = MapsFragment()
 
@@ -950,11 +948,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
     override fun onDestroyView() {
         super.onDestroyView()

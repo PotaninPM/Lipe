@@ -19,8 +19,7 @@ import com.google.firebase.storage.StorageReference
 
 class AllChatsFragment : Fragment() {
 
-    private var _binding: FragmentChatsBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentChatsBinding
 
     private lateinit var storageRef : StorageReference
 
@@ -35,7 +34,7 @@ class AllChatsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentChatsBinding.inflate(inflater, container, false)
+        binding = FragmentChatsBinding.inflate(inflater, container, false)
 
         adapter = AllChatsAdapter(viewLifecycleOwner.lifecycleScope)
 
@@ -90,10 +89,5 @@ class AllChatsFragment : Fragment() {
                 Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
             }
         })
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

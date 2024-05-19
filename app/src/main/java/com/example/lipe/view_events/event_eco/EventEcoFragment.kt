@@ -46,8 +46,7 @@ class EventEcoFragment : Fragment() {
 
     private lateinit var appVM: AppVM
 
-    private var _binding: FragmentEventEcoBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentEventEcoBinding
 
     private val eventEcoVM: EventEcoVM by activityViewModels()
 
@@ -60,7 +59,7 @@ class EventEcoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentEventEcoBinding.inflate(inflater, container, false)
+        binding = FragmentEventEcoBinding.inflate(inflater, container, false)
 
         binding.allEcoEvent.visibility = View.GONE
         binding.loadingProgressBar.visibility = View.VISIBLE

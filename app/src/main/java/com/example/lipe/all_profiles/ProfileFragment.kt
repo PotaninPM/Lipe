@@ -31,8 +31,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ProfileFragment : Fragment() {
-    private var _binding: FragmentProfileBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentProfileBinding
 
     private lateinit var dbRef: DatabaseReference
     private lateinit var auth: FirebaseAuth
@@ -71,7 +70,7 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentProfileBinding.inflate(inflater, container, false)
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
         val view = binding.root
 
         dbRef = FirebaseDatabase.getInstance().getReference("users")
@@ -284,11 +283,6 @@ class ProfileFragment : Fragment() {
                 .replace(R.id.switcher, it)
                 .commit()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }
 

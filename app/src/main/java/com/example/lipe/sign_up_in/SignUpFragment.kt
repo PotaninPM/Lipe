@@ -27,8 +27,7 @@ class SignUpFragment : Fragment() {
 
     private lateinit var appVM: AppVM
 
-    private var _binding: FragmentSignUpBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentSignUpBinding
 
     private lateinit var signUpVM: SignUpVM
 
@@ -40,7 +39,7 @@ class SignUpFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSignUpBinding.inflate(inflater, container, false)
+        binding = FragmentSignUpBinding.inflate(inflater, container, false)
 
         appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
         signUpVM = ViewModelProvider(requireActivity()).get(SignUpVM::class.java)
@@ -160,10 +159,4 @@ class SignUpFragment : Fragment() {
                 }
             })
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
 }

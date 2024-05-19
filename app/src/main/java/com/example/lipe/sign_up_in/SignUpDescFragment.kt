@@ -53,8 +53,7 @@ class SignUpDescFragment : Fragment() {
 
     private var upload_photo: Boolean = false
 
-    private var _binding: FragmentSignUpDescBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentSignUpDescBinding
 
     private var selectedItems: MutableList<SpinnerItem> = mutableListOf()
 
@@ -93,7 +92,7 @@ class SignUpDescFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSignUpDescBinding.inflate(inflater, container, false)
+        binding = FragmentSignUpDescBinding.inflate(inflater, container, false)
 
         signUpVM = ViewModelProvider(requireActivity()).get(SignUpVM::class.java)
 
@@ -338,10 +337,4 @@ class SignUpDescFragment : Fragment() {
             return getView(position, convertView, parent)
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
 }

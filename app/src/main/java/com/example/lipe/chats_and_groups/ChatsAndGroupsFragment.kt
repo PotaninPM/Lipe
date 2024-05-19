@@ -30,8 +30,7 @@ import kotlinx.coroutines.withContext
 
 class ChatsAndGroupsFragment : Fragment() {
 
-    private var _binding: FragmentChatsAndGroupsBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentChatsAndGroupsBinding
 
     private lateinit var adapter: ChatsAndGroupsTabAdapter
 
@@ -43,7 +42,7 @@ class ChatsAndGroupsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentChatsAndGroupsBinding.inflate(inflater, container, false)
+        binding = FragmentChatsAndGroupsBinding.inflate(inflater, container, false)
         val view = binding.root
 
         adapter = ChatsAndGroupsTabAdapter(childFragmentManager, lifecycle)
@@ -123,6 +122,5 @@ class ChatsAndGroupsFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding = null
     }
 }

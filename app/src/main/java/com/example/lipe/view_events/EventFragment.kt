@@ -24,8 +24,7 @@ import com.google.firebase.database.ValueEventListener
 
 class EventFragment : BottomSheetDialogFragment() {
 
-    private var _binding: FragmentEventBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentEventBinding
 
     private  lateinit var dbRef_event: DatabaseReference
 
@@ -42,7 +41,7 @@ class EventFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentEventBinding.inflate(inflater, container, false)
+        binding = FragmentEventBinding.inflate(inflater, container, false)
 
         appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
 
@@ -94,11 +93,5 @@ class EventFragment : BottomSheetDialogFragment() {
             newInstance().show(fragmentManager, "MyBottomSheetFragment1")
         }
 
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }

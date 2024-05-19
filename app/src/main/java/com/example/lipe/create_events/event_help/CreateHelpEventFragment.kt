@@ -66,8 +66,7 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
 
     private lateinit var storageRef : StorageReference
 
-    private var _binding: FragmentCreateHelpEventBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentCreateHelpEventBinding
 
     private lateinit var dbRef: DatabaseReference
     private lateinit var dbRef_id: DatabaseReference
@@ -90,7 +89,7 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentCreateHelpEventBinding.inflate(inflater, container, false)
+        binding = FragmentCreateHelpEventBinding.inflate(inflater, container, false)
 
         storageRef = FirebaseStorage.getInstance().getReference("event_images")
 
@@ -352,11 +351,4 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
     override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
         TODO("Not yet implemented")
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
-
 }
