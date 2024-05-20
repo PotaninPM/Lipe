@@ -93,10 +93,6 @@ class EventEcoFragment : Fragment() {
     }
 
     private fun loadAllImages(callback: (Boolean) -> Unit) {
-        val uid = eventEcoVM.photosBefore.value?.get(0).toString().removeSurrounding("[", "]")
-
-        val photoRef = storageRef.child("event_images/$uid")
-        val tokenTask = photoRef.downloadUrl
 
         val userAvatarRef = storageRef.child("avatars/${eventEcoVM.creator.value}")
 
@@ -113,13 +109,11 @@ class EventEcoFragment : Fragment() {
                 binding.eventAvatar.setImageBitmap(bitmap)
             }
         }
-
-        tokenTask.addOnSuccessListener { url ->
             lifecycleScope.launch {
                 val bitmap = withContext(Dispatchers.IO) {
                     ImageLoader(requireContext()).execute(
                         ImageRequest.Builder(requireContext())
-                            .data(url)
+                            .data(eventEcoVM.photosBefore.value.toString())
                             .build()
                     )
                 }.drawable?.toBitmap()
@@ -127,10 +121,6 @@ class EventEcoFragment : Fragment() {
                 binding.image.setImageBitmap(bitmap)
             }
             callback(true)
-
-        }.addOnFailureListener {
-            callback(false)
-        }
     }
 
     private fun searchEvent(coord1: Double, coord2: Double, callback: (ready: Boolean) -> Unit) {
@@ -149,12 +139,11 @@ class EventEcoFragment : Fragment() {
                         val title = eventSnapshot.child("title").value.toString()
                         val description = eventSnapshot.child("description").value.toString()
                         val creatorUid = eventSnapshot.child("creator_id").value.toString()
-                        val photosBefore = arrayListOf(eventSnapshot.child("photo_before_id").value.toString())
+                        val photos = eventSnapshot.child("photos").value.toString()
                         val freePlaces = maxPeople - eventSnapshot.child("amount_reg_people").value.toString().toInt()
                         val timeOfCreation = eventSnapshot.child("time_of_creation").value.toString()
                         val dateOfMeeting = eventSnapshot.child("date_of_meeting").value.toString()
                         val amountRegPeople = eventSnapshot.child("amount_reg_people").value.toString().toInt()
-                        //val peopleGo = eventSnapshot.child("reg_people_id").value
                         val getPoints:Int = eventSnapshot.child("get_points").value.toString().toInt()
                         val powerPollution: String = eventSnapshot.child("power_of_pollution").value.toString()
 
@@ -166,7 +155,6 @@ class EventEcoFragment : Fragment() {
                                         for(userEventSnapshot in userSnapshot.children) {
                                             if(creatorUid == userEventSnapshot.child("uid").value) {
                                                 val creatorUsername = userEventSnapshot.child("username").value.toString()
-                                                val userPhoto = "1"
                                                 Log.d("INFOG", "нуы")
                                                 eventEcoVM.setInfo(
                                                     id,
@@ -176,7 +164,7 @@ class EventEcoFragment : Fragment() {
                                                     title,
                                                     creatorUid,
                                                     creatorUsername,
-                                                    photosBefore,
+                                                    photos,
                                                     arrayListOf("1"),
                                                     freePlaces,
                                                     description,
@@ -199,7 +187,7 @@ class EventEcoFragment : Fragment() {
                                                 title,
                                                 creatorUid,
                                                 "Удаленный аккаунт",
-                                                photosBefore,
+                                                photos,
                                                 arrayListOf("1"),
                                                 freePlaces,
                                                 description,

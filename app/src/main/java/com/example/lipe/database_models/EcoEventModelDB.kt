@@ -1,23 +1,24 @@
 package com.example.lipe.database_models
 
+import com.google.gson.annotations.SerializedName
 import java.util.ArrayList
 
 data class EcoEventModelDB(
-    var event_id: String,
-    var type_of_event: String,
-    var creator_id: String,
-    var time_of_creation: String,
-    var title: String,
-    var coordinates: HashMap<String, Double>,
-    var power_of_pollution: String,
-    var date_of_meeting: String ?= null,
-    var min_people: Int,
-    var max_people: Int,
-    var description: String,
-    var photo_before_id: ArrayList<String>,
-    var photo_after_id: ArrayList<String>,
-    var reg_people_id: ArrayList<String>,
-    var amount_reg_people: Int,
-    var get_points: Int,
-    var status: String
+    @SerializedName("event_id") var event_id: String,
+    @SerializedName("type_of_event") var type_of_event: String,
+    @SerializedName("creator_id") var creator_id: String,
+    @SerializedName("time_of_creation") var time_of_creation: String,
+    @SerializedName("title") var title: String,
+    @SerializedName("coordinates") var coordinates: HashMap<String, Double>,
+    @SerializedName("power_of_pollution") var power_of_pollution: String,
+    @SerializedName("date_of_meeting") var date_of_meeting: String,
+    @SerializedName("min_people") var min_people: Int,
+    @SerializedName("max_people") var max_people: Int,
+    @SerializedName("description") var description: String,
+    @SerializedName("photos") var photos: String,
+    @SerializedName("reg_people_id") var reg_people_id: HashMap<String?, String?>,
+    @SerializedName("amount_reg_people") var amount_reg_people: Int,
+    @SerializedName("get_points") var get_points: Int,
+    @SerializedName("status") var status: String,
+    @SerializedName("timestamp") var timestamp: Long
 )

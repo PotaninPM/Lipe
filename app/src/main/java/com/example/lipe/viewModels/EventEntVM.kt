@@ -30,9 +30,6 @@ class EventEntVM: ViewModel() {
     private var _peopleGo = MutableLiveData<List<String>>()
     val peopleGo: LiveData<List<String>> = _peopleGo
 
-    private var _adress = MutableLiveData<String>()
-    val adress: LiveData<String> = _adress
-
     private var _freePlaces = MutableLiveData<Int>()
     var freePlaces: LiveData<Int> = _freePlaces
 

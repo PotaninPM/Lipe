@@ -288,7 +288,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     Instant.now().epochSecond
                 )
 
-                val call: Call<Void> = RetrofitInstance.api.sendEventData(event)
+                val call: Call<Void> = RetrofitInstance.api.sendEventEntData(event)
 
                 Log.d("INFOG", call.request().toString())
 

@@ -463,7 +463,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-
     private fun startLocationUpdates() {
         try {
             val dbRef_location = FirebaseDatabase.getInstance().getReference("location/${auth.currentUser!!.uid}")
@@ -746,7 +745,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     }
 
-
+//-------
     private fun searchTypeOfEvent(coord1: Double, coord2: Double, callback: (ready: Boolean) -> Unit) {
         val dbRefEvent = FirebaseDatabase.getInstance().getReference("current_events")
 
@@ -957,7 +956,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
     override fun onMapReady(p0: GoogleMap) {
         mMap = p0
-        mMap.uiSettings.isMyLocationButtonEnabled = false
         mMap.uiSettings.isMyLocationButtonEnabled = false
     }
 

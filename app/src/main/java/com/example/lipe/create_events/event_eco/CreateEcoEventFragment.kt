@@ -27,6 +27,7 @@ import com.example.lipe.R
 import com.example.lipe.database_models.EcoEventModelDB
 import com.example.lipe.database_models.GroupModel
 import com.example.lipe.databinding.FragmentCreateEcoEventBinding
+import com.example.lipe.notifications.RetrofitInstance
 import com.example.lipe.viewModels.AppVM
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -38,7 +39,11 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.util.ArrayList
 import java.util.Calendar
 import java.util.Date
@@ -124,7 +129,7 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
         binding.btnCreateEvent.setOnClickListener {
             uploadImage {photos ->
-                if(photos[0] != "-" || photos[1] != "-" || photos[2] != "-") {
+                if(photos != "-") {
                     createEvent(photos)
                 } else {
                     setDialog("Вы не загрузили ни одного фото", "Вы должны загрузить минимум одно фото", "Хорошо")
@@ -154,14 +159,12 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             Log.d("INFOG", "No media selected")
         }
     }
-    private fun uploadImage(callback: (photos: ArrayList<String>) -> Unit) {
+    private fun uploadImage(callback: (photos: String) -> Unit) {
         val storageRef = FirebaseStorage.getInstance().getReference("event_images")
 
-        val photos: ArrayList<String> = arrayListOf()
-        if (image1 == "-" && image2 == "-" && image3 == "-") {
-            callback(arrayListOf("-", "-", "-"))
+        if (image1 == "-") {
+            callback("-")
         } else {
-            var used: Int = 0;
             if(image1 != "-") {
                 imageUri1.let { uri ->
                     val uid: String = UUID.randomUUID().toString()
@@ -169,13 +172,11 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     imageRef.putFile(uri)
                         .addOnSuccessListener { task ->
                             task.storage.downloadUrl.addOnSuccessListener { url ->
-                                photos.add(uid)
-                                callback(photos)
+                                callback(url.toString())
                             }
                         }
                         .addOnFailureListener { exception ->
-                            callback(arrayListOf("-", "-", "-"))
-                            used = -1
+                            callback("-")
                         }
                 }
             }
@@ -227,7 +228,7 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             .show()
     }
 
-    private fun createEvent(photosBefore: ArrayList<String>) {
+    private fun createEvent(photosBefore: String) {
             appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
             if(checkForEmpty() == true) {
                 eventId = UUID.randomUUID().toString()
@@ -272,32 +273,30 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     maxPeople,
                     desc,
                     photosBefore,
-                    arrayListOf(),
-                    arrayListOf(auth.currentUser?.uid.toString()),
+                    hashMapOf(auth.currentUser?.uid.toString() to auth.currentUser?.uid.toString()),
                     1,
                     getPoints,
-                    "ok"
+                    "ok",
+                    Instant.now().epochSecond
                 )
 
-                val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/curRegEventsId")
-                val dbRef_user_your = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/yourCreatedEvents")
-                val dbRef_user_groups = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/groups")
+                val call: Call<Void> = RetrofitInstance.api.sendEventEcoData(event)
 
-                val dbRef_group = FirebaseDatabase.getInstance().getReference("groups")
+                Log.d("INFOG", call.request().toString())
 
-                dbRef.child(eventId).setValue(event).addOnSuccessListener {
-                    dbRef_user.child(eventId).setValue(eventId).addOnSuccessListener {
-                        dbRef_user_your.child(eventId).setValue(eventId).addOnSuccessListener {
-                            val group = GroupModel(eventId, title, photosBefore.get(0), arrayListOf(auth.currentUser!!.uid), arrayListOf())
-                            dbRef_group.child(eventId).setValue(group).addOnSuccessListener {
-                                dbRef_user_groups.child(eventId).setValue(eventId).addOnSuccessListener {
-
-
-                                }
-                            }
+                call.enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            Log.d("INFOG", "OK, notifications were sent")
+                        } else {
+                            Log.d("INFOG", "${response.message()}")
                         }
                     }
-                }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Log.d("INFOG", "${t.message}")
+                    }
+                })
             }
     }
 

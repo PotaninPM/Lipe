@@ -67,20 +67,22 @@ class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope) :  RecyclerView
             }
             ratingItem.setBackgroundResource(backgroundResId)
 
-            binding.ratingItem.setOnClickListener {
+            binding.ratingItem.setOnClickListener {it ->
                 try {
                     val context = it.context
-//                    val cardView = context.findViewById<CardView>(R.id.cardView)
-//                    cardView.visibility = View.GONE
-                    if(rating.uid != auth.currentUser!!.uid) {
-                        val context = it.context
-                        if (context is AppCompatActivity) {
-                            val fragment = OtherProfileFragment(rating.uid)
-                            val fragmentManager = context.supportFragmentManager
-                            fragmentManager.beginTransaction()
-                                .replace(R.id.allRating, fragment)
-                                .addToBackStack(null)
-                                .commit()
+                    if (context is AppCompatActivity) {
+                        val cardView = context.findViewById<CardView>(R.id.cardView)
+                        cardView.visibility = View.GONE
+                        if (rating.uid != auth.currentUser!!.uid) {
+                            val context = it.context
+                            if (context is AppCompatActivity) {
+                                val fragment = OtherProfileFragment(rating.uid)
+                                val fragmentManager = context.supportFragmentManager
+                                fragmentManager.beginTransaction()
+                                    .replace(R.id.allRating, fragment)
+                                    .addToBackStack(null)
+                                    .commit()
+                            }
                         }
                     }
                 } catch (e: Exception) {
@@ -101,14 +103,20 @@ class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope) :  RecyclerView
         return ratingList.size
     }
     fun filter(text: String) {
-        val filteredList = ArrayList<RatingItem>()
-        for (item in ratingList) {
-            if (item.username.contains(text, ignoreCase = true)) {
-                filteredList.add(item)
+        ratingList.clear()
+        if (text.isEmpty()) {
+            //ratingList.addAll()
+        } else {
+            for(item in ratingList) {
+                if (item.username.contains(text, ignoreCase = true)) {
+                    ratingList.add(item)
+                }
             }
         }
-        updateRequests(filteredList)
+        notifyDataSetChanged()
     }
+
+
     fun removeRequest(position: Int) {
         if (position in 0 until ratingList.size) {
             ratingList.removeAt(position)

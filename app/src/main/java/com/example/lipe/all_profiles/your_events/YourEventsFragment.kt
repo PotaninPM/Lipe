@@ -68,6 +68,7 @@ class YourEventsFragment(val personUid: String) : Fragment() {
                             val title = dataSnapshot.child("title").value.toString()
                             val date_meeting = dataSnapshot.child("date_of_meeting").value.toString()
                             val status = dataSnapshot.child("status").value.toString()
+                            val photos = dataSnapshot.child("photos").value.toString()
 
                             var statusRus = ""
 
@@ -79,15 +80,8 @@ class YourEventsFragment(val personUid: String) : Fragment() {
                                 statusRus = "Будет удалён"
                             }
 
-                            val photoRef = storageRef.child("event_images/${event.value}")
-
-                            val token = photoRef.downloadUrl
-
-                            token.addOnSuccessListener {uri ->
-                                val imageUrl = uri.toString()
-                                yourEvents.add(EventItem(imageUrl, title, date_meeting, statusRus))
-                                adapter.updateRequests(yourEvents)
-                            }
+                            yourEvents.add(EventItem(photos, title, date_meeting, statusRus))
+                            adapter.updateRequests(yourEvents)
                         }
                         override fun onCancelled(databaseError: DatabaseError) {
                             Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")

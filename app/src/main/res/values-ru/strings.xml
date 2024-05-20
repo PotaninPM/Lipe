@@ -49,7 +49,7 @@
     <string name="add_to_friends">Добавить в друзья</string>
     <string name="notifications">Уведомления</string>
     <string name="all">Все</string>
-    <string name="search_by_login" />
+    <string name="search_by_login">Введите логин</string>
     <string name="current">Текущие</string>
     <string name="your">Ваши</string>
     <string name="users_events">Созданные юзером</string>

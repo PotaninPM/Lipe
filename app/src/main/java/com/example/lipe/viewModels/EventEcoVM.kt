@@ -26,8 +26,8 @@ class EventEcoVM: ViewModel() {
     private var _creator = MutableLiveData<String>()
     val creator: LiveData<String> = _creator
 
-    private var _photosBefore = MutableLiveData<ArrayList<String>>()
-    val photosBefore: LiveData<ArrayList<String>> = _photosBefore
+    private var _photosBefore = MutableLiveData<String>()
+    val photosBefore: LiveData<String> = _photosBefore
 
     private var _peopleGo = MutableLiveData<ArrayList<String>>()
     val peopleGo: LiveData<ArrayList<String>> = _peopleGo
@@ -74,7 +74,7 @@ class EventEcoVM: ViewModel() {
         return outputFormat.format(date)
     }
 
-    fun setInfo(id_: String, maxPeople_: Int, minPeople_: Int, powerPollution_: String, title_: String, creator_: String, creatorUsername_: String, photosBefore_: ArrayList<String>, peopleGo_: ArrayList<String>, freePlaces_: Int, eventDesc_: String, time_of_creation_: String, date_: String, amount_reg_people_: Int, getPoints_: Int) {
+    fun setInfo(id_: String, maxPeople_: Int, minPeople_: Int, powerPollution_: String, title_: String, creator_: String, creatorUsername_: String, photosBefore_: String, peopleGo_: ArrayList<String>, freePlaces_: Int, eventDesc_: String, time_of_creation_: String, date_: String, amount_reg_people_: Int, getPoints_: Int) {
         _id.value = id_
         _maxPeople.value = maxPeople_
         _title.value = title_

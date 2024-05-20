@@ -198,65 +198,70 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
         fragmentTransaction.commit()
     }
     private fun checkIfUserAlreadyFriend(status: (String) -> Unit) {
-        val dbRef_user_friends = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/friends")
-        val dbRef_user_query_friends_to_you = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/query_friends")
-        val dbRef_user_query_friends_to_creator = FirebaseDatabase.getInstance().getReference("users/${personUid}/query_friends")
+        val currentUser = auth.currentUser ?: return
+        val dbRefUserFriends = FirebaseDatabase.getInstance().getReference("users/${currentUser.uid}/friends")
+        val dbRefUserQueryFriendsToYou = FirebaseDatabase.getInstance().getReference("users/${currentUser.uid}/query_friends")
+        val dbRefUserQueryFriendsToCreator = FirebaseDatabase.getInstance().getReference("users/${personUid}/query_friends")
 
-        dbRef_user_friends.addValueEventListener(object: ValueEventListener {
+        dbRefUserFriends.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                for(user in snapshot.children) {
-                    if(user.value.toString() == personUid) {
-                        binding.addToFriends.text = getString(R.string.write_to_friend)
-                        status("friend")
-                        break
-                        //change color
+                for (user in snapshot.children) {
+                    if (user.value.toString() == personUid) {
+                        if (isAdded) {
+                            binding.addToFriends.text = getString(R.string.write_to_friend)
+                            status("friend")
+                        }
                         return
                     }
                 }
+
+                dbRefUserQueryFriendsToYou.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for (user in snapshot.children) {
+                            if (user.value == auth.currentUser!!.uid) {
+                                if (isAdded) {
+                                    binding.addToFriends.text = getString(R.string.accept_friendsheep)
+                                    status("query_to_you")
+                                }
+                                return
+                            }
+                        }
+
+                        dbRefUserQueryFriendsToCreator.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                for (user in snapshot.children) {
+                                    if (user.value == auth.currentUser!!.uid) {
+                                        if (isAdded) {
+                                            binding.addToFriends.text = getString(R.string.request_sent)
+                                            status("query_from_you")
+                                        }
+                                        return
+                                    }
+                                }
+
+                                if (isAdded) {
+                                    status("not")
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                Log.e("FirebaseError", "Error: ${error.message}")
+                            }
+                        })
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.e("FirebaseError", "Error: ${error.message}")
+                    }
+                })
             }
 
             override fun onCancelled(error: DatabaseError) {
-                return
+                Log.e("FirebaseError", "Error: ${error.message}")
             }
-
         })
-            dbRef_user_query_friends_to_you.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (user in snapshot.children) {
-                        if (user.value == auth.currentUser!!.uid) {
-                            binding.addToFriends.text = getString(R.string.accept_friendsheep)
-                            status("query_to_you")
-                            break
-                            return
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    return
-                }
-
-            })
-
-            dbRef_user_query_friends_to_creator.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (user in snapshot.children) {
-                        if (user.value == auth.currentUser!!.uid) {
-                            binding.addToFriends.text = getString(R.string.request_sent)
-                            status("query_from_you")
-                            break
-                            return
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    return
-                }
-
-            })
-        status("not")
     }
+
 
     private fun setProfilePhotos(callback: (Boolean) -> Unit) {
         val photoRef = storageRef.child("avatars/${personUid}")
