@@ -28,7 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class PeopleGoToEventFragment : DialogFragment() {
+class PeopleGoToEventFragment(val eventUid: String) : DialogFragment() {
 
     private lateinit var binding: FragmentPeopleGoToEventBinding
 
@@ -36,7 +36,6 @@ class PeopleGoToEventFragment : DialogFragment() {
 
     private val peopleGoAdapter by lazy { PeopleGoAdapter(viewLifecycleOwner.lifecycleScope) }
 
-    private val eventVM: EventEntVM by activityViewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -60,7 +59,7 @@ class PeopleGoToEventFragment : DialogFragment() {
             adapter = peopleGoAdapter
         }
 
-        loadData(eventVM.id.value.toString())
+        loadData(eventUid)
     }
 
     override fun onStart() {

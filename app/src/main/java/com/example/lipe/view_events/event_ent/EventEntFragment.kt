@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -155,7 +157,22 @@ class EventEntFragment : Fragment() {
         binding?.loadingProgressBar?.visibility = View.VISIBLE
 
         binding?.creator?.setOnClickListener {
-
+//            val context = it.context
+//            if (context is AppCompatActivity) {
+//                val cardView = context.findViewById<CardView>(R.id.cardView)
+//                cardView.visibility = View.GONE
+//                if (eventEntVM.creator.value.toString() != auth.currentUser!!.uid) {
+//                    val context = it.context
+//                    if (context is AppCompatActivity) {
+//                        val fragment = OtherProfileFragment(eventEntVM.creator.value.toString())
+//                        val fragmentManager = context.supportFragmentManager
+//                        fragmentManager.beginTransaction()
+//                            .replace(R.id.allEntEvent, fragment)
+//                            .addToBackStack(null)
+//                            .commit()
+//                    }
+//                }
+//            }
         }
 
         binding?.apply {
@@ -218,8 +235,8 @@ class EventEntFragment : Fragment() {
         var dialog: DialogFragment ?= null
 
         dialog = when(lay) {
-            0 -> PeopleGoToEventFragment()
-            1 -> ChoosePeopleFragment()
+            0 -> PeopleGoToEventFragment(eventEntVM.id.value.toString())
+            1 -> ChoosePeopleFragment(eventEntVM.id.value.toString())
             else -> DialogFragment()
         }
         dialog.show(childFragmentManager, "PeopleGoDialog")
@@ -518,8 +535,10 @@ class EventEntFragment : Fragment() {
                                             dbRef_users.child("curRegEventsId").child(event_id).setValue(event_id)
                                                 .addOnSuccessListener {
                                                     dbRef_groups.child(auth.currentUser!!.uid).setValue(auth.currentUser!!.uid).addOnSuccessListener {
-                                                        binding.btnRegToEvent.visibility = View.GONE
-                                                        binding.deleteOrLeave.visibility = View.VISIBLE
+                                                        dbRef_users.child("groups").child(eventEntVM.id.toString()).setValue(eventEntVM.id.toString()).addOnSuccessListener {
+                                                            binding.btnRegToEvent.visibility = View.GONE
+                                                            binding.deleteOrLeave.visibility = View.VISIBLE
+                                                        }
                                                     }
 
                                                     callback(true)

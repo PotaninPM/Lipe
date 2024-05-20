@@ -39,7 +39,7 @@ class RatingFragment : Fragment() {
 
     private val ratingVM: RatingVM by activityViewModels()
 
-    private lateinit var ratingListener: ChildEventListener
+    private lateinit var ratingListener: ValueEventListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -60,9 +60,9 @@ class RatingFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if (newText.isNullOrEmpty()) {
-                    adapter.filter("")
+                    adapter.filter("", rateList)
                 } else {
-                    adapter.filter(newText)
+                    adapter.filter(newText, rateList)
                 }
                 return true
             }
@@ -137,49 +137,53 @@ class RatingFragment : Fragment() {
 
     private fun addPeople() {
         val dbRef_rating = FirebaseDatabase.getInstance().getReference("rating")
-         ratingListener = dbRef_rating.addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val place = snapshot.key
-                val points = snapshot.child("points").value.toString()
-                val userUid = snapshot.child("userUid").value.toString()
-
-                val dbRef_user =
-                    FirebaseDatabase.getInstance().getReference("users/$userUid/username")
-                dbRef_user.addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val nickname = snapshot.value.toString()
-                        val storageRef =
-                            FirebaseStorage.getInstance().getReference("avatars/$userUid")
-
-                        storageRef.downloadUrl.addOnSuccessListener { url ->
-                            val ratingItem = RatingItem(
-                                userUid,
-                                url.toString(),
-                                place!!.toInt(),
-                                nickname,
-                                points.toInt()
-                            )
-                            rateList.add(ratingItem)
-                            rateList.sortBy { it.place }
-                            adapter.updateRequests(rateList)
-                        }.addOnFailureListener {
-                            Log.e("INFOG", "Rating smth wrong")
+        ratingListener = dbRef_rating.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val all = snapshot.childrenCount.toInt()
+                var completedCount = 0
+                val newRateList = mutableListOf<RatingItem>()
+                snapshot.children.forEach { ratingSnapshot ->
+                    val place = ratingSnapshot.child("place").value.toString()
+                    val points = ratingSnapshot.child("points").value.toString()
+                    val userUid = ratingSnapshot.child("userUid").value.toString()
+                    val dbRef_user = FirebaseDatabase.getInstance().getReference("users/$userUid/username")
+                    dbRef_user.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val nickname = snapshot.value.toString()
+                            val storageRef = FirebaseStorage.getInstance().getReference("avatars/$userUid")
+                            storageRef.downloadUrl.addOnSuccessListener { url ->
+                                newRateList.add(RatingItem(userUid, url.toString(), place!!.toInt(), nickname, points.toInt()))
+                                rateList.add(RatingItem(userUid, url.toString(), place!!.toInt(), nickname, points.toInt()))
+                                completedCount++
+                                if (completedCount == all) {
+                                    newRateList.sortBy { it.place }
+                                    adapter.updateRequests(newRateList)
+                                    Log.d("INFOG", newRateList.size.toString())
+                                }
+                            }.addOnFailureListener {
+                                Log.e("INFOG", "Rating smth wrong")
+                                completedCount++
+                                if (completedCount == all) {
+                                    newRateList.sortBy { it.place }
+                                    adapter.updateRequests(newRateList)
+                                    Log.d("INFOG", newRateList.size.toString())
+                                }
+                            }
                         }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        Log.e("INFOG", "Rating onCancelled")
-                    }
-                })
+                        override fun onCancelled(error: DatabaseError) {
+                            completedCount++
+                            if (completedCount == all) {
+                                newRateList.sortBy { it.place }
+                                adapter.updateRequests(newRateList)
+                                Log.d("INFOG", newRateList.size.toString())
+                            }
+                        }
+                    })
+                }
             }
-
             override fun onCancelled(error: DatabaseError) {
-                Log.e("INFOG", "Rating onCancelled")
+                // Обработка ошибок
             }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
-            override fun onChildRemoved(snapshot: DataSnapshot) {}
         })
     }
 

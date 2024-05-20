@@ -175,20 +175,16 @@ class GroupFragment(val groupUid: String) : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
 
                 groupVM.setInfo(snapshot.child("title").value.toString(), groupUid, snapshot.child("members").childrenCount.toString())
-
-                val storage_group = FirebaseStorage.getInstance().getReference("event_images/${snapshot.child("imageUid").value}")
-                storage_group.downloadUrl.addOnSuccessListener {url ->
                     lifecycleScope.launch {
                         val bitmap: Bitmap = withContext(Dispatchers.IO) {
                             Coil.imageLoader(requireContext()).execute(
                                 ImageRequest.Builder(requireContext())
-                                    .data(url)
+                                    .data(snapshot.child("imageUid").value)
                                     .build()
                             ).drawable?.toBitmap()!!
                         }
                         binding.avatarChat.setImageBitmap(bitmap)
                     }
-                }
 
             }
 

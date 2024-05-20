@@ -73,21 +73,15 @@ class AllGroupsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.A
                 }
             })
             name.text = group.title
-
-            val photoRef = storageRef.child("event_images/${group.imageUid}")
-            val photoUrl = photoRef.downloadUrl
-
-            photoUrl.addOnSuccessListener { url ->
                 lifecycleScope.launch {
                     val bitmap: Bitmap = withContext(Dispatchers.IO) {
                         Coil.imageLoader(binding.avatar.context).execute(
                             ImageRequest.Builder(binding.avatar.context)
-                                .data(url)
+                                .data(group.imageUid)
                                 .build()
                         ).drawable?.toBitmap()!!
                     }
                     binding.avatar.setImageBitmap(bitmap)
-                }
                 all.visibility = View.VISIBLE
                 avatar.visibility = View.VISIBLE
             }

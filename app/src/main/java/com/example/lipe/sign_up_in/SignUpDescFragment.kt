@@ -35,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
+import java.security.MessageDigest
 import java.time.LocalDate
 
 class SignUpDescFragment : Fragment() {
@@ -194,6 +195,12 @@ class SignUpDescFragment : Fragment() {
             Log.d("INFOG", "No media selected")
         }
     }
+    fun sha256(input: String): String {
+        val bytes = input.toByteArray()
+        val md = MessageDigest.getInstance("SHA-256")
+        val digest = md.digest(bytes)
+        return digest.fold("", { str, it -> str + "%02x".format(it) })
+    }
 
     private fun uploadImage(callback: (uid: String) -> Unit) {
         val storageRef = FirebaseStorage.getInstance().getReference("avatars")
@@ -231,7 +238,7 @@ class SignUpDescFragment : Fragment() {
                         desc,
                         username,
                         email,
-                        pass,
+                        sha256(pass),
                         names,
                         arrayListOf(),
                         arrayListOf(),

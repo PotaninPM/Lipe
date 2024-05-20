@@ -22,4 +22,8 @@ class GroupVM : ViewModel() {
         _groupUid.value = chatUid_
         _countMembers.value = "$countMembers_ участников"
     }
+
+    fun setPhoto(photo_: String) {
+        _avatar.value = photo_
+    }
 }

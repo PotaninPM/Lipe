@@ -74,6 +74,7 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.security.MessageDigest
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
@@ -462,7 +463,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             Log.e("INFOG", "${e}")
         }
     }
-
+    fun sha256(input: String): String {
+        val bytes = input.toByteArray()
+        val md = MessageDigest.getInstance("SHA-256")
+        val digest = md.digest(bytes)
+        return digest.fold("", { str, it -> str + "%02x".format(it) })
+    }
     private fun startLocationUpdates() {
         try {
             val dbRef_location = FirebaseDatabase.getInstance().getReference("location/${auth.currentUser!!.uid}")

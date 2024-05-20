@@ -58,23 +58,29 @@ class AllGroupsFragment : Fragment() {
         val dbRef_chats = FirebaseDatabase.getInstance().getReference("users/${yourUid}/groups")
         dbRef_chats.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val groups_list = ArrayList<GroupItem>()
-                for(groups in dataSnapshot.children) {
-                    val dbRef_chat_uid = FirebaseDatabase.getInstance().getReference("groups/${groups.value.toString()}")
-                    dbRef_chat_uid.addListenerForSingleValueEvent(object: ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            val uid: String = snapshot.key.toString()
-                            val title: String = snapshot.child("title").value.toString()
-                            val imageUid: String = snapshot.child("imageUid").value.toString()
-                            val group = GroupItem(uid, title, imageUid)
-                            groups_list.add(group)
-                            adapter.updateRequests(groups_list)
-                        }
+                if(dataSnapshot.exists()) {
+                    val groups_list = ArrayList<GroupItem>()
+                    for (groups in dataSnapshot.children) {
+                        val dbRef_chat_uid = FirebaseDatabase.getInstance()
+                            .getReference("groups/${groups.value.toString()}")
+                        dbRef_chat_uid.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                if(snapshot.exists()) {
+                                    val uid: String = snapshot.key.toString()
+                                    val title: String = snapshot.child("title").value.toString()
+                                    val imageUid: String =
+                                        snapshot.child("imageUid").value.toString()
+                                    val group = GroupItem(uid, title, imageUid)
+                                    groups_list.add(group)
+                                    adapter.updateRequests(groups_list)
+                                }
+                            }
 
-                        override fun onCancelled(error: DatabaseError) {
-                            Log.e("FirebaseError","Ошибка Firebase ${error.message}")
-                        }
-                    })
+                            override fun onCancelled(error: DatabaseError) {
+                                Log.e("FirebaseError", "Ошибка Firebase ${error.message}")
+                            }
+                        })
+                    }
                 }
             }
 

@@ -377,7 +377,7 @@
                 <Button
                     android:id="@+id/btnRegToEvent"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_height="wrap_content"
                     style="@style/Widget.Material3.Button.Icon"
                     android:layout_marginStart="@dimen/_22sdp"
                     android:layout_marginEnd="@dimen/_22sdp"
@@ -401,7 +401,7 @@
                     android:id="@+id/deleteOrLeave"
                     style="@style/Widget.Material3.Button.Icon"
                     android:layout_width="@dimen/_140sdp"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_height="wrap_content"
                     android:backgroundTint="@color/quantum_googred"
                     android:ellipsize="end"
                     android:gravity="center"
@@ -413,15 +413,15 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/finishEvent"
+                    app:layout_constraintStart_toEndOf="@+id/listUsers"
                     app:layout_constraintTop_toBottomOf="@+id/desc"
                     tools:ignore="TextSizeCheck" />
 
                 <Button
-                    android:id="@+id/finishEvent"
+                    android:id="@+id/listUsers"
                     style="@style/Widget.Material3.Button.Icon"
                     android:layout_width="@dimen/_140sdp"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_12sdp"
                     android:backgroundTint="#2494EA"
                     android:ellipsize="end"

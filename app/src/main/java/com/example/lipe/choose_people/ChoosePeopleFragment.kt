@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lipe.R
 import com.example.lipe.databinding.FragmentChoosePeopleBinding
 import com.example.lipe.databinding.FragmentPeopleGoToEventBinding
+import com.example.lipe.notifications.RetrofitInstance
 import com.example.lipe.people_go_to_event.PeopleGoAdapter
 import com.example.lipe.people_go_to_event.PersoneGoItem
 import com.example.lipe.viewModels.EventEntVM
@@ -23,10 +24,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class ChoosePeopleFragment : DialogFragment() {
-
-    private val eventVM: EventEntVM by activityViewModels()
+class ChoosePeopleFragment(val eventUid: String) : DialogFragment() {
 
     private lateinit var auth: FirebaseAuth
 
@@ -50,7 +52,7 @@ class ChoosePeopleFragment : DialogFragment() {
             adapter = peopleGoAdapter
         }
 
-        loadData(eventVM.id.value.toString())
+        loadData(eventUid)
 
         val view = binding.root
         return view
@@ -100,51 +102,34 @@ class ChoosePeopleFragment : DialogFragment() {
         binding.finish.setOnClickListener {
             val selectedUsers = peopleGoAdapter.getSelectedPeople()
             addPointsToUsers(selectedUsers, 3)
-            deleteEvent(eventVM.id.value.toString())
+            deleteEvent(eventUid)
             dismiss()
         }
     }
 
     private fun addPointsToUsers(selectedUsers: List<String>, points: Int) {
-        val database = FirebaseDatabase.getInstance()
-        val dbRefUsers = database.getReference("users")
+        val call: Call<Void> = RetrofitInstance.api.getPointsData(GetPointsData(selectedUsers, points))
 
-        selectedUsers.forEach { userUid ->
-            val userPointsRef = dbRefUsers.child(userUid).child("points")
-            userPointsRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val currentPoints = snapshot.getValue(Int::class.java) ?: 0
-                    val newPoints = currentPoints + points
-                    userPointsRef.setValue(newPoints)
-                }
+        Log.d("INFOG", call.request().toString())
 
-                override fun onCancelled(error: DatabaseError) {
-                    Log.e("INFOG", "Failed points $userUid: ${error.message}")
-                }
-            })
-        }
-        val dbRefRating = database.getReference("rating")
-        dbRefRating.addListenerForSingleValueEvent(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val uid = snapshot.child("userUid").value.toString()
-                if(selectedUsers.contains(uid)) {
-                    val curPoints = snapshot.child("points").value.toString().toInt()
-                    dbRefRating.child(uid).child("points").setValue(curPoints + points).addOnSuccessListener {
-
-                    }
+        call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.d("INFOG", "OK, notifications were sent")
+                } else {
+                    Log.d("INFOG", "${response.message()}")
                 }
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.d("INFOG", "${t.message}")
             }
-
         })
     }
     private fun deleteEvent(uid: String) {
         val dbRef_user = FirebaseDatabase.getInstance().getReference("users").child(auth.currentUser!!.uid).child("curRegEventsId").child(uid)
-        val curPeople = FirebaseDatabase.getInstance().getReference("current_events").child(eventVM.id.value.toString())
-        val dbRef_group = FirebaseDatabase.getInstance().getReference("groups").child(eventVM.id.value.toString())
+        val curPeople = FirebaseDatabase.getInstance().getReference("current_events").child(eventUid)
+        val dbRef_group = FirebaseDatabase.getInstance().getReference("groups").child(eventUid)
 
         dbRef_user.removeValue().addOnSuccessListener {
             curPeople.removeValue()

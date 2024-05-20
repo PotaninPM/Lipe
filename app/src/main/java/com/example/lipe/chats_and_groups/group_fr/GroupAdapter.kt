@@ -37,7 +37,7 @@ class GroupAdapter(var messages: List<Message>, var myUserId: String, var lifeSc
                 val name_other: TextView = itemView.findViewById(R.id.sender_group)
                 val other_avatar: ImageView = itemView.findViewById(R.id.avatar_group)
 
-                FirebaseDatabase.getInstance().getReference("users/${message.senderId}/firstName").addValueEventListener(object: ValueEventListener {
+                FirebaseDatabase.getInstance().getReference("users/${message.senderId}/firstAndLastName").addValueEventListener(object: ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         name_other.text = snapshot.value.toString()
 
@@ -62,7 +62,6 @@ class GroupAdapter(var messages: List<Message>, var myUserId: String, var lifeSc
 
                 })
                 messageTextViewGroup.text = CryptAlgo.encrypt(message.text)
-                name_other.text = "Миша Потанин"
             }
         }
     }

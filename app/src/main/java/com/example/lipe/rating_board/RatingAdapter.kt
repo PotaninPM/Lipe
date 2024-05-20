@@ -102,19 +102,18 @@ class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope) :  RecyclerView
     override fun getItemCount(): Int {
         return ratingList.size
     }
-    fun filter(text: String) {
+    fun filter(text: String, allRate: List<RatingItem>) {
         ratingList.clear()
         if (text.isEmpty()) {
-            //ratingList.addAll()
+            ratingList.addAll(allRate)
         } else {
-            for(item in ratingList) {
-                if (item.username.contains(text, ignoreCase = true)) {
-                    ratingList.add(item)
-                }
-            }
+            ratingList.addAll(allRate.filter {
+                it.username.contains(text, ignoreCase = true)
+            })
         }
         notifyDataSetChanged()
     }
+
 
 
     fun removeRequest(position: Int) {

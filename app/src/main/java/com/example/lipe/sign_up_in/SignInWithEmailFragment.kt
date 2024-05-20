@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.security.MessageDigest
 
 class SignInWithEmailFragment : Fragment() {
 
@@ -65,9 +66,15 @@ class SignInWithEmailFragment : Fragment() {
 //            view.findNavController().navigate(R.id.action_signInWithEmailFragment_to_signUpFragment)
 //        }
     }
+    fun sha256(input: String): String {
+        val bytes = input.toByteArray()
+        val md = MessageDigest.getInstance("SHA-256")
+        val digest = md.digest(bytes)
+        return digest.fold("", { str, it -> str + "%02x".format(it) })
+    }
 
     private fun signInUser(email:String, pass: String, ready: (Boolean) -> Unit) {
-        auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
+        auth.signInWithEmailAndPassword(email, sha256(pass)).addOnCompleteListener {
             if(it.isSuccessful) {
                 ready(true)
             } else {

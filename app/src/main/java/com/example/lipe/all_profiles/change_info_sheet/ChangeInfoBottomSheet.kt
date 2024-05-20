@@ -103,7 +103,7 @@ class ChangeInfoBottomSheet : BottomSheetDialogFragment() {
         val newNick = binding.etLogininput.text.toString()
         val newName = binding.etNameAndSurnameinput.text.toString()
         val newDesc = binding.descText.text.toString()
-        val newPass = binding.etPassinput.text.toString()
+        val newPass = sha256(binding.etPassinput.text.toString())
 
         val latch = CountDownLatch(4)
 
