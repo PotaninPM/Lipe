@@ -26,7 +26,7 @@ class YourEventsAdapter(val lifecycleScope: LifecycleCoroutineScope) : RecyclerV
 
         val binding = EventItemBinding.bind(item)
         fun bind(event: EventItem) = with(binding) {
-            dateTime.text = event.date_time
+            dateTime.text = event.date_time.substring(6, event.date_time.length) + " в " + event.date_time.substring(0, 5)
             title.text = event.title
             status.text = event.status
 

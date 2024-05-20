@@ -105,7 +105,9 @@ class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope) :  RecyclerView
     fun filter(text: String, allRate: List<RatingItem>) {
         ratingList.clear()
         if (text.isEmpty()) {
-            ratingList.addAll(allRate)
+            ratingList.addAll(allRate.sortedBy {
+                it.place
+            })
         } else {
             ratingList.addAll(allRate.filter {
                 it.username.contains(text, ignoreCase = true)

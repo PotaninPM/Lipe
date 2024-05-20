@@ -463,12 +463,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             Log.e("INFOG", "${e}")
         }
     }
-    fun sha256(input: String): String {
-        val bytes = input.toByteArray()
-        val md = MessageDigest.getInstance("SHA-256")
-        val digest = md.digest(bytes)
-        return digest.fold("", { str, it -> str + "%02x".format(it) })
-    }
     private fun startLocationUpdates() {
         try {
             val dbRef_location = FirebaseDatabase.getInstance().getReference("location/${auth.currentUser!!.uid}")
@@ -822,7 +816,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
         }
         val markerImageResource = when (type) {
-            "eco" -> R.drawable.leaf
+            "eco" -> R.drawable.planet_icon
             "ent" -> sportType
             "help" -> R.drawable.dollar
             else -> R.drawable.basketball_32

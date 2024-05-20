@@ -1,7 +1,7 @@
 
 <resources>
     <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
-        <item name="colorPrimary">#241ED3</item>
+        <item name="colorPrimary">#2755CA</item>
         <item name="colorOnPrimary">#000000</item>
         <item name="colorPrimaryContainer">#FFFFFF</item>
         <item name="colorOnPrimaryContainer">@color/md_theme_light_onPrimaryContainer</item>

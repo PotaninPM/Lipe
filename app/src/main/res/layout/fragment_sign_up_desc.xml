@@ -165,7 +165,7 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnSignUp"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_45sdp"
+                    android:layout_height="@dimen/_39sdp"
                     android:layout_gravity="bottom"
                     android:layout_marginStart="@dimen/_17sdp"
                     android:layout_marginTop="@dimen/_15sdp"
