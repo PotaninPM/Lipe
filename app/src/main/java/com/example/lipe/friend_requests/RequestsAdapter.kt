@@ -15,11 +15,16 @@ import coil.request.ImageRequest
 import com.example.lipe.R
 import com.example.lipe.database_models.ChatModelDB
 import com.example.lipe.databinding.FriendRequestItemBinding
+import com.example.lipe.notifications.FriendRequestData
+import com.example.lipe.notifications.RetrofitInstance
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.ArrayList
 import java.util.UUID
 
@@ -82,6 +87,24 @@ class RequestsAdapter(val lifecycleScope: LifecycleCoroutineScope): RecyclerView
                                                 dbRef_sender_chats.child(uid_chat).setValue(uid_chat).addOnSuccessListener {
                                                     dbRef_accepter_chats.child(uid_chat).setValue(uid_chat).addOnSuccessListener {
                                                         if (adapterPosition != RecyclerView.NO_POSITION) {
+                                                            val request = FriendRequestData(request.uid_accepter, request.uid_sender)
+                                                            val call: Call<Void> = RetrofitInstance.api.acceptFriendsRequestData(request)
+
+                                                            Log.d("INFOG", call.toString())
+
+                                                            call.enqueue(object : Callback<Void> {
+                                                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                                                    if (response.isSuccessful) {
+                                                                        Log.d("INFOG", "notification was sent")
+                                                                    } else {
+                                                                        Log.d("INFOG", "${response.message()}")
+                                                                    }
+                                                                }
+
+                                                                override fun onFailure(call: Call<Void>, t: Throwable) {
+                                                                    Log.d("INFOG", "${t.message}")
+                                                                }
+                                                            })
                                                             removeRequest(adapterPosition)
                                                         }
                                                     }.addOnFailureListener {

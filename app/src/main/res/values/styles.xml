@@ -64,4 +64,5 @@
     <style name="groupStylecornerRadius">
         <item name="background">@drawable/tabs</item>
     </style>
+
 </resources>

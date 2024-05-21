@@ -74,18 +74,10 @@
             app:destination="@id/chatsAndGroupsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/getPointsFragment"
-        android:name="com.example.lipe.GetPointsFragment"
-        android:label="fragment_get_points"
-        tools:layout="@layout/fragment_get_points" />
-    <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.lipe.all_profiles.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
-        <action
-            android:id="@+id/action_profileFragment_to_getPointsFragment"
-            app:destination="@id/getPointsFragment" />
         <action
             android:id="@+id/action_profileFragment_to_friendRequestsFragment"
             app:destination="@id/friendRequestsFragment" />

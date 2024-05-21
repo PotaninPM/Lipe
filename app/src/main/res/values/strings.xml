@@ -56,4 +56,8 @@
     <string name="accept_friendsheep">Accept friendship</string>
     <string name="request_sent">Request was sent</string>
     <string name="it_is_you">You</string>
+    <string name="delete_friend">Delete from friends</string>
+    <string name="place">Place</string>
+    <string name="username">Username</string>
+    <string name="points">Points</string>
 </resources>

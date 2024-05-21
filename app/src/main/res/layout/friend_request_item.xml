@@ -11,7 +11,6 @@
         android:layout_width="@dimen/_46sdp"
         android:layout_height="@dimen/_46sdp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ex2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/ImageStyle_Circle" />
@@ -22,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_8sdp"
         android:fontFamily="@font/nunitosansextrabold"
-        android:text="MikePM"
+        android:text=""
         android:layout_marginTop="@dimen/_8sdp"
         android:textSize="@dimen/_13sdp"
         app:layout_constraintStart_toEndOf="@+id/avatar_request"

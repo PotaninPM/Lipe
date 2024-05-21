@@ -5,17 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_223sdp"
-            android:src="@drawable/forest"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout6" />
+        <ImageView
+            android:layout_width="@dimen/_152sdp"
+            android:layout_height="@dimen/_152sdp"
+            android:src="@drawable/planet"
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout6"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_352sdp"
-            android:background="@drawable/start_fieds"
             app:layout_constraintBottom_toBottomOf="parent">
                 <TextView
                     android:layout_width="@dimen/_273sdp"

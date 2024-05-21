@@ -1,6 +1,7 @@
 package com.example.lipe.all_profiles.other_profile
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
@@ -29,12 +30,15 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.collection.LLRBNode
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.UUID
 
 class OtherProfileFragment(val personUid: String) : Fragment() {
@@ -109,12 +113,16 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
 
         binding.addToFriends.setOnClickListener {
             when(otherProfileVM.friendStatus.value.toString()) {
-                "friend" -> replaceFragment(ChatFragment(""))
+                "friend" -> deleteFromFriends()
                 "not" -> sendFriendsRequest()
                 "query_to_you" -> acceptFriendRequest()
                 "query_from_you" -> deleteFriendRequest()
             }
         }
+
+    }
+
+    private fun deleteFromFriends() {
 
     }
 
@@ -185,8 +193,25 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
     private fun sendFriendsRequest() {
         val dbRef = FirebaseDatabase.getInstance().getReference("users/${personUid}/query_friends")
         dbRef.child(auth.currentUser!!.uid).setValue(auth.currentUser!!.uid).addOnSuccessListener {
+
             val request = FriendRequestData(personUid, auth.currentUser!!.uid)
             val call: Call<Void> = RetrofitInstance.api.sendFriendsRequestData(request)
+
+            Log.d("INFOG", call.toString())
+
+            call.enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Log.d("INFOG", "notification was sent")
+                    } else {
+                        Log.d("INFOG", "${response.message()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.d("INFOG", "${t.message}")
+                }
+            })
             binding.addToFriends.text = getString(R.string.request_sent)
         }
     }
@@ -208,7 +233,8 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                 for (user in snapshot.children) {
                     if (user.value.toString() == personUid) {
                         if (isAdded) {
-                            binding.addToFriends.text = getString(R.string.write_to_friend)
+                            binding.addToFriends.text = getString(R.string.delete_friend)
+                            binding.addToFriends.setBackgroundColor(Color.RED)
                             status("friend")
                         }
                         return
@@ -233,6 +259,7 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                                     if (user.value == auth.currentUser!!.uid) {
                                         if (isAdded) {
                                             binding.addToFriends.text = getString(R.string.request_sent)
+                                            //binding.addToFriends.setBackgroundResource()
                                             status("query_from_you")
                                         }
                                         return

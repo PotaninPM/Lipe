@@ -535,7 +535,7 @@ class EventEntFragment : Fragment() {
                                             dbRef_users.child("curRegEventsId").child(event_id).setValue(event_id)
                                                 .addOnSuccessListener {
                                                     dbRef_groups.child(auth.currentUser!!.uid).setValue(auth.currentUser!!.uid).addOnSuccessListener {
-                                                        dbRef_users.child("groups").child(eventEntVM.id.toString()).setValue(eventEntVM.id.toString()).addOnSuccessListener {
+                                                        dbRef_users.child("groups").child(eventEntVM.id.value.toString()).setValue(eventEntVM.id.value.toString()).addOnSuccessListener {
                                                             binding.btnRegToEvent.visibility = View.GONE
                                                             binding.deleteOrLeave.visibility = View.VISIBLE
                                                         }
