@@ -70,6 +70,7 @@
                         android:layout_gravity="center"
                         android:layout_marginEnd="@dimen/_8sdp"
                         android:gravity="center"
+                        android:textColor="?attr/colorOnPrimary"
                         android:text="@string/all"
                         android:textSize="@dimen/_12sdp" />
                 </LinearLayout>
@@ -95,6 +96,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="@dimen/_3sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
+                        android:textColor="?attr/colorOnPrimary"
                         android:gravity="center"
                         android:text="@string/friends_amount"
                         android:textSize="@dimen/_12sdp" />
@@ -122,6 +124,7 @@
                         android:layout_marginStart="@dimen/_3sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
                         android:gravity="center"
+                        android:textColor="?attr/colorOnPrimary"
                         android:text="@string/eco"
                         android:textSize="@dimen/_12sdp" />
                 </LinearLayout>
@@ -148,6 +151,7 @@
                         android:layout_marginStart="@dimen/_3sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
                         android:gravity="center"
+                        android:textColor="?attr/colorOnPrimary"
                         android:text="@string/ent"
                         android:textSize="@dimen/_12sdp" />
                 </LinearLayout>
@@ -174,6 +178,7 @@
                         android:layout_marginStart="@dimen/_3sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
                         android:gravity="center"
+                        android:textColor="?attr/colorOnPrimary"
                         android:text="@string/help"
                         android:textSize="@dimen/_12sdp" />
                 </LinearLayout>

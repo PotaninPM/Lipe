@@ -83,7 +83,7 @@ class RequestsAdapter(val lifecycleScope: LifecycleCoroutineScope): RecyclerView
                                     dbRef_sender_query.child(request.uid_accepter).removeValue()
                                         .addOnSuccessListener {
                                             val uid_chat = UUID.randomUUID().toString()
-                                            dbRef_chats.child(uid_chat).setValue(ChatModelDB(request.uid_accepter, request.uid_sender, "-", arrayListOf("-"))).addOnSuccessListener {
+                                            dbRef_chats.child(uid_chat).setValue(ChatModelDB(request.uid_accepter, request.uid_sender)).addOnSuccessListener {
                                                 dbRef_sender_chats.child(uid_chat).setValue(uid_chat).addOnSuccessListener {
                                                     dbRef_accepter_chats.child(uid_chat).setValue(uid_chat).addOnSuccessListener {
                                                         if (adapterPosition != RecyclerView.NO_POSITION) {

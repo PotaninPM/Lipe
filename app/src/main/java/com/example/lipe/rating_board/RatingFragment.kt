@@ -51,6 +51,8 @@ class RatingFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
+        binding.cardView.visibility = View.VISIBLE
+
         binding.recyclerView.setHasFixedSize(true)
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

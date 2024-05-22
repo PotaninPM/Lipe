@@ -246,7 +246,8 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                         for (user in snapshot.children) {
                             if (user.value == auth.currentUser!!.uid) {
                                 if (isAdded) {
-                                    binding.addToFriends.text = getString(R.string.accept_friendsheep)
+                                    //binding.addToFriends.text = getString(R.string.accept_friendsheep)
+                                    binding.addToFriends.text = "Принять"
                                     status("query_to_you")
                                 }
                                 return

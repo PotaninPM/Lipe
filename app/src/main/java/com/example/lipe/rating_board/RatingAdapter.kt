@@ -71,8 +71,8 @@ class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope) :  RecyclerView
                 try {
                     val context = it.context
                     if (context is AppCompatActivity) {
-//                        val cardView = context.findViewById<CardView>(R.id.cardView)
-//                        cardView.visibility = View.GONE
+                        val cardView = context.findViewById<CardView>(R.id.cardView)
+                        cardView.visibility = View.GONE
                         if (rating.uid != auth.currentUser!!.uid) {
                             val context = it.context
                             if (context is AppCompatActivity) {

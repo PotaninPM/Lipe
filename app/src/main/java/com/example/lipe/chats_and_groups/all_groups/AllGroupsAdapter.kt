@@ -60,7 +60,11 @@ class AllGroupsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.A
                         val name = dataSnapshot.child("name").value.toString()
 
                         if (last_message != "null" && name != "null") {
-                            lastMessage.text = "$name: $last_message"
+                            if(last_message.length > 20) {
+                                lastMessage.text = "$name: ${last_message.substring(0, 20)}..."
+                            } else {
+                                lastMessage.text = "$name: $last_message"
+                            }
                         }
                         binding.lastMessage.visibility = View.VISIBLE
                     } else {

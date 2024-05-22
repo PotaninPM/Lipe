@@ -57,11 +57,11 @@ class GroupFragment(val groupUid: String) : Fragment() {
         auth = FirebaseAuth.getInstance()
 
         val nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        if (nightMode == Configuration.UI_MODE_NIGHT_YES) {
-            binding.allGroup.setBackgroundResource(R.drawable.fon_2)
-        } else {
-            binding.allGroup.setBackgroundResource(R.drawable.fon_light)
-        }
+//        if (nightMode == Configuration.UI_MODE_NIGHT_YES) {
+//            binding.allGroup.setBackgroundResource(R.drawable.fon_2)
+//        } else {
+//            binding.allGroup.setBackgroundResource(R.drawable.fon_light)
+//        }
 
         FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/firstAndLastName").addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -174,7 +174,12 @@ class GroupFragment(val groupUid: String) : Fragment() {
         dbRef_find_group.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
 
-                groupVM.setInfo(snapshot.child("title").value.toString(), groupUid, snapshot.child("members").childrenCount.toString())
+                if(isAdded) {
+                    groupVM.setInfo(
+                        snapshot.child("title").value.toString(),
+                        groupUid,
+                        snapshot.child("members").childrenCount.toString()
+                    )
                     lifecycleScope.launch {
                         val bitmap: Bitmap = withContext(Dispatchers.IO) {
                             Coil.imageLoader(requireContext()).execute(
@@ -185,6 +190,7 @@ class GroupFragment(val groupUid: String) : Fragment() {
                         }
                         binding.avatarChat.setImageBitmap(bitmap)
                     }
+                }
 
             }
 

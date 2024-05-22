@@ -81,7 +81,12 @@ class AllChatsAdapter(lifecycleScope: LifecycleCoroutineScope) : RecyclerView.Ad
 
                       lastMessage_db.addValueEventListener(object: ValueEventListener {
                           override fun onDataChange(snapshot: DataSnapshot) {
-                              lastMessage.text = snapshot.value.toString()
+                              if(snapshot.value.toString() != "null") {
+                                  Log.d("INFOG", snapshot.value.toString())
+                                  lastMessage.text = snapshot.value.toString()
+                              } else {
+                                  lastMessage.text = ""
+                              }
                           }
 
                           override fun onCancelled(error: DatabaseError) {

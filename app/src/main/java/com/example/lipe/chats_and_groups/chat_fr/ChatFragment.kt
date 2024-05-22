@@ -50,11 +50,11 @@ class ChatFragment(val chatUid: String) : Fragment() {
         auth = FirebaseAuth.getInstance()
 
         val nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        if (nightMode == Configuration.UI_MODE_NIGHT_YES) {
-            binding.allChat.setBackgroundResource(R.drawable.fon_2)
-        } else {
-            binding.allChat.setBackgroundResource(R.drawable.fon_light)
-        }
+//        if (nightMode == Configuration.UI_MODE_NIGHT_YES) {
+//            binding.allChat.setBackgroundResource(R.drawable.fon_2)
+//        } else {
+//            binding.allChat.setBackgroundResource(R.drawable.fon_light)
+//        }
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner

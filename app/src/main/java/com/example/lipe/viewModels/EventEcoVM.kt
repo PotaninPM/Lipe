@@ -82,7 +82,7 @@ class EventEcoVM: ViewModel() {
         _photosBefore.value = photosBefore_
         _peopleGo.value = peopleGo_
         _eventDesc.value = eventDesc_
-        _date.value = date_
+        _date.value = date_.substring(6, date_.length) + " в " + date_.substring(0, 5)
         _type.value = "Экология"
         _time_of_creation.value = formatDate(time_of_creation_)
         _amount_reg_people.value = amount_reg_people_

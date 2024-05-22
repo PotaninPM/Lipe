@@ -22,6 +22,7 @@ import android.widget.TimePicker
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.R
 import com.example.lipe.database_models.EcoEventModelDB
@@ -128,11 +129,18 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         }
 
         binding.btnCreateEvent.setOnClickListener {
-            uploadImage {photos ->
-                if(photos != "-") {
-                    createEvent(photos)
-                } else {
-                    setDialog("Вы не загрузили ни одного фото", "Вы должны загрузить минимум одно фото", "Хорошо")
+            if(isAdded) {
+                binding.btnCreateEvent.isEnabled = false
+                binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey))
+
+                uploadImage {photos ->
+                    if(photos != "-") {
+                        createEvent(photos)
+                    } else {
+                        binding.btnCreateEvent.isEnabled = true
+                        binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
+                        setDialog("Вы не загрузили ни одного фото", "Вы должны загрузить минимум одно фото", "Хорошо")
+                    }
                 }
             }
         }
@@ -165,19 +173,21 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         if (image1 == "-") {
             callback("-")
         } else {
-            if(image1 != "-") {
-                imageUri1.let { uri ->
-                    val uid: String = UUID.randomUUID().toString()
-                    val imageRef = storageRef.child(uid)
-                    imageRef.putFile(uri)
-                        .addOnSuccessListener { task ->
-                            task.storage.downloadUrl.addOnSuccessListener { url ->
-                                callback(url.toString())
+            if(isAdded) {
+                if (image1 != "-") {
+                    imageUri1.let { uri ->
+                        val uid: String = UUID.randomUUID().toString()
+                        val imageRef = storageRef.child(uid)
+                        imageRef.putFile(uri)
+                            .addOnSuccessListener { task ->
+                                task.storage.downloadUrl.addOnSuccessListener { url ->
+                                    callback(url.toString())
+                                }
                             }
-                        }
-                        .addOnFailureListener { exception ->
-                            callback("-")
-                        }
+                            .addOnFailureListener { exception ->
+                                callback("-")
+                            }
+                    }
                 }
             }
 //
@@ -219,13 +229,15 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     }
 
     private fun setDialog(title: String, desc: String, btnText: String) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(title)
-            .setMessage(desc)
-            .setPositiveButton(btnText) { dialog, which ->
-                dialog.dismiss()
-            }
-            .show()
+        if(isAdded) {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(title)
+                .setMessage(desc)
+                .setPositiveButton(btnText) { dialog, which ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
     }
 
     private fun createEvent(photosBefore: String) {
@@ -297,6 +309,9 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                         Log.d("INFOG", "${t.message}")
                     }
                 })
+            } else {
+                binding.btnCreateEvent.isEnabled = true
+                binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
             }
     }
 
@@ -305,16 +320,19 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         if(binding.etDescInputText.text.toString().isEmpty()) {
             setError("Введите описание!", binding.etDescInputText)
             check = false
+            return false
         }
         if(binding.etNameinput.text.toString().isEmpty()) {
             setError("Введите название!", binding.etNameinput)
             check = false
+            return false
         }
         if(binding.etMaxInputText.text.toString().isEmpty()) {
             setError("Введите количество людей!", binding.etMaxInputText)
             check = false
+            return false
         }
-        return check
+        return true
     }
 
     private fun setError(er: String, field: TextInputEditText) {

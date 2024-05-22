@@ -6,184 +6,193 @@
     android:layout_height="match_parent"
     tools:context=".sign_up_in.SignUpDescFragment">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/progressText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:text="Идет регистрация..."
-        android:textSize="@dimen/_14sdp"
-        android:fontFamily="@font/nunitosansbold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
-    <LinearLayout
-        android:id="@+id/all"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginStart="@dimen/_6sdp"
-        android:layout_marginEnd="@dimen/_6sdp"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:layout_marginBottom="@dimen/_12sdp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout android:gravity="center_horizontal"
-            android:id="@+id/linearSignupdesc"
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/progressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunitosansbold"
+            android:text="Идет регистрация..."
+            android:textSize="@dimen/_14sdp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
+        <LinearLayout
+            android:id="@+id/all"
             android:layout_width="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:layout_marginBottom="@dimen/_12sdp">
 
             <LinearLayout
-                android:id="@+id/etDescLay"
+                android:id="@+id/linearSignupdesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:layout_gravity="center"
+                android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/etDescText"
+                <LinearLayout
+                    android:id="@+id/etDescLay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/_6sdp"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/poppins"
                     android:gravity="center_horizontal"
-                    android:singleLine="true"
-                    android:text="@string/about_you"
-                    android:textFontWeight="600"
-                    android:textSize="@dimen/_20sdp" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/upload_photo"
-                    android:layout_width="@dimen/_200sdp"
-                    android:layout_height="@dimen/_200sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/_6sdp"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/avatar_upload"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:padding="@dimen/_2sdp"
-                        android:scaleType="centerCrop"
-                        android:background="?attr/colorOnSurfaceInverse"
-                        app:strokeWidth="@dimen/_2sdp"
-                        app:strokeColor="#BC1616"
-                        app:shapeAppearanceOverlay="@style/ImageStyle_Circle"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.476"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/imageArrowup"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center_horizontal"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/img_arrowup"
-                        app:layout_constraintBottom_toTopOf="@+id/txtUpload"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        tools:ignore="ContentDescription"
-                        tools:src="@drawable/img_arrowup" />
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/txtUpload"
+                        android:id="@+id/etDescText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginTop="@dimen/_6sdp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/poppins"
                         android:gravity="center_horizontal"
-                        android:text="@string/tap_to_upload"
-                        android:textSize="@dimen/_12sdp"
+                        android:singleLine="true"
+                        android:text="@string/about_you"
+                        android:textFontWeight="600"
+                        android:textSize="@dimen/_20sdp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/upload_photo"
+                        android:layout_width="@dimen/_200sdp"
+                        android:layout_height="@dimen/_200sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:orientation="vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="TextSizeCheck" />
+                        app:layout_constraintTop_toTopOf="parent">
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/avatar_upload"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="?attr/colorOnSurfaceInverse"
+                            android:padding="@dimen/_2sdp"
+                            android:scaleType="centerCrop"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.476"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:shapeAppearanceOverlay="@style/ImageStyle_Circle"
+                            app:strokeColor="#BC1616"
+                            app:strokeWidth="@dimen/_2sdp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_6sdp"
-                    android:layout_marginTop="@dimen/_6sdp"
-                    android:layout_marginEnd="@dimen/_6sdp"
-                    android:orientation="vertical">
+                        <ImageView
+                            android:id="@+id/imageArrowup"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center_horizontal"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/img_arrowup"
+                            app:layout_constraintBottom_toTopOf="@+id/txtUpload"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            tools:ignore="ContentDescription"
+                            tools:src="@drawable/img_arrowup" />
 
-                    <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/spinner1"
+                        <TextView
+                            android:id="@+id/txtUpload"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_6sdp"
+                            android:gravity="center_horizontal"
+                            android:text="@string/tap_to_upload"
+                            android:textSize="@dimen/_12sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:ignore="TextSizeCheck" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_46sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:layout_marginEnd="@dimen/_6sdp"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatSpinner
+                            android:id="@+id/spinner1"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_46sdp"
+                            android:layout_gravity="center"
+                            android:spinnerMode="dropdown" />
+
+                    </LinearLayout>
+                    <!--                descText-->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/descTextLay"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_156sdp"
                         android:layout_gravity="center"
-                        android:spinnerMode="dropdown" />
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:layout_marginTop="@dimen/_6sdp"
+                        android:layout_marginEnd="@dimen/_6sdp"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="300">
 
-                </LinearLayout>
-<!--                descText-->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/descTextLay"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_156sdp"
-                    android:layout_marginStart="@dimen/_6sdp"
-                    android:layout_marginEnd="@dimen/_6sdp"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="300"
-                    android:layout_marginTop="@dimen/_6sdp"
-                    android:layout_gravity="center">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/descText"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_130sdp"
+                            android:gravity="top"
+                            android:hint="@string/about_you"
+                            android:inputType="textMultiLine"
+                            android:singleLine="true" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/descText"
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnSignUp"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_130sdp"
-                        android:hint="@string/about_you"
-                        android:inputType="textMultiLine"
-                        android:gravity="top"
-                        android:singleLine="true" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_height="@dimen/_39sdp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="@dimen/_17sdp"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:layout_marginEnd="@dimen/_17sdp"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:background="@drawable/sign_in_start_btn"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="Зарегистрироваться"
+                        android:textAllCaps="false"
+                        android:textColor="@color/quantum_white_100"
+                        android:textFontWeight="600"
+                        android:textSize="@dimen/_13sdp" />
+                </LinearLayout>
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnSignUp"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_39sdp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="@dimen/_17sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_marginEnd="@dimen/_17sdp"
-                    android:layout_marginBottom="@dimen/_36sdp"
-                    android:background="@drawable/sign_in_start_btn"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:textAllCaps="false"
-                    android:textColor="@color/quantum_white_100"
-                    android:textFontWeight="600"
-                    android:textSize="@dimen/_13sdp"
-                    android:text="Зарегистрироваться" />
             </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

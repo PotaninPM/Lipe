@@ -320,35 +320,37 @@ class EventEntFragment : Fragment() {
             binding.eventAvatar.setImageResource(R.drawable.block_user)
             callback(true)
         } else {
-            val url = eventEntVM.photos.value?.get(0).toString().removeSurrounding("[", "]")
+            if(isAdded) {
+                val url = eventEntVM.photos.value?.get(0).toString().removeSurrounding("[", "]")
 
-            val userAvatarRef = storageRef.child("avatars/${eventEntVM.creator.value}")
-            val tokenTask2 = userAvatarRef.downloadUrl
-            lifecycleScope.launch {
-                val bitmap: Bitmap = withContext(Dispatchers.IO) {
-                    Coil.imageLoader(requireContext()).execute(
-                        ImageRequest.Builder(requireContext())
-                            .data(url)
-                            .build()
-                    ).drawable?.toBitmap()!!
-                }
-                binding.image.setImageBitmap(bitmap)
-                tokenTask2.addOnSuccessListener { url_2 ->
-                    lifecycleScope.launch {
-                        val bitmap: Bitmap = withContext(Dispatchers.IO) {
-                            Coil.imageLoader(requireContext()).execute(
-                                ImageRequest.Builder(requireContext())
-                                    .data(url_2)
-                                    .build()
-                            ).drawable?.toBitmap()!!
-                        }
-                        binding.eventAvatar.setImageBitmap(bitmap)
+                val userAvatarRef = storageRef.child("avatars/${eventEntVM.creator.value}")
+                val tokenTask2 = userAvatarRef.downloadUrl
+                lifecycleScope.launch {
+                    val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                        Coil.imageLoader(requireContext()).execute(
+                            ImageRequest.Builder(requireContext())
+                                .data(url)
+                                .build()
+                        ).drawable?.toBitmap()!!
                     }
-                    callback(true)
-                }.addOnFailureListener {
+                    binding.image.setImageBitmap(bitmap)
+                    tokenTask2.addOnSuccessListener { url_2 ->
+                        lifecycleScope.launch {
+                            val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                                Coil.imageLoader(requireContext()).execute(
+                                    ImageRequest.Builder(requireContext())
+                                        .data(url_2)
+                                        .build()
+                                ).drawable?.toBitmap()!!
+                            }
+                            binding.eventAvatar.setImageBitmap(bitmap)
+                        }
+                        callback(true)
+                    }.addOnFailureListener {
+
+                    }
 
                 }
-
             }
         }
     }

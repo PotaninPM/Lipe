@@ -10,7 +10,31 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center">
 
-        <LinearLayout android:id="@+id/linearSigninwithem"
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/progressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunitosansbold"
+            android:text="Идет авторизация..."
+            android:textSize="@dimen/_14sdp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
+        <LinearLayout
+            android:id="@+id/linearSigninwithem"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:orientation="vertical">
@@ -82,24 +106,6 @@
                     tools:ignore="Autofill"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/_13sdp"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_marginStart="@dimen/_16sdp">
-
-                <TextView
-                    android:id="@+id/txtForgotpasstex"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:gravity="start"
-                    android:singleLine="true"
-                    android:text="Забыли пароль?"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <Button
@@ -183,7 +189,9 @@
                         android:layout_marginEnd="@dimen/_49pxh"
                         android:layout_marginStart="@dimen/_4pxh"
                         android:layout_gravity="center"
-                        android:layout_width="wrap_content" android:singleLine="true"
+                        android:textColor="@color/quantum_black_100"
+                        android:layout_width="wrap_content"
+                        android:singleLine="true"
                         android:text="Google"
                         android:textSize="@dimen/_14sdp"/>
                 </LinearLayout>

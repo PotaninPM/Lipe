@@ -21,6 +21,7 @@ import com.example.lipe.databinding.FragmentProfileBinding
 import com.example.lipe.people_go_to_event.PeopleGoToEventFragment
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.viewModels.EventEcoVM
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -118,15 +119,47 @@ class EventEcoFragment : Fragment() {
             }
 
             deleteOrLeave?.setOnClickListener {
-                if(auth.currentUser!!.uid == eventEcoVM.creator.value) {
-                    showPeopleGoDialog(1)
+                if(isAdded) {
+                    if (auth.currentUser!!.uid == eventEcoVM.creator.value) {
+                        showPeopleGoDialog(1)
+                    } else {
+                        deleteUserFromEvent(eventEcoVM.id.value.toString())
+
+                        binding.deleteOrLeave.visibility = View.GONE
+                        binding.listUsers.visibility = View.GONE
+
+                        binding.btnRegToEvent.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            binding.btnRegToEvent.setOnClickListener {
+                val curUid = auth.currentUser?.uid
+                if (curUid != null) {
+                    checkIfUserAlreadyReg(curUid, eventEcoVM.id.value!!) { isUserAlreadyRegistered ->
+                        if (!isUserAlreadyRegistered) {
+                            regUserToEvent(curUid) { result ->
+                                if (result == true) {
+                                    setDialog(
+                                        "Успешная регистрация",
+                                        "Поздравляем, регистрация на событие прошла успешно",
+                                        "Отлично!"
+                                    )
+                                } else {
+                                    //fail
+                                    setDialog(
+                                        "Ошибка при регистрации",
+                                        "Что-то пошло не так, попробуйте зарегистрироваться еще раз",
+                                        "Хорошо"
+                                    )
+                                }
+                            }
+                        } else {
+                            Log.d("INFOG", "Пользователь уже зарегистрирован на мероприятие")
+                        }
+                    }
                 } else {
-                    deleteUserFromEvent(eventEcoVM.id.value.toString())
-
-                    binding?.deleteOrLeave?.visibility = View.GONE
-                    binding?.listUsers?.visibility = View.GONE
-
-                    binding?.btnRegToEvent?.visibility = View.VISIBLE
+                    Log.e("INFOG", "UID пользователя не найден")
                 }
             }
         }
@@ -135,6 +168,83 @@ class EventEcoFragment : Fragment() {
 
         val view = binding.root
         return view
+    }
+
+    private fun regUserToEvent(curUid: String, callback: (Boolean) -> Unit) {
+        try {
+            val dbRef_users = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
+            val dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
+            val dbRef_groups = FirebaseDatabase.getInstance().getReference("groups/${eventEcoVM.id.value}/members")
+            val event_id = eventEcoVM.id.value.toString()
+
+            dbRef_event.child(event_id).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if(dataSnapshot.exists()) {
+                        val max = dataSnapshot.child("max_people").getValue(Int::class.java) ?: 0
+                        val reg_people = dataSnapshot.child("amount_reg_people").getValue(Int::class.java) ?: 0
+
+                        if (max - reg_people > 0) {
+                            val regPeopleRef = dbRef_event.child(event_id).child("reg_people_id").child(auth.currentUser!!.uid)
+
+                            regPeopleRef.setValue(curUid)
+                                .addOnSuccessListener {
+                                    dbRef_event.child(event_id).child("amount_reg_people").setValue(reg_people + 1)
+                                        .addOnSuccessListener {
+                                            dbRef_users.child("curRegEventsId").child(event_id).setValue(event_id)
+                                                .addOnSuccessListener {
+                                                    dbRef_groups.child(auth.currentUser!!.uid).setValue(auth.currentUser!!.uid).addOnSuccessListener {
+                                                        dbRef_users.child("groups").child(eventEcoVM.id.value.toString()).setValue(eventEcoVM.id.value.toString()).addOnSuccessListener {
+                                                            binding.btnRegToEvent.visibility = View.GONE
+                                                            binding.deleteOrLeave.visibility = View.VISIBLE
+                                                        }
+                                                    }
+
+                                                    callback(true)
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    callback(false)
+                                                    Log.e("FirebaseError", "Ошибка Firebase при записи ID события в curRegEventsId пользователя: ${e.message}")
+                                                }
+                                        }
+                                        .addOnFailureListener { e ->
+                                            callback(false)
+                                            Log.e("FirebaseError", "Ошибка Firebase при обновлении счетчика участников: ${e.message}")
+                                        }
+                                }
+                                .addOnFailureListener { e ->
+                                    callback(false)
+                                    Log.e("FirebaseError", "Ошибка Firebase при добавлении пользователя к событию: ${e.message}")
+                                }
+                        } else {
+                            callback(false)
+                            Log.e("FirebaseError", "Достигнуто максимальное количество участников")
+                        }
+                    } else {
+                        callback(false)
+                        Log.e("FirebaseError", "Мероприятие с ID $event_id не найдено")
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    callback(false)
+                    Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
+                }
+            })
+        } catch (e: Exception) {
+            Log.e("INFOG", e.message.toString())
+        }
+    }
+
+    private fun setDialog(title: String, desc: String, btnText: String) {
+        if(isAdded) {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(title)
+                .setMessage(desc)
+                .setPositiveButton(btnText) { dialog, which ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
     }
 
     fun deleteUserFromEvent(uid: String) {
@@ -200,21 +310,22 @@ class EventEcoFragment : Fragment() {
 
     private fun loadAllImages(callback: (Boolean) -> Unit) {
 
-        val userAvatarRef = storageRef.child("avatars/${eventEcoVM.creator.value}")
+        if(isAdded) {
+            val userAvatarRef = storageRef.child("avatars/${eventEcoVM.creator.value}")
 
-        userAvatarRef.downloadUrl.addOnSuccessListener {url ->
-            lifecycleScope.launch {
-                val bitmap = withContext(Dispatchers.IO) {
-                    ImageLoader(requireContext()).execute(
-                        ImageRequest.Builder(requireContext())
-                            .data(url)
-                            .build()
-                    )
-                }.drawable?.toBitmap()
+            userAvatarRef.downloadUrl.addOnSuccessListener { url ->
+                lifecycleScope.launch {
+                    val bitmap = withContext(Dispatchers.IO) {
+                        ImageLoader(requireContext()).execute(
+                            ImageRequest.Builder(requireContext())
+                                .data(url)
+                                .build()
+                        )
+                    }.drawable?.toBitmap()
 
-                binding.eventAvatar.setImageBitmap(bitmap)
+                    binding.eventAvatar.setImageBitmap(bitmap)
+                }
             }
-        }
             lifecycleScope.launch {
                 val bitmap = withContext(Dispatchers.IO) {
                     ImageLoader(requireContext()).execute(
@@ -227,6 +338,7 @@ class EventEcoFragment : Fragment() {
                 binding.image.setImageBitmap(bitmap)
             }
             callback(true)
+        }
     }
 
     private fun searchEvent(coord1: Double, coord2: Double, callback: (ready: Boolean) -> Unit) {

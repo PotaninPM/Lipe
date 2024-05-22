@@ -146,7 +146,7 @@ class SignUpDescFragment : Fragment() {
             var desc: String = binding.descText.text.toString().trim()
 
             if(desc.isNotEmpty() && upload_photo == true) {
-                auth.createUserWithEmailAndPassword(signUpVM.email, signUpVM.pass).addOnCompleteListener {
+                auth.createUserWithEmailAndPassword(signUpVM.email, sha256(signUpVM.pass)).addOnCompleteListener {
                     if(it.isSuccessful) {
                         uploadImage {uid ->
                             if(uid != "null") {
