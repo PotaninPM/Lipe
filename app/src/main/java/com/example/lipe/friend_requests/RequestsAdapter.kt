@@ -17,8 +17,12 @@ import com.example.lipe.database_models.ChatModelDB
 import com.example.lipe.databinding.FriendRequestItemBinding
 import com.example.lipe.notifications.FriendRequestData
 import com.example.lipe.notifications.RetrofitInstance
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,6 +38,7 @@ class RequestsAdapter(val lifecycleScope: LifecycleCoroutineScope): RecyclerView
     inner class RequestsHolder(item: View): RecyclerView.ViewHolder(item) {
         private lateinit var dbRef: DatabaseReference
 
+        private lateinit var auth: FirebaseAuth
         val binding = FriendRequestItemBinding.bind(item)
         fun bind(request: Request) = with(binding) {
 
@@ -74,6 +79,8 @@ class RequestsAdapter(val lifecycleScope: LifecycleCoroutineScope): RecyclerView
                     .getReference("users/${request.uid_accepter}/query_friends")
                 val dbRef_sender_query = FirebaseDatabase.getInstance()
                     .getReference("users/${request.uid_sender}/query_friends")
+
+                val amount = FirebaseDatabase.getInstance().getReference("users")
                 dbRef_accepter_friends.child(request.uid_sender).setValue(request.uid_sender)
                     .addOnSuccessListener {
                         dbRef_sender_friends.child(request.uid_accepter)
@@ -86,27 +93,47 @@ class RequestsAdapter(val lifecycleScope: LifecycleCoroutineScope): RecyclerView
                                             dbRef_chats.child(uid_chat).setValue(ChatModelDB(request.uid_accepter, request.uid_sender)).addOnSuccessListener {
                                                 dbRef_sender_chats.child(uid_chat).setValue(uid_chat).addOnSuccessListener {
                                                     dbRef_accepter_chats.child(uid_chat).setValue(uid_chat).addOnSuccessListener {
-                                                        if (adapterPosition != RecyclerView.NO_POSITION) {
-                                                            val request = FriendRequestData(request.uid_accepter, request.uid_sender)
-                                                            val call: Call<Void> = RetrofitInstance.api.acceptFriendsRequestData(request)
 
-                                                            Log.d("INFOG", call.toString())
+                                                        amount.child("${request.uid_accepter}").child("friends_amount").addListenerForSingleValueEvent(object: ValueEventListener {
+                                                            override fun onDataChange(snapshot: DataSnapshot) {
+                                                                amount.child("${request.uid_accepter}").child("friends_amount").setValue(snapshot.value.toString().toInt() + 1)
+                                                                amount.child(request.uid_sender).child("friends_amount").addListenerForSingleValueEvent(object: ValueEventListener {
+                                                                    override fun onDataChange(snapshot2: DataSnapshot) {
+                                                                        amount.child(request.uid_sender).child("friends_amount").setValue(snapshot2.value.toString().toInt() + 1)
+                                                                        if (adapterPosition != RecyclerView.NO_POSITION) {
+                                                                            val request = FriendRequestData(request.uid_accepter, request.uid_sender)
+                                                                            val call: Call<Void> = RetrofitInstance.api.acceptFriendsRequestData(request)
 
-                                                            call.enqueue(object : Callback<Void> {
-                                                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                                                                    if (response.isSuccessful) {
-                                                                        Log.d("INFOG", "notification was sent")
-                                                                    } else {
-                                                                        Log.d("INFOG", "${response.message()}")
+                                                                            Log.d("INFOG", call.toString())
+
+                                                                            call.enqueue(object : Callback<Void> {
+                                                                                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                                                                                    if (response.isSuccessful) {
+                                                                                        Log.d("INFOG", "notification was sent")
+                                                                                    } else {
+                                                                                        Log.d("INFOG", "${response.message()}")
+                                                                                    }
+                                                                                }
+
+                                                                                override fun onFailure(call: Call<Void>, t: Throwable) {
+                                                                                    Log.d("INFOG", "${t.message}")
+                                                                                }
+                                                                            })
+                                                                            removeRequest(adapterPosition)
+                                                                        }
                                                                     }
-                                                                }
 
-                                                                override fun onFailure(call: Call<Void>, t: Throwable) {
-                                                                    Log.d("INFOG", "${t.message}")
-                                                                }
-                                                            })
-                                                            removeRequest(adapterPosition)
-                                                        }
+                                                                    override fun onCancelled(error: DatabaseError) {
+                                                                        TODO("Not yet implemented")
+                                                                    }
+                                                                })
+                                                            }
+
+                                                            override fun onCancelled(error: DatabaseError) {
+                                                                TODO("Not yet implemented")
+                                                            }
+
+                                                        })
                                                     }.addOnFailureListener {
                                                         Log.d("INFOG", "ErrorRequest")
                                                     }

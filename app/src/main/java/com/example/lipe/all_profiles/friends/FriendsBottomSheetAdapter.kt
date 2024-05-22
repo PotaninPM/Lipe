@@ -14,8 +14,11 @@ import com.example.lipe.all_profiles.EventItem
 import com.example.lipe.all_profiles.cur_events.YourEventsAdapter
 import com.example.lipe.databinding.EventItemBinding
 import com.example.lipe.databinding.FriendItemWithRemoveBinding
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.app
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,12 +50,34 @@ class FriendsBottomSheetAdapter(val lifecycleScope: LifecycleCoroutineScope, myU
 
             binding.deleteFriend.setOnClickListener {
                 val yourFriends = FirebaseDatabase.getInstance().getReference("users/${myUid}/friends/${friend.uid}")
-                val friend = FirebaseDatabase.getInstance().getReference("users/${friend.uid}/friends/${myUid}")
+                val friend_db = FirebaseDatabase.getInstance().getReference("users/${friend.uid}/friends/${myUid}")
+                val amount = FirebaseDatabase.getInstance().getReference("users")
                 yourFriends.removeValue().addOnSuccessListener {
-                    friend.removeValue().addOnSuccessListener {
-                        if (adapterPosition != RecyclerView.NO_POSITION) {
-                            removeRequest(adapterPosition)
-                        }
+                    friend_db.removeValue().addOnSuccessListener {
+                        amount.child("${myUid}").child("friends_amount").addListenerForSingleValueEvent(object:
+                            ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                amount.child("${myUid}").child("friends_amount").setValue(snapshot.value.toString().toInt() - 1)
+                                amount.child(friend.uid).child("friends_amount").addListenerForSingleValueEvent(object:
+                                    ValueEventListener {
+                                    override fun onDataChange(snapshot2: DataSnapshot) {
+                                        amount.child(friend.uid).child("friends_amount").setValue(snapshot2.value.toString().toInt() - 1)
+                                        if (adapterPosition != RecyclerView.NO_POSITION) {
+                                            removeRequest(adapterPosition)
+                                        }
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        TODO("Not yet implemented")
+                                    }
+                                })
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                TODO("Not yet implemented")
+                            }
+
+                        })
                     }
                 }
             }

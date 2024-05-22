@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import coil.Coil
 import coil.request.ImageRequest
 import com.example.lipe.R
@@ -123,7 +124,40 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
     }
 
     private fun deleteFromFriends() {
+        if(isAdded) {
+            binding.addToFriends.isEnabled = false
+            val yourFriends = FirebaseDatabase.getInstance()
+                .getReference("users/${auth.currentUser!!.uid}/friends/${personUid}")
+            val friend = FirebaseDatabase.getInstance()
+                .getReference("users/${personUid}/friends/${auth.currentUser!!.uid}")
+            val amount = FirebaseDatabase.getInstance().getReference("users")
+            yourFriends.removeValue().addOnSuccessListener {
+                friend.removeValue().addOnSuccessListener {
+                    amount.child("${auth.currentUser!!.uid}").child("friends_amount").addListenerForSingleValueEvent(object: ValueEventListener{
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            amount.child("${auth.currentUser!!.uid}").child("friends_amount").setValue(snapshot.value.toString().toInt() - 1)
+                            amount.child(personUid).child("friends_amount").addListenerForSingleValueEvent(object: ValueEventListener{
+                                override fun onDataChange(snapshot2: DataSnapshot) {
+                                    amount.child(personUid).child("friends_amount").setValue(snapshot2.value.toString().toInt() - 1)
+                                    binding.addToFriends.isEnabled = true
+                                    binding.addToFriends.setBackgroundResource(context?.getColor(R.color.green)!!)
+                                    binding.addToFriends.text = context?.getString(R.string.add_to_friends)
+                                }
 
+                                override fun onCancelled(error: DatabaseError) {
+                                    TODO("Not yet implemented")
+                                }
+                            })
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            TODO("Not yet implemented")
+                        }
+
+                    })
+                }
+            }
+        }
     }
 
     private fun deleteFriendRequest() {

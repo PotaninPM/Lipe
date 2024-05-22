@@ -201,34 +201,42 @@ class ProfileFragment : Fragment() {
 
     private fun findAccount(callback: (UserData?) -> Unit) {
         try {
-            val dbRef_user =
-                FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
-            dbRef_user.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val desc = dataSnapshot.child("about_you").value.toString()
-                    val name = dataSnapshot.child("firstAndLastName").value.toString()
-                    val username: String = dataSnapshot.child("username").value.toString()
-                    val ratingAmount: Int = dataSnapshot.child("points").value.toString().toInt()
-                    val friendsAmount: Int = dataSnapshot.child("friends_amount").value.toString().toInt()
-                    val eventsAmount: Int = dataSnapshot.child("events_amount").value.toString().toInt()
+            if(isAdded) {
+                if(auth.currentUser != null) {
+                    val dbRef_user =
+                        FirebaseDatabase.getInstance()
+                            .getReference("users/${auth.currentUser!!.uid}")
+                    dbRef_user.addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            val desc = dataSnapshot.child("about_you").value.toString()
+                            val name = dataSnapshot.child("firstAndLastName").value.toString()
+                            val username: String = dataSnapshot.child("username").value.toString()
+                            val ratingAmount: Int =
+                                dataSnapshot.child("points").value.toString().toInt()
+                            val friendsAmount: Int =
+                                dataSnapshot.child("friends_amount").value.toString().toInt()
+                            val eventsAmount: Int =
+                                dataSnapshot.child("events_amount").value.toString().toInt()
 
-                    callback(
-                        UserData(
-                            username,
-                            ratingAmount,
-                            friendsAmount,
-                            eventsAmount,
-                            desc,
-                            name
-                        )
-                    )
-                }
+                            callback(
+                                UserData(
+                                    username,
+                                    ratingAmount,
+                                    friendsAmount,
+                                    eventsAmount,
+                                    desc,
+                                    name
+                                )
+                            )
+                        }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
-                    callback(null)
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
+                            callback(null)
+                        }
+                    })
                 }
-            })
+            }
         } catch (e: Exception) {
             Log.e("INFOG", e.message.toString())
         }
