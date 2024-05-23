@@ -1,3 +1,4 @@
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -202,39 +203,74 @@ class ProfileFragment : Fragment() {
     private fun findAccount(callback: (UserData?) -> Unit) {
         try {
             if(isAdded) {
-                if(auth.currentUser != null) {
-                    val dbRef_user =
-                        FirebaseDatabase.getInstance()
-                            .getReference("users/${auth.currentUser!!.uid}")
-                    dbRef_user.addValueEventListener(object : ValueEventListener {
-                        override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            val desc = dataSnapshot.child("about_you").value.toString()
-                            val name = dataSnapshot.child("firstAndLastName").value.toString()
-                            val username: String = dataSnapshot.child("username").value.toString()
-                            val ratingAmount: Int =
-                                dataSnapshot.child("points").value.toString().toInt()
-                            val friendsAmount: Int =
-                                dataSnapshot.child("friends_amount").value.toString().toInt()
-                            val eventsAmount: Int =
-                                dataSnapshot.child("events_amount").value.toString().toInt()
+                val sharedPrefUser = activity?.getSharedPreferences("userRef", Context.MODE_PRIVATE)
+                val username = sharedPrefUser?.getString("username", null)
+                if(username == null) {
+                    if(auth.currentUser != null) {
+                        val dbRef_user =
+                            FirebaseDatabase.getInstance()
+                                .getReference("users/${auth.currentUser!!.uid}")
+                        dbRef_user.addValueEventListener(object : ValueEventListener {
+                            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                val desc = dataSnapshot.child("about_you").value.toString()
+                                val name = dataSnapshot.child("firstAndLastName").value.toString()
+                                val username: String =
+                                    dataSnapshot.child("username").value.toString()
+                                val ratingAmount: Int =
+                                    dataSnapshot.child("points").value.toString().toInt()
+                                val friendsAmount: Int =
+                                    dataSnapshot.child("friends_amount").value.toString().toInt()
+                                val eventsAmount: Int =
+                                    dataSnapshot.child("events_amount").value.toString().toInt()
 
-                            callback(
-                                UserData(
-                                    username,
-                                    ratingAmount,
-                                    friendsAmount,
-                                    eventsAmount,
-                                    desc,
-                                    name
+                                val editor = sharedPrefUser?.edit()
+
+                                editor?.apply {
+                                    putString("username", username)
+                                    putString("name", name)
+                                    putString("desc", desc)
+                                    putInt("rating", ratingAmount)
+                                    putInt("friends", friendsAmount)
+                                    putInt("events", eventsAmount)
+                                    putString("desc", desc)
+                                    apply()
+                                }
+
+                                callback(
+                                    UserData(
+                                        username,
+                                        ratingAmount,
+                                        friendsAmount,
+                                        eventsAmount,
+                                        desc,
+                                        name
+                                    )
                                 )
-                            )
-                        }
+                            }
 
-                        override fun onCancelled(databaseError: DatabaseError) {
-                            Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
-                            callback(null)
-                        }
-                    })
+                            override fun onCancelled(databaseError: DatabaseError) {
+                                Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
+                                callback(null)
+                            }
+                        })
+                    }
+                } else {
+                    val username = sharedPrefUser.getString("username", null)
+                    val desc = sharedPrefUser.getString("desc", null)
+                    val name = sharedPrefUser.getString("name", null)
+                    val rating = sharedPrefUser.getInt("rating", -1)
+                    val friends = sharedPrefUser.getInt("friends", -1)
+                    val events = sharedPrefUser.getInt("events", -1)
+                    callback(
+                        UserData(
+                            username!!,
+                            rating,
+                            friends,
+                            events,
+                            desc!!,
+                            name!!
+                        )
+                    )
                 }
             }
         } catch (e: Exception) {

@@ -1,6 +1,7 @@
 package com.example.lipe.sign_up_in
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -136,7 +137,6 @@ class SignUpDescFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-
         binding.btnSignUp.setOnClickListener {
 
             binding.all.visibility = View.GONE
@@ -151,7 +151,22 @@ class SignUpDescFragment : Fragment() {
                         uploadImage {uid ->
                             if(uid != "null") {
                                 appVM.reg = "yes"
-                                addUserToDb(signUpVM.login, signUpVM.email, signUpVM.pass, signUpVM.email, signUpVM.nameAndSurname, desc, view)
+                                addUserToDb(signUpVM.login, signUpVM.email, signUpVM.pass, signUpVM.nameAndSurname, desc, view)
+                                val sharedPrefUser = activity?.getSharedPreferences("userRef", Context.MODE_PRIVATE)
+                                val editor = sharedPrefUser?.edit()
+
+                                editor?.apply {
+                                    putString("username", signUpVM.login)
+                                    putString("email", signUpVM.email)
+                                    putString("password", signUpVM.pass)
+                                    putString("name", signUpVM.nameAndSurname)
+                                    putString("desc", desc)
+                                    putInt("rating", 0)
+                                    putInt("friends", 0)
+                                    putInt("events", 0)
+                                    putString("desc", desc)
+                                    apply()
+                                }
                             } else {
                                 Log.d("INFOG", "Что-то пошло не так")
                                 Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_LONG).show()
@@ -220,7 +235,7 @@ class SignUpDescFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun addUserToDb(username: String, email: String, pass: String, phone: String, names: String, desc: String, view: View) {
+    fun addUserToDb(username: String, email: String, pass: String, names: String, desc: String, view: View) {
         FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
             val dbRef_rating = FirebaseDatabase.getInstance().getReference("rating")
 
