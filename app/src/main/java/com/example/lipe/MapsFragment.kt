@@ -4,6 +4,8 @@ import ProfileFragment
 import android.Manifest
 import android.animation.ValueAnimator
 import android.app.Dialog
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
@@ -57,6 +59,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
@@ -77,6 +80,8 @@ import kotlinx.coroutines.withContext
 import java.security.MessageDigest
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
+
+    private lateinit var sharedPref: SharedPreferences
 
     private lateinit var binding: FragmentMapsBinding
 
@@ -141,7 +146,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private val callback = OnMapReadyCallback { googleMap ->
         mMap = googleMap
 
-        findPersonOnMap()
+        //findPersonOnMap()
         setMapStyle()
 
         val currentUser = auth.currentUser
@@ -201,6 +206,15 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
 
             true
+        }
+    }
+
+    private fun saveMapState(position: LatLng, zoom: Float) {
+        with(sharedPref.edit()) {
+            putFloat("map_lat", position.latitude.toFloat())
+            putFloat("map_lng", position.longitude.toFloat())
+            putFloat("map_zoom", zoom)
+            apply()
         }
     }
 
@@ -594,6 +608,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         binding = FragmentMapsBinding.inflate(inflater, container, false)
 
         currentFragment = MapsFragment()
+        sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
 
         auth = FirebaseAuth.getInstance()
         appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
@@ -603,6 +618,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         dbRef_user = FirebaseDatabase.getInstance().getReference()
         dbRef_friends = FirebaseDatabase.getInstance().getReference()
         dbRef_status = FirebaseDatabase.getInstance().getReference()
+
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
         val view = binding.root
         return view
@@ -646,7 +664,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.fragment) as SupportMapFragment?
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
         binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
 //        binding.allText.setTextColor(Color.WHITE)
@@ -920,7 +938,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         val fragmentManager = childFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.map, fragment)
+        fragmentTransaction.replace(R.id.mMap, fragment)
         fragmentTransaction.commit()
     }
 
@@ -967,9 +985,31 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             fusedLocationClient.removeLocationUpdates(locationCallback)
         }
     }
-    override fun onMapReady(p0: GoogleMap) {
-        mMap = p0
+    override fun onMapReady(map: GoogleMap) {
+        mMap = map
         mMap.uiSettings.isMyLocationButtonEnabled = false
+
+        val lat = sharedPref.getFloat("map_lat", 0f).toDouble()
+        val lng = sharedPref.getFloat("map_lng", 0f).toDouble()
+        val zoom = sharedPref.getFloat("map_zoom", 0f)
+
+        Log.d("INFOG", lat.toString() + " 1 " + lng.toString())
+        Log.d("INFOG", "1111111")
+
+        if (lat != 0.0 && lng != 0.0 && zoom != 0f) {
+            val savedPosition = LatLng(lat, lng)
+            val cameraPosition = CameraPosition.Builder()
+                .target(savedPosition)
+                .zoom(zoom)
+                .build()
+            map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+        }
+
+        map.setOnCameraIdleListener {
+            val currentPosition = map.cameraPosition.target
+            val currentZoom = map.cameraPosition.zoom
+            saveMapState(currentPosition, currentZoom)
+        }
     }
 
 }

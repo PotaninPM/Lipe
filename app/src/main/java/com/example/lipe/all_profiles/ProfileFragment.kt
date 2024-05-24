@@ -261,6 +261,7 @@ class ProfileFragment : Fragment() {
                     val rating = sharedPrefUser.getInt("rating", -1)
                     val friends = sharedPrefUser.getInt("friends", -1)
                     val events = sharedPrefUser.getInt("events", -1)
+                    Log.d("INFOG", username.toString())
                     callback(
                         UserData(
                             username!!,
