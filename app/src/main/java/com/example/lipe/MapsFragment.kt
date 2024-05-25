@@ -5,6 +5,7 @@ import android.Manifest
 import android.animation.ValueAnimator
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -217,6 +218,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             apply()
         }
     }
+
+//    private fun startLocationService() {
+//        val intent = Intent(requireContext(), LocationService::class.java)
+//        ContextCompat.startForegroundService(requireContext(), intent)
+//    }
 
     private fun addAllFriends() {
         val currentUser = auth.currentUser
@@ -688,6 +694,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             // Log and toast
             Log.d("INFOG", token)
         })
+
+        //startLocationService()
 
         binding.friends.setOnClickListener {
             if (appVM.markersType != "friends") {

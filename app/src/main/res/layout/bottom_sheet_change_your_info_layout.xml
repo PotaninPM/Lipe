@@ -126,13 +126,13 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/descTextLay"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_156sdp"
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_8sdp"
                 app:counterEnabled="true"
+                app:errorEnabled="true"
                 app:counterMaxLength="300"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
