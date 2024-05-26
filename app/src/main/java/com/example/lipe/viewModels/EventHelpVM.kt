@@ -22,8 +22,8 @@ class EventHelpVM : ViewModel() {
     private var _photos = MutableLiveData<ArrayList<String>>()
     val photos: LiveData<ArrayList<String>> = _photos
 
-    private var _peopleWant = MutableLiveData<List<String>>()
-    val peopleGo: LiveData<List<String>> = _peopleWant
+    private var _peopleGo = MutableLiveData<List<String>>()
+    val peopleGo: LiveData<List<String>> = _peopleGo
 
     private var _freePlaces = MutableLiveData<Int>()
     var freePlaces: LiveData<Int> = _freePlaces
@@ -69,7 +69,7 @@ class EventHelpVM : ViewModel() {
         _title.value = title_
         _creator.value = creator_
         _photos.value = photos_
-        _peopleWant.value = peopleGo_
+        _peopleGo.value = peopleGo_
         _eventDesc.value = eventDesc_
         _date.value = date_.substring(6, date_.length) + " в " + date_.substring(0, 5)
         _type_sport.value = type_sport_

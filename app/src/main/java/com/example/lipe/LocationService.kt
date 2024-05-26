@@ -11,20 +11,21 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.*
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
 class LocationService : Service() {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate() {
         super.onCreate()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        createNotificationChannel()
+        auth = FirebaseAuth.getInstance()
 
-//        val notification = createNotification()
-//        startForeground(1, notification)
+        createNotificationChannel()
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
@@ -32,8 +33,18 @@ class LocationService : Service() {
                     val database = FirebaseDatabase.getInstance().reference.child("location")
                     val locationData = LocationData(it.latitude, it.longitude)
 
-                    Log.d("INFOG", "Location: $locationData")
-                    database.child("j8x0qlLA7UPQK1mXvugY6qrhtxp2").setValue(locationData)
+                    val sharedPref = getSharedPreferences("userRef", MODE_PRIVATE)
+                    val editor = sharedPref.edit()
+
+                    editor.apply {
+                        putString("latitude", locationData.latitude.toString())
+                        putString("longitude", locationData.longitude.toString())
+                        apply()
+                    }
+
+                    if(auth.currentUser != null) {
+                        database.child(auth.currentUser!!.uid).setValue(locationData)
+                    }
                 }
             }
         }
@@ -42,6 +53,8 @@ class LocationService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val notification = createNotification()
+        startForeground(1, notification)
         return START_STICKY
     }
 

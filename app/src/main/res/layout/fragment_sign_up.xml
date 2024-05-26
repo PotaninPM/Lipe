@@ -39,7 +39,7 @@
                         android:id="@+id/etNameAndSurnameinput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Ваши имя и фамилия"
+                        android:hint="@string/name_surname"
                         android:inputType="text"
                         android:singleLine="true"
                         tools:ignore="Autofill" />
@@ -51,7 +51,7 @@
                 app:errorEnabled="true"
                 app:counterMaxLength="30">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:hint="Введите логин"
+                    android:hint="@string/enter_login"
                     android:id="@+id/etLogininput"
                     android:inputType="text"
                     android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 app:errorEnabled="true">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:hint="Введите электроную почту"
+                    android:hint="@string/enter_email"
                     android:id="@+id/etEmailinput"
                     android:inputType="textEmailAddress"
                     android:layout_height="wrap_content"
@@ -108,7 +108,7 @@
                     android:ellipsize="end"
                     android:layout_gravity="center"
                     android:singleLine="true"
-                    android:text="Я принимаю политику конфиденциальности"
+                    android:text="@string/except_policy"
                     android:textSize="@dimen/_11sdp"
                     tools:ignore="TextSizeCheck" />
 
@@ -187,7 +187,7 @@
                     android:singleLine="true"
                     android:textStyle="bold"
                     android:clickable="true"
-                    android:text="Уже есть аккаунт? Войдите"
+                    android:text="@string/have_account"
                     android:textSize="@dimen/_11sdp"
                     tools:ignore="TextSizeCheck"
                     android:focusable="true" />

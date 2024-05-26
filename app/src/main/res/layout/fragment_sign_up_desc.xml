@@ -183,7 +183,7 @@
                         android:ellipsize="end"
                         android:gravity="center"
                         android:singleLine="true"
-                        android:text="Зарегистрироваться"
+                        android:text="@string/sign_up"
                         android:textAllCaps="false"
                         android:textColor="@color/quantum_white_100"
                         android:textFontWeight="600"

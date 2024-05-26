@@ -219,10 +219,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-//    private fun startLocationService() {
-//        val intent = Intent(requireContext(), LocationService::class.java)
-//        ContextCompat.startForegroundService(requireContext(), intent)
-//    }
+    private fun startLocationService() {
+        val intent = Intent(requireContext(), LocationService::class.java)
+        ContextCompat.startForegroundService(requireContext(), intent)
+    }
 
     private fun addAllFriends() {
         val currentUser = auth.currentUser
@@ -677,6 +677,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
+        startLocationService()
+
         if(appVM.reg == "yes") {
             //showSuccessRegWindow()
             appVM.reg = "no"
@@ -695,7 +697,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             Log.d("INFOG", token)
         })
 
-        //startLocationService()
 
         binding.friends.setOnClickListener {
             if (appVM.markersType != "friends") {

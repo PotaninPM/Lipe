@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Lipe</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -30,7 +29,7 @@
     <string name="help">Помощь</string>
     <string name="event_details">Детали события</string>
     <string name="event_name">Введите название события</string>
-    <string name="age">Возвраст</string>
+    <string name="age">Возраст</string>
     <string name="max_people">Максимум людей</string>
     <string name="detailed_desc">Подробное описание события</string>
     <string name="meeting_date">Нажмите, чтобы установить дату встречи</string>
@@ -61,4 +60,33 @@
     <string name="place">Место</string>
     <string name="username">Ник</string>
     <string name="points">Баллы</string>
+    <string name="title_start">Создавайте события и ищите новых друзей!</string>
+    <string name="let_start">Начнем</string>
+    <string name="name_surname">Ваши имя и фамилия</string>
+    <string name="enter_email">Введите электронную почту</string>
+    <string name="except_policy">Я принимаю политику конфиденциальности</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="have_account">Уже есть аккаунт? Войдите</string>
+    <string name="basketball">Баскетбол</string>
+    <string name="volleyball">Волейбол</string>
+    <string name="football">Футбол</string>
+    <string name="rugby">Регби</string>
+    <string name="workout">Воркаут</string>
+    <string name="tennis">Большой теннис</string>
+    <string name="badminton">Бадминтон</string>
+    <string name="table_tennis">Пинг-понг</string>
+    <string name="gymnastics">Гимнастика</string>
+    <string name="fencing">Фехтование</string>
+    <string name="jogging">Бег</string>
+    <string name="curling">Кёрлинг</string>
+    <string name="hockey">Хоккей</string>
+    <string name="ice_skating">Катание на коньках</string>
+    <string name="skiing">Лыжная ходьба</string>
+    <string name="downhill_skiing">Горные лыжи</string>
+    <string name="snowboarding">Сноуборд</string>
+    <string name="table_games">Настольные игры</string>
+    <string name="mobile_games">Мобильные игры</string>
+    <string name="chess">Шахматы</string>
+    <string name="programming">Программирование</string>
+    <string name="choose_ent_type">Выберите тип развлечения</string>
 </resources>

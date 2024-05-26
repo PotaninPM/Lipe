@@ -83,29 +83,30 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     private lateinit var binding: FragmentCreateEntEventBinding
 
     private var items: List<SpinnerItem> = listOf(
-        SpinnerItem("Выберите тип развлечения", R.drawable.light_bulb),
-        SpinnerItem("Баскетбол", R.drawable.img_basketballimg),
-        SpinnerItem("Воллейбол", R.drawable.volleyball_2),
-        SpinnerItem("Футбол", R.drawable.football),
-        SpinnerItem("Рэгби", R.drawable.rugby_ball),
-        SpinnerItem("Воркаут", R.drawable.weights),
-        SpinnerItem("Большой тенис", R.drawable.tennis),
-        SpinnerItem("Бадминтон", R.drawable.shuttlecock),
-        SpinnerItem("Пинпонг", R.drawable.table_tennis),
-        SpinnerItem("Гимнастика", R.drawable.gymnastic_rings),
-        SpinnerItem("Фехтование", R.drawable.fencing),
-        SpinnerItem("Бег", R.drawable.running_shoe),
-        SpinnerItem("Кёрлинг", R.drawable.curling),
-        SpinnerItem("Хоккей", R.drawable.ice_hockey),
-        SpinnerItem("Катание на коньках", R.drawable.ice_skate),
-        SpinnerItem("Лыжная ходьба", R.drawable.skiing_1),
-        SpinnerItem("Горные лыжи", R.drawable.skiing),
-        SpinnerItem("Сноуборд", R.drawable.snowboarding),
-        SpinnerItem("Настольные игры", R.drawable.board_game),
-        SpinnerItem("Мобильные игры", R.drawable.mobile_game),
-        SpinnerItem("Шахматы", R.drawable.chess_2),
-        SpinnerItem("Программирование", R.drawable.programming)
+        SpinnerItem(getString(R.string.choose_ent_type), R.drawable.light_bulb),
+        SpinnerItem(getString(R.string.basketball), R.drawable.img_basketballimg),
+        SpinnerItem(getString(R.string.volleyball), R.drawable.volleyball_2),
+        SpinnerItem(getString(R.string.football), R.drawable.football),
+        SpinnerItem(getString(R.string.rugby), R.drawable.rugby_ball),
+        SpinnerItem(getString(R.string.workout), R.drawable.weights),
+        SpinnerItem(getString(R.string.tennis), R.drawable.tennis),
+        SpinnerItem(getString(R.string.badminton), R.drawable.shuttlecock),
+        SpinnerItem(getString(R.string.table_tennis), R.drawable.table_tennis),
+        SpinnerItem(getString(R.string.gymnastics), R.drawable.gymnastic_rings),
+        SpinnerItem(getString(R.string.fencing), R.drawable.fencing),
+        SpinnerItem(getString(R.string.jogging), R.drawable.running_shoe),
+        SpinnerItem(getString(R.string.curling), R.drawable.curling),
+        SpinnerItem(getString(R.string.hockey), R.drawable.ice_hockey),
+        SpinnerItem(getString(R.string.ice_skating), R.drawable.ice_skate),
+        SpinnerItem(getString(R.string.skiing), R.drawable.skiing_1),
+        SpinnerItem(getString(R.string.downhill_skiing), R.drawable.skiing),
+        SpinnerItem(getString(R.string.snowboarding), R.drawable.snowboarding),
+        SpinnerItem(getString(R.string.table_games), R.drawable.board_game),
+        SpinnerItem(getString(R.string.mobile_games), R.drawable.mobile_game),
+        SpinnerItem(getString(R.string.chess), R.drawable.chess_2),
+        SpinnerItem(getString(R.string.programming), R.drawable.programming)
     )
+
 
 
     private lateinit var dbRef_events: DatabaseReference
