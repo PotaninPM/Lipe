@@ -82,8 +82,6 @@ import java.security.MessageDigest
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
-    private lateinit var sharedPref: SharedPreferences
-
     private lateinit var binding: FragmentMapsBinding
 
     private var currentFragment: Fragment? = null
@@ -212,14 +210,42 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    override fun onMapReady(map: GoogleMap) {
+        mMap = map
+        mMap.uiSettings.isMyLocationButtonEnabled = false
+
+        val sharedPref = activity?.getSharedPreferences("userRef", Context.MODE_PRIVATE)
+
+        val lat = sharedPref?.getFloat("latitude_user", 0f)
+        val lng = sharedPref?.getFloat("longitude_user", 0f)
+        val zoom = sharedPref?.getFloat("zoom_user", 0f)
+
+        if (lat != null && lng != null && zoom != null && lat != 0f && lng != 0f && zoom != 0f) {
+            val savedPosition = LatLng(lat.toDouble(), lng.toDouble())
+            val cameraPosition = CameraPosition.Builder()
+                .target(savedPosition)
+                .zoom(zoom)
+                .build()
+            map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+        }
+
+        map.setOnCameraIdleListener {
+            val currentPosition = map.cameraPosition.target
+            val currentZoom = map.cameraPosition.zoom
+            saveMapState(currentPosition, currentZoom)
+        }
+    }
+
     private fun saveMapState(position: LatLng, zoom: Float) {
+        val sharedPref = activity?.getSharedPreferences("userRef", Context.MODE_PRIVATE) ?: return
         with(sharedPref.edit()) {
-            putFloat("map_lat", position.latitude.toFloat())
-            putFloat("map_lng", position.longitude.toFloat())
-            putFloat("map_zoom", zoom)
+            putFloat("latitude_user", position.latitude.toFloat())
+            putFloat("longitude_user", position.longitude.toFloat())
+            putFloat("zoom_user", zoom)
             apply()
         }
     }
+
 
     private fun startLocationService() {
         val intent = Intent(requireContext(), LocationService::class.java)
@@ -616,7 +642,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         binding = FragmentMapsBinding.inflate(inflater, container, false)
 
         currentFragment = MapsFragment()
-        sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
 
         auth = FirebaseAuth.getInstance()
         appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
@@ -956,37 +981,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        if (::fusedLocationClient.isInitialized) {
-//            fusedLocationClient.removeLocationUpdates(locationCallback)
-//        }
-//    }
-    override fun onMapReady(map: GoogleMap) {
-        mMap = map
-        mMap.uiSettings.isMyLocationButtonEnabled = false
+    override fun onDestroyView() {
+        super.onDestroyView()
 
-        val lat = sharedPref.getFloat("map_lat", 0f).toDouble()
-        val lng = sharedPref.getFloat("map_lng", 0f).toDouble()
-        val zoom = sharedPref.getFloat("map_zoom", 0f)
-
-        Log.d("INFOG", lat.toString() + " 1 " + lng.toString())
-        Log.d("INFOG", "1111111")
-
-        if (lat != 0.0 && lng != 0.0 && zoom != 0f) {
-            val savedPosition = LatLng(lat, lng)
-            val cameraPosition = CameraPosition.Builder()
-                .target(savedPosition)
-                .zoom(zoom)
-                .build()
-            map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-        }
-
-        map.setOnCameraIdleListener {
-            val currentPosition = map.cameraPosition.target
-            val currentZoom = map.cameraPosition.zoom
-            saveMapState(currentPosition, currentZoom)
-        }
     }
 
     private fun showMarkersByType(type: String) {

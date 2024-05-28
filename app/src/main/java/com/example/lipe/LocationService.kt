@@ -33,15 +33,6 @@ class LocationService : Service() {
                     val database = FirebaseDatabase.getInstance().reference.child("location")
                     val locationData = LocationData(it.latitude, it.longitude)
 
-                    val sharedPref = getSharedPreferences("userRef", MODE_PRIVATE)
-                    val editor = sharedPref.edit()
-
-                    editor.apply {
-                        putString("latitude", locationData.latitude.toString())
-                        putString("longitude", locationData.longitude.toString())
-                        apply()
-                    }
-
                     if(auth.currentUser != null) {
                         database.child(auth.currentUser!!.uid).setValue(locationData)
                     }

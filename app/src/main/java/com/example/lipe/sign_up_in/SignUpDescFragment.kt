@@ -165,8 +165,9 @@ class SignUpDescFragment : Fragment() {
                                     putInt("friends", 0)
                                     putInt("events", 0)
                                     putString("desc", desc)
-                                    putString("latitude", "-")
-                                    putString("longitude", "-")
+                                    putFloat("latitude_user", 0f)
+                                    putFloat("longitude_user", 0f)
+                                    putFloat("zoom_user", 0f)
                                     apply()
                                 }
                             } else {
