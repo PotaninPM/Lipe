@@ -145,68 +145,70 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private val callback = OnMapReadyCallback { googleMap ->
-        mMap = googleMap
+        if(isAdded) {
+            mMap = googleMap
 
-        //findPersonOnMap()
-        setMapStyle()
+            //findPersonOnMap()
+            setMapStyle()
 
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            addAllEvents()
+            val currentUser = auth.currentUser
+            if (currentUser != null) {
+                addAllEvents()
 
-            addAllFriends()
-        } else {
-            Toast.makeText(requireContext(), "Вы не авторизован", Toast.LENGTH_LONG).show()
-        }
-
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            mMap.isMyLocationEnabled = true
-            startLocationUpdates()
-        } else {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-        }
-
-
-        mMap.setOnMapLongClickListener { latLng ->
-            appVM.setCoord(latLng.latitude, latLng.longitude)
-            CreateEventFragment.show(childFragmentManager)
-        }
-
-        mMap.setOnMarkerClickListener { marker ->
-
-            val markerPosition = marker.position
-
-            val latitude = markerPosition.latitude
-            val longitude = markerPosition.longitude
-
-            eventEntVM.latitude = latitude
-            eventEntVM.longtitude = longitude
-
-            appVM.latitude = latitude
-            appVM.longtitude = longitude
-
-            mMap.animateCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                    LatLng(latitude, longitude),
-                    17f
-                )
-            )
-
-            searchTypeOfEvent(latitude, longitude) {ready ->
-                if(ready) {
-                    EventFragment.show(childFragmentManager)
-                }
+                addAllFriends()
+            } else {
+                Toast.makeText(requireContext(), "Вы не авторизован", Toast.LENGTH_LONG).show()
             }
 
-            true
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                mMap.isMyLocationEnabled = true
+                startLocationUpdates()
+            } else {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    LOCATION_PERMISSION_REQUEST_CODE
+                )
+            }
+
+
+            mMap.setOnMapLongClickListener { latLng ->
+                appVM.setCoord(latLng.latitude, latLng.longitude)
+                CreateEventFragment.show(childFragmentManager)
+            }
+
+            mMap.setOnMarkerClickListener { marker ->
+
+                val markerPosition = marker.position
+
+                val latitude = markerPosition.latitude
+                val longitude = markerPosition.longitude
+
+                eventEntVM.latitude = latitude
+                eventEntVM.longtitude = longitude
+
+                appVM.latitude = latitude
+                appVM.longtitude = longitude
+
+                mMap.animateCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                        LatLng(latitude, longitude),
+                        17f
+                    )
+                )
+
+                searchTypeOfEvent(latitude, longitude) { ready ->
+                    if (ready) {
+                        EventFragment.show(childFragmentManager)
+                    }
+                }
+
+                true
+            }
         }
     }
 
@@ -774,7 +776,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     }
 
-//-------
+    //-------
     private fun searchTypeOfEvent(coord1: Double, coord2: Double, callback: (ready: Boolean) -> Unit) {
         val dbRefEvent = FirebaseDatabase.getInstance().getReference("current_events")
 
@@ -868,40 +870,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         return marker
     }
-    private fun showMarkersByType(type: String) {
-        when (type) {
-            "all" -> {
-                showOrHideMarkers(ecoEventsMarkersMap, "show")
-                showOrHideMarkers(entEventsMarkersMap, "show")
-                showOrHideMarkers(helpEventsMarkersMap, "show")
-                showOrHideMarkers(friendsMarkersMap, "show")
-            }
-            "eco" -> {
-                showOrHideMarkers(ecoEventsMarkersMap, "show")
-                showOrHideMarkers(helpEventsMarkersMap, "hide")
-                showOrHideMarkers(entEventsMarkersMap, "hide")
-                showOrHideMarkers(friendsMarkersMap, "hide")
-            }
-            "ent" -> {
-                showOrHideMarkers(entEventsMarkersMap, "show")
-                showOrHideMarkers(helpEventsMarkersMap, "hide")
-                showOrHideMarkers(ecoEventsMarkersMap, "hide")
-                showOrHideMarkers(friendsMarkersMap, "hide")
-            }
-            "friends" -> {
-                showOrHideMarkers(entEventsMarkersMap, "hide")
-                showOrHideMarkers(helpEventsMarkersMap, "hide")
-                showOrHideMarkers(ecoEventsMarkersMap, "hide")
-                showOrHideMarkers(friendsMarkersMap, "show")
-            }
-            "help" -> {
-                showOrHideMarkers(helpEventsMarkersMap, "show")
-                showOrHideMarkers(entEventsMarkersMap, "hide")
-                showOrHideMarkers(ecoEventsMarkersMap, "hide")
-                showOrHideMarkers(friendsMarkersMap, "hide")
-            }
-        }
-    }
     private fun showOrHideMarkers(markerMap: HashMap<String, Marker>, func: String) {
         if(func != "hide")
             markerMap.forEach { it.value.isVisible = true }
@@ -988,12 +956,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
-    override fun onDestroyView() {
-        super.onDestroyView()
-        if (::fusedLocationClient.isInitialized) {
-            fusedLocationClient.removeLocationUpdates(locationCallback)
-        }
-    }
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        if (::fusedLocationClient.isInitialized) {
+//            fusedLocationClient.removeLocationUpdates(locationCallback)
+//        }
+//    }
     override fun onMapReady(map: GoogleMap) {
         mMap = map
         mMap.uiSettings.isMyLocationButtonEnabled = false
@@ -1018,6 +986,41 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             val currentPosition = map.cameraPosition.target
             val currentZoom = map.cameraPosition.zoom
             saveMapState(currentPosition, currentZoom)
+        }
+    }
+
+    private fun showMarkersByType(type: String) {
+        when (type) {
+            "all" -> {
+                showOrHideMarkers(ecoEventsMarkersMap, "show")
+                showOrHideMarkers(entEventsMarkersMap, "show")
+                showOrHideMarkers(helpEventsMarkersMap, "show")
+                showOrHideMarkers(friendsMarkersMap, "show")
+            }
+            "eco" -> {
+                showOrHideMarkers(ecoEventsMarkersMap, "show")
+                showOrHideMarkers(helpEventsMarkersMap, "hide")
+                showOrHideMarkers(entEventsMarkersMap, "hide")
+                showOrHideMarkers(friendsMarkersMap, "hide")
+            }
+            "ent" -> {
+                showOrHideMarkers(entEventsMarkersMap, "show")
+                showOrHideMarkers(helpEventsMarkersMap, "hide")
+                showOrHideMarkers(ecoEventsMarkersMap, "hide")
+                showOrHideMarkers(friendsMarkersMap, "hide")
+            }
+            "friends" -> {
+                showOrHideMarkers(entEventsMarkersMap, "hide")
+                showOrHideMarkers(helpEventsMarkersMap, "hide")
+                showOrHideMarkers(ecoEventsMarkersMap, "hide")
+                showOrHideMarkers(friendsMarkersMap, "show")
+            }
+            "help" -> {
+                showOrHideMarkers(helpEventsMarkersMap, "show")
+                showOrHideMarkers(entEventsMarkersMap, "hide")
+                showOrHideMarkers(ecoEventsMarkersMap, "hide")
+                showOrHideMarkers(friendsMarkersMap, "hide")
+            }
         }
     }
 

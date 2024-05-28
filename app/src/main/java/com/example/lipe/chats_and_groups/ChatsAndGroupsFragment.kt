@@ -50,66 +50,81 @@ class ChatsAndGroupsFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         storage = FirebaseStorage.getInstance().reference.child("avatars/${auth.currentUser!!.uid}")
 
-        view.findViewById<TabLayout>(R.id.tableLayout).apply {
-            addTab(newTab().setText("Чаты"))
-            addTab(newTab().setText("Группы"))
-            addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-                    binding.viewPager.currentItem = tab!!.position
-                }
-
-                override fun onTabUnselected(p0: TabLayout.Tab?) {}
-
-                override fun onTabReselected(p0: TabLayout.Tab?) {}
-            })
-        }
-
         binding.viewPager.adapter = adapter
 
-        val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
-        dbRef_user.child("query_friends").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (!snapshot.exists() || snapshot.childrenCount.toInt() == 0) {
-                    binding.indexNotif.visibility = View.GONE
-                } else {
-                    binding.indexNotif.visibility = View.VISIBLE
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Handle error
-            }
-        })
-
-        try {
-            storage.downloadUrl.addOnSuccessListener { url ->
-                lifecycleScope.launch {
-                    val bitmap: Bitmap = withContext(Dispatchers.Main.immediate) {
-                        Coil.imageLoader(requireContext()).execute(
-                            ImageRequest.Builder(requireContext())
-                                .data(url)
-                                .build()
-                        ).drawable?.toBitmap()!!
-                    }
-                    binding.avatarChatGroup.setImageBitmap(bitmap)
-                }
-            }
-        } catch (e: Exception) {
-
-        }
-
-        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                binding.tableLayout.selectTab(binding.tableLayout.getTabAt(position))
-            }
-        })
-
-        binding.notificationChats.setOnClickListener {
-            replaceFragment(FriendRequestsFragment())
-        }
-
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if(isAdded) {
+            val dbRef_user =
+                FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
+            dbRef_user.child("query_friends").addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (!snapshot.exists() || snapshot.childrenCount.toInt() == 0) {
+                        binding.indexNotif.visibility = View.GONE
+                    } else {
+                        binding.indexNotif.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle error
+                }
+            })
+
+            view.findViewById<TabLayout>(R.id.tableLayout).apply {
+                addTab(newTab().setText("Чаты"))
+                addTab(newTab().setText("Группы"))
+                addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                    override fun onTabSelected(tab: TabLayout.Tab?) {
+                        binding.viewPager.currentItem = tab!!.position
+                    }
+
+                    override fun onTabUnselected(p0: TabLayout.Tab?) {}
+
+                    override fun onTabReselected(p0: TabLayout.Tab?) {}
+                })
+            }
+
+            try {
+                if (isAdded) {
+                    storage.downloadUrl.addOnSuccessListener { url ->
+                        lifecycleScope.launch {
+                            if (isAdded) {  // Ensure fragment is still added before executing coroutine code
+                                val bitmap: Bitmap = withContext(Dispatchers.IO) {  // Use IO dispatcher for network operations
+                                    Coil.imageLoader(requireContext()).execute(
+                                        ImageRequest.Builder(requireContext())
+                                            .data(url)
+                                            .build()
+                                    ).drawable?.toBitmap()!!
+                                }
+
+                                if (isAdded) {  // Check again before updating the UI
+                                    binding.avatarChatGroup.setImageBitmap(bitmap)
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("INFOG", "Error: ${e.message}")
+            }
+
+            binding.viewPager.registerOnPageChangeCallback(object :
+                ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    binding.tableLayout.selectTab(binding.tableLayout.getTabAt(position))
+                }
+            })
+
+            binding.notificationChats.setOnClickListener {
+                replaceFragment(FriendRequestsFragment())
+            }
+        }
     }
 
     private fun replaceFragment(fragment: Fragment) {

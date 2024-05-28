@@ -31,7 +31,6 @@
             android:value="AIzaSyBRUgHKbiSHmfhmt9plcnXQ-LDbuIatJII" />
 
         <activity
-            android:screenOrientation="portrait"
             android:name=".MainActivity"
             android:exported="true" >
             <intent-filter>

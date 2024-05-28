@@ -1,3 +1,4 @@
+
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -43,27 +44,29 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        switchTabs(0)
+        if(isAdded) {
+            switchTabs(0)
 
-        setupTabLayout()
+            setupTabLayout()
 
-        binding.apply {
-            theme.setOnClickListener {
-                selectImageTheme.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            }
+            binding.apply {
+                theme.setOnClickListener {
+                    selectImageTheme.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                }
 
-            changeYourInfo.setOnClickListener {
-                val bottomSheet = ChangeInfoBottomSheet()
-                bottomSheet.show(childFragmentManager, "ChangeInfoBottomSheet")
-            }
+                changeYourInfo.setOnClickListener {
+                    val bottomSheet = ChangeInfoBottomSheet()
+                    bottomSheet.show(childFragmentManager, "ChangeInfoBottomSheet")
+                }
 
-            avatar.setOnClickListener {
-                selectImageAvatar.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            }
+                avatar.setOnClickListener {
+                    selectImageAvatar.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                }
 
-            friendsAmountLay.setOnClickListener {
-                val friendBottomSheet = FriendsBottomSheet()
-                friendBottomSheet.show(childFragmentManager, "FriendsBottomSheet")
+                friendsAmountLay.setOnClickListener {
+                    val friendBottomSheet = FriendsBottomSheet()
+                    friendBottomSheet.show(childFragmentManager, "FriendsBottomSheet")
+                }
             }
         }
     }
@@ -74,36 +77,38 @@ class ProfileFragment : Fragment() {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        dbRef = FirebaseDatabase.getInstance().getReference("users")
-        auth = FirebaseAuth.getInstance()
-        storageRef = FirebaseStorage.getInstance().reference
+        if(isAdded) {
+            dbRef = FirebaseDatabase.getInstance().getReference("users")
+            auth = FirebaseAuth.getInstance()
+            storageRef = FirebaseStorage.getInstance().reference
 
-        binding.apply {
-            lifecycleOwner = viewLifecycleOwner
-            viewModel = profileVM
+            binding.apply {
+                lifecycleOwner = viewLifecycleOwner
+                viewModel = profileVM
 
-            loadingProgressBar.visibility = View.VISIBLE
-            allProfile.visibility = View.GONE
+                loadingProgressBar.visibility = View.VISIBLE
+                allProfile.visibility = View.GONE
 
-            findAccount { userData ->
-                if(userData != null) {
-                    profileVM.setInfo(
-                        userData.nickname,
-                        userData.friendsAmount,
-                        userData.eventsAmount,
-                        userData.ratingPoints,
-                        userData.desc,
-                        userData.name
-                    )
-                    loadingProgressBar.visibility = View.GONE
-                    allProfile.visibility = View.VISIBLE
+                findAccount { userData ->
+                    if (userData != null) {
+                        profileVM.setInfo(
+                            userData.nickname,
+                            userData.friendsAmount,
+                            userData.eventsAmount,
+                            userData.ratingPoints,
+                            userData.desc,
+                            userData.name
+                        )
+                        loadingProgressBar.visibility = View.GONE
+                        allProfile.visibility = View.VISIBLE
+                    }
                 }
-            }
 
-            setProfilePhotos {
-                if(it) {
-                    loadingProgressBar.visibility = View.GONE
-                    allProfile.visibility = View.VISIBLE
+                setProfilePhotos {
+                    if (it) {
+                        loadingProgressBar.visibility = View.GONE
+                        allProfile.visibility = View.VISIBLE
+                    }
                 }
             }
         }
@@ -280,39 +285,45 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setProfilePhotos(callback: (Boolean) -> Unit) {
-        val photoRef = storageRef.child("avatars/${auth.currentUser!!.uid}")
-        val themeRef = storageRef.child("user_theme/${auth.currentUser!!.uid}")
+        if(isAdded) {
+            val photoRef = storageRef.child("avatars/${auth.currentUser!!.uid}")
+            val themeRef = storageRef.child("user_theme/${auth.currentUser!!.uid}")
 
-        val tokenTaskAvatar = photoRef.downloadUrl
-        val tokenTaskTheme = themeRef.downloadUrl
+            val tokenTaskAvatar = photoRef.downloadUrl
+            val tokenTaskTheme = themeRef.downloadUrl
 
-        tokenTaskAvatar.addOnSuccessListener { url_avatar ->
-            profileVM.setPhoto(url_avatar.toString())
-            lifecycleScope.launch {
-                val bitmap: Bitmap = withContext(Dispatchers.IO) {
-                    Coil.imageLoader(requireContext()).execute(
-                        ImageRequest.Builder(requireContext())
-                            .data(url_avatar)
-                            .build()
-                    ).drawable?.toBitmap()!!
-                }
-                binding.avatar.setImageBitmap(bitmap)
-            }
-            tokenTaskTheme.addOnSuccessListener { url_theme ->
+            tokenTaskAvatar.addOnSuccessListener { url_avatar ->
+                profileVM.setPhoto(url_avatar.toString())
                 lifecycleScope.launch {
-                    val bitmap: Bitmap = withContext(Dispatchers.IO) {
-                        Coil.imageLoader(requireContext()).execute(
-                            ImageRequest.Builder(requireContext())
-                                .data(url_theme)
-                                .build()
-                        ).drawable?.toBitmap()!!
+                    if(isAdded) {
+                        val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                            Coil.imageLoader(requireContext()).execute(
+                                ImageRequest.Builder(requireContext())
+                                    .data(url_avatar)
+                                    .build()
+                            ).drawable?.toBitmap()!!
+                        }
+                        binding.avatar.setImageBitmap(bitmap)
                     }
-                    binding.theme.setImageBitmap(bitmap)
                 }
-                callback(true)
+                tokenTaskTheme.addOnSuccessListener { url_theme ->
+                    lifecycleScope.launch {
+                        if (isAdded) {
+                            val bitmap: Bitmap = withContext(Dispatchers.IO) {
+                                Coil.imageLoader(requireContext()).execute(
+                                    ImageRequest.Builder(requireContext())
+                                        .data(url_theme)
+                                        .build()
+                                ).drawable?.toBitmap()!!
+                            }
+                            binding.theme.setImageBitmap(bitmap)
+                        }
+                        callback(true)
+                    }
+                }
+            }.addOnFailureListener {
+                callback(false)
             }
-        }.addOnFailureListener {
-            callback(false)
         }
     }
 

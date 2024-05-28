@@ -47,35 +47,37 @@ class RatingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = RatingAdapter(lifecycleScope)
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerView.adapter = adapter
+        if(isAdded) {
+            adapter = RatingAdapter(lifecycleScope)
+            binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            binding.recyclerView.adapter = adapter
 
-        binding.cardView.visibility = View.VISIBLE
+            binding.cardView.visibility = View.VISIBLE
 
-        binding.recyclerView.setHasFixedSize(true)
+            binding.recyclerView.setHasFixedSize(true)
 
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText.isNullOrEmpty()) {
-                    adapter.filter("", rateList)
-                } else {
-                    adapter.filter(newText, rateList)
+            binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
                 }
-                return true
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if (newText.isNullOrEmpty()) {
+                        adapter.filter("", rateList)
+                    } else {
+                        adapter.filter(newText, rateList)
+                    }
+                    return true
+                }
+            })
+
+
+            binding.placeInRating.setOnClickListener {
+                //adapter.filter()
             }
-        })
 
-
-        binding.placeInRating.setOnClickListener {
-            //adapter.filter()
+            addPeople()
         }
-
-        addPeople()
     }
 
     private fun loadDataOfUser() {
@@ -124,13 +126,15 @@ class RatingFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
 
-        binding.apply {
-            lifecycleOwner = viewLifecycleOwner
-            viewModel = ratingVM
+        if(isAdded) {
+            binding.apply {
+                lifecycleOwner = viewLifecycleOwner
+                viewModel = ratingVM
 
-            loadDataOfUser()
+                loadDataOfUser()
 
-            originalRatingList.addAll(rateList)
+                originalRatingList.addAll(rateList)
+            }
         }
 
         val view = binding.root
