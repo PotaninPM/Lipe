@@ -41,7 +41,7 @@
             android:gravity="start"
             android:text=""
             android:textColor="@color/quantum_black_100"
-            android:textSize="@dimen/_12sdp"
+            android:textSize="@dimen/_11sdp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,11 +51,17 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_regular"
             android:textColor="@color/quantum_black_100"
-            android:textSize="@dimen/_14sdp"
+            android:textSize="@dimen/_13sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/sender_group" />
 
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

@@ -1,27 +1,38 @@
 package com.example.lipe.sign_up_in
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.lipe.R
-import com.example.lipe.viewModels.AppVM
 import com.example.lipe.databinding.FragmentSignUpBinding
+import com.example.lipe.viewModels.AppVM
 import com.example.lipe.viewModels.SignUpVM
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+
 
 class SignUpFragment : Fragment() {
 
@@ -34,6 +45,10 @@ class SignUpFragment : Fragment() {
     private lateinit var dbRef: DatabaseReference
 
     private lateinit var auth: FirebaseAuth
+
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var googleSignInLauncher: ActivityResultLauncher<Intent>
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +59,23 @@ class SignUpFragment : Fragment() {
         appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
         signUpVM = ViewModelProvider(requireActivity()).get(SignUpVM::class.java)
 
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+
+        googleSignInLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                handleSignInResult(task)
+            } else {
+                Log.d("INFOG", "Failed ${result.resultCode}")
+            }
+        }
+
         binding.signUpWithGoogle.setOnClickListener {
             signInWithGoogle()
         }
@@ -53,8 +85,30 @@ class SignUpFragment : Fragment() {
     }
 
     private fun signInWithGoogle() {
-
+        val signInIntent = googleSignInClient.signInIntent
+        googleSignInLauncher.launch(signInIntent)
     }
+
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
+        try {
+            val account = completedTask.getResult(ApiException::class.java)
+
+            val email = account?.email
+            val displayName = account?.displayName
+            val givenName = account?.givenName
+            val familyName = account?.familyName
+
+            Log.d("INFOG", "Email: $email")
+            Log.d("INFOG", "$displayName")
+            Log.d("INFOG", "$givenName")
+            Log.d("INFOG", "$familyName")
+
+        } catch (e: ApiException) {
+            Log.w("INFOG", "e.statusCode")
+            Log.e("INFOG", "${e.localizedMessage}")
+        }
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -350,7 +350,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunitosansbold"
-                    android:text="@string/about_event"
+                    android:text="@string/about_task"
                     android:layout_marginTop="@dimen/_6sdp"
                     android:textSize="@dimen/_17sdp"
                     app:layout_constraintEnd_toEndOf="parent"
