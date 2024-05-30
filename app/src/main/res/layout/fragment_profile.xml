@@ -61,6 +61,7 @@
                         android:layout_marginTop="@dimen/_93sdp"
                         android:padding="@dimen/_2sdp"
                         android:scaleType="centerCrop"
+                        android:src="?attr/colorOnSurfaceInverse"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:shapeAppearanceOverlay="@style/ImageStyle_Circle"

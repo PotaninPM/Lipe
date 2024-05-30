@@ -1,5 +1,6 @@
 package com.example.lipe.view_events
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -79,9 +80,17 @@ class EventFragment : BottomSheetDialogFragment() {
 
         fragment?.let {
             childFragmentManager.beginTransaction()
-                .replace(R.id.create_event_lay, it)
+                .replace(R.id.view_event_lay, it)
                 .commit()
         }
+    }
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.setOnShowListener {
+            val bottomSheet = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            bottomSheet?.layoutParams?.height = (resources.displayMetrics.heightPixels * 0.6).toInt()
+        }
+        return dialog
     }
 
     companion object {

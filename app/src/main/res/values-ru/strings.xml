@@ -90,4 +90,5 @@
     <string name="programming">Программирование</string>
     <string name="choose_ent_type">Выберите тип развлечения</string>
     <string name="about_task">О задании</string>
+    <string name="any_age">Любой возраст</string>
 </resources>

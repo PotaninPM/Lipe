@@ -82,32 +82,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
     private lateinit var binding: FragmentCreateEntEventBinding
 
-    private var items: List<SpinnerItem> = listOf(
-        SpinnerItem(getString(R.string.choose_ent_type), R.drawable.light_bulb),
-        SpinnerItem(getString(R.string.basketball), R.drawable.img_basketballimg),
-        SpinnerItem(getString(R.string.volleyball), R.drawable.volleyball_2),
-        SpinnerItem(getString(R.string.football), R.drawable.football),
-        SpinnerItem(getString(R.string.rugby), R.drawable.rugby_ball),
-        SpinnerItem(getString(R.string.workout), R.drawable.weights),
-        SpinnerItem(getString(R.string.tennis), R.drawable.tennis),
-        SpinnerItem(getString(R.string.badminton), R.drawable.shuttlecock),
-        SpinnerItem(getString(R.string.table_tennis), R.drawable.table_tennis),
-        SpinnerItem(getString(R.string.gymnastics), R.drawable.gymnastic_rings),
-        SpinnerItem(getString(R.string.fencing), R.drawable.fencing),
-        SpinnerItem(getString(R.string.jogging), R.drawable.running_shoe),
-        SpinnerItem(getString(R.string.curling), R.drawable.curling),
-        SpinnerItem(getString(R.string.hockey), R.drawable.ice_hockey),
-        SpinnerItem(getString(R.string.ice_skating), R.drawable.ice_skate),
-        SpinnerItem(getString(R.string.skiing), R.drawable.skiing_1),
-        SpinnerItem(getString(R.string.downhill_skiing), R.drawable.skiing),
-        SpinnerItem(getString(R.string.snowboarding), R.drawable.snowboarding),
-        SpinnerItem(getString(R.string.table_games), R.drawable.board_game),
-        SpinnerItem(getString(R.string.mobile_games), R.drawable.mobile_game),
-        SpinnerItem(getString(R.string.chess), R.drawable.chess_2),
-        SpinnerItem(getString(R.string.programming), R.drawable.programming)
-    )
-
-
+    private lateinit var items: List<SpinnerItem>
 
     private lateinit var dbRef_events: DatabaseReference
     private lateinit var dbRef_users: DatabaseReference
@@ -133,6 +108,31 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         binding = FragmentCreateEntEventBinding.inflate(inflater, container, false)
 
         storageRef = FirebaseStorage.getInstance().getReference("event_images")
+
+        items = listOf(
+            SpinnerItem(getString(R.string.choose_ent_type), R.drawable.light_bulb),
+            SpinnerItem(getString(R.string.basketball), R.drawable.img_basketballimg),
+            SpinnerItem(getString(R.string.volleyball), R.drawable.volleyball_2),
+            SpinnerItem(getString(R.string.football), R.drawable.football),
+            SpinnerItem(getString(R.string.rugby), R.drawable.rugby_ball),
+            SpinnerItem(getString(R.string.workout), R.drawable.weights),
+            SpinnerItem(getString(R.string.tennis), R.drawable.tennis),
+            SpinnerItem(getString(R.string.badminton), R.drawable.shuttlecock),
+            SpinnerItem(getString(R.string.table_tennis), R.drawable.table_tennis),
+            SpinnerItem(getString(R.string.gymnastics), R.drawable.gymnastic_rings),
+            SpinnerItem(getString(R.string.fencing), R.drawable.fencing),
+            SpinnerItem(getString(R.string.jogging), R.drawable.running_shoe),
+            SpinnerItem(getString(R.string.curling), R.drawable.curling),
+            SpinnerItem(getString(R.string.hockey), R.drawable.ice_hockey),
+            SpinnerItem(getString(R.string.ice_skating), R.drawable.ice_skate),
+            SpinnerItem(getString(R.string.skiing), R.drawable.skiing_1),
+            SpinnerItem(getString(R.string.downhill_skiing), R.drawable.skiing),
+            SpinnerItem(getString(R.string.snowboarding), R.drawable.snowboarding),
+            SpinnerItem(getString(R.string.table_games), R.drawable.board_game),
+            SpinnerItem(getString(R.string.mobile_games), R.drawable.mobile_game),
+            SpinnerItem(getString(R.string.chess), R.drawable.chess_2),
+            SpinnerItem(getString(R.string.programming), R.drawable.programming)
+        )
 
         setDesignToFields()
 
@@ -160,42 +160,53 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if(isAdded) {
+            dbRef_events = FirebaseDatabase.getInstance().getReference("current_events")
+            dbRef_users = FirebaseDatabase.getInstance().getReference("users")
 
-        dbRef_events = FirebaseDatabase.getInstance().getReference("current_events")
-        dbRef_users = FirebaseDatabase.getInstance().getReference("users")
+            auth = FirebaseAuth.getInstance()
 
-        auth = FirebaseAuth.getInstance()
+            val items = listOf(getString(R.string.any_age), "Больше 18 лет", "До 18 лет")
+            val adapter =
+                ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, items)
+            val autoCompleteTextView = view.findViewById<AutoCompleteTextView>(R.id.ageSpinner)
+            autoCompleteTextView.setAdapter(adapter)
+            autoCompleteTextView.setOnItemClickListener { parent, view, position, id ->
+                selectedAge = parent.getItemAtPosition(position).toString()
+            }
 
-        val items = listOf("Любой возраст", "Больше 18 лет", "До 18 лет")
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, items)
-        val autoCompleteTextView = view.findViewById<AutoCompleteTextView>(R.id.ageSpinner)
-        autoCompleteTextView.setAdapter(adapter)
-        autoCompleteTextView.setOnItemClickListener { parent, view, position, id ->
-            selectedAge = parent.getItemAtPosition(position).toString()
-        }
+            binding.btnCreateEvent.setOnClickListener {
 
-        binding.btnCreateEvent.setOnClickListener {
-
-            binding.btnCreateEvent.isEnabled = false
-            binding.btnCreateEvent.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
-            val eventUid = UUID.randomUUID().toString()
-            uploadImage(eventUid) {photo ->
-                if(photo != "-") {
-                    createEvent(eventUid, photo)
-                } else {
-                    binding.btnCreateEvent.isEnabled = true
-                    binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
-                    setDialog("Вы не загрузили ни одного фото", "Вы должны загрузить минимум одно фото", "Хорошо")
+                binding.btnCreateEvent.isEnabled = false
+                binding.btnCreateEvent.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+                val eventUid = UUID.randomUUID().toString()
+                uploadImage(eventUid) { photo ->
+                    if (photo != "-") {
+                        createEvent(eventUid, photo)
+                    } else {
+                        binding.btnCreateEvent.isEnabled = true
+                        binding.btnCreateEvent.setBackgroundColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.green
+                            )
+                        )
+                        setDialog(
+                            "Вы не загрузили ни одного фото",
+                            "Вы должны загрузить минимум одно фото",
+                            "Хорошо"
+                        )
+                    }
                 }
             }
-        }
 
-        binding.dateLay.setOnClickListener {
-            getDateTime()
-        }
+            binding.dateLay.setOnClickListener {
+                getDateTime()
+            }
 
-        binding.photoLay1.setOnClickListener {
-            selectImage1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            binding.photoLay1.setOnClickListener {
+                selectImage1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
         }
     }
 

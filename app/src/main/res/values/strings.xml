@@ -89,5 +89,6 @@
     <string name="chess">Chess</string>
     <string name="programming">Programming</string>
     <string name="choose_ent_type">Choose entertainment type</string>
-    <string name="about_task">О задании</string>
+    <string name="about_task">About task</string>
+    <string name="any_age">Any age</string>
 </resources>

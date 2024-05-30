@@ -38,40 +38,48 @@ class CreateEventFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        switchFragmentsFields(appVM.positionCreateFr)
 
-        binding.buttonEco.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#00AE1C"))
+        if(isAdded) {
+            switchFragmentsFields(appVM.positionCreateFr)
 
-        binding.toggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
-            val buttons = arrayOf(
-                R.id.buttonEco,
-                R.id.buttonEnt,
-                R.id.buttonHelp
-            )
+            binding.buttonEco.backgroundTintList =
+                ColorStateList.valueOf(Color.parseColor("#00AE1C"))
 
-            if (isChecked) {
-                group.findViewById<MaterialButton>(checkedId).backgroundTintList = ColorStateList.valueOf(Color.parseColor("#00AE1C"))
-                group.findViewById<MaterialButton>(checkedId).isChecked = true
+            binding.toggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
+                val buttons = arrayOf(
+                    R.id.buttonEco,
+                    R.id.buttonEnt,
+                    R.id.buttonHelp
+                )
 
-                buttons.forEach { buttonId ->
-                    if (buttonId != checkedId) {
-                        group.findViewById<MaterialButton>(buttonId).backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
-                        group.findViewById<MaterialButton>(buttonId).isChecked = false
+                if (isChecked) {
+                    group.findViewById<MaterialButton>(checkedId).backgroundTintList =
+                        ColorStateList.valueOf(Color.parseColor("#00AE1C"))
+                    group.findViewById<MaterialButton>(checkedId).isChecked = true
+
+                    buttons.forEach { buttonId ->
+                        if (buttonId != checkedId) {
+                            group.findViewById<MaterialButton>(buttonId).backgroundTintList =
+                                ColorStateList.valueOf(Color.TRANSPARENT)
+                            group.findViewById<MaterialButton>(buttonId).isChecked = false
+                        }
                     }
-                }
 
-                when (checkedId) {
-                    R.id.buttonEco -> {
-                        switchFragmentsFields(0)
-                        appVM.positionCreateFr = 0
-                    }
-                    R.id.buttonEnt -> {
-                        switchFragmentsFields(1)
-                        appVM.positionCreateFr = 1
-                    }
-                    R.id.buttonHelp -> {
-                        switchFragmentsFields(2)
-                        appVM.positionCreateFr = 2
+                    when (checkedId) {
+                        R.id.buttonEco -> {
+                            switchFragmentsFields(0)
+                            appVM.positionCreateFr = 0
+                        }
+
+                        R.id.buttonEnt -> {
+                            switchFragmentsFields(1)
+                            appVM.positionCreateFr = 1
+                        }
+
+                        R.id.buttonHelp -> {
+                            switchFragmentsFields(2)
+                            appVM.positionCreateFr = 2
+                        }
                     }
                 }
             }

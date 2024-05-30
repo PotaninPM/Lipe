@@ -5,6 +5,7 @@ import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
@@ -25,15 +26,14 @@ class LocationService : Service() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         auth = FirebaseAuth.getInstance()
 
-        createNotificationChannel()
-
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 locationResult.lastLocation?.let {
                     val database = FirebaseDatabase.getInstance().reference.child("location")
                     val locationData = LocationData(it.latitude, it.longitude)
 
-                    if(auth.currentUser != null) {
+                    Log.d("INFOG", locationData.toString())
+                    if (auth.currentUser != null) {
                         database.child(auth.currentUser!!.uid).setValue(locationData)
                     }
                 }
@@ -44,8 +44,10 @@ class LocationService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val notification = createNotification()
-        startForeground(1, notification)
+//        createNotificationChannel()
+//        val notification = createNotification()
+       // startForeground(1, notification)
+
         return START_STICKY
     }
 
@@ -82,38 +84,38 @@ class LocationService : Service() {
         )
     }
 
-    private fun createNotification(): Notification {
-        val intent = Intent(this, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
+//    private fun createNotification(): Notification {
+//        val intent = Intent(this, MainActivity::class.java)
+//        val pendingIntent = PendingIntent.getActivity(
+//            this,
+//            0,
+//            intent,
+//            PendingIntent.FLAG_IMMUTABLE
+//        )
+//
+//        return NotificationCompat.Builder(this, CHANNEL_ID)
+//            .setContentTitle("Локация")
+//            .setContentText("Ваша локация отслеживаетя")
+//            .setSmallIcon(R.drawable.planet_icon)
+//            .setContentIntent(pendingIntent)
+//            .build()
+//    }
 
-        return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Location Service")
-            .setContentText("Tracking location in the background")
-            .setSmallIcon(R.drawable.planet_icon)
-            .setContentIntent(pendingIntent)
-            .build()
-    }
-
-    private fun createNotificationChannel() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                CHANNEL_ID,
-                "Location Service Channel",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            manager.createNotificationChannel(channel)
-        }
-    }
-
-    companion object {
-        private const val CHANNEL_ID = "location_service_channel"
-    }
+//    private fun createNotificationChannel() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val channel = NotificationChannel(
+//                CHANNEL_ID,
+//                "Location Service Channel",
+//                NotificationManager.IMPORTANCE_DEFAULT
+//            )
+//            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+//            manager.createNotificationChannel(channel)
+//        }
+//    }
+//
+//    companion object {
+//        private const val CHANNEL_ID = "location_service_channel"
+//    }
 }
 
 data class LocationData(

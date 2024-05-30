@@ -84,7 +84,6 @@ class EventHelpVM : ViewModel() {
         _age.value = age_
         _creatorUsername.value = creatorUsername_
 
-        setDate(date_)
     }
 
     fun formatDate(dateString: String): String {
@@ -92,12 +91,5 @@ class EventHelpVM : ViewModel() {
         val outputFormat = SimpleDateFormat("Создано d MMMM yyyy года HH:mm", Locale("ru"))
         val date = inputFormat.parse(dateString)
         return outputFormat.format(date)
-    }
-
-    private var _dateRussianMonthDayYear = MutableLiveData<String>()
-    val dateRussianMonthDayYear: LiveData<String> = _dateRussianMonthDayYear
-
-    fun setDate(date: String) {
-        _dateRussianMonthDayYear.value = date
     }
 }

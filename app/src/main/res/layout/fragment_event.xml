@@ -24,7 +24,7 @@ tools:context=".view_events.EventFragment">
 
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/create_event_lay"
+        android:id="@+id/view_event_lay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/_6sdp"/>

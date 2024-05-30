@@ -79,6 +79,7 @@ class SignUpFragment : Fragment() {
         binding.signUpWithGoogle.setOnClickListener {
             signInWithGoogle()
         }
+
         val view = binding.root
 
         return view
@@ -108,7 +109,6 @@ class SignUpFragment : Fragment() {
             Log.e("INFOG", "${e.localizedMessage}")
         }
     }
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

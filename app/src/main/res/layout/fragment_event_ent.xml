@@ -338,16 +338,16 @@
                                 android:progress="@{viewModel.freePlaces}"
                                 android:progressDrawable="@drawable/progress_reg_free_place" />
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="осталось 3 места"
-                                android:fontFamily="@font/nunitosansextrabold"
-                                android:textColor="@color/quantum_black_100"
-                                android:textSize="@dimen/_12sdp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+<!--                            <TextView-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:gravity="center"-->
+<!--                                android:text="осталось 3 места"-->
+<!--                                android:fontFamily="@font/nunitosansextrabold"-->
+<!--                                android:textColor="@color/quantum_black_100"-->
+<!--                                android:textSize="@dimen/_12sdp"-->
+<!--                                app:layout_constraintStart_toStartOf="parent"-->
+<!--                                app:layout_constraintTop_toTopOf="parent" />-->
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </LinearLayout>
                 </LinearLayout>

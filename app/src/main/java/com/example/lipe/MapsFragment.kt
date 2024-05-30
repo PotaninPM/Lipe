@@ -248,8 +248,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
 
     private fun startLocationService() {
-        val intent = Intent(requireContext(), LocationService::class.java)
-        ContextCompat.startForegroundService(requireContext(), intent)
+        if(isAdded && context != null) {
+            val intent = Intent(requireContext(), LocationService::class.java)
+            ContextCompat.startForegroundService(requireContext(), intent)
+        }
     }
 
     private fun addAllFriends() {

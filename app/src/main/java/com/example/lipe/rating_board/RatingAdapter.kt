@@ -54,7 +54,7 @@ class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope) :  RecyclerView
             if(rating.uid != auth.currentUser!!.uid) {
                 username.text = rating.username
             } else {
-                username.text = "Вы"
+                username.text = "Вы(${rating.username})"
             }
             ratingScore.text = rating.score.toString()
             place.text = rating.place.toString()
@@ -71,8 +71,8 @@ class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope) :  RecyclerView
                 try {
                     val context = it.context
                     if (context is AppCompatActivity) {
-                        val cardView = context.findViewById<CardView>(R.id.cardView)
-                        cardView.visibility = View.GONE
+//                        val cardView = context.findViewById<CardView>(R.id.cardView)
+//                        cardView.visibility = View.GONE
                         if (rating.uid != auth.currentUser!!.uid) {
                             val context = it.context
                             if (context is AppCompatActivity) {
