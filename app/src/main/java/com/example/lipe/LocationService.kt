@@ -44,9 +44,9 @@ class LocationService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-//        createNotificationChannel()
-//        val notification = createNotification()
-       // startForeground(1, notification)
+        createNotificationChannel()
+        val notification = createNotification()
+        startForeground(1, notification)
 
         return START_STICKY
     }
@@ -84,38 +84,38 @@ class LocationService : Service() {
         )
     }
 
-//    private fun createNotification(): Notification {
-//        val intent = Intent(this, MainActivity::class.java)
-//        val pendingIntent = PendingIntent.getActivity(
-//            this,
-//            0,
-//            intent,
-//            PendingIntent.FLAG_IMMUTABLE
-//        )
-//
-//        return NotificationCompat.Builder(this, CHANNEL_ID)
-//            .setContentTitle("Локация")
-//            .setContentText("Ваша локация отслеживаетя")
-//            .setSmallIcon(R.drawable.planet_icon)
-//            .setContentIntent(pendingIntent)
-//            .build()
-//    }
+    private fun createNotification(): Notification {
+        val intent = Intent(this, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
 
-//    private fun createNotificationChannel() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val channel = NotificationChannel(
-//                CHANNEL_ID,
-//                "Location Service Channel",
-//                NotificationManager.IMPORTANCE_DEFAULT
-//            )
-//            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//            manager.createNotificationChannel(channel)
-//        }
-//    }
-//
-//    companion object {
-//        private const val CHANNEL_ID = "location_service_channel"
-//    }
+        return NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle("Локация")
+            .setContentText("Ваша локация отслеживается")
+            .setSmallIcon(R.drawable.planet_icon)
+            .setContentIntent(pendingIntent)
+            .build()
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                "Location Service Channel",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannel(channel)
+        }
+    }
+
+    companion object {
+        private const val CHANNEL_ID = "location_service_channel"
+    }
 }
 
 data class LocationData(
