@@ -513,7 +513,6 @@ class EventEntFragment : Fragment() {
         }
     }
 
-
     private fun regUserToEvent(curUid: String, callback: (Boolean) -> Unit) {
         try {
             val dbRef_users = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")

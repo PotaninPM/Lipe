@@ -27,11 +27,11 @@
                 android:layout_gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/allEntEvent"
+                app:layout_constraintStart_toStartOf="@+id/allHelpEvent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/allEntEvent"
+                android:id="@+id/allHelpEvent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -95,10 +95,11 @@
                 <!--                </LinearLayout>-->
 
                 <TextView
-                    android:id="@+id/title"
+                    android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{viewModel.title}"
+                    android:textColor="@color/green"
+                    android:text="@{viewModel.price}"
                     android:layout_marginStart="@dimen/_12sdp"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:fontFamily="@font/nunitosansbold"
@@ -115,8 +116,8 @@
                     android:textSize="@dimen/_12sdp"
                     android:fontFamily="@font/roboto_bold"
                     android:text="@{viewModel.time_of_creation}"
-                    app:layout_constraintStart_toStartOf="@+id/title"
-                    app:layout_constraintTop_toBottomOf="@+id/title" />
+                    app:layout_constraintStart_toStartOf="@+id/price"
+                    app:layout_constraintTop_toBottomOf="@+id/price" />
 
                 <View
                     android:id="@+id/lineLineTwo"
@@ -144,7 +145,7 @@
                         android:layout_height="@dimen/_40sdp"
                         android:padding="@dimen/_2sdp"
                         android:scaleType="centerCrop"
-                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginStart="@dimen/_12sdp"
                         app:shapeAppearanceOverlay="@style/ImageStyle_Circle"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -164,7 +165,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunitosansextrabold"
                             android:gravity="center"
-                            android:text="@{viewModel.creatorUsername}"
+
                             android:textSize="@dimen/_14sdp" />
 
                         <TextView
@@ -245,6 +246,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/date_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunitosanssemibold"
@@ -363,6 +365,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_12sdp"
                     android:layout_marginTop="@dimen/_4sdp"
                     android:fontFamily="@font/mulish"
                     android:gravity="center"
@@ -396,12 +399,14 @@
                 <Button
                     android:id="@+id/deleteOrLeave"
                     style="@style/Widget.Material3.Button.Icon"
-                    android:layout_width="@dimen/_140sdp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/quantum_googred"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:singleLine="true"
+                    android:layout_marginStart="@dimen/_22sdp"
+                    android:layout_marginEnd="@dimen/_22sdp"
                     android:layout_marginTop="@dimen/_12sdp"
                     android:textAllCaps="false"
                     android:textColor="@color/quantum_white_100"
@@ -409,27 +414,6 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/listUsers"
-                    app:layout_constraintTop_toBottomOf="@+id/desc"
-                    tools:ignore="TextSizeCheck" />
-
-                <Button
-                    android:id="@+id/listUsers"
-                    style="@style/Widget.Material3.Button.Icon"
-                    android:layout_width="@dimen/_140sdp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_12sdp"
-                    android:backgroundTint="#2494EA"
-                    android:ellipsize="end"
-                    android:layout_marginStart="@dimen/_14sdp"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:textAllCaps="false"
-                    android:textColor="@color/quantum_white_100"
-                    android:textFontWeight="600"
-                    android:textSize="@dimen/_12sdp"
-                    android:visibility="invisible"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/desc"
                     tools:ignore="TextSizeCheck" />
 

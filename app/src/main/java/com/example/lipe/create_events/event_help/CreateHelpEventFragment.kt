@@ -157,7 +157,7 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
                     imageRef.putFile(uri)
                         .addOnSuccessListener { task ->
                             task.storage.downloadUrl.addOnSuccessListener { url ->
-                                photos.add(uid)
+                                photos.add(url.toString())
                                 callback(photos)
                             }
                         }
@@ -225,6 +225,7 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
 
             var price = binding.etPriceinputText.text.toString().trim().toInt()
 
+            var dating = binding.dateText.text.toString()
             var coord: HashMap<String, Double> = hashMapOf("latitude" to appVM.latitude, "longitude" to appVM.longtitude)
             var maxPeople: Int = binding.etMaxInputText.text.toString().trim().toInt()
             var desc: String = binding.etDescInputText.text.toString().trim()
@@ -239,9 +240,10 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
                 price,
                 maxPeople,
                 coord,
-                "-",
+                dating,
                 desc,
-                photos
+                photos,
+                arrayListOf()
             )
 
             val dbRef_user_your = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/yourCreatedEvents")

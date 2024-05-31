@@ -11,5 +11,5 @@ data class HelpEventModelDB(
     var date_of_meeting: String ?= null,
     var description: String,
     var photos: ArrayList<String>,
-    var people_want_id: Array<String>? = null,
+    var people_want_id: ArrayList<String>? = null,
 )

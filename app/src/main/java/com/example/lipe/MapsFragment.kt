@@ -19,6 +19,7 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.os.Looper
@@ -249,8 +250,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private fun startLocationService() {
         if(isAdded && context != null) {
-            val intent = Intent(requireContext(), LocationService::class.java)
-            ContextCompat.startForegroundService(requireContext(), intent)
+            val serviceIntent = Intent(requireContext(), LocationService::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                ContextCompat.startForegroundService(requireContext(), serviceIntent)
+            } else {
+                requireContext().startService(serviceIntent)
+            }
         }
     }
 
@@ -614,6 +619,24 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    private fun locationPermissions(): Boolean {
+        val fineLocationPermission = ActivityCompat.checkSelfPermission(
+            requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+        val coarseLocationPermission = ActivityCompat.checkSelfPermission(
+            requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+        val foregroundServiceLocationPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.FOREGROUND_SERVICE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
+        return fineLocationPermission && coarseLocationPermission && foregroundServiceLocationPermission
+    }
+
     fun getRoundedCornerBitmap(bitmap: Bitmap, pixels: Int): Bitmap {
         val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(output)
@@ -706,7 +729,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
-        startLocationService()
+        if (locationPermissions()) {
+            startLocationService()
+        } else {
+            requestLocationPermissions()
+        }
+
 
         if(appVM.reg == "yes") {
             //showSuccessRegWindow()
@@ -801,6 +829,17 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             true
         }
 
+    }
+
+    private fun requestLocationPermissions() {
+        val permissions = mutableListOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissions.add(Manifest.permission.FOREGROUND_SERVICE_LOCATION)
+        }
+        requestPermissions(permissions.toTypedArray(), LOCATION_PERMISSION_REQUEST_CODE)
     }
 
     //-------

@@ -15,6 +15,7 @@ import com.example.lipe.viewModels.EventEcoVM
 import com.example.lipe.viewModels.EventEntVM
 import com.example.lipe.view_events.event_eco.EventEcoFragment
 import com.example.lipe.view_events.event_ent.EventEntFragment
+import com.example.lipe.view_events.event_help.EventHelpFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -60,13 +61,14 @@ class EventFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-                if(appVM.type == "ent") {
-                    switchFragments(0)
-                } else if(appVM.type == "eco") {
-                    switchFragments(1)
-                } else {
-                    switchFragments(0)
-                }
+
+        if(appVM.type == "ent") {
+            switchFragments(0)
+        } else if(appVM.type == "eco") {
+            switchFragments(1)
+        } else if(appVM.type == "help") {
+            switchFragments(2)
+        }
 
 
     }
@@ -75,6 +77,7 @@ class EventFragment : BottomSheetDialogFragment() {
         val fragment = when(position) {
             0 -> EventEntFragment()
             1 -> EventEcoFragment()
+            2 -> EventHelpFragment()
             else -> null
         }
 
@@ -86,10 +89,10 @@ class EventFragment : BottomSheetDialogFragment() {
     }
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.setOnShowListener {
-            val bottomSheet = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-            bottomSheet?.layoutParams?.height = (resources.displayMetrics.heightPixels * 0.6).toInt()
-        }
+//        dialog.setOnShowListener {
+//            val bottomSheet = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+//            bottomSheet?.layoutParams?.height = (resources.displayMetrics.heightPixels * 0.6).toInt()
+//        }
         return dialog
     }
 

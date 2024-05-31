@@ -7,9 +7,6 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class EventHelpVM : ViewModel() {
-    private var _title = MutableLiveData<String>()
-    val title: LiveData<String> = _title
-
     private var _id = MutableLiveData<String>()
     val id: LiveData<String> = _id
 
@@ -21,9 +18,6 @@ class EventHelpVM : ViewModel() {
 
     private var _photos = MutableLiveData<ArrayList<String>>()
     val photos: LiveData<ArrayList<String>> = _photos
-
-    private var _peopleGo = MutableLiveData<List<String>>()
-    val peopleGo: LiveData<List<String>> = _peopleGo
 
     private var _freePlaces = MutableLiveData<Int>()
     var freePlaces: LiveData<Int> = _freePlaces
@@ -49,8 +43,8 @@ class EventHelpVM : ViewModel() {
     private var _creatorUsername = MutableLiveData<String>()
     val creatorUsername: LiveData<String> = _creatorUsername
 
-    private var _age = MutableLiveData<String>()
-    val age: LiveData<String> = _age
+    private var _price = MutableLiveData<String>()
+    val price: LiveData<String> = _price
 
     private var _friend = MutableLiveData<String>()
     val friend: LiveData<String> = _friend
@@ -63,16 +57,13 @@ class EventHelpVM : ViewModel() {
         longtitude = long
     }
 
-    fun setInfo(id_: String, maxPeople_: Int, title_: String, creator_: String, creatorUsername_: String, photos_: ArrayList<String>, peopleGo_: List<String>, freePlaces_: Int, age_: String, eventDesc_: String, time_of_creation_: String, date_: String, type_sport_: String, amount_reg_people_: Int, friend_: String) {
+    fun setInfo(id_: String, maxPeople_: Int, price_: Int, creator_: String, creatorUsername_: String, photos_: ArrayList<String>, freePlaces_: Int, eventDesc_: String, time_of_creation_: String, date_: String, amount_reg_people_: Int, friend_: String) {
         _id.value = id_
         _maxPeople.value = maxPeople_
-        _title.value = title_
         _creator.value = creator_
         _photos.value = photos_
-        _peopleGo.value = peopleGo_
         _eventDesc.value = eventDesc_
         _date.value = date_.substring(6, date_.length) + " в " + date_.substring(0, 5)
-        _type_sport.value = type_sport_
         _time_of_creation.value = time_of_creation_
         _amount_reg_people.value = amount_reg_people_
         _freePlaces.value = 100 - 100 * amount_reg_people.value!! / maxPeople.value!!
@@ -81,7 +72,7 @@ class EventHelpVM : ViewModel() {
 
         _friend.value = friend_
 
-        _age.value = age_
+        _price.value = price_.toString()
         _creatorUsername.value = creatorUsername_
 
     }
