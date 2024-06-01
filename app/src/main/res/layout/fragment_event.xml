@@ -16,10 +16,10 @@ tools:context=".view_events.EventFragment">
 
     <View
         android:id="@+id/lineVectorOne"
-        android:layout_width="@dimen/_56sdp"
+        android:layout_width="@dimen/_36sdp"
         android:layout_height="@dimen/_3sdp"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_6sdp"
         android:background="#959494" />
 
 

@@ -182,27 +182,32 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
             mMap.setOnMarkerClickListener { marker ->
 
-                val markerPosition = marker.position
+                if(marker.title != null) {
+                    appVM.type = marker.title.toString()
+                    EventFragment.show(childFragmentManager)
+                } else {
+                    val markerPosition = marker.position
 
-                val latitude = markerPosition.latitude
-                val longitude = markerPosition.longitude
+                    val latitude = markerPosition.latitude
+                    val longitude = markerPosition.longitude
 
-                eventEntVM.latitude = latitude
-                eventEntVM.longtitude = longitude
+                    eventEntVM.latitude = latitude
+                    eventEntVM.longtitude = longitude
 
-                appVM.latitude = latitude
-                appVM.longtitude = longitude
+                    appVM.latitude = latitude
+                    appVM.longtitude = longitude
 
-                mMap.animateCamera(
-                    CameraUpdateFactory.newLatLngZoom(
-                        LatLng(latitude, longitude),
-                        17f
+                    mMap.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(latitude, longitude),
+                            17f
+                        )
                     )
-                )
 
-                searchTypeOfEvent(latitude, longitude) { ready ->
-                    if (ready) {
-                        EventFragment.show(childFragmentManager)
+                    searchTypeOfEvent(latitude, longitude) { ready ->
+                        if (ready) {
+                            EventFragment.show(childFragmentManager)
+                        }
                     }
                 }
 
@@ -480,6 +485,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                                                 )
                                             )
                                         )
+                                        .title(friendUid)
                                         .anchor(0.5f, 1f)
 
                                     val marker = mMap.addMarker(markerOptions)
