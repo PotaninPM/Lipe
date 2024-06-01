@@ -3,7 +3,6 @@ package com.example.lipe.chats_and_groups.group_fr
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,14 +14,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.Coil
 import coil.request.ImageRequest
-import com.example.lipe.CryptAlgo
+import com.example.lipe.DeCryptMessages
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.chats_and_groups.Message
-import com.example.lipe.chats_and_groups.chat_fr.ChatAdapter
-import com.example.lipe.databinding.FragmentChatBinding
 import com.example.lipe.databinding.FragmentGroupBinding
-import com.example.lipe.viewModels.ChatVM
 import com.example.lipe.viewModels.GroupVM
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -31,7 +27,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -109,11 +104,12 @@ class GroupFragment(val groupUid: String) : Fragment() {
         val dbRef_chatLastMessage = FirebaseDatabase.getInstance().getReference("groups/${groupUid}")
 
         binding.sendBtn.setOnClickListener {
+            val secretKey = DeCryptMessages.generateKey()
             val messageText = binding.messageInput.text.toString().trim()
             if (messageText.isNotEmpty()) {
                 val currentUser = FirebaseAuth.getInstance().currentUser
                 val message = Message(
-                    CryptAlgo.crypt(messageText),
+                    DeCryptMessages.encrypt(messageText, secretKey),
                     currentUser?.uid ?: "",
                     System.currentTimeMillis()
                 )
@@ -178,7 +174,8 @@ class GroupFragment(val groupUid: String) : Fragment() {
                     groupVM.setInfo(
                         snapshot.child("title").value.toString(),
                         groupUid,
-                        snapshot.child("members").childrenCount.toString()
+                        snapshot.child("members").childrenCount.toString(),
+                        snapshot.child("key").value.toString()
                     )
                     lifecycleScope.launch {
                         val bitmap: Bitmap = withContext(Dispatchers.IO) {

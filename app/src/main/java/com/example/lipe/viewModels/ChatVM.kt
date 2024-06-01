@@ -17,8 +17,13 @@ class ChatVM : ViewModel() {
 
     private var _chatUid = MutableLiveData<String>()
     val chatUid: LiveData<String> = _chatUid
-    fun setInfo(name_ :String, status_: String, chatUid_:String) {
+
+    private var _key = MutableLiveData<String>()
+    val key: LiveData<String> = _key
+
+    fun setInfo(name_ :String, status_: String, chatUid_:String, key_: String) {
         _name.value = name_
+        _key.value = key_
         if(status_ == "online"){
             _status.value = "в сети"
         } else if(status_ == "offline") {

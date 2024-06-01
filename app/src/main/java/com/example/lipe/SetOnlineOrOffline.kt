@@ -3,6 +3,7 @@ package com.example.lipe
 import android.app.Activity
 import android.app.Application
 import android.content.ComponentCallbacks2
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
@@ -12,11 +13,14 @@ import com.google.firebase.database.FirebaseDatabase.*
 class SetOnlineOrOffline : Application() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var batteryReceiver: BatteryReceiver
     override fun onCreate() {
         super.onCreate()
 
         try {
             auth = FirebaseAuth.getInstance()
+
+            batteryReceiver = BatteryReceiver()
 
             val user = auth.currentUser?.uid
 
@@ -24,7 +28,9 @@ class SetOnlineOrOffline : Application() {
 
             if(user != "null") {
                 registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
-                    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
+                    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+                        loadBatteryLevel(activity)
+                    }
 
                     override fun onActivityStarted(activity: Activity) {
                         if (user != null) {
@@ -60,6 +66,22 @@ class SetOnlineOrOffline : Application() {
             }
         } catch (e: Exception) {
             Log.e("INFOG1", e.message.toString())
+        }
+    }
+
+    private fun loadBatteryLevel(context: Context) {
+        batteryReceiver.getBatteryLevel(context).observeForever { batteryLevel ->
+            sendBatteryLevelToFirebase(batteryLevel)
+        }
+    }
+
+    private fun sendBatteryLevelToFirebase(batteryLevel: String) {
+        val userId = auth.currentUser?.uid ?: return
+        val dbRefUser = FirebaseDatabase.getInstance().getReference("users/$userId")
+        dbRefUser.child("batteryLevel").setValue(batteryLevel).addOnSuccessListener {
+            Log.d("INFOG", "Battery level updated: $batteryLevel%")
+        }.addOnFailureListener {
+            Log.e("INFOG", "Failed to update battery level")
         }
     }
 

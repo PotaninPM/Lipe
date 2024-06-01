@@ -17,10 +17,14 @@ class GroupVM : ViewModel() {
     private var _countMembers = MutableLiveData<String>()
     val countMembers: LiveData<String> = _countMembers
 
-    fun setInfo(name_ :String, chatUid_:String, countMembers_: String) {
+    private var _key = MutableLiveData<String>()
+    val key: LiveData<String> = _key
+
+    fun setInfo(name_ :String, chatUid_:String, countMembers_: String, key_: String) {
         _name.value = name_
         _groupUid.value = chatUid_
         _countMembers.value = "$countMembers_ участников"
+        _key.value = key_
     }
 
     fun setPhoto(photo_: String) {

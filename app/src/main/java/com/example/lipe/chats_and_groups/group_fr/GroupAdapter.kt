@@ -10,14 +10,13 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.request.ImageRequest
-import com.example.lipe.CryptAlgo
+import com.example.lipe.DeCryptMessages
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.Message
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,10 +27,9 @@ class GroupAdapter(var messages: List<Message>, var myUserId: String, var lifeSc
     inner class GroupViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(message: Message) {
-
             if(message.senderId == myUserId) {
                 val messageTextView: TextView = itemView.findViewById(R.id.sender_message_text)
-                messageTextView.text = CryptAlgo.encrypt(message.text)
+                messageTextView.text = message.text
             } else {
                 val messageTextViewGroup: TextView = itemView.findViewById(R.id.sender_message_text_group)
                 val name_other: TextView = itemView.findViewById(R.id.sender_group)
@@ -61,7 +59,7 @@ class GroupAdapter(var messages: List<Message>, var myUserId: String, var lifeSc
                     }
 
                 })
-                messageTextViewGroup.text = CryptAlgo.encrypt(message.text)
+                messageTextViewGroup.text = message.text
             }
         }
     }

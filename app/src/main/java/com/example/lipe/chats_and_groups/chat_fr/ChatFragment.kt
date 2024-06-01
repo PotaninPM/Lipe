@@ -11,13 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.Coil
-import coil.memory.MemoryCache
 import coil.request.ImageRequest
-import com.example.lipe.CryptAlgo
+import com.example.lipe.DeCryptMessages
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.chats_and_groups.Message
@@ -85,8 +83,9 @@ class ChatFragment(val chatUid: String) : Fragment() {
             val messageText = binding.messageInput.text.toString().trim()
             if (messageText.isNotEmpty()) {
                 val currentUser = FirebaseAuth.getInstance().currentUser
+                val secretKey = DeCryptMessages.generateKey()
                 val message = Message(
-                    CryptAlgo.crypt(messageText),
+                    DeCryptMessages.encrypt(messageText, secretKey),
                     currentUser?.uid ?: "",
                     System.currentTimeMillis()
                 )
@@ -171,8 +170,8 @@ class ChatFragment(val chatUid: String) : Fragment() {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val name = snapshot.child("firstAndLastName").value.toString()
                         val status = snapshot.child("status").value.toString()
-
-                        chatVM.setInfo("$name", status, chatUid)
+                        val key = snapshot.child("key").value.toString()
+                        chatVM.setInfo("$name", status, chatUid, key)
                     }
 
                     override fun onCancelled(error: DatabaseError) {
