@@ -25,6 +25,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
+import com.vanniktech.emoji.EmojiManager
+import com.vanniktech.emoji.EmojiPopup
+import com.vanniktech.emoji.google.GoogleEmojiProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -87,6 +90,17 @@ class ChatFragment(val chatUid: String) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         db = FirebaseDatabase.getInstance().getReference("chats/${chatUid}/messages")
+
+        EmojiManager.install(GoogleEmojiProvider())
+
+        val emojiPopup = EmojiPopup.Builder.fromRootView(view).build(binding.messageInput)
+        binding.emojiBtn.setOnClickListener {
+            if (emojiPopup.isShowing) {
+                emojiPopup.dismiss()
+            } else {
+                emojiPopup.toggle()
+            }
+        }
 
         binding.recyclerViewChat.layoutManager = LinearLayoutManager(requireContext()).apply {
             reverseLayout = false

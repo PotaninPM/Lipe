@@ -14,7 +14,7 @@
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/all_chat"
-        android:background="?attr/colorOnSurfaceInverse"
+        android:background="@color/night_day"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <androidx.recyclerview.widget.RecyclerView
@@ -95,18 +95,27 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/emojiBtn"
+                android:layout_width="@dimen/_21sdp"
+                android:layout_height="@dimen/_21sdp"
+                android:src="@drawable/emoji_btn"
+                android:layout_marginStart="@dimen/_4sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/messageInput"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/_6sdp"
+                android:layout_marginStart="@dimen/_4sdp"
                 android:background="@null"
-                android:layout_marginStart="@dimen/_12sdp"
                 android:hint="@string/message_tint"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/sendBtn"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/emojiBtn"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
