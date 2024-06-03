@@ -58,11 +58,29 @@ class ChatFragment(val chatUid: String) : Fragment() {
             lifecycleOwner = viewLifecycleOwner
             viewModel = chatVM
 
+            val bottomNav =
+                (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
+            bottomNav.visibility = View.GONE
+
             fillOponentData()
         }
 
         val view = binding.root
         return view
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val bottomNav =
+            (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNav.visibility = View.VISIBLE
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val bottomNav =
+            (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNav.visibility = View.GONE
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -107,10 +125,6 @@ class ChatFragment(val chatUid: String) : Fragment() {
                 .replace(R.id.all_chat, fragment)
                 .addToBackStack(null)
                 .commit()
-
-            val bottomNav =
-                (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
-            bottomNav.visibility = View.VISIBLE
         }
 
         db.addValueEventListener(object : ValueEventListener {

@@ -132,10 +132,6 @@ class GroupFragment(val groupUid: String) : Fragment() {
                 .replace(R.id.all_group, fragment)
                 .addToBackStack(null)
                 .commit()
-
-            val bottomNav =
-                (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
-            bottomNav.visibility = View.VISIBLE
         }
 
         db.addValueEventListener(object : ValueEventListener {
@@ -160,6 +156,20 @@ class GroupFragment(val groupUid: String) : Fragment() {
         })
 
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+        val bottomNav =
+            (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNav.visibility = View.VISIBLE
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val bottomNav =
+            (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNav.visibility = View.GONE
     }
 
     private fun fillGroupData() {
