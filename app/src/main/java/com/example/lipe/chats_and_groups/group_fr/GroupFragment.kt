@@ -27,6 +27,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.vanniktech.emoji.EmojiManager
+import com.vanniktech.emoji.EmojiPopup
+import com.vanniktech.emoji.google.GoogleEmojiProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -96,6 +99,17 @@ class GroupFragment(val groupUid: String) : Fragment() {
         binding.recyclerViewGroup.layoutManager = LinearLayoutManager(requireContext()).apply {
             reverseLayout = false
             stackFromEnd = true
+        }
+
+        EmojiManager.install(GoogleEmojiProvider())
+
+        val emojiPopup = EmojiPopup.Builder.fromRootView(view).build(binding.messageInput)
+        binding.emojiBtn.setOnClickListener {
+            if (emojiPopup.isShowing) {
+                emojiPopup.dismiss()
+            } else {
+                emojiPopup.toggle()
+            }
         }
 
         groupAdapter = GroupAdapter(listOf(), auth.currentUser!!.uid, lifecycleScope)
