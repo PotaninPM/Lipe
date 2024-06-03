@@ -735,6 +735,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
+        binding.allText.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+
         if (locationPermissions()) {
             startLocationService()
         } else {
@@ -967,14 +969,44 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val type = appVM.markersType
         Log.d("INFOG", appVM.markersType)
 
-//        if(type == "friends")
-//            binding.friendsText.setTextColor(Color.BLACK)
-//        if(type == "all")
-//            binding.allText.setTextColor(Color.BLACK)
-//        if(type == "eco")
-//            binding.ecoText.setTextColor(Color.BLACK)
-//        if(type == "ent")
-//            binding.entText.setTextColor(Color.BLACK)
+        val white = ContextCompat.getColor(requireContext(), R.color.white)
+        val black = Color.BLACK
+        if(type == "friends") {
+            binding.friendsText.setTextColor(white)
+            binding.allText.setTextColor(black)
+            binding.helpText.setTextColor(black)
+            binding.ecoText.setTextColor(black)
+            binding.entText.setTextColor(black)
+        }
+        if(type == "all") {
+            binding.allText.setTextColor(white)
+            binding.friendsText.setTextColor(black)
+            binding.helpText.setTextColor(black)
+            binding.ecoText.setTextColor(black)
+            binding.entText.setTextColor(black)
+        }
+        if(type == "eco") {
+            binding.ecoText.setTextColor(white)
+            binding.friendsText.setTextColor(black)
+            binding.allText.setTextColor(black)
+            binding.helpText.setTextColor(black)
+            binding.entText.setTextColor(black)
+        }
+        if(type == "ent") {
+            binding.entText.setTextColor(white)
+            binding.friendsText.setTextColor(black)
+            binding.allText.setTextColor(black)
+            binding.helpText.setTextColor(black)
+            binding.ecoText.setTextColor(black)
+        }
+
+        if(type == "help") {
+            binding.helpText.setTextColor(white)
+            binding.friendsText.setTextColor(black)
+            binding.allText.setTextColor(black)
+            binding.entText.setTextColor(black)
+            binding.ecoText.setTextColor(black)
+        }
 
         binding.friends.setBackgroundResource(if(type == "friends") R.drawable.vary_of_events else 0)
         binding.allEvents.setBackgroundResource(if(type == "all") R.drawable.vary_of_events else 0)
