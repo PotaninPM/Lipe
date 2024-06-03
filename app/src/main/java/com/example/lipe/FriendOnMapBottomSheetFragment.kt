@@ -11,7 +11,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class FriendOnMapBottomSheetFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentFriendOnMapBottomSheetBinding
-    private lateinit var
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

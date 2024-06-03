@@ -79,7 +79,6 @@ class RatingFragment : Fragment() {
             addPeople()
         }
     }
-
     private fun loadDataOfUser() {
         val user = auth.currentUser!!.uid
 
