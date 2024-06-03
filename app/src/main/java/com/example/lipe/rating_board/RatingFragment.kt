@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -56,20 +57,13 @@ class RatingFragment : Fragment() {
 
             binding.recyclerView.setHasFixedSize(true)
 
-            binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return false
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    if (newText.isNullOrEmpty()) {
+            binding.searchView.addTextChangedListener {
+                    if(it.isNullOrEmpty()) {
                         adapter.filter("", rateList)
                     } else {
-                        adapter.filter(newText, rateList)
+                        adapter.filter(it.toString(), rateList)
                     }
-                    return true
-                }
-            })
+            }
 
 
             binding.placeInRating.setOnClickListener {

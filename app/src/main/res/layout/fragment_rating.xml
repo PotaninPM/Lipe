@@ -120,25 +120,38 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
-            <com.google.android.material.card.MaterialCardView
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/cardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="@dimen/_20sdp"
-                app:cardElevation="@dimen/_4sdp"
-                app:cardUseCompatPadding="true"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/search_icon"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_15sdp"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusBottomEnd="@dimen/_30sdp"
+                app:boxCornerRadiusBottomStart="@dimen/_30sdp"
+                app:boxCornerRadiusTopStart="@dimen/_30sdp"
+                app:boxCornerRadiusTopEnd="@dimen/_30sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
-                <androidx.appcompat.widget.SearchView
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/searchView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:iconifiedByDefault="false"
-                    app:queryHint="@string/search_by_login" />
-            </com.google.android.material.card.MaterialCardView>
+                    android:hint="@string/enter_login"
+                    android:inputType="textEmailAddress"
+                    app:queryHint="@string/search_by_login"
+                    android:singleLine="true"
+                    tools:ignore="Autofill" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
 
         <TextView
