@@ -89,9 +89,55 @@
                         android:layout_marginEnd="@dimen/_12sdp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_12sdp"
+                        android:visibility="invisible"
                         android:backgroundTint="#00A917"
                         android:textColor="@color/quantum_white_100"
                         android:text="@string/add_to_friends"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/avatar"
+                        app:layout_constraintTop_toBottomOf="@+id/avatar" />
+
+                    <Button
+                        android:id="@+id/request"
+                        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                        android:layout_width="match_parent"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
+                        android:visibility="invisible"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:textColor="@color/quantum_white_100"
+                        android:text="@string/request_sent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/avatar"
+                        app:layout_constraintTop_toBottomOf="@+id/avatar" />
+
+                    <Button
+                        android:id="@+id/delete"
+                        android:layout_width="match_parent"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
+                        android:backgroundTint="@color/quantum_googred"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:textColor="@color/quantum_white_100"
+                        android:text="@string/delete_friend"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/avatar"
+                        app:layout_constraintTop_toBottomOf="@+id/avatar" />
+
+                    <Button
+                        android:id="@+id/accept"
+                        android:layout_width="match_parent"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_12sdp"
+                        android:backgroundTint="#376EDB"
+                        android:layout_height="wrap_content"
+                        android:visibility="invisible"
+                        android:layout_marginTop="@dimen/_12sdp"
+                        android:textColor="@color/quantum_white_100"
+                        android:text="@string/accept_friendsheep"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/avatar"
                         app:layout_constraintTop_toBottomOf="@+id/avatar" />

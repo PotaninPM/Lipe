@@ -113,19 +113,26 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
         setupTabLayout()
 
         binding.addToFriends.setOnClickListener {
-            when(otherProfileVM.friendStatus.value.toString()) {
-                "friend" -> deleteFromFriends()
-                "not" -> sendFriendsRequest()
-                "query_to_you" -> acceptFriendRequest()
-                "query_from_you" -> deleteFriendRequest()
-            }
+            sendFriendsRequest()
+        }
+
+        binding.delete.setOnClickListener {
+            deleteFromFriends()
+        }
+
+        binding.request.setOnClickListener {
+            deleteFriendRequest()
+        }
+
+        binding.accept.setOnClickListener {
+            acceptFriendRequest()
         }
 
     }
 
     private fun deleteFromFriends() {
         if(isAdded) {
-            binding.addToFriends.isEnabled = false
+            binding.delete.isEnabled = false
             val yourFriends = FirebaseDatabase.getInstance()
                 .getReference("users/${auth.currentUser!!.uid}/friends/${personUid}")
             val friend = FirebaseDatabase.getInstance()
@@ -138,10 +145,14 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                             amount.child("${auth.currentUser!!.uid}").child("friends_amount").setValue(snapshot.value.toString().toInt() - 1)
                             amount.child(personUid).child("friends_amount").addListenerForSingleValueEvent(object: ValueEventListener{
                                 override fun onDataChange(snapshot2: DataSnapshot) {
-                                    amount.child(personUid).child("friends_amount").setValue(snapshot2.value.toString().toInt() - 1)
-                                    binding.addToFriends.isEnabled = true
-                                    binding.addToFriends.setBackgroundResource(context?.getColor(R.color.green)!!)
-                                    binding.addToFriends.text = context?.getString(R.string.add_to_friends)
+                                    amount.child(personUid).child("friends_amount").setValue(snapshot2.value.toString().toInt() - 1).addOnSuccessListener {
+                                        binding.delete.visibility = View.INVISIBLE
+                                        binding.addToFriends.visibility = View.VISIBLE
+                                        binding.request.visibility = View.INVISIBLE
+                                        binding.accept.visibility= View.INVISIBLE
+
+                                        binding.delete.isEnabled = true
+                                    }
                                 }
 
                                 override fun onCancelled(error: DatabaseError) {
@@ -161,13 +172,22 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
     }
 
     private fun deleteFriendRequest() {
+        binding.request.isEnabled = false
+
         val dbRef_accepter_query = FirebaseDatabase.getInstance()
             .getReference("users/${personUid}/query_friends/${auth.currentUser!!.uid}")
         dbRef_accepter_query.removeValue().addOnSuccessListener {
-            binding.addToFriends.text = getString(R.string.add_to_friends)
+            binding.delete.visibility = View.INVISIBLE
+            binding.addToFriends.visibility = View.VISIBLE
+            binding.request.visibility = View.INVISIBLE
+            binding.accept.visibility= View.INVISIBLE
+
+            binding.request.isEnabled = true
         }
     }
     private fun acceptFriendRequest() {
+        binding.accept.isEnabled = false
+
         val you = auth.currentUser!!.uid
         val person = personUid
         val dbRef_accepter_friends = FirebaseDatabase.getInstance()
@@ -202,8 +222,12 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                                                 dbRef_accepter_chats.child(uid_chat).setValue(uid_chat).addOnSuccessListener {
                                                     val request = FriendRequestData(personUid, auth.currentUser!!.uid)
                                                     val call: Call<Void> = RetrofitInstance.api.acceptFriendsRequestData(request)
+                                                    binding.accept.isEnabled = true
 
-                                                    binding.addToFriends.text = getString(R.string.write_to_friend)
+                                                    binding.delete.visibility = View.VISIBLE
+                                                    binding.addToFriends.visibility = View.INVISIBLE
+                                                    binding.request.visibility = View.INVISIBLE
+                                                    binding.accept.visibility= View.INVISIBLE
                                                 }.addOnFailureListener {
                                                     Log.d("INFOG", "ErrorRequest")
                                                 }
@@ -225,6 +249,7 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
     }
 
     private fun sendFriendsRequest() {
+        binding.addToFriends.isEnabled = false
         val dbRef = FirebaseDatabase.getInstance().getReference("users/${personUid}/query_friends")
         dbRef.child(auth.currentUser!!.uid).setValue(auth.currentUser!!.uid).addOnSuccessListener {
 
@@ -236,7 +261,12 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
             call.enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
-                        Log.d("INFOG", "notification was sent")
+                        binding.addToFriends.isEnabled = true
+
+                        binding.delete.visibility = View.INVISIBLE
+                        binding.addToFriends.visibility = View.INVISIBLE
+                        binding.request.visibility = View.VISIBLE
+                        binding.accept.visibility= View.INVISIBLE
                     } else {
                         Log.d("INFOG", "${response.message()}")
                     }
@@ -246,7 +276,6 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                     Log.d("INFOG", "${t.message}")
                 }
             })
-            binding.addToFriends.text = getString(R.string.request_sent)
         }
     }
 
@@ -267,8 +296,10 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                 for (user in snapshot.children) {
                     if (user.value.toString() == personUid) {
                         if (isAdded) {
-                            binding.addToFriends.text = getString(R.string.delete_friend)
-                            binding.addToFriends.setBackgroundColor(Color.RED)
+                            binding.delete.visibility = View.VISIBLE
+                            binding.addToFriends.visibility = View.INVISIBLE
+                            binding.request.visibility = View.INVISIBLE
+                            binding.accept.visibility= View.INVISIBLE
                             status("friend")
                         }
                         return
@@ -280,8 +311,10 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                         for (user in snapshot.children) {
                             if (user.value == auth.currentUser!!.uid) {
                                 if (isAdded) {
-                                    //binding.addToFriends.text = getString(R.string.accept_friendsheep)
-                                    binding.addToFriends.text = "Принять"
+                                    binding.addToFriends.visibility = View.INVISIBLE
+                                    binding.request.visibility = View.INVISIBLE
+                                    binding.accept.visibility= View.VISIBLE
+                                    binding.delete.visibility = View.INVISIBLE
                                     status("query_to_you")
                                 }
                                 return
@@ -293,8 +326,10 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                                 for (user in snapshot.children) {
                                     if (user.value == auth.currentUser!!.uid) {
                                         if (isAdded) {
-                                            binding.addToFriends.text = getString(R.string.request_sent)
-                                            //binding.addToFriends.setBackgroundResource()
+                                            binding.addToFriends.visibility = View.INVISIBLE
+                                            binding.request.visibility = View.VISIBLE
+                                            binding.accept.visibility= View.INVISIBLE
+                                            binding.delete.visibility = View.INVISIBLE
                                             status("query_from_you")
                                         }
                                         return
