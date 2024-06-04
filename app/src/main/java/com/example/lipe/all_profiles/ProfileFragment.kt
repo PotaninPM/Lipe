@@ -14,9 +14,11 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.widget.ViewPager2
 import coil.Coil
 import coil.request.ImageRequest
 import com.example.lipe.R
+import com.example.lipe.all_profiles.EventsInProfileTabAdapter
 import com.example.lipe.all_profiles.change_info_sheet.ChangeInfoBottomSheet
 import com.example.lipe.databinding.FragmentProfileBinding
 import com.example.lipe.viewModels.ProfileVM
@@ -40,14 +42,13 @@ class ProfileFragment : Fragment() {
     private lateinit var storageRef: StorageReference
     private var originalBackground: Drawable? = null
 
+    private lateinit var adapter: EventsInProfileTabAdapter
+
     private val profileVM: ProfileVM by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if(isAdded) {
-            switchTabs(0)
-
-            setupTabLayout()
 
             binding.apply {
                 theme.setOnClickListener {
@@ -67,6 +68,30 @@ class ProfileFragment : Fragment() {
                     val friendBottomSheet = FriendsBottomSheet()
                     friendBottomSheet.show(childFragmentManager, "FriendsBottomSheet")
                 }
+
+                tabLayout.apply {
+                    addTab(newTab().setText(R.string.cur_events))
+                    addTab(newTab().setText(R.string.your_events))
+
+                    addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
+                        override fun onTabSelected(tab: TabLayout.Tab?) {
+                            binding.viewPager.currentItem = tab!!.position
+                        }
+
+                        override fun onTabUnselected(p0: TabLayout.Tab?) {}
+
+                        override fun onTabReselected(p0: TabLayout.Tab?) {}
+
+                    })
+                }
+
+                viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+                    override fun onPageSelected(position: Int) {
+                        super.onPageSelected(position)
+
+                        binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
+                    }
+                })
             }
         }
     }
@@ -77,6 +102,7 @@ class ProfileFragment : Fragment() {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         val view = binding.root
 
+
         if(isAdded) {
             dbRef = FirebaseDatabase.getInstance().getReference("users")
             auth = FirebaseAuth.getInstance()
@@ -85,6 +111,9 @@ class ProfileFragment : Fragment() {
             binding.apply {
                 lifecycleOwner = viewLifecycleOwner
                 viewModel = profileVM
+
+                adapter = EventsInProfileTabAdapter(childFragmentManager, lifecycle, auth.currentUser!!.uid)
+                binding.viewPager.adapter = adapter
 
                 loadingProgressBar.visibility = View.VISIBLE
                 allProfile.visibility = View.GONE
@@ -114,25 +143,6 @@ class ProfileFragment : Fragment() {
         }
 
         return view
-    }
-
-    private fun setupTabLayout() {
-        val tabLayout = binding.tabLayout
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.cur_events))
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.your_events))
-
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                when (tab?.position) {
-                    0 -> switchTabs(0)
-                    1 -> switchTabs(1)
-                }
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-        })
     }
 
     val selectImageTheme =
@@ -324,20 +334,6 @@ class ProfileFragment : Fragment() {
             }.addOnFailureListener {
                 callback(false)
             }
-        }
-    }
-
-    private fun switchTabs(position: Int) {
-        val fragment = when (position) {
-            0 -> CurEventsInProfileFragment(auth.currentUser!!.uid)
-            1 -> YourEventsFragment(auth.currentUser!!.uid)
-            else -> null
-        }
-
-        fragment?.let {
-            childFragmentManager.beginTransaction()
-                .replace(R.id.switcher, it)
-                .commit()
         }
     }
 }

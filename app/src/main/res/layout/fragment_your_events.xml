@@ -6,6 +6,17 @@
     android:paddingBottom="@dimen/_50sdp"
     tools:context=".all_profiles.your_events.YourEventsFragment">
 
+    <TextView
+        android:id="@+id/no_events"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_22sdp"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/nunitosansbold"
+        android:visibility="invisible"
+        android:textSize="@dimen/_14sdp"
+        android:text="Нет событий"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recuclerview_in_profile"
         android:layout_width="match_parent"

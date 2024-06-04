@@ -224,24 +224,21 @@
                         app:tabIndicatorColor="@null"
                         app:tabRippleColor="@null"
                         app:tabIndicator="@drawable/tab_events"
-                        app:tabIndicatorHeight="@dimen/_32sdp"
+                        app:tabIndicatorHeight="@dimen/_30sdp"
                         app:tabIndicatorFullWidth="true"
                         app:tabIndicatorAnimationMode="elastic"
                         app:layout_constraintTop_toBottomOf="@+id/changeYourInfo">
 
                     </com.google.android.material.tabs.TabLayout>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/viewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
 
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/switcher"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/allProfile" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>

@@ -75,7 +75,7 @@ class ChatsAndGroupsFragment : Fragment() {
                 }
             })
 
-            view.findViewById<TabLayout>(R.id.tableLayout).apply {
+            binding.tableLayout.apply {
                 addTab(newTab().setText("Чаты"))
                 addTab(newTab().setText("Группы"))
                 addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -93,8 +93,8 @@ class ChatsAndGroupsFragment : Fragment() {
                 if (isAdded) {
                     storage.downloadUrl.addOnSuccessListener { url ->
                         lifecycleScope.launch {
-                            if (isAdded) {  // Ensure fragment is still added before executing coroutine code
-                                val bitmap: Bitmap = withContext(Dispatchers.IO) {  // Use IO dispatcher for network operations
+                            if (isAdded) {
+                                val bitmap: Bitmap = withContext(Dispatchers.IO) {
                                     Coil.imageLoader(requireContext()).execute(
                                         ImageRequest.Builder(requireContext())
                                             .data(url)
@@ -102,7 +102,7 @@ class ChatsAndGroupsFragment : Fragment() {
                                     ).drawable?.toBitmap()!!
                                 }
 
-                                if (isAdded) {  // Check again before updating the UI
+                                if (isAdded) {
                                     binding.avatarChatGroup.setImageBitmap(bitmap)
                                 }
                             }
@@ -113,8 +113,7 @@ class ChatsAndGroupsFragment : Fragment() {
                 Log.e("INFOG", "Error: ${e.message}")
             }
 
-            binding.viewPager.registerOnPageChangeCallback(object :
-                ViewPager2.OnPageChangeCallback() {
+            binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     binding.tableLayout.selectTab(binding.tableLayout.getTabAt(position))

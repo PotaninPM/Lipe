@@ -60,6 +60,13 @@ class YourEventsFragment(val personUid: String) : Fragment() {
         val yourEvents = ArrayList<EventItem>()
         dbRef_your_events.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.childrenCount.toInt() != 0) {
+                    binding.recuclerviewInProfile.visibility = View.VISIBLE
+                    binding.noEvents.visibility = View.INVISIBLE
+                } else {
+                    binding.recuclerviewInProfile.visibility = View.INVISIBLE
+                    binding.noEvents.visibility = View.VISIBLE
+                }
                 for(event in snapshot.children) {
                     Log.d("INFOG", event.value.toString())
                     val dbRef_cur_events = FirebaseDatabase.getInstance().getReference("current_events/${event.value}")
