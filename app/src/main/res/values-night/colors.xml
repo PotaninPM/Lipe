@@ -3,4 +3,5 @@
     <color name="gold_color">#EDC400</color>
     <color name="night_day">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="inverse">#FFFFFF</color>
 </resources>

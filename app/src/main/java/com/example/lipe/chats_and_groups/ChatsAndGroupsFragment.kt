@@ -126,6 +126,11 @@ class ChatsAndGroupsFragment : Fragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+
+    }
+
     private fun replaceFragment(fragment: Fragment) {
         val fragmentManager = childFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()

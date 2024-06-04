@@ -9,18 +9,19 @@
             type="com.example.lipe.viewModels.ProfileVM" />
     </data>
 
-    <androidx.drawerlayout.widget.DrawerLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
-            android:background="?attr/colorOnSurfaceInverse"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="?attr/colorOnSurfaceInverse"
+            android:clipToPadding="false"
             android:fitsSystemWindows="true"
             android:orientation="vertical"
-            android:clipToPadding="false">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -68,36 +69,14 @@
                         app:strokeColor="?attr/colorOnSurfaceInverse"
                         app:strokeWidth="@dimen/_2sdp" />
 
-<!--                    <LinearLayout-->
-<!--                        android:id="@+id/lay1"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_marginTop="@dimen/_4sdp"-->
-<!--                        android:orientation="horizontal"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toBottomOf="@+id/avatar">-->
-
-<!--                        <TextView-->
-<!--                            android:id="@+id/textView6"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:fontFamily="@font/interextrabold"-->
-<!--                            android:text="@{viewModel.nameLastName}"-->
-<!--                            android:textAlignment="center"-->
-<!--                            android:textSize="@dimen/_17sdp"-->
-<!--                            android:textStyle="bold" />-->
-
-<!--                    </LinearLayout>-->
-
                     <TextView
                         android:id="@+id/textView9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_12sdp"
                         android:fontFamily="@font/nunitosansextrabold"
                         android:text="@{viewModel.nickname}"
                         android:textSize="@dimen/_16sdp"
-                        android:layout_marginTop="@dimen/_12sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/avatar"
                         app:layout_constraintTop_toBottomOf="@+id/theme" />
@@ -106,13 +85,15 @@
                         android:id="@+id/changeYourInfo"
                         style="@style/Widget.Material3.Button.OutlinedButton.Icon"
                         android:layout_width="match_parent"
-                        android:layout_marginStart="@dimen/_12sdp"
-                        android:layout_marginEnd="@dimen/_12sdp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_12sdp"
                         android:layout_marginTop="@dimen/_12sdp"
-                        android:textColor="?attr/colorOnPrimary"
+                        android:layout_marginEnd="@dimen/_12sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:text="@string/change_data"
+                        android:textColor="?attr/colorOnPrimary"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.993"
                         app:layout_constraintStart_toEndOf="@+id/avatar"
                         app:layout_constraintTop_toBottomOf="@+id/avatar" />
 
@@ -215,19 +196,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginTop="@dimen/_12sdp"
                         android:layout_marginEnd="@dimen/_12sdp"
                         android:background="?attr/colorOnSurfaceInverse"
-                        android:layout_marginTop="@dimen/_12sdp"
-                        app:tabSelectedTextColor="@color/white"
-                        app:tabIndicatorGravity="center"
-                        app:tabMode="fixed"
-                        app:tabIndicatorColor="@null"
-                        app:tabRippleColor="@null"
+                        app:layout_constraintTop_toBottomOf="@+id/changeYourInfo"
                         app:tabIndicator="@drawable/tab_events"
-                        app:tabIndicatorHeight="@dimen/_30sdp"
-                        app:tabIndicatorFullWidth="true"
                         app:tabIndicatorAnimationMode="elastic"
-                        app:layout_constraintTop_toBottomOf="@+id/changeYourInfo">
+                        app:tabIndicatorColor="@null"
+                        app:tabIndicatorFullWidth="true"
+                        app:tabIndicatorGravity="center"
+                        app:tabIndicatorHeight="@dimen/_30sdp"
+                        app:tabMode="fixed"
+                        app:tabRippleColor="@null"
+                        app:tabSelectedTextColor="@color/white">
 
                     </com.google.android.material.tabs.TabLayout>
 
@@ -243,6 +224,6 @@
 
         </androidx.core.widget.NestedScrollView>
 
-    </androidx.drawerlayout.widget.DrawerLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

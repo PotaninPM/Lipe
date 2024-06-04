@@ -72,18 +72,18 @@ class ChatFragment(val chatUid: String) : Fragment() {
         return view
     }
 
-    override fun onPause() {
-        super.onPause()
-        val bottomNav =
-            (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNav.visibility = View.VISIBLE
-    }
+//    override fun onPause() {
+//        super.onPause()
+//        val bottomNav =
+//            (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
+//        bottomNav.visibility = View.VISIBLE
+//    }
 
     override fun onResume() {
         super.onResume()
         val bottomNav =
             (requireActivity() as AppCompatActivity).findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNav.visibility = View.GONE
+        bottomNav.visibility = View.INVISIBLE
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -97,8 +97,10 @@ class ChatFragment(val chatUid: String) : Fragment() {
         binding.emojiBtn.setOnClickListener {
             if (emojiPopup.isShowing) {
                 emojiPopup.dismiss()
+                binding.emojiBtn.setImageResource(R.drawable.emoji_btn)
             } else {
                 emojiPopup.toggle()
+                binding.emojiBtn.setImageResource(R.drawable.keyboard_btn)
             }
         }
 

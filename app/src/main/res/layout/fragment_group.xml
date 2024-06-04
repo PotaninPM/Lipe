@@ -42,7 +42,7 @@
                     android:id="@+id/back_btn"
                     android:layout_width="@dimen/_18sdp"
                     android:layout_height="@dimen/_18sdp"
-                    android:background="@drawable/back_btn_white"
+                    android:background="@drawable/back_btn"
                     android:backgroundTint="#868686"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

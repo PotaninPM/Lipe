@@ -67,12 +67,11 @@ class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope) :  RecyclerView
             }
             ratingItem.setBackgroundResource(backgroundResId)
 
-            binding.ratingItem.setOnClickListener {it ->
+            binding.ratingItem.setOnClickListener {
                 try {
+                    binding.ratingItem.isEnabled = false
                     val context = it.context
                     if (context is AppCompatActivity) {
-//                        val cardView = context.findViewById<CardView>(R.id.cardView)
-//                        cardView.visibility = View.GONE
                         if (rating.uid != auth.currentUser!!.uid) {
                             val context = it.context
                             if (context is AppCompatActivity) {
@@ -82,8 +81,15 @@ class RatingAdapter(val lifecycleScope: LifecycleCoroutineScope) :  RecyclerView
                                     .replace(R.id.allRating, fragment)
                                     .addToBackStack(null)
                                     .commit()
+                                binding.ratingItem.isEnabled = true
+                            } else {
+                                binding.ratingItem.isEnabled = true
                             }
+                        } else {
+                            binding.ratingItem.isEnabled = true
                         }
+                    } else {
+                        binding.ratingItem.isEnabled = true
                     }
                 } catch (e: Exception) {
                     Log.e("INFOG", "${e.message.toString()}")

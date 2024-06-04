@@ -63,6 +63,7 @@
     <color name="md_theme_dark_scrim">#000000</color>
     <color name="green">#00AE1C</color>
     <color name="white">#FFFFFF</color>
+    <color name="inverse">#000000</color>
     <color name="gold_color">#EDC400</color>
     <color name="night_day">#FFFFFF</color>
     <color name="grey">#ACACAC</color>
