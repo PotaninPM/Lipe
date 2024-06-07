@@ -13,9 +13,11 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import coil.Coil
 import coil.request.ImageRequest
 import com.example.lipe.R
+import com.example.lipe.all_profiles.EventsInProfileTabAdapter
 import com.example.lipe.databinding.FragmentOtherProfileBinding
 import com.example.lipe.all_profiles.cur_events.CurEventsInProfileFragment
 import com.example.lipe.all_profiles.cur_events.YourEventsFragment
@@ -50,6 +52,8 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var storageRef: StorageReference
 
+    private lateinit var adapter: EventsInProfileTabAdapter
+
     private val otherProfileVM: OtherProfileVM by activityViewModels()
 
     private var originalBackground: Drawable? = null
@@ -64,40 +68,45 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
     ): View? {
         binding = FragmentOtherProfileBinding.inflate(inflater, container, false)
 
-        auth = FirebaseAuth.getInstance()
-        dbRef = FirebaseDatabase.getInstance().getReference()
-        storageRef = FirebaseStorage.getInstance().reference
+        if(isAdded) {
+            auth = FirebaseAuth.getInstance()
+            dbRef = FirebaseDatabase.getInstance().getReference()
+            storageRef = FirebaseStorage.getInstance().reference
 
-        binding.apply {
-            lifecycleOwner = viewLifecycleOwner
-            viewModel = otherProfileVM
+            binding.apply {
+                lifecycleOwner = viewLifecycleOwner
+                viewModel = otherProfileVM
 
-            loadingProgressBar.visibility = View.VISIBLE
-            allProfile.visibility = View.GONE
+                adapter = EventsInProfileTabAdapter(childFragmentManager, lifecycle, auth.currentUser!!.uid)
+                binding.switcherOther.adapter = adapter
 
-            findAccount { userData ->
-                checkIfUserAlreadyFriend { friendStatus ->
-                    Log.d("INFOG", friendStatus)
-                    if (userData != null) {
-                        otherProfileVM.setInfo(
-                            userData.nickname,
-                            userData.friendsAmount,
-                            userData.eventsAmount,
-                            userData.ratingPoints,
-                            userData.desc,
-                            userData.name,
-                            friendStatus
-                        )
+                loadingProgressBar.visibility = View.VISIBLE
+                allProfile.visibility = View.GONE
+
+                findAccount { userData ->
+                    checkIfUserAlreadyFriend { friendStatus ->
+                        Log.d("INFOG", friendStatus)
+                        if (userData != null) {
+                            otherProfileVM.setInfo(
+                                userData.nickname,
+                                userData.friendsAmount,
+                                userData.eventsAmount,
+                                userData.ratingPoints,
+                                userData.desc,
+                                userData.name,
+                                friendStatus
+                            )
+                            loadingProgressBar.visibility = View.GONE
+                            allProfile.visibility = View.VISIBLE
+                        }
+                    }
+                }
+
+                setProfilePhotos {
+                    if (it) {
                         loadingProgressBar.visibility = View.GONE
                         allProfile.visibility = View.VISIBLE
                     }
-                }
-            }
-
-            setProfilePhotos {
-                if(it) {
-                    loadingProgressBar.visibility = View.GONE
-                    allProfile.visibility = View.VISIBLE
                 }
             }
         }
@@ -109,9 +118,31 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        switchTabs(0)
+        binding.apply {
+            tabLayout.apply {
+                addTab(newTab().setText(R.string.cur_events))
+                addTab(newTab().setText(R.string.your_events))
 
-        setupTabLayout()
+                addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
+                    override fun onTabSelected(tab: TabLayout.Tab?) {
+                        binding.switcherOther.currentItem = tab!!.position
+                    }
+
+                    override fun onTabUnselected(p0: TabLayout.Tab?) {}
+
+                    override fun onTabReselected(p0: TabLayout.Tab?) {}
+
+                })
+            }
+
+            switcherOther.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+
+                    binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
+                }
+            })
+        }
 
         binding.addToFriends.setOnClickListener {
             sendFriendsRequest()
@@ -436,24 +467,6 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
             Log.e("INFOG", e.message.toString())
         }
     }
-    private fun setupTabLayout() {
-        val tabLayout = binding.tabLayout
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.cur_events))
-        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.users_events)))
-
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                when (tab?.position) {
-                    0 -> switchTabs(0)
-                    1 -> switchTabs(1)
-                }
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-        })
-    }
 
     private fun switchTabs(position: Int) {
         val fragment = when(position) {
@@ -468,14 +481,6 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                 .commit()
         }
     }
-
-//    private fun replaceFragment(fragment: Fragment) {
-//        val fragmentManager = childFragmentManager
-//        val fragmentTransaction = fragmentManager.beginTransaction()
-//        fragmentTransaction.replace(R.id., fragment)
-//        fragmentTransaction.addToBackStack(null)
-//        fragmentTransaction.commit()
-//    }
 
 }
 
