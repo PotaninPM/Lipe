@@ -91,4 +91,6 @@
     <string name="choose_ent_type">Выберите тип развлечения</string>
     <string name="about_task">О задании</string>
     <string name="any_age">Любой возраст</string>
+    <string name="no_image">Вы не загрузили ни одного фото</string>
+    <string name="min_one_photo">Вы должны загрузить минимум одно фото</string>
 </resources>

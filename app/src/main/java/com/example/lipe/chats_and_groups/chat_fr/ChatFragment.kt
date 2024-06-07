@@ -117,9 +117,9 @@ class ChatFragment(val chatUid: String) : Fragment() {
             val messageText = binding.messageInput.text.toString().trim()
             if (messageText.isNotEmpty()) {
                 val currentUser = FirebaseAuth.getInstance().currentUser
-                val secretKey = DeCryptMessages.generateKey()
+
                 val message = Message(
-                    DeCryptMessages.encrypt(messageText, secretKey),
+                    "р",
                     currentUser?.uid ?: "",
                     System.currentTimeMillis()
                 )

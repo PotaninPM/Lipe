@@ -77,6 +77,7 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
 
             findAccount { userData ->
                 checkIfUserAlreadyFriend { friendStatus ->
+                    Log.d("INFOG", friendStatus)
                     if (userData != null) {
                         otherProfileVM.setInfo(
                             userData.nickname,
@@ -285,6 +286,7 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
         fragmentTransaction.replace(R.id.allOtherProfile, fragment)
         fragmentTransaction.commit()
     }
+
     private fun checkIfUserAlreadyFriend(status: (String) -> Unit) {
         val currentUser = auth.currentUser ?: return
         val dbRefUserFriends = FirebaseDatabase.getInstance().getReference("users/${currentUser.uid}/friends")
@@ -338,6 +340,11 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
 
                                 if (isAdded) {
                                     status("not")
+
+                                    binding.addToFriends.visibility = View.VISIBLE
+                                    binding.request.visibility = View.INVISIBLE
+                                    binding.accept.visibility= View.INVISIBLE
+                                    binding.delete.visibility = View.INVISIBLE
                                 }
                             }
 

@@ -118,12 +118,12 @@ class GroupFragment(val groupUid: String) : Fragment() {
         val dbRef_chatLastMessage = FirebaseDatabase.getInstance().getReference("groups/${groupUid}")
 
         binding.sendBtn.setOnClickListener {
-            val secretKey = DeCryptMessages.generateKey()
+//            val secretKey = DeCryptMessages.generateKey()
             val messageText = binding.messageInput.text.toString().trim()
             if (messageText.isNotEmpty()) {
                 val currentUser = FirebaseAuth.getInstance().currentUser
                 val message = Message(
-                    DeCryptMessages.encrypt(messageText, secretKey),
+                    "DeCry",
                     currentUser?.uid ?: "",
                     System.currentTimeMillis()
                 )

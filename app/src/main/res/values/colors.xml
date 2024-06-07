@@ -43,7 +43,7 @@
     <color name="md_theme_dark_onTertiary">#492532</color>
     <color name="md_theme_dark_tertiaryContainer">#633B48</color>
     <color name="md_theme_dark_onTertiaryContainer">#FFD8E4</color>
-    <color name="md_theme_dark_error">#F2B8B5</color>
+    <color name="md_theme_dark_error">#FA8D87</color>
     <color name="md_theme_dark_onError">#601410</color>
     <color name="md_theme_dark_errorContainer">#8C1D18</color>
     <color name="md_theme_dark_onErrorContainer">#F9DEDC</color>

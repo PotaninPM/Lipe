@@ -139,7 +139,8 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     } else {
                         binding.btnCreateEvent.isEnabled = true
                         binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
-                        setDialog("Вы не загрузили ни одного фото", "Вы должны загрузить минимум одно фото", "Хорошо")
+                        setDialog(getString(R.string.no_image),
+                            getString(R.string.min_one_photo), "Хорошо")
                     }
                 }
             }

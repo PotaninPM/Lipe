@@ -114,7 +114,7 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
                 if(photos[0] != "-" || photos[1] != "-" || photos[2] != "-") {
                     createEvent(photos)
                 } else {
-                    setDialog("Вы не загрузили ни одного фото", "Вы должны загрузить минимум одно фото", "Хорошо")
+                    setDialog(getString(R.string.no_image), getString(R.string.min_one_photo), "Хорошо")
                 }
             }
         }

@@ -192,8 +192,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                             )
                         )
                         setDialog(
-                            "Вы не загрузили ни одного фото",
-                            "Вы должны загрузить минимум одно фото",
+                            getString(R.string.no_image),
+                            getString(R.string.min_one_photo),
                             "Хорошо"
                         )
                     }

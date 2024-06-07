@@ -91,4 +91,6 @@
     <string name="choose_ent_type">Choose entertainment type</string>
     <string name="about_task">About task</string>
     <string name="any_age">Any age</string>
+    <string name="no_image">You didn\'t upload any photo</string>
+    <string name="min_one_photo">You should upload at least one photo</string>
 </resources>

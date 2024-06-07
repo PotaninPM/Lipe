@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".sign_up_in.SignUpFragment">
-    <LinearLayout android:id="@+id/linearSignupwithem"
+    <androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/linearSignupwithem"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:layout_gravity="center_vertical"
@@ -21,7 +21,7 @@
             android:orientation="vertical">
             <TextView android:ellipsize="end"
                 android:id="@+id/txtCreateacctitl"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_width="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/_6sdp"
@@ -33,6 +33,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
+                    app:counterMaxLength="50"
+                    app:counterEnabled="true"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -49,7 +51,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorEnabled="true"
-                app:counterMaxLength="30">
+                app:counterMaxLength="12"
+                app:counterEnabled="true">
                 <com.google.android.material.textfield.TextInputEditText
                     android:hint="@string/enter_login"
                     android:id="@+id/etLogininput"
@@ -63,6 +66,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:counterMaxLength="30"
+                app:counterEnabled="true"
                 app:errorEnabled="true">
                 <com.google.android.material.textfield.TextInputEditText
                     android:hint="@string/enter_email"
@@ -79,6 +84,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:passwordToggleEnabled="true"
+                app:counterEnabled="true"
+                app:counterMaxLength="50"
                 app:errorEnabled="true">
                 <com.google.android.material.textfield.TextInputEditText
                     android:hint="Введите пароль"
@@ -143,6 +150,7 @@
                     android:layout_height="@dimen/_40sdp"
                     android:layout_width="@dimen/_147sdp"
                     android:orientation="horizontal"
+                    android:backgroundTint="@color/night_day"
                     android:layout_gravity="center"
                     android:background="@drawable/sign_with_google">
 
@@ -169,7 +177,7 @@
                         android:singleLine="true"
                         android:layout_marginStart="@dimen/_15sdp"
                         android:text="Google"
-                        android:textColor="#000000"
+                        android:textColor="?attr/colorSurfaceInverse"
                         android:textSize="@dimen/_14sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -193,6 +201,6 @@
                     android:focusable="true" />
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</FrameLayout>
+</androidx.core.widget.NestedScrollView>

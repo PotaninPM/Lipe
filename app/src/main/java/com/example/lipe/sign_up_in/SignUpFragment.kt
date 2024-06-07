@@ -26,7 +26,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DataSnapshot
@@ -37,15 +40,10 @@ import com.google.firebase.database.ValueEventListener
 class SignUpFragment : Fragment() {
 
     private lateinit var appVM: AppVM
-
     private lateinit var binding: FragmentSignUpBinding
-
     private lateinit var signUpVM: SignUpVM
-
     private lateinit var dbRef: DatabaseReference
-
     private lateinit var auth: FirebaseAuth
-
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var googleSignInLauncher: ActivityResultLauncher<Intent>
 
@@ -55,11 +53,13 @@ class SignUpFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentSignUpBinding.inflate(inflater, container, false)
-
         appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
         signUpVM = ViewModelProvider(requireActivity()).get(SignUpVM::class.java)
+        auth = Firebase.auth
+        dbRef = FirebaseDatabase.getInstance().getReference("users")
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken("895088919548-56gvv91cvkgf398eim3d52nfj8i27fll.apps.googleusercontent.com")
             .requestEmail()
             .build()
 
@@ -68,11 +68,15 @@ class SignUpFragment : Fragment() {
         googleSignInLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
+
+            Log.d("INFOG", result.data.toString())
+            Log.d("INFOG", Activity.RESULT_OK.toString())
+            Log.d("INFOG", result.resultCode.toString())
             if (result.resultCode == Activity.RESULT_OK) {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                 handleSignInResult(task)
             } else {
-                Log.d("INFOG", "Failed ${result.resultCode}")
+                Log.d("INFOG", "Failed with result code ${result.resultCode}")
             }
         }
 
@@ -80,9 +84,47 @@ class SignUpFragment : Fragment() {
             signInWithGoogle()
         }
 
-        val view = binding.root
+        binding.txHaveAc.setOnClickListener {
+            view?.findNavController()?.navigate(R.id.action_signUpFragment_to_signInWithEmailFragment)
+        }
 
-        return view
+        binding.btnNext.setOnClickListener {
+            val username: String = binding.etLogininput.text.toString().trim()
+            val email: String = binding.etEmailinput.text.toString().trim()
+            val pass: String = binding.etPassinput.text.toString().trim()
+            val nameAndSurname: String = binding.etNameAndSurnameinput.text.toString().trim()
+
+            if (username.isNotEmpty() && pass.isNotEmpty() && email.isNotEmpty() && nameAndSurname.isNotEmpty() && username.length < 51 && username.length < 13 && email.length < 31 && pass.length < 51) {
+                checkIfUsernameExists(username) { result ->
+                    Log.d("INFOG", result)
+                    if (result == "ok") {
+                        if (pass.length < 4) {
+                            binding.etPassinput.error = "Пароль должен содержать хотя бы 4 символа"
+                        } else {
+                            checkIfEmailExists(email) { result2 ->
+                                if (result2 == "ok") {
+                                    signUpVM.setData(nameAndSurname, username, email, pass)
+                                    view?.findNavController()?.navigate(R.id.action_signUpFragment_to_signUpDescFragment)
+                                } else if (result2 == "noEmail") {
+                                    setError("Эта почта уже занята", binding.etEmailinput)
+                                    binding.etEmailinput.setText("")
+                                } else if (result2 == "Error") {
+                                    Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        }
+                    } else if (result == "noUsername") {
+                        setError("Такой никнейм уже занят", binding.etLogininput)
+                    } else if (result == "Error") {
+                        Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_LONG).show()
+                    }
+                }
+            } else {
+                checkForEmpty(username, pass, email, nameAndSurname)
+            }
+        }
+
+        return binding.root
     }
 
     private fun signInWithGoogle() {
@@ -93,99 +135,60 @@ class SignUpFragment : Fragment() {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
-
-            val email = account?.email
-            val displayName = account?.displayName
-            val givenName = account?.givenName
-            val familyName = account?.familyName
-
-            Log.d("INFOG", "Email: $email")
-            Log.d("INFOG", "$displayName")
-            Log.d("INFOG", "$givenName")
-            Log.d("INFOG", "$familyName")
-
+            val idToken = account?.idToken ?: ""
+            firebaseAuthWithGoogle(idToken)
         } catch (e: ApiException) {
-            Log.w("INFOG", "e.statusCode")
-            Log.e("INFOG", "${e.localizedMessage}")
+            Log.w("INFOG", "Google sign in failed", e)
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        //realtime data
-        dbRef = FirebaseDatabase.getInstance().getReference("users")
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    // Handle successful sign-in
+                    val user = auth.currentUser
+                    user?.let {
+                        val email = it.email
+                        val displayName = it.displayName
+                        val photoUrl = it.photoUrl?.toString()
 
-        //auth firebase
-        auth = FirebaseAuth.getInstance()
+                        Log.d("INFOG", "Email: $email")
+                        Log.d("INFOG", "Display Name: $displayName")
+                        Log.d("INFOG", "Photo URL: $photoUrl")
 
-        binding.txHaveAc.setOnClickListener {
-            view.findNavController().navigate(R.id.action_signUpFragment_to_signInWithEmailFragment)
-        }
-
-        binding.btnNext.setOnClickListener {
-            var username: String = binding.etLogininput.text.toString().trim()
-            var email: String = binding.etEmailinput.text.toString().trim()
-            var pass:String= binding.etPassinput.text.toString().trim()
-
-            var nameAndSurname: String = binding.etNameAndSurnameinput.text.toString().trim()
-
-            if(username.isNotEmpty() && pass.isNotEmpty() && email.isNotEmpty() && nameAndSurname.isNotEmpty()) {
-                checkIfUsernameExists(username) {result ->
-                    Log.d("INFOG", result)
-                    if(result == "ok") {
-                        if(pass.length < 4) {
-                            binding.etPassinput.error = "Пароль должен содержать хотя бы 4 символа"
-                        } else {
-                            checkIfEmailExists(email) {result2 ->
-                                if(result2 == "ok") {
-                                    signUpVM.setData(nameAndSurname, username, email, pass)
-                                    view.findNavController().navigate(R.id.action_signUpFragment_to_signUpDescFragment)
-                                } else if(result2 == "noEmail") {
-                                    setError("Эта почта уже занята", binding.etEmailinput)
-                                    binding.etEmailinput.setText("")
-                                } else if(result2 == "Error") {
-                                    Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_LONG).show()
-                                }
-                            }
-                        }
-                    } else if(result == "noUsername") {
-                        setError( "Такой никнейм уже занят", binding.etLogininput)
-                    } else if(result == "Error") {
-                        Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_LONG).show()
                     }
+                } else {
+                    Log.w("INFOG", "signInWithCredential:failure", task.exception)
                 }
-
-            } else {
-                checkForEmpty(username,pass, email, nameAndSurname)
             }
-        }
     }
 
-    fun checkForEmpty(username: String, pass: String, phone: String, nameAndSurname: String) {
-        if(username.isEmpty()) {
+    private fun checkForEmpty(username: String, pass: String, email: String, nameAndSurname: String) {
+        if (username.isEmpty()) {
             setError("Введите логин!", binding.etLogininput)
         }
-        if(pass.isEmpty()) {
+        if (pass.isEmpty()) {
             setError("Введите пароль", binding.etPassinput)
         }
-        if(phone.isEmpty()) {
+        if (email.isEmpty()) {
             setError("Введите электронную почту!", binding.etEmailinput)
         }
-        if(nameAndSurname.isEmpty()) {
+        if (nameAndSurname.isEmpty()) {
             setError("Введите ваше имя и фамилию!", binding.etNameAndSurnameinput)
         }
     }
+
     private fun setError(er: String, field: TextInputEditText) {
-        var textError: TextInputEditText = field
-        textError.error=er
+        field.error = er
     }
 
-    fun checkIfUsernameExists(username: String, result: (String) -> Unit) {
+    private fun checkIfUsernameExists(username: String, result: (String) -> Unit) {
         dbRef.orderByChild("username").equalTo(username)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if(dataSnapshot.exists() == true) {
+                    if (dataSnapshot.exists()) {
                         result("noUsername")
                     } else {
                         result("ok")
@@ -197,11 +200,12 @@ class SignUpFragment : Fragment() {
                 }
             })
     }
-    fun checkIfEmailExists(email: String, result: (String) -> Unit) {
+
+    private fun checkIfEmailExists(email: String, result: (String) -> Unit) {
         dbRef.orderByChild("email").equalTo(email)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if(dataSnapshot.exists() == true) {
+                    if (dataSnapshot.exists()) {
                         result("noEmail")
                     } else {
                         result("ok")
@@ -213,4 +217,10 @@ class SignUpFragment : Fragment() {
                 }
             })
     }
+
+    data class User(
+        val name: String,
+        val email: String,
+        val photoUrl: String
+    )
 }

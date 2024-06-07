@@ -1,8 +1,10 @@
 package com.example.lipe.viewModels
 
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.lipe.R
 
 class ChatVM : ViewModel() {
 
@@ -25,8 +27,8 @@ class ChatVM : ViewModel() {
         _name.value = name_
         _key.value = key_
         if(status_ == "online"){
-            _status.value = "в сети"
-        } else if(status_ == "offline") {
+            _status.value = "онлайн"
+        } else {
             _status.value = "не в сети"
         }
         _chatUid.value = chatUid_
