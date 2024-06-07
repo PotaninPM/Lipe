@@ -176,10 +176,25 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/addTofriendText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/add_to_friends"
                         android:textColor="#0054D0"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/nunitosansextrabold"
+                        android:layout_marginEnd="@dimen/_12sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/friendText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/already_friend"
+                        android:visibility="invisible"
+                        android:textColor="#767676"
                         android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/nunitosansextrabold"
                         android:layout_marginEnd="@dimen/_12sdp"
@@ -317,14 +332,12 @@
                         android:layout_marginStart="@dimen/_8sdp"
                         android:layout_marginEnd="@dimen/_12sdp"
                         android:orientation="vertical">
-
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunitosanssemibold"
                             android:text="@string/free_places"
                             android:textSize="@dimen/_15sdp" />
-
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
@@ -338,55 +351,66 @@
                                 android:progress="@{viewModel.freePlaces}"
                                 android:progressDrawable="@drawable/progress_reg_free_place" />
 
-<!--                            <TextView-->
-<!--                                android:layout_width="match_parent"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:gravity="center"-->
-<!--                                android:text="осталось 3 места"-->
-<!--                                android:fontFamily="@font/nunitosansextrabold"-->
-<!--                                android:textColor="@color/quantum_black_100"-->
-<!--                                android:textSize="@dimen/_12sdp"-->
-<!--                                app:layout_constraintStart_toStartOf="parent"-->
-<!--                                app:layout_constraintTop_toTopOf="parent" />-->
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </LinearLayout>
                 </LinearLayout>
 
-                <View
-                    android:id="@+id/lineLineThree"
-                    android:layout_width="@dimen/_292sdp"
-                    android:layout_height="@dimen/_1sdp"
-                    android:layout_weight="0.39"
-                    android:layout_marginTop="@dimen/_12sdp"
-                    android:background="@color/quantum_bluegrey50"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="@dimen/_37sdp"
+                    android:layout_height="@dimen/_37sdp"
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:src="@drawable/information"
+                    app:layout_constraintStart_toStartOf="@+id/people"
                     app:layout_constraintTop_toBottomOf="@+id/people" />
 
                 <TextView
                     android:id="@+id/about_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/nunitosansbold"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:fontFamily="@font/nunitosanssemibold"
                     android:text="@string/about_event"
-                    android:layout_marginTop="@dimen/_6sdp"
-                    android:textSize="@dimen/_17sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lineLineThree" />
+                    android:textSize="@dimen/_13sdp"
+                    app:layout_constraintStart_toEndOf="@+id/imageView9"
+                    app:layout_constraintTop_toTopOf="@+id/imageView9" />
 
                 <TextView
                     android:id="@+id/desc"
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/_243sdp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_marginTop="@dimen/_4sdp"
-                    android:fontFamily="@font/mulish"
-                    android:gravity="center"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:fontFamily="@font/intermedium"
+                    android:gravity="start"
                     android:text="@{viewModel.eventDesc}"
-                    android:textSize="@dimen/_15sdp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:textSize="@dimen/_14sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+                    app:layout_constraintStart_toEndOf="@+id/imageView9"
                     app:layout_constraintTop_toBottomOf="@+id/about_event" />
+
+                <View
+                    android:id="@+id/lineLineThree"
+                    android:layout_width="@dimen/_292sdp"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_weight="0.39"
+                    android:background="@color/quantum_bluegrey50"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.562"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/desc" />
+
+                <View
+                    android:id="@+id/lineLineThree_"
+                    android:layout_width="@dimen/_292sdp"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_weight="0.39"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:background="@color/quantum_bluegrey50"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.562"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/desc" />
 
                 <Button
                     android:id="@+id/btnRegToEvent"
@@ -395,10 +419,10 @@
                     android:layout_height="@dimen/_40sdp"
                     android:layout_marginStart="@dimen/_22sdp"
                     android:layout_marginEnd="@dimen/_22sdp"
-                    android:layout_marginTop="@dimen/_12sdp"
                     android:backgroundTint="@color/green"
                     android:ellipsize="end"
                     android:gravity="center"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:singleLine="true"
                     android:text="@string/want_to_event"
                     android:textAllCaps="false"
@@ -407,7 +431,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/desc"
+                    app:layout_constraintTop_toBottomOf="@+id/lineLineThree"
                     tools:ignore="TextSizeCheck" />
 
                 <Button
@@ -419,7 +443,6 @@
                     android:ellipsize="end"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:layout_marginTop="@dimen/_12sdp"
                     android:textAllCaps="false"
                     android:textColor="@color/quantum_white_100"
                     android:textFontWeight="600"
@@ -427,7 +450,7 @@
                     android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/listUsers"
-                    app:layout_constraintTop_toBottomOf="@+id/desc"
+                    app:layout_constraintTop_toTopOf="@+id/btnRegToEvent"
                     tools:ignore="TextSizeCheck" />
 
                 <Button
@@ -435,10 +458,9 @@
                     style="@style/Widget.Material3.Button.Icon"
                     android:layout_width="@dimen/_140sdp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_12sdp"
+                    android:layout_marginStart="@dimen/_14sdp"
                     android:backgroundTint="#2494EA"
                     android:ellipsize="end"
-                    android:layout_marginStart="@dimen/_14sdp"
                     android:gravity="center"
                     android:singleLine="true"
                     android:textAllCaps="false"
@@ -447,7 +469,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/desc"
+                    app:layout_constraintTop_toTopOf="@+id/btnRegToEvent"
                     tools:ignore="TextSizeCheck" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

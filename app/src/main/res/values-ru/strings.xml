@@ -93,4 +93,5 @@
     <string name="any_age">Любой возраст</string>
     <string name="no_image">Вы не загрузили ни одного фото</string>
     <string name="min_one_photo">Вы должны загрузить минимум одно фото</string>
+    <string name="already_friend">Друг</string>
 </resources>

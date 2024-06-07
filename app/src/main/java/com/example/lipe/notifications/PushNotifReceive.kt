@@ -50,7 +50,7 @@ class PushNotifReceive : FirebaseMessagingService() {
     private fun showNotification(title: String?, message: String?) {
         val channelId = "channel_id"
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.planet_icon)
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
