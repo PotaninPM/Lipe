@@ -337,42 +337,50 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <View
-                    android:id="@+id/lineLineThree"
-                    android:layout_width="@dimen/_292sdp"
-                    android:layout_height="@dimen/_1sdp"
-                    android:layout_weight="0.39"
-                    android:layout_marginTop="@dimen/_12sdp"
-                    android:background="@color/quantum_bluegrey50"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="@dimen/_37sdp"
+                    android:layout_height="@dimen/_37sdp"
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:src="@drawable/information"
+                    app:layout_constraintStart_toStartOf="@+id/people"
                     app:layout_constraintTop_toBottomOf="@+id/people" />
 
                 <TextView
                     android:id="@+id/about_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/nunitosansbold"
-                    android:text="@string/about_task"
-                    android:layout_marginTop="@dimen/_6sdp"
-                    android:textSize="@dimen/_17sdp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lineLineThree" />
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:fontFamily="@font/nunitosanssemibold"
+                    android:text="@string/about_event"
+                    android:textSize="@dimen/_13sdp"
+                    app:layout_constraintStart_toEndOf="@+id/imageView9"
+                    app:layout_constraintTop_toTopOf="@+id/imageView9" />
 
                 <TextView
                     android:id="@+id/desc"
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/_243sdp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_marginEnd="@dimen/_12sdp"
-                    android:layout_marginTop="@dimen/_4sdp"
-                    android:fontFamily="@font/mulish"
-                    android:gravity="center"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:fontFamily="@font/intermedium"
+                    android:gravity="start"
                     android:text="@{viewModel.eventDesc}"
-                    android:textSize="@dimen/_15sdp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:textSize="@dimen/_14sdp"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+                    app:layout_constraintStart_toEndOf="@+id/imageView9"
                     app:layout_constraintTop_toBottomOf="@+id/about_event" />
+
+                <View
+                    android:id="@+id/lineLineThree"
+                    android:layout_width="@dimen/_292sdp"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_weight="0.39"
+                    android:background="@color/quantum_bluegrey50"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.562"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/desc" />
 
                 <Button
                     android:id="@+id/btnRegToEvent"
@@ -393,7 +401,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/desc"
+                    app:layout_constraintTop_toBottomOf="@+id/lineLineThree"
                     tools:ignore="TextSizeCheck" />
 
                 <Button
@@ -401,13 +409,12 @@
                     style="@style/Widget.Material3.Button.Icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_22sdp"
                     android:backgroundTint="@color/quantum_googred"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:layout_marginStart="@dimen/_22sdp"
-                    android:layout_marginEnd="@dimen/_22sdp"
-                    android:layout_marginTop="@dimen/_12sdp"
                     android:textAllCaps="false"
                     android:textColor="@color/quantum_white_100"
                     android:textFontWeight="600"

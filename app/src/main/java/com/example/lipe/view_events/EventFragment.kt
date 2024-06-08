@@ -2,13 +2,12 @@ package com.example.lipe.view_events
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
-import com.example.lipe.FriendOnMapBottomSheetFragment
+import com.example.lipe.friend_bottom_sheet.FriendOnMapBottomSheetFragment
 import com.example.lipe.R
 import com.example.lipe.databinding.FragmentEventBinding
 import com.example.lipe.viewModels.AppVM
@@ -20,12 +19,8 @@ import com.example.lipe.view_events.event_help.EventHelpFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.GenericTypeIndicator
-import com.google.firebase.database.ValueEventListener
 
 class EventFragment : BottomSheetDialogFragment() {
 

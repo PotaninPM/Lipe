@@ -342,7 +342,7 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                 dbRefUserQueryFriendsToYou.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         for (user in snapshot.children) {
-                            if (user.value == auth.currentUser!!.uid) {
+                            if (user.value == personUid) {
                                 if (isAdded) {
                                     binding.addToFriends.visibility = View.INVISIBLE
                                     binding.request.visibility = View.INVISIBLE
