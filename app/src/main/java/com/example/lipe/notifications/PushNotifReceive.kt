@@ -2,10 +2,13 @@ package com.example.lipe.notifications
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.example.lipe.MainActivity
 import com.example.lipe.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -15,18 +18,20 @@ import com.google.firebase.messaging.RemoteMessage
 class PushNotifReceive : FirebaseMessagingService() {
 
     private lateinit var auth: FirebaseAuth
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         auth = FirebaseAuth.getInstance()
 
-        val user = auth.currentUser!!.uid
-        if(user != null) {
+        val user = auth.currentUser?.uid
+        if (user != null) {
             if (remoteMessage.data.isNotEmpty()) {
                 val title = remoteMessage.data["title"]
                 val message = remoteMessage.data["message"]
+                val type = remoteMessage.data["type"]
 
                 Log.d("INFOG", title.toString())
-                showNotification(title, message)
+                understandType(title, message, type)
             }
         }
     }
@@ -46,20 +51,47 @@ class PushNotifReceive : FirebaseMessagingService() {
         }
     }
 
+    private fun understandType(title: String?, message: String?, type: String?) {
 
-    private fun showNotification(title: String?, message: String?) {
+        if(type == "friendship_request") {
+            val intent = Intent(this, MainActivity::class.java).apply {
+                putExtra("fragmentToLoad", "FriendRequestsFragment")
+            }
+            showNotification(title, message, intent)
+        } else if(type == "accept_friendship") {
+//            intent = Intent(this, MainActivity::class.java).apply {
+//                putExtra("fragmentToLoad", "FriendRequestsFragment")
+//            }
+        } else if(type == "points") {
+            val intent = Intent(this, MainActivity::class.java).apply {
+                putExtra("fragmentToLoad", "RatingFragment")
+            }
+            showNotification(title, message, intent)
+        }
+
+    }
+
+    fun showNotification(title: String?, message: String?, intent: Intent) {
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
         val channelId = "channel_id"
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.planet_icon)
             .setContentTitle(title)
             .setContentText(message)
+            .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, "title", NotificationManager.IMPORTANCE_DEFAULT)
+            val channel = NotificationChannel(channelId, "Notification Channel", NotificationManager.IMPORTANCE_DEFAULT)
             notificationManager.createNotificationChannel(channel)
         }
 

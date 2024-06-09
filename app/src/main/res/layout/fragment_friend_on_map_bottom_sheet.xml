@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".friend_bottom_sheet.FriendOnMapBottomSheetFragment">
+    tools:context=".friend_on_map_bottom_sheet.FriendOnMapBottomSheetFragment">
 
     <ImageView
         android:id="@+id/imageView8"
@@ -84,6 +84,7 @@
         android:id="@+id/friendsRecView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        tools:listitem="@layout/friend_item_with_remove"
         android:layout_marginTop="@dimen/_4sdp"
         android:layout_marginEnd="@dimen/_12sdp"
         android:layout_marginStart="@dimen/_12sdp"

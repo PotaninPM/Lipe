@@ -95,4 +95,5 @@
     <string name="min_one_photo">You should upload at least one photo</string>
     <string name="already_friend">Friend</string>
     <string name="add">Add</string>
+    <string name="groups">Groups</string>
 </resources>

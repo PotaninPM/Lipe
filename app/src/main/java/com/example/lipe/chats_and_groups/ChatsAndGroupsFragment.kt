@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -78,8 +79,8 @@ class ChatsAndGroupsFragment : Fragment() {
             })
 
             binding.tableLayout.apply {
-                addTab(newTab().setText("Чаты"))
-                addTab(newTab().setText("Группы"))
+                addTab(newTab().setText(ContextCompat.getString(requireContext(), R.string.chats)))
+                addTab(newTab().setText(context.getString(R.string.groups)))
                 addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                     override fun onTabSelected(tab: TabLayout.Tab?) {
                         binding.viewPager.currentItem = tab!!.position

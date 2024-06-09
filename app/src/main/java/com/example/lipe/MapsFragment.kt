@@ -183,6 +183,18 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             mMap.setOnMarkerClickListener { marker ->
 
                 if(marker.title != null) {
+                    val markerPosition = marker.position
+
+                    val latitude = markerPosition.latitude
+                    val longitude = markerPosition.longitude
+
+                    mMap.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(latitude, longitude),
+                            17f
+                        )
+                    )
+
                     appVM.type = marker.title.toString()
                     EventFragment.show(childFragmentManager)
                 } else {
