@@ -120,7 +120,7 @@
                     app:layout_constraintStart_toStartOf="@+id/price"
                     app:layout_constraintTop_toBottomOf="@+id/price" />
 
-                <View
+                <com.google.android.material.divider.MaterialDivider
                     android:id="@+id/lineLineTwo"
                     android:layout_width="@dimen/_292sdp"
                     android:layout_height="@dimen/_1sdp"
@@ -215,7 +215,7 @@
                     <!--                    </LinearLayout>-->
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <View
+                <com.google.android.material.divider.MaterialDivider
                     android:id="@+id/lineLineOne"
                     android:layout_width="@dimen/_292sdp"
                     android:layout_height="@dimen/_1sdp"
@@ -370,7 +370,7 @@
                     app:layout_constraintStart_toEndOf="@+id/imageView9"
                     app:layout_constraintTop_toBottomOf="@+id/about_event" />
 
-                <View
+                <com.google.android.material.divider.MaterialDivider
                     android:id="@+id/lineLineThree"
                     android:layout_width="@dimen/_292sdp"
                     android:layout_height="@dimen/_1sdp"

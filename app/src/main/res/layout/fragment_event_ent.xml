@@ -119,7 +119,7 @@
                     app:layout_constraintStart_toStartOf="@+id/title"
                     app:layout_constraintTop_toBottomOf="@+id/title" />
 
-                <View
+                <com.google.android.material.divider.MaterialDivider
                     android:id="@+id/lineLineTwo"
                     android:layout_width="@dimen/_292sdp"
                     android:layout_height="@dimen/_1sdp"
@@ -229,7 +229,7 @@
 <!--                    </LinearLayout>-->
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <View
+                <com.google.android.material.divider.MaterialDivider
                     android:id="@+id/lineLineOne"
                     android:layout_width="@dimen/_292sdp"
                     android:layout_height="@dimen/_1sdp"
@@ -401,7 +401,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/desc" />
 
-                <View
+                <com.google.android.material.divider.MaterialDivider
                     android:id="@+id/lineLineThree_"
                     android:layout_width="@dimen/_292sdp"
                     android:layout_height="@dimen/_1sdp"
