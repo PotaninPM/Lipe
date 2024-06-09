@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="@dimen/_50sdp"
+    android:minHeight="@dimen/_250sdp"
     tools:context=".all_profiles.cur_events.CurEventsInProfileFragment">
 
     <TextView

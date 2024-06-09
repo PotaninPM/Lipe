@@ -15,8 +15,8 @@ class RatingVM : ViewModel() {
     val avatar: LiveData<String> = _avatar
 
     fun setInfo(ratingPoints_: String, place_: String, avatar_: String) {
-        _ratingPoints.value = "Баллы $ratingPoints_"
-        _place.value = "Место $place_"
+        _ratingPoints.value = "$ratingPoints_"
+        _place.value = "$place_"
         _avatar.value = avatar_
     }
 }

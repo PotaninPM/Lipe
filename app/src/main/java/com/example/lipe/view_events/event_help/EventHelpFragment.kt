@@ -88,18 +88,30 @@ class EventHelpFragment : Fragment() {
                             if(ans) {
                                 binding.btnRegToEvent.visibility = View.GONE
 
+                                val date_ = eventHelpVM.date.value!!
+                                binding.dateOfMeetingHelp.text = buildString {
+                                    append(
+                                        date_.substring(
+                                            6,
+                                            date_.length
+                                        )
+                                    )
+                                    append(getString(R.string.`in`))
+                                    append(date_.substring(0, 5))
+                                }
+
                                 if (eventHelpVM.creator.value == user) {
                                     binding.deleteOrLeave.visibility = View.VISIBLE
-                                    binding.deleteOrLeave.setText("Завершить")
+                                    binding.deleteOrLeave.text = getString(R.string.finish)
                                 } else {
-                                    binding.deleteOrLeave.setText("Покинуть")
+                                    binding.deleteOrLeave.text = getString(R.string.leave)
                                     binding.deleteOrLeave.visibility = View.VISIBLE
                                 }
 
                                 binding.allHelpEvent.visibility = View.VISIBLE
                                 binding.loadingProgressBar.visibility = View.GONE
                             } else {
-                                binding.dateText.setText("***")
+                                binding.dateOfMeetingHelp.text = "*****"
                                 binding.allHelpEvent.visibility = View.VISIBLE
                                 binding.loadingProgressBar.visibility = View.GONE
                             }
@@ -140,6 +152,7 @@ class EventHelpFragment : Fragment() {
                     showPeopleGoDialog(1)
                     //deleteEvent(eventEntVM.id.value.toString())
                 } else {
+                    binding.dateOfMeetingHelp.text = "*******"
                     deleteUserFromEvent(eventHelpVM.id.value.toString())
 
                     binding.deleteOrLeave.visibility = View.GONE
@@ -157,16 +170,16 @@ class EventHelpFragment : Fragment() {
                             regUserToEvent(curUid) { result ->
                                 if (result == true) {
                                     setDialog(
-                                        "Успешная регистрация",
-                                        "Поздравляем, регистрация на событие прошла успешно",
-                                        "Отлично!"
+                                        getString(R.string.success_reg),
+                                        getString(R.string.congrats_success_reg),
+                                        getString(R.string.nice)
                                     )
                                 } else {
                                     //fail
                                     setDialog(
-                                        "Ошибка при регистрации",
-                                        "Что-то пошло не так, попробуйте зарегистрироваться еще раз",
-                                        "Хорошо"
+                                        getString(R.string.error_reg),
+                                        getString(R.string.smth_went_wrong_reg_event),
+                                        getString(R.string.okey)
                                     )
                                 }
                             }

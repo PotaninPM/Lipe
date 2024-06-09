@@ -166,7 +166,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
             auth = FirebaseAuth.getInstance()
 
-            val items = listOf(getString(R.string.any_age), "Больше 18 лет", "До 18 лет")
+            val items = listOf(getString(R.string.any_age), getString(R.string.more_18),
+                getString(R.string.before_18))
             val adapter =
                 ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, items)
             val autoCompleteTextView = view.findViewById<AutoCompleteTextView>(R.id.ageSpinner)
@@ -194,7 +195,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                         setDialog(
                             getString(R.string.no_image),
                             getString(R.string.min_one_photo),
-                            "Хорошо"
+                            getString(R.string.okey),
                         )
                     }
                 }
@@ -279,7 +280,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             var type: String = "ent"
 
             if(type_sport == "1" || type_sport == "Выберите тип развлечения") {
-                Toast.makeText(requireContext(), "Введите спорт!", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), getString(R.string.choose_sport), Toast.LENGTH_LONG).show()
             } else {
                 var event = EntEventData(
                     eventId,
@@ -327,27 +328,29 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     fun checkForEmpty(): Boolean {
         var check: Boolean = true
         if(binding.etDescInputText.text.toString().isEmpty()) {
-            setError("Введите описание!", binding.etDescInputText)
+            setError(getString(R.string.enter_desc), binding.etDescInputText)
             check = false
         }
         if(binding.etNameinputText.text.toString().isEmpty()) {
-            setError("Введите название!", binding.etNameinputText)
+            setError(getString(R.string.enter_title), binding.etNameinputText)
             check = false
         }
         if(binding.etMaxInputText.text.toString().isEmpty()) {
-            setError("Введите количество людей!", binding.etMaxInputText)
+            setError(getString(R.string.enter_people_amount), binding.etMaxInputText)
             check = false
         }
         if(selectedAge == "-") {
-            setDialog("Вы не выбрали возраст", "Вы должны выбрать возраст участия в вашем событии", "Хорошо")
+            setDialog(getString(R.string.age_was_not_chosen), getString(R.string.must_age), getString(R.string.okey))
             check = false
         }
         if(savedYear == 0) {
-            setDialog("Вы не выбрали дату начала события", "Вы должны выбрать дату начала события, то есть дату сбора всех зарегистрировавшихся", "Хорошо")
+            setDialog(getString(R.string.date_start_event),
+                getString(R.string.date_of_meeting), getString(R.string.okey))
             check = false
         }
         if(type_sport == "1") {
-            setDialog("Вы не выбрали вид спорта события", "Вы должны выбрать вид спорта события", "Хорошо")
+            setDialog(getString(R.string.no_sport_error),
+                getString(R.string.must_type_sport), getString(R.string.okey))
             check = false
         }
         return check
@@ -387,7 +390,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     private fun getDateTime() {
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Выберите дату")
+                .setTitleText(getString(R.string.choose_the_date))
                 .build()
 
         datePicker.addOnPositiveButtonClickListener {
@@ -400,7 +403,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             val timePicker = MaterialTimePicker.Builder()
                 .setTimeFormat(TimeFormat.CLOCK_24H)
                 .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
-                .setTitleText("Выберите время")
+                .setTitleText(getString(R.string.choose_time))
                 .build()
 
             timePicker.addOnPositiveButtonClickListener {
@@ -422,7 +425,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         val monthName = months[savedMonth]
 
         binding.dateText.visibility = View.VISIBLE
-        binding.dateText.text = String.format("%d %s %d года", savedDay, monthName, savedYear)
+        binding.dateText.text = String.format("%d %s %d ${getString(R.string.year)}", savedDay, monthName, savedYear)
 
         binding.dateLay.setBackgroundResource(R.drawable.chosen_date_lay)
     }

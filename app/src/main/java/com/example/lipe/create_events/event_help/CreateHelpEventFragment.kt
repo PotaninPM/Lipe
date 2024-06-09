@@ -114,7 +114,7 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
                 if(photos[0] != "-" || photos[1] != "-" || photos[2] != "-") {
                     createEvent(photos)
                 } else {
-                    setDialog(getString(R.string.no_image), getString(R.string.min_one_photo), "Хорошо")
+                    setDialog(getString(R.string.no_image), getString(R.string.min_one_photo), getString(R.string.nice))
                 }
             }
         }
@@ -259,7 +259,7 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
     fun checkForEmpty(): Boolean {
         var check: Boolean = true
         if(binding.etDescInputText.text.toString().isEmpty()) {
-            setError("Введите описание!", binding.etDescInputText)
+            setError(getString(R.string.enter_desc), binding.etDescInputText)
             check = false
         }
 //        if(binding.etNameinput.text.toString().isEmpty()) {
@@ -267,7 +267,7 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
 //            check = false
 //        }
         if(binding.etMaxInputText.text.toString().isEmpty()) {
-            setError("Введите количество людей!", binding.etMaxInputText)
+            setError(getString(R.string.enter_people_amount), binding.etMaxInputText)
             check = false
         }
         return check
@@ -307,7 +307,7 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
     private fun getDateTime() {
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Выберите дату")
+                .setTitleText(getString(R.string.choose_the_date))
                 .build()
 
         datePicker.addOnPositiveButtonClickListener {
@@ -320,7 +320,7 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
             val timePicker = MaterialTimePicker.Builder()
                 .setTimeFormat(TimeFormat.CLOCK_24H)
                 .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
-                .setTitleText("Выберите время")
+                .setTitleText(getString(R.string.choose_time))
                 .build()
 
             timePicker.addOnPositiveButtonClickListener {
@@ -342,7 +342,7 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
         val monthName = months[savedMonth]
 
         binding.dateText.visibility = View.VISIBLE
-        binding.dateText.text = String.format("%d %s %d года", savedDay, monthName, savedYear)
+        binding.dateText.text = String.format("%d %s %d ${getString(R.string.year)}", savedDay, monthName, savedYear)
 
         binding.dateLay.setBackgroundResource(R.drawable.chosen_date_lay)
     }

@@ -108,4 +108,23 @@
     <string name="smth_went_wrong_reg_event">Something went wrong, try to register again</string>
     <string name="okey">Okey</string>
     <string name="message">Message</string>
+    <string name="more_18">Older than 18 y.o.</string>
+    <string name="before_18">Younger than 18 y.o.</string>
+    <string name="choose_sport">Choose sport!</string>
+    <string name="enter_desc">Enter description!</string>
+    <string name="enter_title">Enter title!</string>
+    <string name="enter_people_amount">Enter people amount!</string>
+    <string name="age_was_not_chosen">You have not chosen an age</string>
+    <string name="must_age">You must choose an allowed age for your event</string>
+    <string name="date_start_event">You have not selected the start date for the event</string>
+    <string name="date_of_meeting">You must select the date of starting event, be exact, select a date of meeting with all members</string>
+    <string name="no_sport_error">You have not selected a type of sport for event</string>
+    <string name="must_type_sport">You must select a type of sport</string>
+    <string name="choose_time">Select the time</string>
+    <string name="year">year</string>
+    <string name="choose_the_date">Select the date</string>
+    <string name="like_landfield">Like a landfill</string>
+    <string name="a_lot">A lot</string>
+    <string name="quite_a_lot">Quite a lot</string>
+    <string name="some">Some bottles and e.t.c</string>
 </resources>

@@ -53,16 +53,30 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/place_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_bold"
+                        android:text="@string/place"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:textColor="@color/quantum_white_100"
+                        android:textSize="@dimen/_13sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/imageView3"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.461" />
+
+                    <TextView
                         android:id="@+id/place_in_rating_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_bold"
                         android:text="@{viewModel.place}"
-                        android:textSize="@dimen/_13sdp"
                         android:textColor="@color/quantum_white_100"
+                        android:textSize="@dimen/_13sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/imageView3"
+                        app:layout_constraintStart_toEndOf="@+id/place_text"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -86,16 +100,29 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
+                        android:id="@+id/pointsText_"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_bold"
+                        android:text="@string/points"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:textColor="@color/quantum_white_100"
+                        android:textSize="@dimen/_13sdp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/imageView4"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
                         android:id="@+id/points_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/quantum_white_100"
                         android:fontFamily="@font/roboto_bold"
                         android:text="@{viewModel.ratingPoints}"
+                        android:textColor="@color/quantum_white_100"
                         android:textSize="@dimen/_13sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/imageView4"
+                        app:layout_constraintStart_toEndOf="@+id/pointsText_"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

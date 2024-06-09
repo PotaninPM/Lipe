@@ -108,4 +108,23 @@
     <string name="smth_went_wrong_reg_event">Что-то пошло не так, попробуйте зарегистрироваться еще раз</string>
     <string name="okey">Хорошо</string>
     <string name="message">Сообщение</string>
+    <string name="more_18">Больше 18 лет</string>
+    <string name="before_18">До 18 лет</string>
+    <string name="choose_sport">Введите спорт!</string>
+    <string name="enter_desc">Введите описание!</string>
+    <string name="enter_title">Введите название!</string>
+    <string name="enter_people_amount">Введите количество людей!</string>
+    <string name="age_was_not_chosen">Вы не выбрали возраст</string>
+    <string name="must_age">Вы должны выбрать возраст участия в вашем событии</string>
+    <string name="date_start_event">Вы не выбрали дату начала события</string>
+    <string name="date_of_meeting">Вы должны выбрать дату начала события, то есть дату сбора всех участников</string>
+    <string name="no_sport_error">Вы не выбрали вид спорта события</string>
+    <string name="must_type_sport">Вы должны выбрать вид спорта события</string>
+    <string name="choose_time">Выберите время</string>
+    <string name="year">года</string>
+    <string name="choose_the_date">Выберите дату</string>
+    <string name="like_landfield">Похоже на свалку</string>
+    <string name="a_lot">Очень много</string>
+    <string name="quite_a_lot">Достаточно много</string>
+    <string name="some">Не очень много</string>
 </resources>

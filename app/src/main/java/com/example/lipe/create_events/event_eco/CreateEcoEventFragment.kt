@@ -56,28 +56,14 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     private lateinit var appVM: AppVM
 
     private lateinit var imageUri1: Uri
-    private lateinit var imageUri2: Uri
-    private lateinit var imageUri3: Uri
 
     private var image1: String = "-"
-    private var image2: String = "-"
-    private var image3: String = "-"
 
     private var selectedPower = "-"
-
-    private var imagesUid: ArrayList<String> = arrayListOf("-", "-", "-")
-
-    private lateinit var firebaseRef: DatabaseReference
-
-    private lateinit var spinner: Spinner
 
     private lateinit var storageRef : StorageReference
 
     private lateinit var binding: FragmentCreateEcoEventBinding
-
-    private var items: ArrayList<SpinnerItem> = arrayListOf(
-        SpinnerItem("Выберите тип развлечения", R.drawable.light_bulb),
-    )
 
     private lateinit var dbRef: DatabaseReference
     private lateinit var dbRef_id: DatabaseReference
@@ -90,11 +76,6 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     var savedDay = 0
     var savedHour = 0
     var savedMinute = 0
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -120,7 +101,10 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
         auth = FirebaseAuth.getInstance()
 
-        val items = listOf("Не очень сильный", "Достаточно много", "Очень много", "Похоже на свалку")
+        val items = listOf(
+            getString(R.string.some),
+            getString(R.string.quite_a_lot), getString(R.string.a_lot),
+            getString(R.string.like_landfield))
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, items)
         val autoCompleteTextView = view.findViewById<AutoCompleteTextView>(R.id.pollutionSpinner)
         autoCompleteTextView.setAdapter(adapter)
@@ -370,7 +354,7 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     private fun getDateTime() {
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Выберите дату")
+                .setTitleText(getString(R.string.choose_the_date))
                 .build()
 
         datePicker.addOnPositiveButtonClickListener {
@@ -383,7 +367,7 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             val timePicker = MaterialTimePicker.Builder()
                 .setTimeFormat(TimeFormat.CLOCK_24H)
                 .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
-                .setTitleText("Выберите время")
+                .setTitleText(getString(R.string.choose_time))
                 .build()
 
             timePicker.addOnPositiveButtonClickListener {
@@ -405,7 +389,7 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         val monthName = months[savedMonth]
 
         binding.dateText.visibility = View.VISIBLE
-        binding.dateText.text = String.format("%d %s %d года", savedDay, monthName, savedYear)
+        binding.dateText.text = String.format("%d %s %d ${getString(R.string.year)}", savedDay, monthName, savedYear)
 
         binding.dateLay.setBackgroundResource(R.drawable.chosen_date_lay)
     }

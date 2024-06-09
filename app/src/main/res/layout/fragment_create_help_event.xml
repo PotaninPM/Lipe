@@ -151,7 +151,8 @@
                         android:id="@+id/notify_set_date"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_12sdp"
                         android:textSize="@dimen/_13sdp"
                         android:text="@string/meeting_date"/>
 
@@ -213,20 +214,18 @@
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-
-
-                <androidx.appcompat.widget.AppCompatButton
+                <Button
                     android:id="@+id/btnCreateEvent"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
                     android:layout_marginStart="@dimen/_8sdp"
                     android:layout_marginEnd="@dimen/_8sdp"
-                    android:background="@drawable/sign_in_start_btn"
+                    android:backgroundTint="@color/green"
                     android:ellipsize="end"
                     android:gravity="center"
-                    android:layout_marginBottom="@dimen/_12sdp"
                     android:singleLine="true"
-                    android:text="Создать событие"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:text="@string/create_event"
                     android:textAllCaps="false"
                     android:textColor="@color/quantum_white_100"
                     android:textFontWeight="600"
