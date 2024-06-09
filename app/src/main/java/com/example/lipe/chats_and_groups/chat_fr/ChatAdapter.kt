@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.lipe.DeCryptMessages
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.Message
 

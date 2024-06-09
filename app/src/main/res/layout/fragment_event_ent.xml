@@ -20,11 +20,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ProgressBar
+            <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/loadingProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:indeterminate="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/allEntEvent"
@@ -417,12 +418,12 @@
                     style="@style/Widget.Material3.Button.Icon"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
-                    android:layout_marginStart="@dimen/_22sdp"
-                    android:layout_marginEnd="@dimen/_22sdp"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_55sdp"
                     android:backgroundTint="@color/green"
                     android:ellipsize="end"
                     android:gravity="center"
-                    android:layout_marginTop="@dimen/_12sdp"
                     android:singleLine="true"
                     android:text="@string/want_to_event"
                     android:textAllCaps="false"
@@ -433,6 +434,36 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/lineLineThree"
                     tools:ignore="TextSizeCheck" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/report"
+                    android:layout_width="@dimen/_37sdp"
+                    android:layout_height="@dimen/_37sdp"
+                    android:background="@drawable/report_btn"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:src="@drawable/report"
+                    android:textAllCaps="false"
+                    android:textColor="@color/quantum_white_100"
+                    android:textFontWeight="600"
+                    android:textSize="@dimen/_12sdp"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btnRegToEvent"
+                    app:layout_constraintTop_toTopOf="@+id/btnRegToEvent"
+                    tools:ignore="TextSizeCheck">
+
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/report_flag"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <Button
                     android:id="@+id/deleteOrLeave"

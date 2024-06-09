@@ -170,7 +170,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                 getString(R.string.before_18))
             val adapter =
                 ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, items)
-            val autoCompleteTextView = view.findViewById<AutoCompleteTextView>(R.id.ageSpinner)
+            val autoCompleteTextView = binding.ageSpinner
             autoCompleteTextView.setAdapter(adapter)
             autoCompleteTextView.setOnItemClickListener { parent, view, position, id ->
                 selectedAge = parent.getItemAtPosition(position).toString()

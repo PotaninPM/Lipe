@@ -10,7 +10,6 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.request.ImageRequest
-import com.example.lipe.DeCryptMessages
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.Message
 import com.google.firebase.database.DataSnapshot

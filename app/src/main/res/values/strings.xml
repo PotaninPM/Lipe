@@ -127,4 +127,16 @@
     <string name="a_lot">A lot</string>
     <string name="quite_a_lot">Quite a lot</string>
     <string name="some">Some bottles and e.t.c</string>
+    <string name="send_report">Send report</string>
+    <string name="enter_reason">Enter the reason</string>
+    <string name="select_reason">Select the reason</string>
+    <string name="send">Send</string>
+    <string name="cancel">Cancel</string>
+    <string name="reason">Reason</string>
+    <string name="full_reason">Full reason</string>
+    <string name="propaganda_violence">Propaganda of violence</string>
+    <string name="event_fake">Event is fake</string>
+    <string name="fraud">Scam</string>
+    <string name="selling_drugs">Selling psychotropic drugs</string>
+    <string name="other">Other</string>
 </resources>

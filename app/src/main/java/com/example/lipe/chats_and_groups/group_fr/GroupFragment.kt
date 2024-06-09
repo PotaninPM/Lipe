@@ -14,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.Coil
 import coil.request.ImageRequest
-import com.example.lipe.DeCryptMessages
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.chats_and_groups.Message
@@ -123,7 +122,7 @@ class GroupFragment(val groupUid: String) : Fragment() {
             if (messageText.isNotEmpty()) {
                 val currentUser = FirebaseAuth.getInstance().currentUser
                 val message = Message(
-                    "DeCry",
+                    messageText,
                     currentUser?.uid ?: "",
                     System.currentTimeMillis()
                 )

@@ -127,4 +127,16 @@
     <string name="a_lot">Очень много</string>
     <string name="quite_a_lot">Достаточно много</string>
     <string name="some">Не очень много</string>
+    <string name="send_report">Отправить жалобу</string>
+    <string name="enter_reason">Введите причину</string>
+    <string name="select_reason">Выберите причину</string>
+    <string name="send">Отправить</string>
+    <string name="cancel">Отмена</string>
+    <string name="reason">Причина</string>
+    <string name="full_reason">Подробная причина</string>
+    <string name="propaganda_violence">Пропаганда насилия</string>
+    <string name="event_fake">Фейк событие</string>
+    <string name="fraud">Мошенничество</string>
+    <string name="selling_drugs">Продажа психотропных средств</string>
+    <string name="other">Другое</string>
 </resources>

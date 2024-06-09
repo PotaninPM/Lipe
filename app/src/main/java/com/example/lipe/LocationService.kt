@@ -40,6 +40,7 @@ class LocationService : Service() {
             }
         }
 
+
         startLocationUpdates()
     }
 

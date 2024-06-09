@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingVertical="@dimen/_8sdp"
+    android:paddingHorizontal="@dimen/_10sdp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/reasonSpinnerLayout"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:hint="@string/reason"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:spinnerMode="dropdown"
+        app:errorEnabled="true"
+        android:layout_marginTop="@dimen/_8sdp">
+        <AutoCompleteTextView
+            android:id="@+id/reasonSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="none"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/reportReasonFull"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        app:counterEnabled="true"
+        app:counterMaxLength="300"
+        android:hint="@string/full_reason">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/report_reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:gravity="start"
+            android:minLines="5"
+            android:maxLines="6" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

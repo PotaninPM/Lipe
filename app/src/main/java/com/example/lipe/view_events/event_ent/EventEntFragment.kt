@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import coil.Coil
 import coil.request.ImageRequest
+import com.example.lipe.EventReportFragment
 import com.example.lipe.R
 import com.example.lipe.choose_people.ChoosePeopleFragment
 import com.example.lipe.databinding.FragmentEventEntBinding
@@ -68,6 +69,11 @@ class EventEntFragment : Fragment() {
         storageRef = FirebaseStorage.getInstance().reference
 
         dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
+
+        binding.report.setOnClickListener {
+            val reportDialog = EventReportFragment(eventEntVM.id.value.toString(), auth.currentUser!!.uid)
+            reportDialog.show(childFragmentManager, "EventReport")
+        }
 
         searchEvent(appVM.latitude, appVM.longtitude) { ready ->
             val sportType = appVM.type_sport
@@ -126,12 +132,15 @@ class EventEntFragment : Fragment() {
 
                                     binding.listUsers.text = getString(R.string.list)
                                     binding.listUsers.visibility = View.VISIBLE
+
+                                    binding.report.visibility = View.INVISIBLE
                                 } else {
                                     binding.deleteOrLeave.text = getString(R.string.leave)
                                     binding.deleteOrLeave.visibility = View.VISIBLE
 
                                     binding.listUsers.text = getString(R.string.list)
                                     binding.listUsers.visibility = View.VISIBLE
+                                    binding.report.visibility = View.INVISIBLE
                                 }
 
                                 binding.allEntEvent.visibility = View.VISIBLE

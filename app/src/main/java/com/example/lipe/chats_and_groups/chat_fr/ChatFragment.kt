@@ -15,7 +15,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.Coil
 import coil.request.ImageRequest
-import com.example.lipe.DeCryptMessages
 import com.example.lipe.R
 import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.chats_and_groups.Message
@@ -119,7 +118,7 @@ class ChatFragment(val chatUid: String) : Fragment() {
                 val currentUser = FirebaseAuth.getInstance().currentUser
 
                 val message = Message(
-                    "р",
+                    messageText,
                     currentUser?.uid ?: "",
                     System.currentTimeMillis()
                 )
