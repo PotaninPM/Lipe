@@ -32,6 +32,8 @@
             android:id="@+id/friendsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
             tools:listitem="@layout/friend_item_with_remove"
             android:layout_marginTop="@dimen/_4sdp"
             app:layout_constraintBottom_toBottomOf="parent"

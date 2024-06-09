@@ -684,19 +684,22 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         binding = FragmentMapsBinding.inflate(inflater, container, false)
 
-        currentFragment = MapsFragment()
+        if(isAdded) {
+            currentFragment = MapsFragment()
 
-        auth = FirebaseAuth.getInstance()
-        appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
-        eventEcoVM = ViewModelProvider(requireActivity()).get(EventEcoVM::class.java)
-        saveStateMapVM = ViewModelProvider(requireActivity()).get(SaveStateMapsVM::class.java)
+            auth = FirebaseAuth.getInstance()
+            appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
+            eventEcoVM = ViewModelProvider(requireActivity()).get(EventEcoVM::class.java)
+            saveStateMapVM = ViewModelProvider(requireActivity()).get(SaveStateMapsVM::class.java)
 
-        dbRef_user = FirebaseDatabase.getInstance().getReference()
-        dbRef_friends = FirebaseDatabase.getInstance().getReference()
-        dbRef_status = FirebaseDatabase.getInstance().getReference()
+            dbRef_user = FirebaseDatabase.getInstance().getReference()
+            dbRef_friends = FirebaseDatabase.getInstance().getReference()
+            dbRef_status = FirebaseDatabase.getInstance().getReference()
 
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
-        mapFragment.getMapAsync(this)
+            val mapFragment =
+                childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
+            mapFragment.getMapAsync(this)
+        }
 
         val view = binding.root
         return view
@@ -982,7 +985,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         Log.d("INFOG", appVM.markersType)
 
         val white = ContextCompat.getColor(requireContext(), R.color.white)
-        val black = Color.BLACK
+        val black = ContextCompat.getColor(requireContext(), R.color.inverse)
         if(type == "friends") {
             binding.friendsText.setTextColor(white)
             binding.allText.setTextColor(black)

@@ -87,43 +87,60 @@ class EventEcoFragment : Fragment() {
                                 eventEcoVM.id.value.toString()
                             ) { ans ->
                                 if (ans) {
-                                    binding?.btnRegToEvent?.visibility = View.GONE
+                                    val date_ = eventEcoVM.date.value!!
 
-                                    if (eventEcoVM.creator.value == auth.currentUser!!.uid) {
-                                        binding?.deleteOrLeave?.visibility = View.VISIBLE
-                                        binding?.deleteOrLeave?.setText("Завершить")
-
-                                        binding?.listUsers?.setText("Список")
-                                        binding?.listUsers?.visibility = View.VISIBLE
-                                    } else {
-                                        binding?.deleteOrLeave?.setText("Покинуть")
-                                        binding?.deleteOrLeave?.visibility = View.VISIBLE
-
-                                        binding?.listUsers?.setText("Список")
-                                        binding?.listUsers?.visibility = View.VISIBLE
+                                    binding.dateOfMeetingEco.text = buildString {
+                                        append(
+                                            date_.substring(
+                                                6,
+                                                date_.length
+                                            )
+                                        )
+                                        append(getString(R.string.`in`))
+                                        append(date_.substring(0, 5))
                                     }
 
-                                    binding?.allEcoEvent?.visibility = View.VISIBLE
-                                    binding?.loadingProgressBar?.visibility = View.GONE
+                                    binding.btnRegToEvent.visibility = View.GONE
+
+                                    if (eventEcoVM.creator.value == auth.currentUser!!.uid) {
+                                        binding.deleteOrLeave.visibility = View.VISIBLE
+                                        binding.deleteOrLeave.text = getString(R.string.finish)
+
+                                        binding.listUsers.text = getString(R.string.list)
+                                        binding.listUsers.visibility = View.VISIBLE
+                                    } else {
+                                        binding.deleteOrLeave.text = getString(R.string.leave)
+                                        binding.deleteOrLeave.visibility = View.VISIBLE
+
+                                        binding.listUsers.text = getString(R.string.list)
+                                        binding.listUsers.visibility = View.VISIBLE
+                                    }
+
+                                    binding.allEcoEvent.visibility = View.VISIBLE
+                                    binding.loadingProgressBar.visibility = View.GONE
                                 } else {
-                                    binding?.allEcoEvent?.visibility = View.VISIBLE
-                                    binding?.loadingProgressBar?.visibility = View.GONE
+                                    binding.allEcoEvent.visibility = View.VISIBLE
+                                    binding.loadingProgressBar.visibility = View.GONE
+
+                                    binding.dateOfMeetingEco.text = "*******"
                                 }
                             }
                         }
                     }
                 }
             }
-            listUsers?.setOnClickListener {
+            listUsers.setOnClickListener {
                 showPeopleGoDialog(0)
             }
 
-            deleteOrLeave?.setOnClickListener {
+            deleteOrLeave.setOnClickListener {
                 if(isAdded) {
                     if (auth.currentUser!!.uid == eventEcoVM.creator.value) {
                         showPeopleGoDialog(1)
                     } else {
                         deleteUserFromEvent(eventEcoVM.id.value.toString())
+
+                        binding.dateOfMeetingEco.text = "*******"
 
                         binding.deleteOrLeave.visibility = View.GONE
                         binding.listUsers.visibility = View.GONE
@@ -140,17 +157,31 @@ class EventEcoFragment : Fragment() {
                         if (!isUserAlreadyRegistered) {
                             regUserToEvent(curUid) { result ->
                                 if (result == true) {
+                                    val date_= eventEcoVM.date.value!!
+                                    binding.dateOfMeetingEco.setText(
+                                        buildString {
+                                            append(
+                                                date_.substring(
+                                                    6,
+                                                    date_.length
+                                                )
+                                            )
+                                            append(getString(R.string.`in`))
+                                            append(date_.substring(0, 5))
+                                        }
+                                    )
+
                                     setDialog(
-                                        "Успешная регистрация",
-                                        "Поздравляем, регистрация на событие прошла успешно",
-                                        "Отлично!"
+                                        getString(R.string.success_reg),
+                                        getString(R.string.congrats_success_reg),
+                                        getString(R.string.nice)
                                     )
                                 } else {
                                     //fail
                                     setDialog(
-                                        "Ошибка при регистрации",
-                                        "Что-то пошло не так, попробуйте зарегистрироваться еще раз",
-                                        "Хорошо"
+                                        getString(R.string.error_reg),
+                                        getString(R.string.smth_went_wrong_reg_event),
+                                        getString(R.string.okey)
                                     )
                                 }
                             }

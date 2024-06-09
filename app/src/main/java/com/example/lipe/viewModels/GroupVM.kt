@@ -1,10 +1,13 @@
 package com.example.lipe.viewModels
 
+import android.content.Context
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class GroupVM : ViewModel() {
+
     private var _name = MutableLiveData<String>()
     val name: LiveData<String> = _name
 

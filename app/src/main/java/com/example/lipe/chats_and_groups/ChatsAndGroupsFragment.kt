@@ -79,8 +79,6 @@ class ChatsAndGroupsFragment : Fragment() {
             })
 
             binding.tableLayout.apply {
-                addTab(newTab().setText(ContextCompat.getString(requireContext(), R.string.chats)))
-                addTab(newTab().setText(context.getString(R.string.groups)))
                 addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                     override fun onTabSelected(tab: TabLayout.Tab?) {
                         binding.viewPager.currentItem = tab!!.position

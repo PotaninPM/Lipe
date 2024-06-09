@@ -47,7 +47,18 @@
         app:tabIndicatorAnimationMode="elastic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent">
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/_3sdp"
+            android:text="@string/chats" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/groups" />
+    </com.google.android.material.tabs.TabLayout>
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/avatar_chat_group"

@@ -96,4 +96,16 @@
     <string name="already_friend">Друг</string>
     <string name="add">Добавить</string>
     <string name="groups">Группы</string>
+    <string name="no_events">Нет событий</string>
+    <string name="in">" в "</string>
+    <string name="finish">Завершить</string>
+    <string name="list">Список</string>
+    <string name="leave">Покинуть</string>
+    <string name="success_reg">Успешная регистрация</string>
+    <string name="congrats_success_reg">Поздравляем, регистрация на событие прошла успешно</string>
+    <string name="nice">Отлично!</string>
+    <string name="error_reg">Ошибка при регистрации</string>
+    <string name="smth_went_wrong_reg_event">Что-то пошло не так, попробуйте зарегистрироваться еще раз</string>
+    <string name="okey">Хорошо</string>
+    <string name="message">Сообщение</string>
 </resources>

@@ -1,49 +1,34 @@
 package com.example.lipe.view_events.event_ent
 
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import coil.Coil
 import coil.request.ImageRequest
-import com.example.lipe.MapsFragment
 import com.example.lipe.R
-import com.example.lipe.all_profiles.other_profile.OtherProfileFragment
 import com.example.lipe.choose_people.ChoosePeopleFragment
 import com.example.lipe.databinding.FragmentEventEntBinding
 import com.example.lipe.people_go_to_event.PeopleGoToEventFragment
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.viewModels.EventEntVM
-import com.example.lipe.view_events.EventFragment
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.getValue
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExecutorCoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -51,11 +36,7 @@ class EventEntFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
 
-    private lateinit var dbRef: DatabaseReference
-
     private lateinit var dbRef_event: DatabaseReference
-
-    private lateinit var dbRef_user: DatabaseReference
 
     private lateinit var storageRef : StorageReference
 
@@ -125,27 +106,41 @@ class EventEntFragment : Fragment() {
                             eventEntVM.id.value.toString()
                         ) { ans ->
                             if (ans) {
-                                binding?.btnRegToEvent?.visibility = View.GONE
-
-                                if (eventEntVM.creator.value == user) {
-                                    binding?.deleteOrLeave?.visibility = View.VISIBLE
-                                    binding?.deleteOrLeave?.setText("Завершить")
-
-                                    binding?.listUsers?.setText("Список")
-                                    binding?.listUsers?.visibility = View.VISIBLE
-                                } else {
-                                    binding?.deleteOrLeave?.setText("Покинуть")
-                                    binding?.deleteOrLeave?.visibility = View.VISIBLE
-
-                                    binding?.listUsers?.setText("Список")
-                                    binding?.listUsers?.visibility = View.VISIBLE
+                                val date_ = eventEntVM.date.value!!
+                                binding.dateOfMeetingEnt.text = buildString {
+                                    append(
+                                        date_.substring(
+                                            6,
+                                            date_.length
+                                        )
+                                    )
+                                    append(getString(R.string.`in`))
+                                    append(date_.substring(0, 5))
                                 }
 
-                                binding?.allEntEvent?.visibility = View.VISIBLE
-                                binding?.loadingProgressBar?.visibility = View.GONE
+                                binding.btnRegToEvent.visibility = View.GONE
+
+                                if (eventEntVM.creator.value == user) {
+                                    binding.deleteOrLeave.visibility = View.VISIBLE
+                                    binding.deleteOrLeave.text = getString(R.string.finish)
+
+                                    binding.listUsers.text = getString(R.string.list)
+                                    binding.listUsers.visibility = View.VISIBLE
+                                } else {
+                                    binding.deleteOrLeave.text = getString(R.string.leave)
+                                    binding.deleteOrLeave.visibility = View.VISIBLE
+
+                                    binding.listUsers.text = getString(R.string.list)
+                                    binding.listUsers.visibility = View.VISIBLE
+                                }
+
+                                binding.allEntEvent.visibility = View.VISIBLE
+                                binding.loadingProgressBar.visibility = View.GONE
                             } else {
-                                binding?.allEntEvent?.visibility = View.VISIBLE
-                                binding?.loadingProgressBar?.visibility = View.GONE
+                                binding.allEntEvent.visibility = View.VISIBLE
+                                binding.loadingProgressBar.visibility = View.GONE
+
+                                binding.dateOfMeetingEnt.text = "*******"
                             }
                         }
                     }
@@ -153,10 +148,10 @@ class EventEntFragment : Fragment() {
             }
         }
 
-        binding?.allEntEvent?.visibility = View.GONE
-        binding?.loadingProgressBar?.visibility = View.VISIBLE
+        binding.allEntEvent.visibility = View.GONE
+        binding.loadingProgressBar.visibility = View.VISIBLE
 
-        binding?.creator?.setOnClickListener {
+        binding.creator.setOnClickListener {
 //            val context = it.context
 //            if (context is AppCompatActivity) {
 //                val cardView = context.findViewById<CardView>(R.id.cardView)
@@ -175,47 +170,63 @@ class EventEntFragment : Fragment() {
 //            }
         }
 
-        binding?.apply {
+        binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = eventEntVM
 
-            listUsers?.setOnClickListener {
+            listUsers.setOnClickListener {
                 showPeopleGoDialog(0)
             }
 
-            deleteOrLeave?.setOnClickListener {
+            deleteOrLeave.setOnClickListener {
                 if (auth.currentUser!!.uid == eventEntVM.creator.value) {
                     showPeopleGoDialog(1)
                     //deleteEvent(eventEntVM.id.value.toString())
                 } else {
+                    binding.dateOfMeetingEnt.text = "*******"
                     deleteUserFromEvent(eventEntVM.id.value.toString())
 
-                    binding?.deleteOrLeave?.visibility = View.GONE
-                    binding?.listUsers?.visibility = View.GONE
+                    binding.deleteOrLeave.visibility = View.GONE
+                    binding.listUsers.visibility = View.GONE
 
-                    binding?.btnRegToEvent?.visibility = View.VISIBLE
+                    binding.btnRegToEvent.visibility = View.VISIBLE
                 }
             }
 
 
-            btnRegToEvent?.setOnClickListener {
+            btnRegToEvent.setOnClickListener {
                 val curUid = auth.currentUser?.uid
                 if (curUid != null) {
                     checkIfUserAlreadyReg(curUid, eventEntVM.id.value!!) { isUserAlreadyRegistered ->
                         if (!isUserAlreadyRegistered) {
                             regUserToEvent(curUid) { result ->
                                 if (result == true) {
+                                    val date_ = eventEntVM.date.value
+                                    if(date_ != null) {
+                                        binding.dateOfMeetingEnt.setText(
+                                            buildString {
+                                                append(
+                                                    date_.substring(
+                                                        6,
+                                                        date_.length
+                                                    )
+                                                )
+                                                append(getString(R.string.`in`))
+                                                append(date_.substring(0, 5))
+                                            }
+                                        )
+                                    }
                                     setDialog(
-                                        "Успешная регистрация",
-                                        "Поздравляем, регистрация на событие прошла успешно",
-                                        "Отлично!"
+                                        getString(R.string.success_reg),
+                                        getString(R.string.congrats_success_reg),
+                                        getString(R.string.nice)
                                     )
                                 } else {
                                     //fail
                                     setDialog(
-                                        "Ошибка при регистрации",
-                                        "Что-то пошло не так, попробуйте зарегистрироваться еще раз",
-                                        "Хорошо"
+                                        getString(R.string.error_reg),
+                                        getString(R.string.smth_went_wrong_reg_event),
+                                        getString(R.string.okey)
                                     )
                                 }
                             }

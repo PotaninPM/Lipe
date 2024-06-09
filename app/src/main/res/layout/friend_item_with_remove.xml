@@ -13,7 +13,6 @@
         android:id="@+id/avatar"
         android:layout_width="@dimen/_45sdp"
         android:layout_height="@dimen/_45sdp"
-        android:layout_marginStart="@dimen/_12sdp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +39,6 @@
         android:fontFamily="@font/nunitosansbold"
         android:textColor="@color/white"
         android:background="@drawable/add_friend_bottom_sheet"
-        android:layout_marginEnd="@dimen/_12sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -51,7 +49,6 @@
         android:layout_height="@dimen/_23sdp"
         android:src="@drawable/mark_sent"
         android:visibility="invisible"
-        android:layout_marginEnd="@dimen/_12sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -59,7 +56,6 @@
         android:id="@+id/delete_friend"
         android:layout_width="@dimen/_18sdp"
         android:layout_height="@dimen/_18sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
         android:src="@drawable/trash"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
