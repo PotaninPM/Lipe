@@ -37,6 +37,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ReportFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import coil.Coil
@@ -47,6 +48,7 @@ import com.example.lipe.create_events.CreateEventFragment
 import com.example.lipe.databinding.FragmentMapsBinding
 import com.example.lipe.all_profiles.other_profile.OtherProfileFragment
 import com.example.lipe.rating_board.RatingFragment
+import com.example.lipe.reports.report_fragment_for_moderators.ReportsForModeratorsFragment
 import com.example.lipe.viewModels.EventEcoVM
 import com.example.lipe.view_events.EventFragment
 import com.example.lipe.viewModels.EventEntVM
@@ -752,7 +754,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         binding.allText.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
 
-        if (locationPermissions()) {
+        checkUsersRole()
+
+        if(locationPermissions()) {
             startLocationService()
         } else {
             requestLocationPermissions()
@@ -826,23 +830,28 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.profile -> {
-                    if (currentFragment !is ProfileFragment) {
+                    if(currentFragment !is ProfileFragment) {
                         replaceFragment(ProfileFragment())
                     }
                 }
                 R.id.map -> {
-                    if (currentFragment !is MapsFragment) {
+                    if(currentFragment !is MapsFragment) {
                         replaceFragment(MapsFragment())
                     }
                 }
                 R.id.rating -> {
-                    if (currentFragment !is RatingFragment) {
+                    if(currentFragment !is RatingFragment) {
                         replaceFragment(RatingFragment())
                     }
                 }
                 R.id.chats -> {
-                    if (currentFragment !is ChatsAndGroupsFragment) {
+                    if(currentFragment !is ChatsAndGroupsFragment) {
                         replaceFragment(ChatsAndGroupsFragment())
+                    }
+                }
+                R.id.reports -> {
+                    if(currentFragment !is ReportsForModeratorsFragment) {
+                        replaceFragment(ReportsForModeratorsFragment())
                     }
                 }
                 else -> {
@@ -852,6 +861,27 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             true
         }
 
+    }
+
+    private fun checkUsersRole() {
+        val user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
+        user.child("role").addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()) {
+                    val role = snapshot.value.toString()
+                    if(role == "moderator" || role == "admin") {
+                        binding.bottomNavigation.menu.findItem(R.id.reports).isVisible = true
+                    } else {
+                        binding.bottomNavigation.menu.findItem(R.id.reports).isVisible = false
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
     }
 
     private fun requestLocationPermissions() {

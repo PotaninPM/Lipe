@@ -269,7 +269,8 @@ class SignUpDescFragment : Fragment() {
                         arrayListOf(),
                         arrayListOf(),
                         "online",
-                        token
+                        token,
+                        "user"
                     )
 
                     val user = mapOf(

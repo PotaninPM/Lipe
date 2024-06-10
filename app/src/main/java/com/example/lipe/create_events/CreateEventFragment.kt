@@ -44,6 +44,7 @@ class CreateEventFragment : BottomSheetDialogFragment() {
 
             binding.buttonEco.backgroundTintList =
                 ColorStateList.valueOf(Color.parseColor("#00AE1C"))
+            binding.buttonEco.setTextColor(resources.getColor(R.color.white))
 
             binding.toggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
                 val buttons = arrayOf(
@@ -69,16 +70,25 @@ class CreateEventFragment : BottomSheetDialogFragment() {
                         R.id.buttonEco -> {
                             switchFragmentsFields(0)
                             appVM.positionCreateFr = 0
+                            binding.buttonEco.setTextColor(resources.getColor(R.color.white))
+                            binding.buttonHelp.setTextColor(resources.getColor(R.color.inverse))
+                            binding.buttonEnt.setTextColor(resources.getColor(R.color.inverse))
                         }
 
                         R.id.buttonEnt -> {
                             switchFragmentsFields(1)
                             appVM.positionCreateFr = 1
+                            binding.buttonEnt.setTextColor(resources.getColor(R.color.white))
+                            binding.buttonHelp.setTextColor(resources.getColor(R.color.inverse))
+                            binding.buttonEco.setTextColor(resources.getColor(R.color.inverse))
                         }
 
                         R.id.buttonHelp -> {
                             switchFragmentsFields(2)
                             appVM.positionCreateFr = 2
+                            binding.buttonHelp.setTextColor(resources.getColor(R.color.white))
+                            binding.buttonEco.setTextColor(resources.getColor(R.color.inverse))
+                            binding.buttonEnt.setTextColor(resources.getColor(R.color.inverse))
                         }
                     }
                 }

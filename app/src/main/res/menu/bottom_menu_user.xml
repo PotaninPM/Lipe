@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/map"
+        android:enabled="true"
+        android:icon="@drawable/marker_bottom"
+        android:title="@string/map"/>
+    <item
+        android:id="@+id/rating"
+        android:enabled="true"
+        android:icon="@drawable/rating_users"
+        android:title="@string/rating" />
+    <item
+        android:id="@+id/reports"
+        android:enabled="true"
+        android:icon="@drawable/flag_48px"
+        android:title="@string/reports" />
+    <item
+        android:id="@+id/chats"
+        android:enabled="true"
+        android:icon="@drawable/chats_2"
+        android:title="@string/chats" />
+    <item
+        android:id="@+id/profile"
+        android:enabled="true"
+        android:icon="@drawable/profile_bottom_btn"
+        android:title="@string/profile"/>
+</menu>

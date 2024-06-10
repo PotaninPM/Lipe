@@ -70,6 +70,7 @@
                         android:text="@string/creator"
                         android:textSize="@dimen/_12sdp" />
                 </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 <!--            <com.google.android.material.divider.MaterialDivider-->
@@ -111,12 +112,25 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:layout_marginBottom="@dimen/_3sdp"
+                    android:text="Взять на рассмотрение"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/delete_event_btn"
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_3sdp"
+                    android:visibility="invisible"
                     android:text="@string/delete_event"
                     android:textColor="@color/quantum_googred"
                     app:layout_constraintStart_toStartOf="parent"
@@ -128,6 +142,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/reports"
+                    android:visibility="invisible"
                     app:layout_constraintEnd_toStartOf="@+id/on_map_btn"
                     app:layout_constraintStart_toEndOf="@+id/delete_event_btn"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -137,6 +152,7 @@
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:visibility="invisible"
                     android:layout_gravity="end"
                     android:text="@string/on_map"
                     app:layout_constraintEnd_toEndOf="parent"
