@@ -70,8 +70,6 @@ class ProfileFragment : Fragment() {
                 }
 
                 tabLayout.apply {
-                    addTab(newTab().setText(R.string.cur_events))
-                    addTab(newTab().setText(R.string.your_events))
 
                     addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
                         override fun onTabSelected(tab: TabLayout.Tab?) {

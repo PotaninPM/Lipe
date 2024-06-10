@@ -13,7 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import coil.Coil
 import coil.request.ImageRequest
-import com.example.lipe.reports.EventReportFragment
+import com.example.lipe.reports.report_dialog.EventReportFragment
 import com.example.lipe.R
 import com.example.lipe.choose_people.ChoosePeopleFragment
 import com.example.lipe.databinding.FragmentEventEntBinding

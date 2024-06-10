@@ -20,13 +20,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/ImageStyle_Circle" />
 
-    <View
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/statusViewGroup"
-        android:layout_width="@dimen/_12sdp"
-        android:layout_height="@dimen/_12sdp"
+        android:layout_width="@dimen/_14sdp"
+        android:layout_height="@dimen/_14sdp"
         android:background="@drawable/online_spot"
         app:layout_constraintBottom_toBottomOf="@+id/avatar"
-        app:layout_constraintEnd_toEndOf="@+id/avatar" />
+        app:layout_constraintEnd_toEndOf="@+id/avatar"
+        app:strokeColor="?attr/colorOnSurfaceInverse"
+        app:strokeWidth="@dimen/_2sdp"
+        android:padding="@dimen/_2sdp"
+        app:shapeAppearanceOverlay="@style/ImageStyle_Circle"/>
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"

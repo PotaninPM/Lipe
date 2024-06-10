@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toBitmap
@@ -18,8 +19,12 @@ import coil.request.ImageRequest
 import com.example.lipe.databinding.BottomSheetChangeYourInfoLayoutBinding
 import com.example.lipe.viewModels.ProfileVM
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -81,6 +86,7 @@ class ChangeInfoBottomSheet : BottomSheetDialogFragment() {
             binding.saveAllChanges.setOnClickListener {
                 allEditProfile.visibility = View.GONE
                 saving.visibility = View.VISIBLE
+                statusSave.visibility = View.VISIBLE
 
                 GlobalScope.launch {
                     updateUserData { ans ->
@@ -103,11 +109,10 @@ class ChangeInfoBottomSheet : BottomSheetDialogFragment() {
         val newNick = binding.etLogininput.text.toString()
         val newName = binding.etNameAndSurnameinput.text.toString()
         val newDesc = binding.descText.text.toString()
-        val newPass = sha256(binding.etPassinput.text.toString())
 
-        val latch = CountDownLatch(4)
+        val latch = CountDownLatch(3)
 
-        if (newNick != profileVM.nickname.value.toString() && newNick.isNotEmpty()) {
+        if(newNick != profileVM.nickname.value.toString() && newNick.isNotEmpty()) {
             dbRef_user.child("username").setValue(newNick).addOnSuccessListener {
                 latch.countDown()
             }.addOnFailureListener {
@@ -117,7 +122,7 @@ class ChangeInfoBottomSheet : BottomSheetDialogFragment() {
             latch.countDown()
         }
 
-        if (newName != profileVM.name.value.toString() && newName.isNotEmpty()) {
+        if(newName != profileVM.name.value.toString() && newName.isNotEmpty()) {
             dbRef_user.child("firstAndLastName").setValue(newName).addOnSuccessListener {
                 latch.countDown()
             }.addOnFailureListener {
@@ -127,18 +132,8 @@ class ChangeInfoBottomSheet : BottomSheetDialogFragment() {
             latch.countDown()
         }
 
-        if (newDesc != profileVM.desc.value.toString() && newDesc.isNotEmpty()) {
+        if(newDesc != profileVM.desc.value.toString() && newDesc.isNotEmpty()) {
             dbRef_user.child("about_you").setValue(newDesc).addOnSuccessListener {
-                latch.countDown()
-            }.addOnFailureListener {
-                latch.countDown()
-            }
-        } else {
-            latch.countDown()
-        }
-
-        if(newPass.isNotEmpty()) {
-            dbRef_user.child("password").setValue(sha256(newPass)).addOnSuccessListener {
                 latch.countDown()
             }.addOnFailureListener {
                 latch.countDown()
@@ -151,7 +146,6 @@ class ChangeInfoBottomSheet : BottomSheetDialogFragment() {
 
         ans("ok")
     }
-
 
     val selectImageAvatar =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->

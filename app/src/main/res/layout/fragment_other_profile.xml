@@ -246,21 +246,25 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?attr/colorOnSurfaceInverse"
-                        app:layout_constraintTop_toBottomOf="@+id/addToFriends"
-                        app:tabIndicator="@drawable/tab_events"
-                        app:tabIndicatorAnimationMode="elastic"
-                        app:tabIndicatorColor="@null"
                         android:layout_marginStart="@dimen/_12sdp"
                         android:layout_marginEnd="@dimen/_12sdp"
-                        android:layout_marginTop="@dimen/_12sdp"
+                        app:layout_constraintTop_toBottomOf="@+id/addToFriends"
+                        app:tabIndicatorAnimationMode="elastic"
                         app:tabIndicatorFullWidth="true"
-                        app:tabIndicatorGravity="center"
-                        app:tabIndicatorHeight="@dimen/_32sdp"
                         app:tabMode="fixed"
-                        app:tabRippleColor="@null"
-                        app:tabSelectedTextColor="@color/quantum_white_100"
-                        app:tabTextColor="?attr/colorOnPrimary">
+                        app:tabRippleColor="@null">
 
+                        <com.google.android.material.tabs.TabItem
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:icon="@drawable/schedule_24px"
+                            android:text="@string/cur_events" />
+
+                        <com.google.android.material.tabs.TabItem
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:icon="@drawable/star_48px"
+                            android:text="@string/your_events" />
                     </com.google.android.material.tabs.TabLayout>
 
                     <androidx.viewpager2.widget.ViewPager2
