@@ -9,7 +9,7 @@
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_6sdp"
+        android:layout_margin="@dimen/_12sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -25,53 +25,28 @@
                 android:layout_height="@dimen/_190sdp"
                 android:scaleType="centerCrop" />
 
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+<!--            <com.google.android.material.divider.MaterialDivider-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"/>-->
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_4sdp"
-                android:layout_marginBottom="@dimen/_4sdp"
-                android:layout_marginStart="@dimen/_10sdp"
-                >
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="@dimen/_4sdp"-->
+<!--                android:layout_marginBottom="@dimen/_4sdp"-->
+<!--                android:layout_marginStart="@dimen/_10sdp"-->
+<!--                >-->
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/avatar"
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="@dimen/_40sdp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:shapeAppearanceOverlay="@style/ImageStyle_Circle" />
+<!--                <com.google.android.material.imageview.ShapeableImageView-->
+<!--                    android:id="@+id/avatar"-->
+<!--                    android:layout_width="@dimen/_40sdp"-->
+<!--                    android:layout_height="@dimen/_40sdp"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:shapeAppearanceOverlay="@style/ImageStyle_Circle" />-->
+<!--                -->
 
-                <LinearLayout
-                    android:id="@+id/linearLayout9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_marginStart="@dimen/_3sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/avatar"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/username"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/nunitosansbold"
-                        android:gravity="center"
-                        android:textSize="@dimen/_14sdp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="@string/creator"
-                        android:textSize="@dimen/_12sdp" />
-                </LinearLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 <!--            <com.google.android.material.divider.MaterialDivider-->
 <!--                android:layout_width="match_parent"-->
@@ -112,25 +87,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:layout_marginBottom="@dimen/_3sdp"
-                    android:text="Взять на рассмотрение"
-                    android:textColor="@color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/delete_event_btn"
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_3sdp"
-                    android:visibility="invisible"
                     android:text="@string/delete_event"
                     android:textColor="@color/quantum_googred"
                     app:layout_constraintStart_toStartOf="parent"
@@ -142,7 +104,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/reports"
-                    android:visibility="invisible"
                     app:layout_constraintEnd_toStartOf="@+id/on_map_btn"
                     app:layout_constraintStart_toEndOf="@+id/delete_event_btn"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -152,7 +113,6 @@
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="invisible"
                     android:layout_gravity="end"
                     android:text="@string/on_map"
                     app:layout_constraintEnd_toEndOf="parent"

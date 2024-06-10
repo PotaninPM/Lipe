@@ -50,6 +50,7 @@ class AllChatsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         adapter = AllChatsAdapter(viewLifecycleOwner.lifecycleScope)
         binding.chatRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.chatRecyclerView.adapter = adapter

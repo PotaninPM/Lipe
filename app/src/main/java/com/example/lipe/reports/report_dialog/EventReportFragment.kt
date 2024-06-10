@@ -59,7 +59,8 @@ class EventReportFragment(eventUid: String, personUid: String) : DialogFragment(
         dialog.setOnShowListener {
             val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
             positiveButton.setOnClickListener {
-                val reportReason = binding.reportReason.text.toString().trim()
+                //val reportReason = binding.reportReason.text.toString().trim()
+                val reportReason = "123"
                 Log.d("INFOG", "Report Reason: $reportReason")
                 Log.d("INFOG", "General Reason: $generalReason")
 

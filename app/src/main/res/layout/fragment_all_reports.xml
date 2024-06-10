@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/_43sdp"
     tools:context=".reports.report_fragment_for_moderators.all_reports.AllReportsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reportsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:listitem="@layout/report_event"/>

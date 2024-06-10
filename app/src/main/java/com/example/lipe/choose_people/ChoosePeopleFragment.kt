@@ -130,16 +130,19 @@ class ChoosePeopleFragment(val eventUid: String) : DialogFragment() {
         val dbRef_user = FirebaseDatabase.getInstance().getReference("users").child(auth.currentUser!!.uid).child("curRegEventsId").child(uid)
         val curPeople = FirebaseDatabase.getInstance().getReference("current_events").child(eventUid)
         val dbRef_group = FirebaseDatabase.getInstance().getReference("groups").child(eventUid)
+        val reports = FirebaseDatabase.getInstance().getReference("reports/${eventUid}")
 
         dbRef_user.removeValue().addOnSuccessListener {
             curPeople.removeValue()
                 .addOnSuccessListener {
                     dbRef_group.removeValue().addOnSuccessListener {
+                        reports.removeValue().addOnSuccessListener {
 //                        val eventFragment = parentFragment as? EventFragment
 //                        eventFragment?.dismiss()
 //
 //                        binding.deleteOrLeave.visibility = View.GONE
 //                        binding.btnRegToEvent.visibility = View.VISIBLE
+                        }
                     }
                 }
                 .addOnFailureListener {
