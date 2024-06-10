@@ -139,4 +139,8 @@
     <string name="fraud">Мошенничество</string>
     <string name="selling_drugs">Продажа психотропных средств</string>
     <string name="other">Другое</string>
+    <string name="Confirmed">Подтверждено</string>
+    <string name="delete_event">Удалить событие</string>
+    <string name="reports">Жалобы</string>
+    <string name="on_map">На карте</string>
 </resources>

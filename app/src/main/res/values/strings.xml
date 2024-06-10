@@ -139,4 +139,8 @@
     <string name="fraud">Scam</string>
     <string name="selling_drugs">Selling psychotropic drugs</string>
     <string name="other">Other</string>
+    <string name="Confirmed">Confirmed</string>
+    <string name="delete_event">Delete event</string>
+    <string name="reports">Reports</string>
+    <string name="on_map">On map</string>
 </resources>
