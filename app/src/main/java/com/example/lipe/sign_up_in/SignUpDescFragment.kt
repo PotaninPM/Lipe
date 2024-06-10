@@ -148,10 +148,10 @@ class SignUpDescFragment : Fragment() {
             if(desc.isNotEmpty() && upload_photo == true) {
                 auth.createUserWithEmailAndPassword(signUpVM.email, sha256(signUpVM.pass)).addOnCompleteListener {
                     if(it.isSuccessful) {
-                        uploadImage {uid ->
-                            if(uid != "null") {
+                        uploadImage {url ->
+                            if(url != "null") {
                                 appVM.reg = "yes"
-                                addUserToDb(signUpVM.login, signUpVM.email, signUpVM.pass, signUpVM.nameAndSurname, desc, view)
+                                addUserToDb(signUpVM.login, signUpVM.email, signUpVM.pass, signUpVM.nameAndSurname, desc, url, view)
                                 val sharedPrefUser = activity?.getSharedPreferences("userRef", Context.MODE_PRIVATE)
                                 val editor = sharedPrefUser?.edit()
 
@@ -228,7 +228,7 @@ class SignUpDescFragment : Fragment() {
             imageRef.putFile(uri)
                 .addOnSuccessListener { task ->
                     task.storage.downloadUrl.addOnSuccessListener { url ->
-                        callback(uid)
+                        callback(url.toString())
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -238,7 +238,7 @@ class SignUpDescFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun addUserToDb(username: String, email: String, pass: String, names: String, desc: String, view: View) {
+    fun addUserToDb(username: String, email: String, pass: String, names: String, desc: String, imageUrl: String, view: View) {
         FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
             val dbRef_rating = FirebaseDatabase.getInstance().getReference("rating")
 
@@ -249,6 +249,7 @@ class SignUpDescFragment : Fragment() {
 
                     val user_DB_info = UserDB(
                         auth.currentUser?.uid,
+                        imageUrl,
                         LocalDate.now().toString(),
                         0,
                         0,
@@ -261,7 +262,6 @@ class SignUpDescFragment : Fragment() {
                         arrayListOf(),
                         arrayListOf(),
                         arrayListOf(),
-                        0,
                         arrayListOf(),
                         arrayListOf(),
                         0,

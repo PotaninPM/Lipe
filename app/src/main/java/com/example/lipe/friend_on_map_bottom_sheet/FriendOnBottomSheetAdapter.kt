@@ -77,39 +77,11 @@ class FriendOnBottomSheetAdapter(val lifecycleScope: LifecycleCoroutineScope, fr
                         .getReference("users/${friendUid}/friends/${friend.uid}")
                     val friend_db = FirebaseDatabase.getInstance()
                         .getReference("users/${friend.uid}/friends/${friendUid}")
-                    val amount = FirebaseDatabase.getInstance().getReference("users")
                     yourFriends.removeValue().addOnSuccessListener {
                         friend_db.removeValue().addOnSuccessListener {
-                            amount.child("${friendUid}").child("friends_amount")
-                                .addListenerForSingleValueEvent(object :
-                                    ValueEventListener {
-                                    override fun onDataChange(snapshot: DataSnapshot) {
-                                        amount.child("${friendUid}").child("friends_amount")
-                                            .setValue(snapshot.value.toString().toInt() - 1)
-                                        amount.child(friend.uid).child("friends_amount")
-                                            .addListenerForSingleValueEvent(object :
-                                                ValueEventListener {
-                                                override fun onDataChange(snapshot2: DataSnapshot) {
-                                                    amount.child(friend.uid).child("friends_amount")
-                                                        .setValue(
-                                                            snapshot2.value.toString().toInt() - 1
-                                                        )
-                                                    if (adapterPosition != RecyclerView.NO_POSITION) {
-                                                        removeRequest(adapterPosition)
-                                                    }
-                                                }
-
-                                                override fun onCancelled(error: DatabaseError) {
-                                                    TODO("Not yet implemented")
-                                                }
-                                            })
-                                    }
-
-                                    override fun onCancelled(error: DatabaseError) {
-                                        TODO("Not yet implemented")
-                                    }
-
-                                })
+                                if (adapterPosition != RecyclerView.NO_POSITION) {
+                                    removeRequest(adapterPosition)
+                                }
                         }
                     }
                 }

@@ -10,21 +10,20 @@
         android:id="@+id/imageView8"
         android:layout_width="@dimen/_28sdp"
         android:layout_height="@dimen/_28sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
-        android:src="@drawable/battery_all_power"
-        app:layout_constraintBottom_toBottomOf="@+id/avatar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/avatar" />
+        android:src="@drawable/battery_img"
+        app:layout_constraintBottom_toTopOf="@+id/username"
+        app:layout_constraintStart_toStartOf="@+id/username"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/battery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/nunitosansbold"
-        android:text="78%"
+        android:layout_marginStart="@dimen/_5sdp"
         android:textSize="@dimen/_13sdp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView8"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView8"
         app:layout_constraintTop_toTopOf="@+id/imageView8" />
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -48,34 +47,31 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_13sdp"
         android:fontFamily="@font/nunitosansextrabold"
-        android:text="Михаил Потанин"
         android:textSize="@dimen/_15sdp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView8"
-        app:layout_constraintEnd_toStartOf="@+id/imageView8"
-        app:layout_constraintStart_toEndOf="@+id/avatar"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/avatar"
+        app:layout_constraintStart_toStartOf="@+id/username"
+        app:layout_constraintTop_toTopOf="@+id/avatar"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginStart="24dp"
         android:fontFamily="@font/nunitosansextrabold"
-        android:text="MikePM"
         android:textSize="@dimen/_15sdp"
-        app:layout_constraintBottom_toBottomOf="@+id/avatar"
-        app:layout_constraintEnd_toStartOf="@+id/imageView8"
+        app:layout_constraintBottom_toTopOf="@+id/name"
         app:layout_constraintStart_toEndOf="@+id/avatar"
-        app:layout_constraintTop_toBottomOf="@+id/name" />
+        app:layout_constraintTop_toTopOf="@+id/avatar"
+        app:layout_constraintVertical_bias="0.775" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/friendsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_12sdp"
         android:fontFamily="@font/nunitosansbold"
-        android:text="Друзья: 50+"
         android:textSize="@dimen/_14sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/avatar" />
@@ -88,5 +84,5 @@
         android:layout_marginEnd="@dimen/_12sdp"
         tools:listitem="@layout/friend_item_with_remove"
         android:layout_marginTop="@dimen/_4sdp"
-        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+        app:layout_constraintTop_toBottomOf="@+id/friendsText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

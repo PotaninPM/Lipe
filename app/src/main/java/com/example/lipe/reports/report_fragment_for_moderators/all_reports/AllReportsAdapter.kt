@@ -13,7 +13,10 @@ import coil.request.ImageRequest
 import com.example.lipe.R
 import com.example.lipe.databinding.ReportEventBinding
 import com.example.lipe.reports.report_fragment_for_moderators.EventReport
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -21,7 +24,7 @@ import java.util.ArrayList
 
 class AllReportsAdapter(val lifecycleScope: LifecycleCoroutineScope) : RecyclerView.Adapter<AllReportsAdapter.AllReportsHolder>() {
 
-    val reports = ArrayList<EventReport>()
+    val reports_list = ArrayList<EventReport>()
     inner class AllReportsHolder(item: View): RecyclerView.ViewHolder(item) {
 
         val binding = ReportEventBinding.bind(item)
@@ -41,7 +44,22 @@ class AllReportsAdapter(val lifecycleScope: LifecycleCoroutineScope) : RecyclerV
             binding.reportsBtn.setText(binding.reportsBtn.text.toString() + " ${event.reports}")
 
             binding.deleteEventBtn.setOnClickListener {
+                val dbRef_event = FirebaseDatabase.getInstance().getReference("current_events/${event.eventUid}/reg_people_id")
+                var users_list = arrayListOf<String>()
+                dbRef_event.addListenerForSingleValueEvent(object: ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        for(users in snapshot.children) {
+                            users_list.add(users.value.toString())
+                        }
+                        deleteEvent(event.eventUid, users_list)
+                    }
 
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+
+                })
+                //deleteEvent(event.eventUid, users_list)
             }
 
             binding.onMapBtn.setOnClickListener {
@@ -54,52 +72,55 @@ class AllReportsAdapter(val lifecycleScope: LifecycleCoroutineScope) : RecyclerV
         }
     }
 
-//    private fun deleteEvent(uid: String) {
-//        val dbRef_user = FirebaseDatabase.getInstance().getReference("users").child(auth.currentUser!!.uid).child("curRegEventsId").child(uid)
-//        val curPeople = FirebaseDatabase.getInstance().getReference("current_events").child(uid)
-//        val dbRef_group = FirebaseDatabase.getInstance().getReference("groups").child(uid)
-//        val reports = FirebaseDatabase.getInstance().getReference("reports/${uid}")
-//
-//        dbRef_user.removeValue().addOnSuccessListener {
-//            curPeople.removeValue()
-//                .addOnSuccessListener {
-//                    dbRef_group.removeValue().addOnSuccessListener {
-//                        reports.removeValue().addOnSuccessListener {
-////                        val eventFragment = parentFragment as? EventFragment
-////                        eventFragment?.dismiss()
-////
-////                        binding.deleteOrLeave.visibility = View.GONE
-////                        binding.btnRegToEvent.visibility = View.VISIBLE
-//                        }
-//                    }
-//                }
-//                .addOnFailureListener {
-//                    Log.e("INFOG", "ErLeaveEvent")
-//                }
-//        }
-//    }
+    private fun deleteEvent(uid: String, users: ArrayList<String>) {
+        val dbRef_user = FirebaseDatabase.getInstance().getReference("users")
+        val curPeople = FirebaseDatabase.getInstance().getReference("current_events").child(uid)
+        val dbRef_group = FirebaseDatabase.getInstance().getReference("groups").child(uid)
+        val reports = FirebaseDatabase.getInstance().getReference("reports/${uid}")
+
+        for(user in users) {
+            dbRef_user.child(user).child("curRegEventsId").child(uid).removeValue().addOnSuccessListener {
+
+            }
+        }
+        curPeople.removeValue().addOnSuccessListener {
+            dbRef_group.removeValue().addOnSuccessListener {
+                reports.removeValue().addOnSuccessListener {
+    //                val eventFragment = parentFragment as? EventFragment
+    //                eventFragment?.dismiss()
+    //
+    //                binding.deleteOrLeave.visibility = View.GONE
+    //                binding.btnRegToEvent.visibility = View.VISIBLE
+                    }
+                }
+            }
+            .addOnFailureListener {
+                Log.e("INFOG", "ErLeaveEvent")
+            }
+
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllReportsHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.report_event, parent, false)
         return AllReportsHolder(view)
     }
     override fun onBindViewHolder(holder: AllReportsHolder, position: Int) {
-        holder.bind(reports[position])
+        holder.bind(reports_list[position])
     }
     override fun getItemCount(): Int {
-        return reports.size
+        return reports_list.size
     }
 
     fun removeRequest(position: Int) {
-        if (position in 0 until reports.size) {
-            reports.removeAt(position)
+        if (position in 0 until reports_list.size) {
+            reports_list.removeAt(position)
             notifyItemRemoved(position)
         }
     }
 
     fun updateRequests(events: List<EventReport>) {
-        reports.clear()
-        reports.addAll(events)
+        reports_list.clear()
+        reports_list.addAll(events)
         notifyDataSetChanged()
     }
 }

@@ -167,35 +167,41 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                 .getReference("users/${auth.currentUser!!.uid}/friends/${personUid}")
             val friend = FirebaseDatabase.getInstance()
                 .getReference("users/${personUid}/friends/${auth.currentUser!!.uid}")
-            val amount = FirebaseDatabase.getInstance().getReference("users")
+
+            val chatRefPers = FirebaseDatabase.getInstance()
+                .getReference("users/${personUid}/chats/${auth.currentUser!!.uid}")
+
+            val chatRefYour = FirebaseDatabase.getInstance()
+                .getReference("users/${auth.currentUser!!.uid}/chats/${personUid}")
+
+            chatRefPers.addListenerForSingleValueEvent(object: ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if(snapshot.exists()) {
+                        val chat = FirebaseDatabase.getInstance().getReference("chats/${snapshot.value}")
+                        chat.removeValue().addOnSuccessListener {
+                            chatRefPers.removeValue().addOnSuccessListener {
+                                chatRefYour.removeValue().addOnSuccessListener {
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+
             yourFriends.removeValue().addOnSuccessListener {
                 friend.removeValue().addOnSuccessListener {
-                    amount.child("${auth.currentUser!!.uid}").child("friends_amount").addListenerForSingleValueEvent(object: ValueEventListener{
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            amount.child("${auth.currentUser!!.uid}").child("friends_amount").setValue(snapshot.value.toString().toInt() - 1)
-                            amount.child(personUid).child("friends_amount").addListenerForSingleValueEvent(object: ValueEventListener{
-                                override fun onDataChange(snapshot2: DataSnapshot) {
-                                    amount.child(personUid).child("friends_amount").setValue(snapshot2.value.toString().toInt() - 1).addOnSuccessListener {
-                                        binding.delete.visibility = View.INVISIBLE
-                                        binding.addToFriends.visibility = View.VISIBLE
-                                        binding.request.visibility = View.INVISIBLE
-                                        binding.accept.visibility= View.INVISIBLE
+                    binding.delete.visibility = View.INVISIBLE
+                    binding.addToFriends.visibility = View.VISIBLE
+                    binding.request.visibility = View.INVISIBLE
+                    binding.accept.visibility= View.INVISIBLE
 
-                                        binding.delete.isEnabled = true
-                                    }
-                                }
-
-                                override fun onCancelled(error: DatabaseError) {
-                                    TODO("Not yet implemented")
-                                }
-                            })
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            TODO("Not yet implemented")
-                        }
-
-                    })
+                    binding.delete.isEnabled = true
                 }
             }
         }
@@ -248,8 +254,8 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                                     .addOnSuccessListener {
                                         val uid_chat = UUID.randomUUID().toString()
                                         dbRef_chats.child(uid_chat).setValue(ChatModelDB(you, personUid, "", arrayListOf())).addOnSuccessListener {
-                                            dbRef_sender_chats.child(uid_chat).setValue(uid_chat).addOnSuccessListener {
-                                                dbRef_accepter_chats.child(uid_chat).setValue(uid_chat).addOnSuccessListener {
+                                            dbRef_sender_chats.child(you).setValue(uid_chat).addOnSuccessListener {
+                                                dbRef_accepter_chats.child(person).setValue(uid_chat).addOnSuccessListener {
                                                     val request = FriendRequestData(personUid, auth.currentUser!!.uid)
                                                     val call: Call<Void> = RetrofitInstance.api.acceptFriendsRequestData(request)
                                                     binding.accept.isEnabled = true
@@ -441,7 +447,7 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                     val name = dataSnapshot.child("firstAndLastName").value.toString()
                     val username: String = dataSnapshot.child("username").value.toString()
                     val ratingAmount: Int = dataSnapshot.child("points").value.toString().toInt()
-                    val friendsAmount: Int = dataSnapshot.child("friends_amount").value.toString().toInt()
+                    val friendsAmount: Int = dataSnapshot.child("friends").childrenCount.toInt() ?: 0
                     val eventsAmount: Int = dataSnapshot.child("events_amount").value.toString().toInt()
 
                     callback(

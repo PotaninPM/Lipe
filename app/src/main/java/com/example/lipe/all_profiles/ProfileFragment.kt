@@ -232,7 +232,7 @@ class ProfileFragment : Fragment() {
                                 val ratingAmount: Int =
                                     dataSnapshot.child("points").value.toString().toInt()
                                 val friendsAmount: Int =
-                                    dataSnapshot.child("friends_amount").value.toString().toInt()
+                                    dataSnapshot.child("friends").childrenCount.toInt() ?: 0
                                 val eventsAmount: Int =
                                     dataSnapshot.child("events_amount").value.toString().toInt()
 
