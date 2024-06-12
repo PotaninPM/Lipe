@@ -103,7 +103,7 @@ class RequestsAdapter(val lifecycleScope: LifecycleCoroutineScope): RecyclerView
                                                                    if (response.isSuccessful) {
                                                                        Log.d("INFOG", "notification was sent")
                                                                    } else {
-                                                                       Log.d("INFOG", "${response.message()}")
+                                                                       Log.d("INFOG", "${response.errorBody()}")
                                                                    }
                                                                }
 
