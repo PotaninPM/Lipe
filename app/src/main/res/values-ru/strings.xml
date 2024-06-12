@@ -145,4 +145,5 @@
     <string name="on_map">На карте</string>
     <string name="all_reports">Все жалобы</string>
     <string name="your_reports">Ваша работа</string>
+    <string name="confirmed">Подтверждён</string>
 </resources>

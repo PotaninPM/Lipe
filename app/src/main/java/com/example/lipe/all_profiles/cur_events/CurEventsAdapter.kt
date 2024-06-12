@@ -26,7 +26,7 @@ class CurEventsAdapter(val lifecycleScope: LifecycleCoroutineScope) : RecyclerVi
 
         val binding = EventItemBinding.bind(item)
         fun bind(event: EventItem) = with(binding) {
-            dateTime.text = event.date_time.substring(6, event.date_time.length) + " в " + event.date_time.substring(0, 5)
+            dateTime.text = event.date_time.substring(6, event.date_time.length - 4) + " в " + event.date_time.substring(0, 5)
             title.text = event.title
             status.text = event.status
 

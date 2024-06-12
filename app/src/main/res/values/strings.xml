@@ -145,4 +145,5 @@
     <string name="on_map">On map</string>
     <string name="all_reports">All reports</string>
     <string name="your_reports">Your work</string>
+    <string name="confirmed">Confirmed</string>
 </resources>
