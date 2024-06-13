@@ -232,22 +232,22 @@ class ProfileFragment : Fragment() {
                                 val ratingAmount: Int =
                                     dataSnapshot.child("points").value.toString().toInt()
                                 val friendsAmount: Int =
-                                    dataSnapshot.child("friends").childrenCount.toInt() ?: 0
+                                    dataSnapshot.child("friends").childrenCount.toInt()
                                 val eventsAmount: Int =
                                     dataSnapshot.child("events_amount").value.toString().toInt()
 
-                                val editor = sharedPrefUser?.edit()
+                                //val editor = sharedPrefUser?.edit()
 
-                                editor?.apply {
-                                    putString("username", username)
-                                    putString("name", name)
-                                    putString("desc", desc)
-                                    putInt("rating", ratingAmount)
-                                    putInt("friends", friendsAmount)
-                                    putInt("events", eventsAmount)
-                                    putString("desc", desc)
-                                    apply()
-                                }
+//                                editor?.apply {
+//                                    putString("username", username)
+//                                    putString("name", name)
+//                                    putString("desc", desc)
+//                                    putInt("rating", ratingAmount)
+//                                    putInt("friends", friendsAmount)
+//                                    putInt("events", eventsAmount)
+//                                    putString("desc", desc)
+//                                    apply()
+//                                }
 
                                 callback(
                                     UserData(

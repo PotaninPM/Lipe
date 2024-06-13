@@ -25,6 +25,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.lipe.R
+import com.example.lipe.create_events.event_ent.CreateEntEventFragment
 import com.example.lipe.database_models.EcoEventModelDB
 import com.example.lipe.database_models.GroupModel
 import com.example.lipe.databinding.FragmentCreateEcoEventBinding
@@ -36,8 +37,11 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import retrofit2.Call
@@ -113,6 +117,8 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         }
 
         binding.btnCreateEvent.setOnClickListener {
+            binding.allEco.visibility = View.INVISIBLE
+            binding.progressBar.visibility = View.VISIBLE
             if(isAdded) {
                 binding.btnCreateEvent.isEnabled = false
                 binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey))
@@ -277,6 +283,51 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     Instant.now().epochSecond
                 )
 
+                val dbRef_user_your = FirebaseDatabase.getInstance().getReference("users/${event.creator_id}/yourCreatedEvents")
+                val dbRef_user_groups = FirebaseDatabase.getInstance().getReference("users/${event.creator_id}/groups")
+                val dbRef_user_events_amount = FirebaseDatabase.getInstance().getReference("users/${event.creator_id}/events_amount")
+
+                val dbRef_group = FirebaseDatabase.getInstance().getReference("groups")
+
+                val latitude = event.coordinates["latitude"]!!.toDouble()
+                val longitude = event.coordinates["longitude"]!!.toDouble()
+                val creatorUid = event.creator_id
+
+                val dbRef_events = FirebaseDatabase.getInstance().getReference("current_events")
+                val dbRef_user_cr = FirebaseDatabase.getInstance().getReference("users/${event.creator_id}/curRegEventsId")
+
+                dbRef_events.child(event.event_id).setValue(event) {e, _ ->
+                    dbRef_user_cr.child(event.event_id).setValue(event.event_id) {e, _ ->
+                        dbRef_user_your.child(event.event_id).setValue(event.event_id) {e, _ ->
+                            val group = CreateEntEventFragment.GroupModel(
+                                event.event_id,
+                                event.title,
+                                event.photos,
+                                hashMapOf(event.creator_id to event.creator_id),
+                                arrayListOf()
+                            )
+                            dbRef_group.child(event.event_id).setValue(group) {e, _ ->
+                                dbRef_user_groups.child(event.event_id).setValue(event.event_id) {e, _ ->
+
+                                }
+                            }
+                            dbRef_user_events_amount.addListenerForSingleValueEvent(object :
+                                ValueEventListener {
+                                override fun onDataChange(snapshot: DataSnapshot) {
+                                    dbRef_user_events_amount.setValue(snapshot?.value.toString().toInt() + 1) {e, _ ->
+
+                                    }
+                                }
+
+                                override fun onCancelled(error: DatabaseError) {
+                                    TODO("Not yet implemented")
+                                }
+
+                            })
+                        }
+                    }
+                }
+
                 val call: Call<Void> = RetrofitInstance.api.sendEventEcoData(event)
 
                 Log.d("INFOG", call.request().toString())
@@ -294,6 +345,8 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                         Log.d("INFOG", "${t.message}")
                     }
                 })
+                binding.allEco.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.INVISIBLE
             } else {
                 binding.btnCreateEvent.isEnabled = true
                 binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))

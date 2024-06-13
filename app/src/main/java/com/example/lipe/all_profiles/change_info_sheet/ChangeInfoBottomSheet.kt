@@ -79,9 +79,9 @@ class ChangeInfoBottomSheet : BottomSheetDialogFragment() {
                 binding.avatar.setImageBitmap(bitmap)
             }
 
-            avatar.setOnClickListener {
-                selectImageAvatar.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            }
+//            avatar.setOnClickListener {
+//                selectImageAvatar.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+//            }
 
             binding.saveAllChanges.setOnClickListener {
                 allEditProfile.visibility = View.GONE

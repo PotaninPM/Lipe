@@ -13,6 +13,21 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                android:indeterminate="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/allEco">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/horizontalScrollView"
@@ -216,7 +231,7 @@
                             android:id="@+id/etMaxInputText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Макс. людей"
+                            android:hint="@string/max_people"
                             android:inputType="number"
                             android:gravity="center"
                             android:singleLine="true"
@@ -266,6 +281,7 @@
                     tools:ignore="TextSizeCheck" />
             </LinearLayout>
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>

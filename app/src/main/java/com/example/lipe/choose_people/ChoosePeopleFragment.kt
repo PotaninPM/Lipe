@@ -125,6 +125,44 @@ class ChoosePeopleFragment(val eventUid: String) : DialogFragment() {
                 Log.d("INFOG", "${t.message}")
             }
         })
+
+        val database = FirebaseDatabase.getInstance()
+        val dbRefUsers = database.getReference("users")
+        val dbRefRating = database.getReference("rating")
+
+        selectedUsers.forEach { userUid ->
+            val userPointsRef = dbRefUsers.child(userUid)
+            userPointsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val currentPoints = snapshot.child("points").getValue(Int::class.java) ?: 0
+                    val newPoints = currentPoints + points
+                    userPointsRef.child("points").setValue(newPoints) {e, _ ->
+                        //sendNotificationToUser(snapshot.child("userToken").value.toString(), "Вам начислены баллы", "Вам начислено $pointsInt баллов. Общие баллы: $newPoints", "points")
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    print("Failed points $userUid: ${error.message}")
+                }
+            })
+        }
+        dbRefRating.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                snapshot.children.forEach { it ->
+                    val uid = it.child("userUid").value.toString()
+                    if(selectedUsers.contains(uid)) {
+                        val curPoints = it.child("points").value.toString().toInt()
+                        dbRefRating.child(it.key.toString()).child("points").setValue(curPoints + points) { e, _ ->
+
+                        }
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
     private fun deleteEvent(uid: String) {
         val dbRef_user = FirebaseDatabase.getInstance().getReference("users").child(auth.currentUser!!.uid).child("curRegEventsId").child(uid)

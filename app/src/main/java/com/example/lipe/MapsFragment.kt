@@ -939,7 +939,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         if (sport_type != "-") {
             sportType = when (sport_type) {
                 "Баскетбол" -> R.drawable.img_basketballimg
-                "Воллейбол" -> R.drawable.volleyball_2
+                "Волейбол" -> R.drawable.volleyball_2
                 "Футбол" -> R.drawable.football
                 "Рэгби" -> R.drawable.rugby_ball
                 "Воркаут" -> R.drawable.weights

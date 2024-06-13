@@ -79,7 +79,7 @@ class EventEntFragment : Fragment() {
             val sportType = appVM.type_sport
             val imageSport = when (sportType) {
                 "Баскетбол" -> R.drawable.img_basketballimg
-                "Воллейбол" -> R.drawable.volleyball_2
+                "Волейбол" -> R.drawable.volleyball_2
                 "Футбол" -> R.drawable.football
                 "Рэгби" -> R.drawable.rugby_ball
                 "Воркаут" -> R.drawable.weights

@@ -40,8 +40,11 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import retrofit2.Call
@@ -87,6 +90,14 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     private lateinit var dbRef_events: DatabaseReference
     private lateinit var dbRef_users: DatabaseReference
     private lateinit var auth: FirebaseAuth
+
+    data class GroupModel(
+        val uid: String,
+        val title: String,
+        val imageUid: String,
+        val members: HashMap<String, String>,
+        val messages: ArrayList<String>
+    )
 
     var eventId: String = ""
 
@@ -177,6 +188,9 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             }
 
             binding.btnCreateEvent.setOnClickListener {
+
+                binding.allEnt.visibility = View.INVISIBLE
+                binding.progressBar.visibility = View.VISIBLE
 
                 binding.btnCreateEvent.isEnabled = false
                 binding.btnCreateEvent.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
@@ -280,6 +294,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             var type: String = "ent"
 
             if(type_sport == "1" || type_sport == "Выберите тип развлечения") {
+                binding.btnCreateEvent.isEnabled = true
                 Toast.makeText(requireContext(), getString(R.string.choose_sport), Toast.LENGTH_LONG).show()
             } else {
                 var event = EntEventData(
@@ -301,6 +316,51 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     Instant.now().epochSecond
                 )
 
+                val dbRef_user_your = FirebaseDatabase.getInstance().getReference("users/${event.creator_id}/yourCreatedEvents")
+                val dbRef_user_groups = FirebaseDatabase.getInstance().getReference("users/${event.creator_id}/groups")
+                val dbRef_user_events_amount = FirebaseDatabase.getInstance().getReference("users/${event.creator_id}/events_amount")
+
+                val dbRef_group = FirebaseDatabase.getInstance().getReference("groups")
+
+                val latitude = event.coordinates["latitude"]!!.toDouble()
+                val longitude = event.coordinates["longitude"]!!.toDouble()
+                val creatorUid = event.creator_id
+
+                val dbRef_events = FirebaseDatabase.getInstance().getReference("current_events")
+                val dbRef_user_cr = FirebaseDatabase.getInstance().getReference("users/${event.creator_id}/curRegEventsId")
+
+                dbRef_events.child(event.event_id).setValue(event) {e, _ ->
+                    dbRef_user_cr.child(event.event_id).setValue(event.event_id) {e, _ ->
+                        dbRef_user_your.child(event.event_id).setValue(event.event_id) {e, _ ->
+                            val group = GroupModel(
+                                event.event_id,
+                                event.title,
+                                event.photos,
+                                hashMapOf(event.creator_id to event.creator_id),
+                                arrayListOf()
+                            )
+                            dbRef_group.child(event.event_id).setValue(group) {e, _ ->
+                                dbRef_user_groups.child(event.event_id).setValue(event.event_id) {e, _ ->
+
+                                }
+                            }
+                            dbRef_user_events_amount.addListenerForSingleValueEvent(object :
+                                ValueEventListener {
+                                override fun onDataChange(snapshot: DataSnapshot) {
+                                    dbRef_user_events_amount.setValue(snapshot?.value.toString().toInt() + 1) {e, _ ->
+
+                                    }
+                                }
+
+                                override fun onCancelled(error: DatabaseError) {
+                                    TODO("Not yet implemented")
+                                }
+
+                            })
+                        }
+                    }
+                }
+
                 val call: Call<Void> = RetrofitInstance.api.sendEventEntData(event)
 
                 Log.d("INFOG", call.request().toString())
@@ -318,8 +378,13 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                         Log.d("INFOG", "${t.message}")
                     }
                 })
+                binding.allEnt.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.INVISIBLE
             }
         }else {
+            binding.allEnt.visibility = View.VISIBLE
+            binding.progressBar.visibility = View.INVISIBLE
+
             binding.btnCreateEvent.isEnabled = true
             binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
         }

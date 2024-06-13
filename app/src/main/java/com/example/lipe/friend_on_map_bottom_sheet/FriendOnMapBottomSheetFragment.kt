@@ -81,7 +81,7 @@ class FriendOnMapBottomSheetFragment : BottomSheetDialogFragment() {
                     binding.avatar.setImageBitmap(bitmap)
                 }
 
-                binding.friendsText.setText("Друзья: ${adapter.friends.size}")
+                binding.friendsText.setText("Друзья: ")
             }
 
             override fun onCancelled(error: DatabaseError) {
