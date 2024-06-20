@@ -168,6 +168,7 @@ class SignUpDescFragment : Fragment() {
                                     putFloat("latitude_user", 0f)
                                     putFloat("longitude_user", 0f)
                                     putFloat("zoom_user", 0f)
+                                    putBoolean("enter", true)
                                     apply()
                                 }
                             } else {

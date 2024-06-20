@@ -59,6 +59,13 @@ class SignInWithEmailFragment : Fragment() {
             if(email.isNotEmpty() && pass.isNotEmpty()) {
                 signInUser(email, sha256(pass)) {ready ->
                     if(ready) {
+                        val sharedPrefUser = activity?.getSharedPreferences("userRef", Context.MODE_PRIVATE)
+                        val editor = sharedPrefUser?.edit()
+
+                        editor?.apply {
+                            putString("enter", "first")
+                            apply()
+                        }
                         view.findNavController().navigate(R.id.action_signInWithEmailFragment_to_mapsFragment)
                     } else {
                         binding.linearSigninwithem.visibility = View.VISIBLE

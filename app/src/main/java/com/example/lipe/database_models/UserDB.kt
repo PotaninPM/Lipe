@@ -23,5 +23,5 @@ data class UserDB(
     val groups: ArrayList<String> ?= null,
     val status: String = "online",
     val userToken: String ?= null,
-    val role: String ?= null
+    val role: String ?= null,
 )

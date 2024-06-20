@@ -53,7 +53,6 @@ class CurEventsAdapter(val lifecycleScope: LifecycleCoroutineScope) : RecyclerVi
     override fun getItemCount(): Int {
         return curEventsList.size
     }
-
     fun removeRequest(position: Int) {
         if (position in 0 until curEventsList.size) {
             curEventsList.removeAt(position)

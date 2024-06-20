@@ -89,6 +89,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private var currentFragment: Fragment? = null
 
+    private lateinit var sharedPreferences: SharedPreferences
+
     //View Model
     private lateinit var appVM: AppVM
 
@@ -701,10 +703,25 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             val mapFragment =
                 childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
             mapFragment.getMapAsync(this)
+
+            sharedPreferences = requireActivity().getSharedPreferences("userRef", Context.MODE_PRIVATE)
+
+            if(isFirstTime()) {
+                BeginDialogFragment.newInstance().show(childFragmentManager, "BeginDialogFragment")
+                markAsVisited()
+            }
         }
 
         val view = binding.root
         return view
+    }
+
+    private fun isFirstTime(): Boolean {
+        return sharedPreferences.getBoolean("enter", true)
+    }
+
+    private fun markAsVisited() {
+        sharedPreferences.edit().putBoolean("enter", false).apply()
     }
 
     private fun createDrawableFromView(view: View): Bitmap {
