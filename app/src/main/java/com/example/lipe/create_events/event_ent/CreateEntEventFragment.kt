@@ -65,7 +65,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
     var type_sport = "1"
 
-    private var selectedAge: String = "-"
+    private var selectedAge: Int = -1
 
     private lateinit var imageUri1: Uri
     private lateinit var imageUri2: Uri
@@ -184,7 +184,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             val autoCompleteTextView = binding.ageSpinner
             autoCompleteTextView.setAdapter(adapter)
             autoCompleteTextView.setOnItemClickListener { parent, view, position, id ->
-                selectedAge = parent.getItemAtPosition(position).toString()
+                selectedAge = position
             }
 
             binding.btnCreateEvent.setOnClickListener {
@@ -293,7 +293,14 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
             var type: String = "ent"
 
-            if(type_sport == "1" || type_sport == "Выберите тип развлечения") {
+            var age: String = when(selectedAge) {
+                0 -> "any_age"
+                1 -> "more_18"
+                2 -> "before_18"
+                else -> "-1"
+            }
+
+            if(type_sport == "1") {
                 binding.btnCreateEvent.isEnabled = true
                 Toast.makeText(requireContext(), getString(R.string.choose_sport), Toast.LENGTH_LONG).show()
             } else {
@@ -307,7 +314,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     coord,
                     date_of_meeting,
                     maxPeople,
-                    selectedAge,
+                    age,
                     desc,
                     photos,
                     hashMapOf(auth.currentUser?.uid to auth.currentUser?.uid),
@@ -404,7 +411,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             setError(getString(R.string.enter_people_amount), binding.etMaxInputText)
             check = false
         }
-        if(selectedAge == "-") {
+        if(selectedAge == -1) {
             setDialog(getString(R.string.age_was_not_chosen), getString(R.string.must_age), getString(R.string.okey))
             check = false
         }

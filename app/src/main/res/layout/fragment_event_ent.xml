@@ -52,49 +52,6 @@
                         android:layout_height="match_parent" />
                 </LinearLayout>
 
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/linearLayout6"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="@dimen/_28sdp"-->
-<!--                    android:layout_marginStart="@dimen/_12sdp"-->
-<!--                    android:layout_marginTop="@dimen/_7sdp"-->
-<!--                    android:background="@drawable/type_event_form"-->
-<!--                    android:paddingStart="@dimen/_7sdp"-->
-<!--                    android:paddingEnd="@dimen/_4sdp"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/title">-->
-
-<!--                    <TextView-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:fontFamily="@font/mulishsemibold"-->
-<!--                        android:gravity="center"-->
-<!--                        android:text="@{viewModel.type}"-->
-<!--                        android:textColor="#2629FF"-->
-<!--                        android:textSize="@dimen/_10sdp"-->
-<!--                        android:textStyle="bold" />-->
-<!--                </LinearLayout>-->
-
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/linearLayout3"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="@dimen/_22sdp"-->
-<!--                    android:layout_marginStart="@dimen/_12sdp"-->
-<!--                    app:layout_constraintBottom_toBottomOf="@+id/linearLayout6"-->
-<!--                    app:layout_constraintStart_toEndOf="@+id/linearLayout6"-->
-<!--                    app:layout_constraintTop_toTopOf="@+id/linearLayout6">-->
-
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:clickable="true"-->
-<!--                        android:focusable="true"-->
-<!--                        android:fontFamily="@font/inter"-->
-<!--                        android:gravity="center"-->
-<!--                        android:text="@{viewModel.amount_reg_people.toString()}"-->
-<!--                        android:textSize="@dimen/_13sdp" />-->
-<!--                </LinearLayout>-->
-
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="wrap_content"
@@ -301,7 +258,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunitosanssemibold"
-                            android:text="@{viewModel.type_sport}"
+                            android:text="@{viewModel.lang_type_sport}"
                             android:textSize="@dimen/_15sdp" />
 
                         <TextView

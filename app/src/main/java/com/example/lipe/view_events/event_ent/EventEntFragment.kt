@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -123,7 +124,7 @@ class EventEntFragment : Fragment() {
                                     append(date_.substring(0, 5))
                                 }
 
-                                binding.btnRegToEvent.visibility = View.GONE
+                                binding.btnRegToEvent.visibility = View.INVISIBLE
 
                                 if (eventEntVM.creator.value == user) {
                                     binding.deleteOrLeave.visibility = View.VISIBLE
@@ -395,10 +396,40 @@ class EventEntFragment : Fragment() {
                         val dateOfMeeting = eventSnapshot.child("date_of_meeting").value.toString()
                         val amountRegPeople = eventSnapshot.child("amount_reg_people").value.toString().toInt()
                         val age = eventSnapshot.child("age").value.toString()
+                        val age_lang = when(age) {
+                            "any_age" -> getString(R.string.any_age)
+                            "more_18" -> getString(R.string.more_18)
+                            "before_18" -> getString(R.string.before_18)
+                            else -> ""
+                        }
 
                         when(type) {
                             "ent" -> {
                                 val sportType = eventSnapshot.child("sport_type").value.toString()
+                                val lang_sport_type = when (sportType) {
+                                    "Basketball" -> getString(R.string.basketball)
+                                    "Volleyball" -> getString(R.string.volleyball)
+                                    "Football" -> getString(R.string.football)
+                                    "Rugby" -> getString(R.string.rugby)
+                                    "Workout" -> getString(R.string.workout)
+                                    "Tennis" -> getString(R.string.tennis)
+                                    "Badminton" -> getString(R.string.badminton)
+                                    "Table tennis" -> getString(R.string.table_tennis)
+                                    "Gymnastics" -> getString(R.string.gymnastics)
+                                    "Fencing" -> getString(R.string.fencing)
+                                    "Jogging" -> getString(R.string.jogging)
+                                    "Curling" -> getString(R.string.curling)
+                                    "Hockey" -> getString(R.string.hockey)
+                                    "Ice skating" -> getString(R.string.ice_skating)
+                                    "Skiing" -> getString(R.string.skiing)
+                                    "Downhill skiing" -> getString(R.string.downhill_skiing)
+                                    "Snowboarding" -> getString(R.string.snowboarding)
+                                    "Table games" -> getString(R.string.table_games)
+                                    "Mobile games" -> getString(R.string.mobile_games)
+                                    "Chess" -> getString(R.string.chess)
+                                    "Programming" -> getString(R.string.programming)
+                                    else -> "0"
+                                }
                                 checkIfUserAlreadyFriend { ready ->
                                     var found: Boolean = false
                                     dbRefUser.addValueEventListener(object : ValueEventListener {
@@ -416,11 +447,12 @@ class EventEntFragment : Fragment() {
                                                         photos,
                                                         arrayListOf("1"),
                                                         freePlaces,
-                                                        age,
+                                                        age_lang,
                                                         description,
                                                         timeOfCreation,
                                                         dateOfMeeting,
                                                         sportType,
+                                                        lang_sport_type,
                                                         amountRegPeople,
                                                         ready
                                                     )
@@ -446,6 +478,7 @@ class EventEntFragment : Fragment() {
                                                     timeOfCreation,
                                                     dateOfMeeting,
                                                     sportType,
+                                                    lang_sport_type,
                                                     amountRegPeople,
                                                     ready
                                                 )

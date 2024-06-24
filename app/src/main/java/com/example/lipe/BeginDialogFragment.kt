@@ -56,6 +56,11 @@ class BeginDialogFragment : DialogFragment() {
             updateTip()
         }
 
+        binding.backTipButton.setOnClickListener {
+            currentTipIndex -= 1
+            updateTip()
+        }
+
         return binding.root
     }
 
@@ -63,11 +68,18 @@ class BeginDialogFragment : DialogFragment() {
         if (currentTipIndex == tips.size) {
             dismiss()
         } else {
+            binding.backTipButton.visibility = View.VISIBLE
             progress = (currentTipIndex + 1) * 25
             binding.progressText.text = "$progress%"
             binding.progressBar.progress = progress
             binding.tipTextView.text = tips[currentTipIndex]
             binding.gifImageView.load(gifUrls[currentTipIndex])
+        }
+
+        if(currentTipIndex == 0) {
+            binding.backTipButton.visibility = View.GONE
+        } else {
+            binding.backTipButton.visibility = View.VISIBLE
         }
     }
 

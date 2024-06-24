@@ -1,7 +1,10 @@
 package com.example.lipe.viewModels
 
+import android.content.Context
 import android.content.res.Resources
 import android.util.Log
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -42,6 +45,9 @@ class EventEntVM: ViewModel() {
     private var _type_sport = MutableLiveData<String>()
     var type_sport: LiveData<String> = _type_sport
 
+    private var _lang_type_sport = MutableLiveData<String>()
+    var lang_type_sport: LiveData<String> = _lang_type_sport
+
     private var _type = MutableLiveData<String>()
     val type: LiveData<String> = _type
 
@@ -68,7 +74,7 @@ class EventEntVM: ViewModel() {
         longtitude = long
     }
 
-    fun setInfo(id_: String, maxPeople_: Int, title_: String, creator_: String, creatorUsername_: String, photos_: ArrayList<String>, peopleGo_: List<String>, freePlaces_: Int, age_: String, eventDesc_: String, time_of_creation_: String, date_: String, type_sport_: String, amount_reg_people_: Int, friend_: String) {
+    fun setInfo(id_: String, maxPeople_: Int, title_: String, creator_: String, creatorUsername_: String, photos_: ArrayList<String>, peopleGo_: List<String>, freePlaces_: Int, age_: String, eventDesc_: String, time_of_creation_: String, date_: String, type_sport_: String, lang_type_sport_: String, amount_reg_people_: Int, friend_: String) {
         _id.value = id_
         _maxPeople.value = maxPeople_
         _title.value = title_
@@ -81,6 +87,8 @@ class EventEntVM: ViewModel() {
         _time_of_creation.value = time_of_creation_
         _amount_reg_people.value = amount_reg_people_
         _freePlaces.value = 100 - 100 * amount_reg_people.value!! / maxPeople.value!!
+
+        _lang_type_sport.value = lang_type_sport_
 
         _time_of_creation.value = formatDate(time_of_creation_)
 

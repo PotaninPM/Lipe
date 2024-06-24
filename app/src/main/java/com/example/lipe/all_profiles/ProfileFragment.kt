@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toBitmap
@@ -216,9 +217,6 @@ class ProfileFragment : Fragment() {
     private fun findAccount(callback: (UserData?) -> Unit) {
         try {
             if(isAdded) {
-                val sharedPrefUser = activity?.getSharedPreferences("userRef", Context.MODE_PRIVATE)
-                val username = sharedPrefUser?.getString("username", null)
-                if(username == null) {
                     if(auth.currentUser != null) {
                         val dbRef_user =
                             FirebaseDatabase.getInstance()
@@ -236,8 +234,10 @@ class ProfileFragment : Fragment() {
                                 val eventsAmount: Int =
                                     dataSnapshot.child("events_amount").value.toString().toInt()
 
-                                //val editor = sharedPrefUser?.edit()
+                                Log.d("INFOG1", eventsAmount.toString())
 
+//                                val editor = sharedPrefUser?.edit()
+//
 //                                editor?.apply {
 //                                    putString("username", username)
 //                                    putString("name", name)
@@ -268,25 +268,8 @@ class ProfileFragment : Fragment() {
                         })
                     }
                 } else {
-                    val username = sharedPrefUser.getString("username", null)
-                    val desc = sharedPrefUser.getString("desc", null)
-                    val name = sharedPrefUser.getString("name", null)
-                    val rating = sharedPrefUser.getInt("rating", -1)
-                    val friends = sharedPrefUser.getInt("friends", -1)
-                    val events = sharedPrefUser.getInt("events", -1)
-                    Log.d("INFOG", username.toString())
-                    callback(
-                        UserData(
-                            username!!,
-                            rating,
-                            friends,
-                            events,
-                            desc!!,
-                            name!!
-                        )
-                    )
+                    Toast.makeText(requireContext(), getString(R.string.not_auth), Toast.LENGTH_LONG).show()
                 }
-            }
         } catch (e: Exception) {
             Log.e("INFOG", e.message.toString())
         }
