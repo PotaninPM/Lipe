@@ -78,28 +78,27 @@ class EventEntFragment : Fragment() {
         searchEvent(appVM.latitude, appVM.longtitude) { ready ->
             val sportType = appVM.type_sport
             val imageSport = when (sportType) {
-                "Баскетбол" -> R.drawable.img_basketballimg
-                "Волейбол" -> R.drawable.volleyball_2
-                "Футбол" -> R.drawable.football
-                "Рэгби" -> R.drawable.rugby_ball
-                "Воркаут" -> R.drawable.weights
-                "Большой тенис" -> R.drawable.tennis
-                "Бадминтон" -> R.drawable.shuttlecock
-                "Пинпонг" -> R.drawable.table_tennis
-                "Гимнастика" -> R.drawable.gymnastic_rings
-                "Фехтование" -> R.drawable.fencing
-                "Бег" -> R.drawable.running_shoe
-                "Кёрлинг" -> R.drawable.curling
-                "Хоккей" -> R.drawable.ice_hockey
-                "Катание на коньках" -> R.drawable.ice_skate
-                "Лыжная ходьба" -> R.drawable.skiing_1
-                "Горные лыжи" -> R.drawable.skiing
-                "Теннис" -> R.drawable.tennis
-                "Сноуборд" -> R.drawable.snowboarding
-                "Настольные игры" -> R.drawable.board_game
-                "Мобильные игры" -> R.drawable.mobile_game
-                "Шахматы" -> R.drawable.chess_2
-                "Программирование" -> R.drawable.programming
+                "Basketball" -> R.drawable.img_basketballimg
+                "Volleyball" -> R.drawable.volleyball_2
+                "Football" -> R.drawable.football
+                "Rugby" -> R.drawable.rugby_ball
+                "Workout" -> R.drawable.weights
+                "Tennis" -> R.drawable.tennis
+                "Badminton" -> R.drawable.shuttlecock
+                "Table tennis" -> R.drawable.table_tennis
+                "Gymnastics" -> R.drawable.gymnastic_rings
+                "Fencing" -> R.drawable.fencing
+                "Jogging" -> R.drawable.running_shoe
+                "Curling" -> R.drawable.curling
+                "Hockey" -> R.drawable.ice_hockey
+                "Ice skating" -> R.drawable.ice_skate
+                "Skiing" -> R.drawable.skiing_1
+                "Downhill skiing" -> R.drawable.skiing
+                "Snowboarding" -> R.drawable.snowboarding
+                "Table games" -> R.drawable.board_game
+                "Mobile games" -> R.drawable.mobile_game
+                "Chess" -> R.drawable.chess_2
+                "Programming" -> R.drawable.programming
                 else -> 0
             }
             val user = auth.currentUser!!.uid

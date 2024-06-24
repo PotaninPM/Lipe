@@ -369,9 +369,9 @@
                     android:layout_marginStart="@dimen/_8sdp"
                     android:fontFamily="@font/intermedium"
                     android:gravity="start"
+                    android:layout_marginTop="@dimen/_1sdp"
                     android:text="@{viewModel.eventDesc}"
                     android:textSize="@dimen/_14sdp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView9"
                     app:layout_constraintStart_toEndOf="@+id/imageView9"
                     app:layout_constraintTop_toBottomOf="@+id/about_event" />
 

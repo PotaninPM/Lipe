@@ -121,28 +121,28 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         storageRef = FirebaseStorage.getInstance().getReference("event_images")
 
         items = listOf(
-            SpinnerItem(getString(R.string.choose_ent_type), R.drawable.light_bulb),
-            SpinnerItem(getString(R.string.basketball), R.drawable.img_basketballimg),
-            SpinnerItem(getString(R.string.volleyball), R.drawable.volleyball_2),
-            SpinnerItem(getString(R.string.football), R.drawable.football),
-            SpinnerItem(getString(R.string.rugby), R.drawable.rugby_ball),
-            SpinnerItem(getString(R.string.workout), R.drawable.weights),
-            SpinnerItem(getString(R.string.tennis), R.drawable.tennis),
-            SpinnerItem(getString(R.string.badminton), R.drawable.shuttlecock),
-            SpinnerItem(getString(R.string.table_tennis), R.drawable.table_tennis),
-            SpinnerItem(getString(R.string.gymnastics), R.drawable.gymnastic_rings),
-            SpinnerItem(getString(R.string.fencing), R.drawable.fencing),
-            SpinnerItem(getString(R.string.jogging), R.drawable.running_shoe),
-            SpinnerItem(getString(R.string.curling), R.drawable.curling),
-            SpinnerItem(getString(R.string.hockey), R.drawable.ice_hockey),
-            SpinnerItem(getString(R.string.ice_skating), R.drawable.ice_skate),
-            SpinnerItem(getString(R.string.skiing), R.drawable.skiing_1),
-            SpinnerItem(getString(R.string.downhill_skiing), R.drawable.skiing),
-            SpinnerItem(getString(R.string.snowboarding), R.drawable.snowboarding),
-            SpinnerItem(getString(R.string.table_games), R.drawable.board_game),
-            SpinnerItem(getString(R.string.mobile_games), R.drawable.mobile_game),
-            SpinnerItem(getString(R.string.chess), R.drawable.chess_2),
-            SpinnerItem(getString(R.string.programming), R.drawable.programming)
+            SpinnerItem(getString(R.string.choose_ent_type), R.drawable.light_bulb, "Choose entertainment type"),
+            SpinnerItem(getString(R.string.basketball), R.drawable.img_basketballimg, "Basketball"),
+            SpinnerItem(getString(R.string.volleyball), R.drawable.volleyball_2, "Volleyball"),
+            SpinnerItem(getString(R.string.football), R.drawable.football, "Football"),
+            SpinnerItem(getString(R.string.rugby), R.drawable.rugby_ball, "Rugby"),
+            SpinnerItem(getString(R.string.workout), R.drawable.weights, "Workout"),
+            SpinnerItem(getString(R.string.tennis), R.drawable.tennis, "Tennis"),
+            SpinnerItem(getString(R.string.badminton), R.drawable.shuttlecock, "Badminton"),
+            SpinnerItem(getString(R.string.table_tennis), R.drawable.table_tennis, "Table tennis"),
+            SpinnerItem(getString(R.string.gymnastics), R.drawable.gymnastic_rings, "Gymnastics"),
+            SpinnerItem(getString(R.string.fencing), R.drawable.fencing, "Fencing"),
+            SpinnerItem(getString(R.string.jogging), R.drawable.running_shoe, "Jogging"),
+            SpinnerItem(getString(R.string.curling), R.drawable.curling, "Curling"),
+            SpinnerItem(getString(R.string.hockey), R.drawable.ice_hockey, "Hockey"),
+            SpinnerItem(getString(R.string.ice_skating), R.drawable.ice_skate, "Ice skating"),
+            SpinnerItem(getString(R.string.skiing), R.drawable.skiing_1, "Skiing"),
+            SpinnerItem(getString(R.string.downhill_skiing), R.drawable.skiing, "Downhill skiing"),
+            SpinnerItem(getString(R.string.snowboarding), R.drawable.snowboarding, "Snowboarding"),
+            SpinnerItem(getString(R.string.table_games), R.drawable.board_game, "Table games"),
+            SpinnerItem(getString(R.string.mobile_games), R.drawable.mobile_game, "Mobile games"),
+            SpinnerItem(getString(R.string.chess), R.drawable.chess_2, "Chess"),
+            SpinnerItem(getString(R.string.programming), R.drawable.programming, "Programming")
         )
 
         setDesignToFields()
@@ -156,7 +156,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = items[position]
-                type_sport = selectedItem.name
+                type_sport = selectedItem.idString
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -432,7 +432,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         binding.etMaxInputLay.boxStrokeColor = Color.BLUE
     }
 
-    data class SpinnerItem(val name: String, val imageResourceId: Int)
+    data class SpinnerItem(val name: String, val imageResourceId: Int, val idString: String)
     class CustomAdapter(context: Context, private val items: List<SpinnerItem>) : ArrayAdapter<SpinnerItem>(context,
         R.layout.spinner_one_chose, items) {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
