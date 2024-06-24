@@ -146,4 +146,8 @@
     <string name="all_reports">All reports</string>
     <string name="your_reports">Your work</string>
     <string name="confirmed">Confirmed</string>
+    <string name="preparation">Learn how to use this app</string>
+    <string name="finger">Hold your finger for 1 sec. to create event</string>
+    <string name="can">Отлично, теперь вы можете приступать к использованию приложения, удачи!)</string>
+    <string name="theme_help">You can set up a profile theme by clicking on blue background and choosing photo that you want to see</string>
 </resources>

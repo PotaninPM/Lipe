@@ -21,19 +21,26 @@ class BeginDialogFragment : DialogFragment() {
     private var currentTipIndex = 0
     private var progress = 0
 
-    private val tips = listOf(
-        getString(R.string.preparation),
-        "Чтобы создать событие просто удерживайте палец на экране в течении 1.5 секунд",
-        "",
-        "Отлично, теперь вы можете приступать к использованию приложения, удачи!)"
-    )
+    private lateinit var tips: List<String>
+    private lateinit var gifUrls: List<Int>
 
-    private val gifUrls = listOf(
-        R.drawable.classroom,
-        "url_to_gif_1",
-        "url_to_gif_2",
-        R.drawable.success,
-    )
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        tips = listOf(
+            getString(R.string.preparation),
+            getString(R.string.finger),
+            getString(R.string.theme_help),
+            getString(R.string.can)
+        )
+
+        gifUrls = listOf(
+            R.drawable.classroom,
+            R.drawable.left_click,
+            R.drawable.lipe,
+            R.drawable.success,
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +52,7 @@ class BeginDialogFragment : DialogFragment() {
         updateTip()
 
         binding.nextTipButton.setOnClickListener {
-            currentTipIndex+=1
+            currentTipIndex += 1
             updateTip()
         }
 
@@ -53,12 +60,11 @@ class BeginDialogFragment : DialogFragment() {
     }
 
     private fun updateTip() {
-
-        if(currentTipIndex == 4) {
+        if (currentTipIndex == tips.size) {
             dismiss()
         } else {
-            progress += 25
-            binding.progressText.setText("$progress%")
+            progress = (currentTipIndex + 1) * 25
+            binding.progressText.text = "$progress%"
             binding.progressBar.progress = progress
             binding.tipTextView.text = tips[currentTipIndex]
             binding.gifImageView.load(gifUrls[currentTipIndex])

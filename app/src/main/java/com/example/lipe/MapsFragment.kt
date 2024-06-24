@@ -705,11 +705,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             mapFragment.getMapAsync(this)
 
             sharedPreferences = requireActivity().getSharedPreferences("userRef", Context.MODE_PRIVATE)
-
-            if(isFirstTime()) {
-                BeginDialogFragment.newInstance().show(childFragmentManager, "BeginDialogFragment")
-                markAsVisited()
-            }
         }
 
         val view = binding.root
@@ -778,6 +773,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         } else {
             requestLocationPermissions()
         }
+
+        //if(isFirstTime()) {
+            view.post {
+                BeginDialogFragment.newInstance().show(childFragmentManager, "BeginDialogFragment")
+                markAsVisited()
+            }
+        //}
 
 
         if(appVM.reg == "yes") {
