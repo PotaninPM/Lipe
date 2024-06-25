@@ -51,8 +51,6 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
     private lateinit var appVM: AppVM
 
     private lateinit var imageUri1: Uri
-    private lateinit var imageUri2: Uri
-    private lateinit var imageUri3: Uri
 
     private var image1: String = "-"
     private var image2: String = "-"
@@ -167,41 +165,6 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
                         }
                 }
             }
-//
-//            if(image2 != "-") {
-//                imageUri2.let { uri ->
-//                    val uid: String = UUID.randomUUID().toString()
-//                    val imageRef = storageRef.child(uid)
-//                    imageRef.putFile(uri)
-//                        .addOnSuccessListener { task ->
-//                            task.storage.downloadUrl.addOnSuccessListener { url ->
-//                                photos.add(uid)
-//                            }
-//                        }
-//                        .addOnFailureListener { exception ->
-//                            callback(arrayListOf("-", "-", "-"))
-//                            used = -1
-//                        }
-//                }
-//            }
-//
-//            if(image3 != "-") {
-//                imageUri3.let { uri ->
-//                    val uid: String = UUID.randomUUID().toString()
-//                    val imageRef = storageRef.child(uid)
-//                    imageRef.putFile(uri)
-//                        .addOnSuccessListener { task ->
-//                            task.storage.downloadUrl.addOnSuccessListener { url ->
-//                                photos.add(uid)
-//                            }
-//                        }
-//                        .addOnFailureListener { exception ->
-//                            callback(arrayListOf("-", "-", "-"))
-//                            used = -1
-//                        }
-//                }
-//            }
-//
         }
     }
 
@@ -262,10 +225,6 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
             setError(getString(R.string.enter_desc), binding.etDescInputText)
             check = false
         }
-//        if(binding.etNameinput.text.toString().isEmpty()) {
-//            setError("Введите название!", binding.etNameinput)
-//            check = false
-//        }
         if(binding.etMaxInputText.text.toString().isEmpty()) {
             setError(getString(R.string.enter_people_amount), binding.etMaxInputText)
             check = false

@@ -150,7 +150,6 @@ class SignUpDescFragment : Fragment() {
                     if(it.isSuccessful) {
                         uploadImage {url ->
                             if(url != "null") {
-                                appVM.reg = "yes"
                                 addUserToDb(signUpVM.login, signUpVM.email, signUpVM.pass, signUpVM.nameAndSurname, desc, url, view)
                                 val sharedPrefUser = activity?.getSharedPreferences("userRef", Context.MODE_PRIVATE)
                                 val editor = sharedPrefUser?.edit()

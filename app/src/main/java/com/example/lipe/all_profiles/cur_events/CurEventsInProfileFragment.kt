@@ -28,14 +28,11 @@ class CurEventsInProfileFragment(val personUid: String) : Fragment() {
     private lateinit var adapter: CurEventsAdapter
 
     private lateinit var auth: FirebaseAuth
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentCurEventsInProfileBinding.inflate(inflater, container, false)
 
         auth = FirebaseAuth.getInstance()

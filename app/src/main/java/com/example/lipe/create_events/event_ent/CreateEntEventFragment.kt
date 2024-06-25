@@ -15,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.Spinner
@@ -30,8 +29,6 @@ import androidx.fragment.app.activityViewModels
 import com.example.lipe.R
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.databinding.FragmentCreateEntEventBinding
-import com.example.lipe.database_models.EntEventModelDB
-import com.example.lipe.database_models.GroupModel
 import com.example.lipe.notifications.EntEventData
 import com.example.lipe.notifications.RetrofitInstance
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -63,7 +60,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     //view model
     private val appVM: AppVM by activityViewModels()
 
-    var type_sport = "1"
+    var typeSport = "1"
 
     private var selectedAge: Int = -1
 
@@ -87,8 +84,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
     private lateinit var items: List<SpinnerItem>
 
-    private lateinit var dbRef_events: DatabaseReference
-    private lateinit var dbRef_users: DatabaseReference
+    private lateinit var dbrefEvents: DatabaseReference
+    private lateinit var dbrefUsers: DatabaseReference
     private lateinit var auth: FirebaseAuth
 
     data class GroupModel(
@@ -156,7 +153,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = items[position]
-                type_sport = selectedItem.idString
+                typeSport = selectedItem.idString
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -172,8 +169,8 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if(isAdded) {
-            dbRef_events = FirebaseDatabase.getInstance().getReference("current_events")
-            dbRef_users = FirebaseDatabase.getInstance().getReference("users")
+            dbrefEvents = FirebaseDatabase.getInstance().getReference("current_events")
+            dbrefUsers = FirebaseDatabase.getInstance().getReference("users")
 
             auth = FirebaseAuth.getInstance()
 
@@ -191,6 +188,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
                 binding.allEnt.visibility = View.GONE
                 binding.progressBar.visibility = View.VISIBLE
+                binding.creating.visibility = View.VISIBLE
 
                 binding.btnCreateEvent.isEnabled = false
                 binding.btnCreateEvent.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
@@ -301,7 +299,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                 else -> "-1"
             }
 
-            if(type_sport == "1") {
+            if(typeSport == "1") {
                 binding.btnCreateEvent.isEnabled = true
                 Toast.makeText(requireContext(), getString(R.string.choose_sport), Toast.LENGTH_LONG).show()
             } else {
@@ -310,7 +308,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     type,
                     auth.currentUser?.uid.toString(),
                     current,
-                    type_sport,
+                    typeSport,
                     title,
                     coord,
                     date_of_meeting,
@@ -387,8 +385,6 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     }
                 })
 
-                //////////////////////////////////////
-                //binding.allEnt.visibility = View.VISIBLE
                 binding.creating.visibility = View.GONE
                 binding.congrats.visibility = View.VISIBLE
                 binding.progressBar.visibility = View.INVISIBLE
@@ -426,7 +422,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                 getString(R.string.date_of_meeting), getString(R.string.okey))
             check = false
         }
-        if(type_sport == "1") {
+        if(typeSport == "1") {
             setDialog(getString(R.string.no_sport_error),
                 getString(R.string.must_type_sport), getString(R.string.okey))
             check = false

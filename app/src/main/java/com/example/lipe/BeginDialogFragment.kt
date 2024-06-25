@@ -31,6 +31,7 @@ class BeginDialogFragment : DialogFragment() {
             getString(R.string.preparation),
             getString(R.string.finger),
             getString(R.string.theme_help),
+            getString(R.string.friends_view),
             getString(R.string.can)
         )
 
@@ -38,6 +39,7 @@ class BeginDialogFragment : DialogFragment() {
             R.drawable.classroom,
             R.drawable.left_click,
             R.drawable.lipe,
+            R.drawable.friends_photo,
             R.drawable.success,
         )
     }
@@ -69,7 +71,8 @@ class BeginDialogFragment : DialogFragment() {
             dismiss()
         } else {
             binding.backTipButton.visibility = View.VISIBLE
-            progress = (currentTipIndex + 1) * 25
+            if(currentTipIndex != 0)
+                progress = (currentTipIndex) * 25
             binding.progressText.text = "$progress%"
             binding.progressBar.progress = progress
             binding.tipTextView.text = tips[currentTipIndex]

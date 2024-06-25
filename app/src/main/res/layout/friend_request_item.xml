@@ -34,7 +34,7 @@
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginBottom="@dimen/_6sdp"
         android:fontFamily="@font/nunito_sans"
-        android:text="Заявка в друзья"
+        android:text="@string/query_friend"
         android:textSize="@dimen/_11sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/avatar_request"

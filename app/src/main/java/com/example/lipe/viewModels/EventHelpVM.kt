@@ -28,17 +28,17 @@ class EventHelpVM : ViewModel() {
     private var _date = MutableLiveData<String>()
     val date: LiveData<String> = _date
 
-    private var _type_sport = MutableLiveData<String>()
-    var type_sport: LiveData<String> = _type_sport
+    private var _typeSport = MutableLiveData<String>()
+    var typeSport: LiveData<String> = _typeSport
 
     private var _type = MutableLiveData<String>()
     val type: LiveData<String> = _type
 
-    private var _time_of_creation = MutableLiveData<String>()
-    val time_of_creation: LiveData<String> = _time_of_creation
+    private var _timeOfCreation = MutableLiveData<String>()
+    val timeOfCreation: LiveData<String> = _timeOfCreation
 
-    private var _amount_reg_people = MutableLiveData<Int>()
-    val amount_reg_people: LiveData<Int> = _amount_reg_people
+    private var _amountRegPeople = MutableLiveData<Int>()
+    val amountRegPeople: LiveData<Int> = _amountRegPeople
 
     private var _creatorUsername = MutableLiveData<String>()
     val creatorUsername: LiveData<String> = _creatorUsername
@@ -64,11 +64,11 @@ class EventHelpVM : ViewModel() {
         _photos.value = photos_
         _eventDesc.value = eventDesc_
         _date.value = date_
-        _time_of_creation.value = time_of_creation_
-        _amount_reg_people.value = amount_reg_people_
-        _freePlaces.value = 100 - 100 * amount_reg_people.value!! / maxPeople.value!!
+        _timeOfCreation.value = time_of_creation_
+        _amountRegPeople.value = amount_reg_people_
+        _freePlaces.value = 100 - 100 * amountRegPeople.value!! / maxPeople.value!!
 
-        _time_of_creation.value = formatDate(time_of_creation_)
+        _timeOfCreation.value = formatDate(time_of_creation_)
 
         _friend.value = friend_
 

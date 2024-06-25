@@ -153,4 +153,7 @@
     <string name="not_auth">Вы не авторизованы</string>
     <string name="suc_ev">Событие успешно создано!</string>
     <string name="creating">Создаем событие...</string>
+    <string name="query_friend">Заявка в друзья</string>
+    <string name="friends_view">Чтобы увидеть ваших друзей нажмите в вашем профиле как показано на рисунке</string>
+    <string name="suc_delete">Событие было успешно удалено</string>
 </resources>

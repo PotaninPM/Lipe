@@ -236,19 +236,6 @@ class ProfileFragment : Fragment() {
 
                                 Log.d("INFOG1", eventsAmount.toString())
 
-//                                val editor = sharedPrefUser?.edit()
-//
-//                                editor?.apply {
-//                                    putString("username", username)
-//                                    putString("name", name)
-//                                    putString("desc", desc)
-//                                    putInt("rating", ratingAmount)
-//                                    putInt("friends", friendsAmount)
-//                                    putInt("events", eventsAmount)
-//                                    putString("desc", desc)
-//                                    apply()
-//                                }
-
                                 callback(
                                     UserData(
                                         username,

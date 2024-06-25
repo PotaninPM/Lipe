@@ -1,16 +1,9 @@
 package com.example.lipe.viewModels
 
-import android.content.Context
-import android.content.res.Resources
-import android.util.Log
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getString
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.lipe.R
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
 class EventEntVM: ViewModel() {
@@ -42,20 +35,20 @@ class EventEntVM: ViewModel() {
     private var _date = MutableLiveData<String>()
     val date: LiveData<String> = _date
 
-    private var _type_sport = MutableLiveData<String>()
-    var type_sport: LiveData<String> = _type_sport
+    private var _typeSport = MutableLiveData<String>()
+    var typeSport: LiveData<String> = _typeSport
 
-    private var _lang_type_sport = MutableLiveData<String>()
-    var lang_type_sport: LiveData<String> = _lang_type_sport
+    private var _langTypeSport = MutableLiveData<String>()
+    var langTypeSport: LiveData<String> = _langTypeSport
 
     private var _type = MutableLiveData<String>()
     val type: LiveData<String> = _type
 
-    private var _time_of_creation = MutableLiveData<String>()
-    val time_of_creation: LiveData<String> = _time_of_creation
+    private var _timeOfCreation = MutableLiveData<String>()
+    val timeOfCreation: LiveData<String> = _timeOfCreation
 
-    private var _amount_reg_people = MutableLiveData<Int>()
-    val amount_reg_people: LiveData<Int> = _amount_reg_people
+    private var _amountRegPeople = MutableLiveData<Int>()
+    val amountRegPeople: LiveData<Int> = _amountRegPeople
 
     private var _creatorUsername = MutableLiveData<String>()
     val creatorUsername: LiveData<String> = _creatorUsername
@@ -74,7 +67,7 @@ class EventEntVM: ViewModel() {
         longtitude = long
     }
 
-    fun setInfo(id_: String, maxPeople_: Int, title_: String, creator_: String, creatorUsername_: String, photos_: ArrayList<String>, peopleGo_: List<String>, freePlaces_: Int, age_: String, eventDesc_: String, time_of_creation_: String, date_: String, type_sport_: String, lang_type_sport_: String, amount_reg_people_: Int, friend_: String) {
+    fun setInfo(id_: String?, maxPeople_: Int, title_: String, creator_: String, creatorUsername_: String, photos_: ArrayList<String>, peopleGo_: List<String>, freePlaces_: Int, age_: String, eventDesc_: String, time_of_creation_: String, date_: String, type_sport_: String, lang_type_sport_: String, amount_reg_people_: Int, friend_: String) {
         _id.value = id_
         _maxPeople.value = maxPeople_
         _title.value = title_
@@ -83,14 +76,14 @@ class EventEntVM: ViewModel() {
         _peopleGo.value = peopleGo_
         _eventDesc.value = eventDesc_
         _date.value = date_
-        _type_sport.value = type_sport_
-        _time_of_creation.value = time_of_creation_
-        _amount_reg_people.value = amount_reg_people_
-        _freePlaces.value = 100 - 100 * amount_reg_people.value!! / maxPeople.value!!
+        _typeSport.value = type_sport_
+        _timeOfCreation.value = time_of_creation_
+        _amountRegPeople.value = amount_reg_people_
+        _freePlaces.value = 100 - 100 * amountRegPeople.value!! / maxPeople.value!!
 
-        _lang_type_sport.value = lang_type_sport_
+        _langTypeSport.value = lang_type_sport_
 
-        _time_of_creation.value = formatDate(time_of_creation_)
+        _timeOfCreation.value = formatDate(time_of_creation_)
 
         _friend.value = friend_
 

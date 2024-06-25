@@ -153,4 +153,7 @@
     <string name="not_auth">You are not authorized</string>
     <string name="suc_ev">Event was successfully created!</string>
     <string name="creating">Creating event...</string>
+    <string name="query_friend">Query to friends</string>
+    <string name="friends_view">To see all your friends tap on button like on image</string>
+    <string name="suc_delete">Event was successfully deleted</string>
 </resources>

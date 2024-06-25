@@ -63,43 +63,6 @@ class FriendsBottomSheet : BottomSheetDialogFragment() {
 
         setFriends()
 
-        binding.apply {
-//            lifecycleOwner = viewLifecycleOwner
-//            viewModel = profileVM
-//
-//            binding.saving.visibility = View.GONE
-//            binding.statusSave.visibility = View.GONE
-
-//            lifecycleScope.launch {
-//                val bitmap: Bitmap = withContext(Dispatchers.IO) {
-//                    Coil.imageLoader(requireContext()).execute(
-//                        ImageRequest.Builder(requireContext())
-//                            .data(profileVM.avatar.value)
-//                            .build()
-//                    ).drawable?.toBitmap()!!
-//                }
-//                binding.avatar.setImageBitmap(bitmap)
-//            }
-//
-//            avatar.setOnClickListener {
-//                selectImageAvatar.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-//            }
-//
-//            binding.saveAllChanges.setOnClickListener {
-//                allEditProfile.visibility = View.GONE
-//                saving.visibility = View.VISIBLE
-//
-//                updateUserData { ans ->
-//                    if(ans == "ok") {
-//                        dismiss()
-//                    } else {
-//                        binding.saving.visibility = View.GONE
-//                        binding.statusSave.visibility = View.GONE
-//                        allEditProfile.visibility = View.VISIBLE
-//                    }
-//                }
-//            }
-        }
     }
 
     private fun setFriends() {

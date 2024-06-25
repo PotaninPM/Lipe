@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -75,6 +74,11 @@ class EventEntFragment : Fragment() {
             val reportDialog = EventReportFragment(eventEntVM.id.value.toString(), auth.currentUser!!.uid)
             reportDialog.show(childFragmentManager, "EventReport")
         }
+
+//        if(appVM.delete_event == "yes") {
+//            binding.allEntEvent.visibility = View.GONE
+//            binding.sucDeleteEnt.visibility = View.VISIBLE
+//        }
 
         searchEvent(appVM.latitude, appVM.longtitude) { ready ->
             val sportType = appVM.type_sport
@@ -241,7 +245,7 @@ class EventEntFragment : Fragment() {
 
         dialog = when(lay) {
             0 -> PeopleGoToEventFragment(eventEntVM.id.value.toString())
-            1 -> ChoosePeopleFragment(eventEntVM.id.value.toString())
+            1 -> ChoosePeopleFragment(eventEntVM.id.value.toString(), "ent")
             else -> DialogFragment()
         }
         dialog.show(childFragmentManager, "PeopleGoDialog")
@@ -361,94 +365,126 @@ class EventEntFragment : Fragment() {
     }
 
     private fun searchEvent(coord1: Double, coord2: Double, callback: (ready: Boolean) -> Unit) {
-        if(context != null) {
-            val context = context ?: return
+        if(isAdded) {
+            if (context != null) {
+                val context = context ?: return
 
-            val dbRefEvent = FirebaseDatabase.getInstance().getReference("current_events")
-            val dbRefUser = FirebaseDatabase.getInstance().getReference("users")
+                val dbRefEvent = FirebaseDatabase.getInstance().getReference("current_events")
+                val dbRefUser = FirebaseDatabase.getInstance().getReference("users")
 
-            dbRefEvent.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    for (eventSnapshot in dataSnapshot.children) {
-                        val coordinates: List<Double>? = listOf(
-                            eventSnapshot.child("coordinates").child("latitude").value.toString()
-                                .toDouble(),
-                            eventSnapshot.child("coordinates").child("longitude").value.toString()
-                                .toDouble()
-                        )
-                        if (coordinates != null && coordinates[0] == coord1 && coordinates[1] == coord2) {
-                            val type = eventSnapshot.child("type_of_event").value.toString()
-                            val id = eventSnapshot.child("event_id").value.toString()
-                            val maxPeople =
-                                eventSnapshot.child("max_people").value.toString().toInt()
-                            val title = eventSnapshot.child("title").value.toString()
-                            val description = eventSnapshot.child("description").value.toString()
-                            val creatorUid = eventSnapshot.child("creator_id").value.toString()
-                            val photos = arrayListOf(eventSnapshot.child("photos").value.toString())
-                            val freePlaces =
-                                maxPeople - eventSnapshot.child("amount_reg_people").value.toString()
-                                    .toInt()
-                            val timeOfCreation =
-                                eventSnapshot.child("time_of_creation").value.toString()
-                            val dateOfMeeting =
-                                eventSnapshot.child("date_of_meeting").value.toString()
-                            val amountRegPeople =
-                                eventSnapshot.child("amount_reg_people").value.toString().toInt()
-                            val age = eventSnapshot.child("age").value.toString()
-                            val age_lang = when (age) {
-                                "any_age" -> getString(R.string.any_age)
-                                "more_18" -> getString(R.string.more_18)
-                                "before_18" -> getString(R.string.before_18)
-                                else -> ""
-                            }
+                dbRefEvent.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        for (eventSnapshot in dataSnapshot.children) {
+                            val coordinates: List<Double>? = listOf(
+                                eventSnapshot.child("coordinates")
+                                    .child("latitude").value.toString()
+                                    .toDouble(),
+                                eventSnapshot.child("coordinates")
+                                    .child("longitude").value.toString()
+                                    .toDouble()
+                            )
+                            if (coordinates != null && coordinates[0] == coord1 && coordinates[1] == coord2) {
+                                val type = eventSnapshot.child("type_of_event").value.toString()
+                                val id = eventSnapshot.child("event_id").value.toString()
+                                val maxPeople =
+                                    eventSnapshot.child("max_people").value.toString().toInt()
+                                val title = eventSnapshot.child("title").value.toString()
+                                val description =
+                                    eventSnapshot.child("description").value.toString()
+                                val creatorUid = eventSnapshot.child("creator_id").value.toString()
+                                val photos =
+                                    arrayListOf(eventSnapshot.child("photos").value.toString())
+                                val freePlaces =
+                                    maxPeople - eventSnapshot.child("amount_reg_people").value.toString()
+                                        .toInt()
+                                val timeOfCreation =
+                                    eventSnapshot.child("time_of_creation").value.toString()
+                                val dateOfMeeting =
+                                    eventSnapshot.child("date_of_meeting").value.toString()
+                                val amountRegPeople =
+                                    eventSnapshot.child("amount_reg_people").value.toString()
+                                        .toInt()
+                                val age = eventSnapshot.child("age").value.toString()
+                                val age_lang = when (age) {
+                                    "any_age" -> getString(R.string.any_age)
+                                    "more_18" -> getString(R.string.more_18)
+                                    "before_18" -> getString(R.string.before_18)
+                                    else -> ""
+                                }
 
-                            when (type) {
-                                "ent" -> {
-                                    val sportType =
-                                        eventSnapshot.child("sport_type").value.toString()
-                                    val lang_sport_type = when (sportType) {
-                                        "Basketball" -> getString(R.string.basketball)
-                                        "Volleyball" -> getString(R.string.volleyball)
-                                        "Football" -> getString(R.string.football)
-                                        "Rugby" -> getString(R.string.rugby)
-                                        "Workout" -> getString(R.string.workout)
-                                        "Tennis" -> getString(R.string.tennis)
-                                        "Badminton" -> getString(R.string.badminton)
-                                        "Table tennis" -> getString(R.string.table_tennis)
-                                        "Gymnastics" -> getString(R.string.gymnastics)
-                                        "Fencing" -> getString(R.string.fencing)
-                                        "Jogging" -> getString(R.string.jogging)
-                                        "Curling" -> getString(R.string.curling)
-                                        "Hockey" -> getString(R.string.hockey)
-                                        "Ice skating" -> getString(R.string.ice_skating)
-                                        "Skiing" -> getString(R.string.skiing)
-                                        "Downhill skiing" -> getString(R.string.downhill_skiing)
-                                        "Snowboarding" -> getString(R.string.snowboarding)
-                                        "Table games" -> getString(R.string.table_games)
-                                        "Mobile games" -> getString(R.string.mobile_games)
-                                        "Chess" -> getString(R.string.chess)
-                                        "Programming" -> getString(R.string.programming)
-                                        else -> "0"
-                                    }
-                                    checkIfUserAlreadyFriend { ready ->
-                                        var found: Boolean = false
-                                        dbRefUser.addValueEventListener(object :
-                                            ValueEventListener {
-                                            override fun onDataChange(userSnapshot: DataSnapshot) {
-                                                for (userEventSnapshot in userSnapshot.children) {
-                                                    if (creatorUid == userEventSnapshot.child("uid").value) {
-                                                        val creatorUsername =
-                                                            userEventSnapshot.child("username").value.toString()
+                                when (type) {
+                                    "ent" -> {
+                                        val sportType =
+                                            eventSnapshot.child("sport_type").value.toString()
+                                        val lang_sport_type = when (sportType) {
+                                            "Basketball" -> getString(R.string.basketball)
+                                            "Volleyball" -> getString(R.string.volleyball)
+                                            "Football" -> getString(R.string.football)
+                                            "Rugby" -> getString(R.string.rugby)
+                                            "Workout" -> getString(R.string.workout)
+                                            "Tennis" -> getString(R.string.tennis)
+                                            "Badminton" -> getString(R.string.badminton)
+                                            "Table tennis" -> getString(R.string.table_tennis)
+                                            "Gymnastics" -> getString(R.string.gymnastics)
+                                            "Fencing" -> getString(R.string.fencing)
+                                            "Jogging" -> getString(R.string.jogging)
+                                            "Curling" -> getString(R.string.curling)
+                                            "Hockey" -> getString(R.string.hockey)
+                                            "Ice skating" -> getString(R.string.ice_skating)
+                                            "Skiing" -> getString(R.string.skiing)
+                                            "Downhill skiing" -> getString(R.string.downhill_skiing)
+                                            "Snowboarding" -> getString(R.string.snowboarding)
+                                            "Table games" -> getString(R.string.table_games)
+                                            "Mobile games" -> getString(R.string.mobile_games)
+                                            "Chess" -> getString(R.string.chess)
+                                            "Programming" -> getString(R.string.programming)
+                                            else -> "0"
+                                        }
+                                        checkIfUserAlreadyFriend { ready ->
+                                            var found: Boolean = false
+                                            dbRefUser.addValueEventListener(object :
+                                                ValueEventListener {
+                                                override fun onDataChange(userSnapshot: DataSnapshot) {
+                                                    for (userEventSnapshot in userSnapshot.children) {
+                                                        if (creatorUid == userEventSnapshot.child("uid").value) {
+                                                            val creatorUsername =
+                                                                userEventSnapshot.child("username").value.toString()
+                                                            eventEntVM.setInfo(
+                                                                id,
+                                                                maxPeople,
+                                                                title,
+                                                                creatorUid,
+                                                                creatorUsername,
+                                                                photos,
+                                                                arrayListOf("1"),
+                                                                freePlaces,
+                                                                age_lang,
+                                                                description,
+                                                                timeOfCreation,
+                                                                dateOfMeeting,
+                                                                sportType,
+                                                                lang_sport_type,
+                                                                amountRegPeople,
+                                                                ready
+                                                            )
+                                                            Log.d("INFOG", ready)
+                                                            callback(true)
+                                                            found = true
+                                                            return
+                                                        }
+                                                    }
+
+                                                    if (found == false) {
                                                         eventEntVM.setInfo(
                                                             id,
                                                             maxPeople,
                                                             title,
                                                             creatorUid,
-                                                            creatorUsername,
+                                                            "Удаленный аккаунт",
                                                             photos,
                                                             arrayListOf("1"),
                                                             freePlaces,
-                                                            age_lang,
+                                                            age,
                                                             description,
                                                             timeOfCreation,
                                                             dateOfMeeting,
@@ -457,52 +493,27 @@ class EventEntFragment : Fragment() {
                                                             amountRegPeople,
                                                             ready
                                                         )
-                                                        Log.d("INFOG", ready)
                                                         callback(true)
-                                                        found = true
-                                                        return
                                                     }
                                                 }
 
-                                                if (found == false) {
-                                                    eventEntVM.setInfo(
-                                                        id,
-                                                        maxPeople,
-                                                        title,
-                                                        creatorUid,
-                                                        "Удаленный аккаунт",
-                                                        photos,
-                                                        arrayListOf("1"),
-                                                        freePlaces,
-                                                        age,
-                                                        description,
-                                                        timeOfCreation,
-                                                        dateOfMeeting,
-                                                        sportType,
-                                                        lang_sport_type,
-                                                        amountRegPeople,
-                                                        ready
-                                                    )
-                                                    callback(true)
+                                                override fun onCancelled(error: DatabaseError) {
+                                                    callback(false)
                                                 }
-                                            }
-
-                                            override fun onCancelled(error: DatabaseError) {
-                                                callback(false)
-                                            }
-                                        })
+                                            })
+                                        }
                                     }
                                 }
+                                break
                             }
-                            break
                         }
                     }
-                }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
-                }
-            })
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
+                    }
+                })
+            }
         }
     }
 
@@ -516,7 +527,7 @@ class EventEntFragment : Fragment() {
             userInEventRef.removeValue()
                 .addOnSuccessListener {
                     groupRef.removeValue().addOnSuccessListener {
-                        curPeople.setValue(eventEntVM.amount_reg_people.value?.minus(1)).addOnSuccessListener {
+                        curPeople.setValue(eventEntVM.amountRegPeople.value?.minus(1)).addOnSuccessListener {
                             groupInProfile.removeValue().addOnSuccessListener {
                                 binding.deleteOrLeave.visibility = View.GONE
                                 binding.btnRegToEvent.visibility = View.VISIBLE

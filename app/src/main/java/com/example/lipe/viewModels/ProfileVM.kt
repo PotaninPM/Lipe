@@ -35,9 +35,6 @@ class ProfileVM: ViewModel() {
         _ratingPoints.value = ratingPoints_.toString()
         _desc.value = desc
         _name.value = name_
-//
-//        _age.value = age_
-//        _creatorUsername.value = creatorUsername_
     }
 
     fun setPhoto(avatar_: String) {

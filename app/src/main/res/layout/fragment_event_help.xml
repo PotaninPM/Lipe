@@ -116,7 +116,7 @@
                     android:layout_marginTop="@dimen/_12sdp"
                     android:textSize="@dimen/_12sdp"
                     android:fontFamily="@font/roboto_bold"
-                    android:text="@{viewModel.time_of_creation}"
+                    android:text="@{viewModel.timeOfCreation}"
                     app:layout_constraintStart_toStartOf="@+id/price"
                     app:layout_constraintTop_toBottomOf="@+id/price" />
 

@@ -3,7 +3,6 @@ package com.example.lipe
 import ProfileFragment
 import android.Manifest
 import android.animation.ValueAnimator
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -12,13 +11,11 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.fragment.app.Fragment
 import android.os.Bundle
@@ -28,17 +25,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ReportFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import coil.Coil
@@ -47,7 +39,6 @@ import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.create_events.CreateEventFragment
 import com.example.lipe.databinding.FragmentMapsBinding
-import com.example.lipe.all_profiles.other_profile.OtherProfileFragment
 import com.example.lipe.rating_board.RatingFragment
 import com.example.lipe.reports.report_fragment_for_moderators.ReportsForModeratorsFragment
 import com.example.lipe.viewModels.EventEcoVM
@@ -82,7 +73,6 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.security.MessageDigest
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
@@ -92,11 +82,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var sharedPreferences: SharedPreferences
 
-    //View Model
     private lateinit var appVM: AppVM
 
     private val eventEntVM: EventEntVM by activityViewModels()
 
+    //ViewModel
     private lateinit var eventEcoVM: EventEcoVM
 
     private lateinit var saveStateMapVM: SaveStateMapsVM
@@ -109,10 +99,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private var myLocationMarker: Marker? = null
 
-    private lateinit var dbRef_user: DatabaseReference
-    private lateinit var dbRef_event: DatabaseReference
-    private lateinit var dbRef_friends: DatabaseReference
-    private lateinit var dbRef_status: DatabaseReference
+    private lateinit var dbrefUser: DatabaseReference
+    private lateinit var dbrefEvent: DatabaseReference
+    private lateinit var dbrefFriends: DatabaseReference
+    private lateinit var dbrefStatus: DatabaseReference
 
     private lateinit var auth: FirebaseAuth
 
@@ -185,7 +175,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
         return marker
     }
-    //-------
+
     private fun searchTypeOfEvent(coord1: Double, coord2: Double, callback: (ready: Boolean) -> Unit) {
         val dbRefEvent = FirebaseDatabase.getInstance().getReference("current_events")
 
@@ -378,7 +368,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private fun addAllFriends() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            dbRef_friends.child("users").child(currentUser.uid).child("friends")
+            dbrefFriends.child("users").child(currentUser.uid).child("friends")
                 .addChildEventListener(object : ChildEventListener {
                     override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                         val friendUid = dataSnapshot.value.toString()
@@ -470,9 +460,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun addAllEvents() {
-        dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
+        dbrefEvent = FirebaseDatabase.getInstance().getReference("current_events")
         // show all markers on map
-        dbRef_event.addChildEventListener(object : ChildEventListener {
+        dbrefEvent.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String?) {
                 try {
                     val coordinates: ArrayList<Double>? = arrayListOf(
@@ -791,9 +781,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             eventEcoVM = ViewModelProvider(requireActivity()).get(EventEcoVM::class.java)
             saveStateMapVM = ViewModelProvider(requireActivity()).get(SaveStateMapsVM::class.java)
 
-            dbRef_user = FirebaseDatabase.getInstance().getReference()
-            dbRef_friends = FirebaseDatabase.getInstance().getReference()
-            dbRef_status = FirebaseDatabase.getInstance().getReference()
+            dbrefUser = FirebaseDatabase.getInstance().getReference()
+            dbrefFriends = FirebaseDatabase.getInstance().getReference()
+            dbrefStatus = FirebaseDatabase.getInstance().getReference()
 
             val mapFragment =
                 childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
@@ -855,7 +845,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
         binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
-//        binding.allText.setTextColor(Color.WHITE)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
@@ -876,22 +865,14 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
         //}
 
-
-        if(appVM.reg == "yes") {
-            //showSuccessRegWindow()
-            appVM.reg = "no"
-        }
-
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.d("INFOG", "Fetching FCM registration token failed", task.exception)
                 return@OnCompleteListener
             }
 
-            // Get new FCM registration token
             val token = task.result
 
-            // Log and toast
             Log.d("INFOG", token)
         })
 
@@ -1087,21 +1068,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         fragmentTransaction.replace(R.id.mMap, fragment)
         fragmentTransaction.commit()
     }
-
-
-//    private fun showSuccessRegWindow() {
-//        val pop_up_menu = layoutInflater.inflate(R.layout.pop_up_notification_success_sign_up, null)
-//        val pop_up = Dialog(requireContext())
-//        pop_up.setContentView(pop_up_menu)
-//        pop_up.setCancelable(false)
-//        pop_up.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//        pop_up.show()
-//        val closeBtn = pop_up.findViewById<Button>(R.id.close_ad)
-//        val goTraneBtn = pop_up.findViewById<Button>(R.id.go_trane)
-//        closeBtn.setOnClickListener {
-//            pop_up.dismiss()
-//        }
-//    }
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1

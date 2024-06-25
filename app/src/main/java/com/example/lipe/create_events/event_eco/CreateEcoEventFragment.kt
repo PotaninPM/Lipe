@@ -182,41 +182,6 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     }
                 }
             }
-//
-//            if(image2 != "-") {
-//                imageUri2.let { uri ->
-//                    val uid: String = UUID.randomUUID().toString()
-//                    val imageRef = storageRef.child(uid)
-//                    imageRef.putFile(uri)
-//                        .addOnSuccessListener { task ->
-//                            task.storage.downloadUrl.addOnSuccessListener { url ->
-//                                photos.add(uid)
-//                            }
-//                        }
-//                        .addOnFailureListener { exception ->
-//                            callback(arrayListOf("-", "-", "-"))
-//                            used = -1
-//                        }
-//                }
-//            }
-//
-//            if(image3 != "-") {
-//                imageUri3.let { uri ->
-//                    val uid: String = UUID.randomUUID().toString()
-//                    val imageRef = storageRef.child(uid)
-//                    imageRef.putFile(uri)
-//                        .addOnSuccessListener { task ->
-//                            task.storage.downloadUrl.addOnSuccessListener { url ->
-//                                photos.add(uid)
-//                            }
-//                        }
-//                        .addOnFailureListener { exception ->
-//                            callback(arrayListOf("-", "-", "-"))
-//                            used = -1
-//                        }
-//                }
-//            }
-//
         }
     }
 

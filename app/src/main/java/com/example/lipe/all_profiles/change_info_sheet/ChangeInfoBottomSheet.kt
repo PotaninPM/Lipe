@@ -41,13 +41,6 @@ class ChangeInfoBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var auth: FirebaseAuth
 
-    fun sha256(input: String): String {
-        val bytes = input.toByteArray()
-        val md = MessageDigest.getInstance("SHA-256")
-        val digest = md.digest(bytes)
-        return digest.fold("", { str, it -> str + "%02x".format(it) })
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -79,10 +72,6 @@ class ChangeInfoBottomSheet : BottomSheetDialogFragment() {
                 binding.avatar.setImageBitmap(bitmap)
             }
 
-//            avatar.setOnClickListener {
-//                selectImageAvatar.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-//            }
-
             binding.saveAllChanges.setOnClickListener {
                 allEditProfile.visibility = View.GONE
                 saving.visibility = View.VISIBLE
@@ -103,7 +92,7 @@ class ChangeInfoBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
-    private suspend fun updateUserData(ans: (String) -> Unit) {
+    private fun updateUserData(ans: (String) -> Unit) {
         val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
 
         val newNick = binding.etLogininput.text.toString()
@@ -147,23 +136,8 @@ class ChangeInfoBottomSheet : BottomSheetDialogFragment() {
         ans("ok")
     }
 
-    val selectImageAvatar =
-        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) {
-                binding.avatar.setImageURI(uri)
-                avatarUri = uri
-//                uploadImage(uri, "avatar")
-            } else {
-                Log.d("INFOG", "No media selected")
-            }
-        }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
-//        dialog.setOnShowListener {
-//            val bottomSheet = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-//            bottomSheet?.layoutParams?.height = (resources.displayMetrics.heightPixels * 0.6).toInt()
-//        }
         return dialog
     }
 }

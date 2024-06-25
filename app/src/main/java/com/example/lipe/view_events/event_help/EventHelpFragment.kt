@@ -15,11 +15,8 @@ import coil.Coil
 import coil.request.ImageRequest
 import com.example.lipe.R
 import com.example.lipe.choose_people.ChoosePeopleFragment
-import com.example.lipe.databinding.FragmentEventEntBinding
 import com.example.lipe.databinding.FragmentEventHelpBinding
-import com.example.lipe.people_go_to_event.PeopleGoToEventFragment
 import com.example.lipe.viewModels.AppVM
-import com.example.lipe.viewModels.EventEntVM
 import com.example.lipe.viewModels.EventHelpVM
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
@@ -204,7 +201,7 @@ class EventHelpFragment : Fragment() {
             userInEventRef.removeValue()
                 .addOnSuccessListener {
                     groupRef.removeValue().addOnSuccessListener {
-                        curPeople.setValue(eventHelpVM.amount_reg_people.value?.minus(1)).addOnSuccessListener {
+                        curPeople.setValue(eventHelpVM.amountRegPeople.value?.minus(1)).addOnSuccessListener {
                             groupInProfile.removeValue().addOnSuccessListener {
                                 binding.deleteOrLeave.visibility = View.GONE
                                 binding.btnRegToEvent.visibility = View.VISIBLE
@@ -222,7 +219,7 @@ class EventHelpFragment : Fragment() {
         var dialog: DialogFragment?= null
 
         dialog = when(lay) {
-            0 -> ChoosePeopleFragment(eventHelpVM.id.value.toString())
+            0 -> ChoosePeopleFragment(eventHelpVM.id.value.toString(), "help")
             else -> DialogFragment()
         }
         dialog.show(childFragmentManager, "PeopleGoDialog")

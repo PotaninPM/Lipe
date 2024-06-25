@@ -53,13 +53,6 @@ class GroupFragment(val groupUid: String) : Fragment() {
 
         auth = FirebaseAuth.getInstance()
 
-        val nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-//        if (nightMode == Configuration.UI_MODE_NIGHT_YES) {
-//            binding.allGroup.setBackgroundResource(R.drawable.fon_2)
-//        } else {
-//            binding.allGroup.setBackgroundResource(R.drawable.fon_light)
-//        }
-
         FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/firstAndLastName").addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 var name = ""
@@ -119,7 +112,6 @@ class GroupFragment(val groupUid: String) : Fragment() {
         val dbRef_chatLastMessage = FirebaseDatabase.getInstance().getReference("groups/${groupUid}")
 
         binding.sendBtn.setOnClickListener {
-//            val secretKey = DeCryptMessages.generateKey()
             val messageText = binding.messageInput.text.toString().trim()
             if (messageText.isNotEmpty()) {
                 val currentUser = FirebaseAuth.getInstance().currentUser

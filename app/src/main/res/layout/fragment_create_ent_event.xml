@@ -40,10 +40,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_4sdp"
                     android:fontFamily="@font/nunitosansbold"
                     android:text="@string/suc_ev"
-                    android:layout_marginTop="@dimen/_4sdp"
                     android:textSize="@dimen/_14sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imageView10" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 

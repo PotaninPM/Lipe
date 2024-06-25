@@ -11,13 +11,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.viewModelFactory
 import coil.ImageLoader
 import coil.request.ImageRequest
 import com.example.lipe.R
 import com.example.lipe.choose_people.ChoosePeopleFragment
 import com.example.lipe.databinding.FragmentEventEcoBinding
-import com.example.lipe.databinding.FragmentProfileBinding
 import com.example.lipe.people_go_to_event.PeopleGoToEventFragment
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.viewModels.EventEcoVM
@@ -27,14 +25,12 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.ArrayList
 
 class EventEcoFragment : Fragment() {
 
@@ -80,24 +76,24 @@ class EventEcoFragment : Fragment() {
 
             searchEvent(appVM.latitude, appVM.longtitude) {ready ->
                 if(ready) {
-                    loadAllImages {ready->
+                    loadAllImages { ready->
                         if (ready) {
                             checkIfUserAlreadyReg(
                                 auth.currentUser!!.uid,
                                 eventEcoVM.id.value.toString()
                             ) { ans ->
                                 if (ans) {
-                                    val date_ = eventEcoVM.date.value!!
+                                    val date_ = eventEcoVM.date.value
 
                                     binding.dateOfMeetingEco.text = buildString {
                                         append(
-                                            date_.substring(
+                                            date_?.substring(
                                                 6,
                                                 date_.length
                                             )
                                         )
                                         append(getString(R.string.`in`))
-                                        append(date_.substring(0, 5))
+                                        append(date_?.substring(0, 5))
                                     }
 
                                     binding.btnRegToEvent.visibility = View.GONE
@@ -157,17 +153,17 @@ class EventEcoFragment : Fragment() {
                         if (!isUserAlreadyRegistered) {
                             regUserToEvent(curUid) { result ->
                                 if (result == true) {
-                                    val date_= eventEcoVM.date.value!!
+                                    val date_= eventEcoVM.date.value
                                     binding.dateOfMeetingEco.setText(
                                         buildString {
                                             append(
-                                                date_.substring(
+                                                date_?.substring(
                                                     6,
                                                     date_.length
                                                 )
                                             )
                                             append(getString(R.string.`in`))
-                                            append(date_.substring(0, 5))
+                                            append(date_?.substring(0, 5))
                                         }
                                     )
 
@@ -288,7 +284,7 @@ class EventEcoFragment : Fragment() {
             userInEventRef.removeValue()
                 .addOnSuccessListener {
                     groupRef.removeValue().addOnSuccessListener {
-                        curPeople.setValue(eventEcoVM.amount_reg_people.value?.minus(1)).addOnSuccessListener {
+                        curPeople.setValue(eventEcoVM.amountRegPeople.value?.minus(1)).addOnSuccessListener {
                             groupInProfile.removeValue().addOnSuccessListener {
                                 binding.deleteOrLeave.visibility = View.GONE
                                 binding.btnRegToEvent.visibility = View.VISIBLE
@@ -307,7 +303,7 @@ class EventEcoFragment : Fragment() {
 
         dialog = when(lay) {
             0 -> PeopleGoToEventFragment(eventEcoVM.id.value.toString())
-            1 -> ChoosePeopleFragment(eventEcoVM.id.value.toString())
+            1 -> ChoosePeopleFragment(eventEcoVM.id.value.toString(), "eco")
             else -> DialogFragment()
         }
         dialog.show(childFragmentManager, "PeopleGoDialog")
