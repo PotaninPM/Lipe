@@ -16,7 +16,10 @@ import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
 import java.util.ArrayList
+import java.util.Date
+import java.util.Locale
 
 class CurEventsAdapter(val lifecycleScope: LifecycleCoroutineScope) : RecyclerView.Adapter<CurEventsAdapter.CurEventsHolder>() {
 
@@ -26,7 +29,7 @@ class CurEventsAdapter(val lifecycleScope: LifecycleCoroutineScope) : RecyclerVi
 
         val binding = EventItemBinding.bind(item)
         fun bind(event: EventItem) = with(binding) {
-            dateTime.text = event.date_time.substring(6, event.date_time.length - 4) + " в " + event.date_time.substring(0, 5)
+            dateTime.text = formatTimestamp(event.date_time.toLong())
             title.text = event.title
             status.text = event.status
 
@@ -64,5 +67,20 @@ class CurEventsAdapter(val lifecycleScope: LifecycleCoroutineScope) : RecyclerVi
         curEventsList.clear()
         curEventsList.addAll(events)
         notifyDataSetChanged()
+    }
+
+    private fun getDateFormat(): SimpleDateFormat {
+        val locale = Locale.getDefault()
+        return if (locale.language == "ru") {
+            SimpleDateFormat("dd MMMM yyyy 'года' 'в' HH:mm", locale)
+        } else {
+            SimpleDateFormat("MMMM dd, yyyy 'at' HH:mm", locale)
+        }
+    }
+
+    private fun formatTimestamp(timestamp: Long): String {
+        val date = Date(timestamp)
+        val outputFormat = getDateFormat()
+        return outputFormat.format(date)
     }
 }

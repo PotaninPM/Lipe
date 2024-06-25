@@ -54,63 +54,56 @@ class CurEventsInProfileFragment(val personUid: String) : Fragment() {
     }
 
     private fun setCurEvents() {
-        if(isAdded) {
-            val context = context ?: return
-            if(context != null) {
-                val dbRef_cur_user_events =
-                    FirebaseDatabase.getInstance().getReference("users/${personUid}/curRegEventsId")
-                val curEvents = ArrayList<EventItem>()
-                dbRef_cur_user_events.addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot.childrenCount.toInt() != 0) {
-                            binding.recuclerviewInProfile.visibility = View.VISIBLE
-                            binding.noEvents.visibility = View.INVISIBLE
-                        } else {
-                            binding.recuclerviewInProfile.visibility = View.INVISIBLE
-                            binding.noEvents.visibility = View.VISIBLE
+        // Ensure the fragment is attached and context is not null
+        if (!isAdded || context == null) return
+
+        val dbRefCurUserEvents = FirebaseDatabase.getInstance().getReference("users/${personUid}/curRegEventsId")
+        val curEvents = ArrayList<EventItem>()
+
+        dbRefCurUserEvents.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (!isAdded || context == null) return
+
+                if (snapshot.childrenCount.toInt() != 0) {
+                    binding.recuclerviewInProfile.visibility = View.VISIBLE
+                    binding.noEvents.visibility = View.INVISIBLE
+                } else {
+                    binding.recuclerviewInProfile.visibility = View.INVISIBLE
+                    binding.noEvents.visibility = View.VISIBLE
+                }
+
+                for (event in snapshot.children) {
+                    val dbRefCurEvents = FirebaseDatabase.getInstance().getReference("current_events/${event.value}")
+                    dbRefCurEvents.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            if (!isAdded || context == null) return
+
+                            val title = dataSnapshot.child("title").value.toString()
+                            val dateMeeting = dataSnapshot.child("date_of_meeting").value.toString()
+                            val status = dataSnapshot.child("status").value.toString()
+                            val photos = dataSnapshot.child("photos").value.toString()
+
+                            val statusRus = when (status) {
+                                "ok" -> getString(R.string.confirmed)
+                                "processing" -> "В обработке"
+                                "failed" -> "Будет удалён"
+                                else -> ""
+                            }
+
+                            curEvents.add(EventItem(photos, title, dateMeeting, statusRus))
+                            adapter.updateRequests(curEvents)
                         }
-                        for (event in snapshot.children) {
-                            val dbRef_cur_events = FirebaseDatabase.getInstance()
-                                .getReference("current_events/${event.value}")
-                            dbRef_cur_events.addListenerForSingleValueEvent(object :
-                                ValueEventListener {
-                                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                    val title = dataSnapshot.child("title").value.toString()
-                                    val date_meeting =
-                                        dataSnapshot.child("date_of_meeting").value.toString()
-                                    val status = dataSnapshot.child("status").value.toString()
-                                    val photos = dataSnapshot.child("photos").value.toString()
 
-                                    var statusRus = ""
-
-                                    if (status == "ok") {
-                                        statusRus = getString(R.string.confirmed)
-                                    } else if (status == "processing") {
-                                        statusRus = "В обработке"
-                                    } else if (status == "failed") {
-                                        statusRus = "Будет удалён"
-                                    }
-
-                                    curEvents.add(EventItem(photos, title, date_meeting, statusRus))
-                                    adapter.updateRequests(curEvents)
-                                }
-
-                                override fun onCancelled(databaseError: DatabaseError) {
-                                    Log.e(
-                                        "FirebaseError",
-                                        "Ошибка Firebase ${databaseError.message}"
-                                    )
-                                }
-                            })
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
                         }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
-                    }
-
-                })
+                    })
+                }
             }
-        }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("FirebaseError", "Ошибка Firebase ${error.message}")
+            }
+        })
     }
 }

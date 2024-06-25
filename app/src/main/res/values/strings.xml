@@ -156,4 +156,5 @@
     <string name="query_friend">Query to friends</string>
     <string name="friends_view">To see all your friends tap on button like on image</string>
     <string name="suc_delete">Event was successfully deleted</string>
+    <string name="deleted_ac">Deleted account</string>
 </resources>

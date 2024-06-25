@@ -52,6 +52,7 @@ import java.time.Instant
 import java.util.ArrayList
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 import java.util.TimeZone
 import java.util.UUID
 
@@ -273,6 +274,33 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             .show()
     }
 
+    fun parseDateToTimestamp(dateString: String): Long {
+        val locale = Locale.getDefault()
+        if(locale.language == "ru") {
+            val pattern = "HH:mm dd MMMM yyyy 'года'"
+            val dateFormat = SimpleDateFormat(pattern, locale)
+
+            return try {
+                val date = dateFormat.parse(dateString)
+                date?.time ?: throw IllegalArgumentException("Invalid date string")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                0L
+            }
+        } else {
+            val pattern = "HH:mm dd MMMM yyyy 'year'"
+            val dateFormat = SimpleDateFormat(pattern, locale)
+
+            return try {
+                val date = dateFormat.parse(dateString)
+                date?.time ?: throw IllegalArgumentException("Invalid date string")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                0L
+            }
+        }
+    }
+
     private fun createEvent(eventUid: String, photos: String) {
         binding.creating.visibility = View.VISIBLE
         binding.btnCreateEvent.isEnabled = false
@@ -280,13 +308,15 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
         if (checkForEmpty() == true) {
             eventId = eventUid
-            val time = Calendar.getInstance().time
-            val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
-            val current = formatter.format(time)
+
+            val current = System.currentTimeMillis()
 
             var title = binding.etNameinputText.text.toString().trim()
             var coord: HashMap<String, Double> = hashMapOf("latitude" to appVM.latitude, "longitude" to appVM.longtitude)
             var date_of_meeting: String = binding.timeText.text.toString() + " " + binding.dateText.text.toString()
+
+            Log.i("INFOG", parseDateToTimestamp(date_of_meeting).toString())
+
             var maxPeople: Int = binding.etMaxInputText.text.toString().trim().toInt()
             var desc: String = binding.etDescInputText.text.toString().trim()
 
@@ -307,11 +337,11 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     eventId,
                     type,
                     auth.currentUser?.uid.toString(),
-                    current,
+                    current.toString(),
                     typeSport,
                     title,
                     coord,
-                    date_of_meeting,
+                    parseDateToTimestamp(date_of_meeting).toString(),
                     maxPeople,
                     age,
                     desc,

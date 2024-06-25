@@ -52,6 +52,7 @@ import java.time.Instant
 import java.util.ArrayList
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 import java.util.TimeZone
 import java.util.UUID
 
@@ -197,13 +198,39 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         }
     }
 
+    fun parseDateToTimestamp(dateString: String): Long {
+        val locale = Locale.getDefault()
+        if(locale.language == "ru") {
+            val pattern = "HH:mm dd MMMM yyyy 'года'"
+            val dateFormat = SimpleDateFormat(pattern, locale)
+
+            return try {
+                val date = dateFormat.parse(dateString)
+                date?.time ?: throw IllegalArgumentException("Invalid date string")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                0L
+            }
+        } else {
+            val pattern = "HH:mm dd MMMM yyyy 'year'"
+            val dateFormat = SimpleDateFormat(pattern, locale)
+
+            return try {
+                val date = dateFormat.parse(dateString)
+                date?.time ?: throw IllegalArgumentException("Invalid date string")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                0L
+            }
+        }
+    }
+
     private fun createEvent(photosBefore: String) {
             appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
             if(checkForEmpty() == true) {
                 eventId = UUID.randomUUID().toString()
-                val time = Calendar.getInstance().time
-                val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
-                val current = formatter.format(time)
+
+                val current = System.currentTimeMillis()
 
                 var title = binding.etNameinput.text.toString().trim()
 
@@ -233,11 +260,11 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     eventId,
                     type,
                     auth.currentUser?.uid.toString(),
-                    current,
+                    current.toString(),
                     title,
                     coord,
                     selectedPower,
-                    date_of_meeting,
+                    parseDateToTimestamp(date_of_meeting).toString(),
                     minPeople,
                     maxPeople,
                     desc,

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class EventEcoVM: ViewModel() {
@@ -67,30 +68,62 @@ class EventEcoVM: ViewModel() {
         longtitude = long
     }
 
-    fun formatDate(dateString: String): String {
+    fun formatDate(dateString: String?): String {
+        if (dateString.isNullOrEmpty()) return ""
+
         val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
         val outputFormat = SimpleDateFormat("Создано d MMMM yyyy года HH:mm", Locale("ru"))
         val date = inputFormat.parse(dateString)
-        return outputFormat.format(date)
+        return date?.let { outputFormat.format(it) } ?: ""
     }
 
-    fun setInfo(id_: String, maxPeople_: Int, minPeople_: Int, powerPollution_: String, title_: String, creator_: String, creatorUsername_: String, photosBefore_: String, peopleGo_: ArrayList<String>, freePlaces_: Int, eventDesc_: String, time_of_creation_: String, date_: String, amount_reg_people_: Int, getPoints_: Int) {
-        _id.value = id_
-        _maxPeople.value = maxPeople_
-        _title.value = title_
-        _creator.value = creator_
-        _photosBefore.value = photosBefore_
-        _peopleGo.value = peopleGo_
-        _eventDesc.value = eventDesc_
-        _date.value = date_
-        _type.value = "Экология"
+    fun setInfo(
+        id_: String?,
+        maxPeople_: Int?,
+        minPeople_: Int?,
+        powerPollution_: String?,
+        title_: String?,
+        creator_: String?,
+        creatorUsername_: String?,
+        photosBefore_: String?,
+        peopleGo_: ArrayList<String>?,
+        freePlaces_: Int?,
+        eventDesc_: String?,
+        time_of_creation_: String?,
+        date_: String?,
+        amount_reg_people_: Int?,
+        getPoints_: Int?
+    ) {
+        _id.value = id_ ?: ""
+        _maxPeople.value = maxPeople_ ?: 0
+        _title.value = title_ ?: ""
+        _creator.value = creator_ ?: ""
+        _photosBefore.value = photosBefore_ ?: ""
+        _peopleGo.value = peopleGo_ ?: ArrayList()
+        _eventDesc.value = eventDesc_ ?: ""
+        _date.value = date_ ?: ""
         _timeOfCreation.value = formatDate(time_of_creation_)
-        _amountRegPeople.value = amount_reg_people_
+        _amountRegPeople.value = amount_reg_people_ ?: 0
         _freePlaces.value = 100 - 100 * amountRegPeople.value!! / maxPeople.value!!
-        _powerPollution.value = powerPollution_.toString()
-        _minPeople.value = minPeople_
-        _getPoints.value = getPoints_
+        _powerPollution.value = powerPollution_ ?: ""
+        _minPeople.value = minPeople_ ?: 0
+        _getPoints.value = getPoints_ ?: 0
 
-        _creatorUsername.value = creatorUsername_
+        _creatorUsername.value = creatorUsername_ ?: ""
+    }
+
+    private fun getDateFormat(): SimpleDateFormat {
+        val locale = Locale.getDefault()
+        return if (locale.language == "ru") {
+            SimpleDateFormat("dd MMMM yyyy 'года' 'в' HH:mm", locale)
+        } else {
+            SimpleDateFormat("MMMM dd, yyyy 'at' HH:mm", locale)
+        }
+    }
+
+    private fun formatTimestamp(timestamp: Long): String {
+        val date = Date(timestamp)
+        val outputFormat = getDateFormat()
+        return outputFormat.format(date)
     }
 }

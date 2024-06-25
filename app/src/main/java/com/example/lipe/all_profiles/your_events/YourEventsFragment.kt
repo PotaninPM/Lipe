@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.lipe.R
 import com.example.lipe.databinding.FragmentYourEventsBinding
 import com.example.lipe.all_profiles.EventItem
 import com.google.firebase.auth.FirebaseAuth
@@ -79,7 +80,7 @@ class YourEventsFragment(val personUid: String) : Fragment() {
                                 var statusRus = ""
 
                                 if (status == "ok") {
-                                    statusRus = "Подтверждён"
+                                    statusRus = getString(R.string.confirmed)
                                 } else if (status == "processing") {
                                     statusRus = "В обработке"
                                 } else if (status == "failed") {

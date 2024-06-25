@@ -156,4 +156,5 @@
     <string name="query_friend">Заявка в друзья</string>
     <string name="friends_view">Чтобы увидеть ваших друзей нажмите в вашем профиле как показано на рисунке</string>
     <string name="suc_delete">Событие было успешно удалено</string>
+    <string name="deleted_ac">Удаленный аккаунт</string>
 </resources>

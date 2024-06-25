@@ -37,7 +37,7 @@ class EventEntFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
 
-    private lateinit var dbRef_event: DatabaseReference
+    private lateinit var dbrefEvent1: DatabaseReference
 
     private lateinit var storageRef : StorageReference
 
@@ -68,17 +68,12 @@ class EventEntFragment : Fragment() {
 
         storageRef = FirebaseStorage.getInstance().reference
 
-        dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
+        dbrefEvent1 = FirebaseDatabase.getInstance().getReference("current_events")
 
         binding.report.setOnClickListener {
             val reportDialog = EventReportFragment(eventEntVM.id.value.toString(), auth.currentUser!!.uid)
             reportDialog.show(childFragmentManager, "EventReport")
         }
-
-//        if(appVM.delete_event == "yes") {
-//            binding.allEntEvent.visibility = View.GONE
-//            binding.sucDeleteEnt.visibility = View.VISIBLE
-//        }
 
         searchEvent(appVM.latitude, appVM.longtitude) { ready ->
             val sportType = appVM.type_sport
@@ -116,17 +111,8 @@ class EventEntFragment : Fragment() {
                             eventEntVM.id.value.toString()
                         ) { ans ->
                             if (ans) {
-                                val date_ = eventEntVM.date.value!!
-                                binding.dateOfMeetingEnt.text = buildString {
-                                    append(
-                                        date_.substring(
-                                            6,
-                                            date_.length
-                                        )
-                                    )
-                                    append(getString(R.string.`in`))
-                                    append(date_.substring(0, 5))
-                                }
+                                val date_ = eventEntVM.date.value
+                                binding.dateOfMeetingEnt.text = date_
 
                                 binding.btnRegToEvent.visibility = View.INVISIBLE
 
@@ -179,7 +165,6 @@ class EventEntFragment : Fragment() {
             deleteOrLeave.setOnClickListener {
                 if (auth.currentUser!!.uid == eventEntVM.creator.value) {
                     showPeopleGoDialog(1)
-                    //deleteEvent(eventEntVM.id.value.toString())
                 } else {
                     binding.dateOfMeetingEnt.text = "*******"
                     deleteUserFromEvent(eventEntVM.id.value.toString())
@@ -252,18 +237,18 @@ class EventEntFragment : Fragment() {
     }
 
     private fun sendFriendRequest() {
-        val dbRef_user_query_friends = FirebaseDatabase.getInstance().getReference("users/${eventEntVM.creator.value.toString()}/query_friends")
-        dbRef_user_query_friends.child(auth.currentUser!!.uid).setValue(auth.currentUser!!.uid)
+        val dbrefUserQueryFriends = FirebaseDatabase.getInstance().getReference("users/${eventEntVM.creator.value.toString()}/query_friends")
+        dbrefUserQueryFriends.child(auth.currentUser!!.uid).setValue(auth.currentUser!!.uid)
     }
 
     private fun checkIfUserAlreadyFriend(callback: (ready: String) -> Unit) {
-        val dbRef_user_friends = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/friends")
-        val dbRef_user_query_friends_to_you = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/query_friends")
-        val dbRef_user_query_friends_to_creator = FirebaseDatabase.getInstance().getReference("users/${eventEntVM.creator.value.toString()}/query_friends")
+        val dbrefUserFriends = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/friends")
+        val dbrefUserQueryFriendsToYou = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/query_friends")
+        val dbrefUserQueryFriendsToCreator = FirebaseDatabase.getInstance().getReference("users/${eventEntVM.creator.value.toString()}/query_friends")
 
         var reg = "not"
 
-        dbRef_user_friends.addValueEventListener(object: ValueEventListener {
+        dbrefUserFriends.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                for(user in snapshot.children) {
                    if(user.value.toString() == eventEntVM.creator.value.toString()) {
@@ -279,7 +264,7 @@ class EventEntFragment : Fragment() {
 
         })
         if(reg != "friend") {
-            dbRef_user_query_friends_to_you.addValueEventListener(object : ValueEventListener {
+            dbrefUserQueryFriendsToYou.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (user in snapshot.children) {
                         if (user.value == auth.currentUser!!.uid) {
@@ -297,7 +282,7 @@ class EventEntFragment : Fragment() {
         }
 
         if(reg != "friend" && reg != "request_to_you") {
-            dbRef_user_query_friends_to_creator.addValueEventListener(object : ValueEventListener {
+            dbrefUserQueryFriendsToCreator.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (user in snapshot.children) {
                         if (user.value == auth.currentUser!!.uid) {
@@ -315,13 +300,6 @@ class EventEntFragment : Fragment() {
         }
         callback(reg)
     }
-
-//    private fun replaceFragment(fragment: Fragment) {
-//        val fragmentManager = childFragmentManager
-//        val fragmentTransaction = fragmentManager.beginTransaction()
-//        fragmentTransaction.replace(R.id., fragment)
-//        fragmentTransaction.commit()
-//    }
 
 
     private fun loadAllImages(callback: (Boolean) -> Unit) {
@@ -365,162 +343,122 @@ class EventEntFragment : Fragment() {
     }
 
     private fun searchEvent(coord1: Double, coord2: Double, callback: (ready: Boolean) -> Unit) {
-        if(isAdded) {
-            if (context != null) {
-                val context = context ?: return
+        if (!isAdded || context == null) return
 
-                val dbRefEvent = FirebaseDatabase.getInstance().getReference("current_events")
-                val dbRefUser = FirebaseDatabase.getInstance().getReference("users")
+        val dbRefEvent = FirebaseDatabase.getInstance().getReference("current_events")
+        val dbRefUser = FirebaseDatabase.getInstance().getReference("users")
 
-                dbRefEvent.addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        for (eventSnapshot in dataSnapshot.children) {
-                            val coordinates: List<Double>? = listOf(
-                                eventSnapshot.child("coordinates")
-                                    .child("latitude").value.toString()
-                                    .toDouble(),
-                                eventSnapshot.child("coordinates")
-                                    .child("longitude").value.toString()
-                                    .toDouble()
-                            )
-                            if (coordinates != null && coordinates[0] == coord1 && coordinates[1] == coord2) {
-                                val type = eventSnapshot.child("type_of_event").value.toString()
-                                val id = eventSnapshot.child("event_id").value.toString()
-                                val maxPeople =
-                                    eventSnapshot.child("max_people").value.toString().toInt()
-                                val title = eventSnapshot.child("title").value.toString()
-                                val description =
-                                    eventSnapshot.child("description").value.toString()
-                                val creatorUid = eventSnapshot.child("creator_id").value.toString()
-                                val photos =
-                                    arrayListOf(eventSnapshot.child("photos").value.toString())
-                                val freePlaces =
-                                    maxPeople - eventSnapshot.child("amount_reg_people").value.toString()
-                                        .toInt()
-                                val timeOfCreation =
-                                    eventSnapshot.child("time_of_creation").value.toString()
-                                val dateOfMeeting =
-                                    eventSnapshot.child("date_of_meeting").value.toString()
-                                val amountRegPeople =
-                                    eventSnapshot.child("amount_reg_people").value.toString()
-                                        .toInt()
-                                val age = eventSnapshot.child("age").value.toString()
-                                val age_lang = when (age) {
-                                    "any_age" -> getString(R.string.any_age)
-                                    "more_18" -> getString(R.string.more_18)
-                                    "before_18" -> getString(R.string.before_18)
-                                    else -> ""
-                                }
+        dbRefEvent.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (!isAdded || context == null) return
 
-                                when (type) {
-                                    "ent" -> {
-                                        val sportType =
-                                            eventSnapshot.child("sport_type").value.toString()
-                                        val lang_sport_type = when (sportType) {
-                                            "Basketball" -> getString(R.string.basketball)
-                                            "Volleyball" -> getString(R.string.volleyball)
-                                            "Football" -> getString(R.string.football)
-                                            "Rugby" -> getString(R.string.rugby)
-                                            "Workout" -> getString(R.string.workout)
-                                            "Tennis" -> getString(R.string.tennis)
-                                            "Badminton" -> getString(R.string.badminton)
-                                            "Table tennis" -> getString(R.string.table_tennis)
-                                            "Gymnastics" -> getString(R.string.gymnastics)
-                                            "Fencing" -> getString(R.string.fencing)
-                                            "Jogging" -> getString(R.string.jogging)
-                                            "Curling" -> getString(R.string.curling)
-                                            "Hockey" -> getString(R.string.hockey)
-                                            "Ice skating" -> getString(R.string.ice_skating)
-                                            "Skiing" -> getString(R.string.skiing)
-                                            "Downhill skiing" -> getString(R.string.downhill_skiing)
-                                            "Snowboarding" -> getString(R.string.snowboarding)
-                                            "Table games" -> getString(R.string.table_games)
-                                            "Mobile games" -> getString(R.string.mobile_games)
-                                            "Chess" -> getString(R.string.chess)
-                                            "Programming" -> getString(R.string.programming)
-                                            else -> "0"
+                for (eventSnapshot in dataSnapshot.children) {
+                    val coordinates = listOfNotNull(
+                        eventSnapshot.child("coordinates").child("latitude").value?.toString()?.toDoubleOrNull(),
+                        eventSnapshot.child("coordinates").child("longitude").value?.toString()?.toDoubleOrNull()
+                    )
+
+                    if (coordinates.isNotEmpty() && coordinates[0] == coord1 && coordinates[1] == coord2) {
+                        val type = eventSnapshot.child("type_of_event").value.toString()
+                        val id = eventSnapshot.child("event_id").value.toString()
+                        val maxPeople = eventSnapshot.child("max_people").value.toString().toIntOrNull() ?: 0
+                        val title = eventSnapshot.child("title").value.toString()
+                        val description = eventSnapshot.child("description").value.toString()
+                        val creatorUid = eventSnapshot.child("creator_id").value.toString()
+                        val photos = arrayListOf(eventSnapshot.child("photos").value.toString())
+                        val freePlaces = maxPeople - (eventSnapshot.child("amount_reg_people").value.toString().toIntOrNull() ?: 0)
+                        val timeOfCreation = eventSnapshot.child("time_of_creation").value.toString().toLongOrNull() ?: 0L
+                        val dateOfMeeting = eventSnapshot.child("date_of_meeting").value.toString()
+                        val amountRegPeople = eventSnapshot.child("amount_reg_people").value.toString().toIntOrNull() ?: 0
+                        val age = eventSnapshot.child("age").value.toString()
+                        val ageLang = when (age) {
+                            "any_age" -> getString(R.string.any_age)
+                            "more_18" -> getString(R.string.more_18)
+                            "before_18" -> getString(R.string.before_18)
+                            else -> ""
+                        }
+
+                        if (type == "ent") {
+                            val sportType = eventSnapshot.child("sport_type").value.toString()
+                            val langSportType = when (sportType) {
+                                "Basketball" -> getString(R.string.basketball)
+                                "Volleyball" -> getString(R.string.volleyball)
+                                "Football" -> getString(R.string.football)
+                                "Rugby" -> getString(R.string.rugby)
+                                "Workout" -> getString(R.string.workout)
+                                "Tennis" -> getString(R.string.tennis)
+                                "Badminton" -> getString(R.string.badminton)
+                                "Table tennis" -> getString(R.string.table_tennis)
+                                "Gymnastics" -> getString(R.string.gymnastics)
+                                "Fencing" -> getString(R.string.fencing)
+                                "Jogging" -> getString(R.string.jogging)
+                                "Curling" -> getString(R.string.curling)
+                                "Hockey" -> getString(R.string.hockey)
+                                "Ice skating" -> getString(R.string.ice_skating)
+                                "Skiing" -> getString(R.string.skiing)
+                                "Downhill skiing" -> getString(R.string.downhill_skiing)
+                                "Snowboarding" -> getString(R.string.snowboarding)
+                                "Table games" -> getString(R.string.table_games)
+                                "Mobile games" -> getString(R.string.mobile_games)
+                                "Chess" -> getString(R.string.chess)
+                                "Programming" -> getString(R.string.programming)
+                                else -> "0"
+                            }
+
+                            checkIfUserAlreadyFriend { ready ->
+                                if (!isAdded || context == null) return@checkIfUserAlreadyFriend
+
+                                var found = false
+                                dbRefUser.addValueEventListener(object : ValueEventListener {
+                                    override fun onDataChange(userSnapshot: DataSnapshot) {
+                                        if (!isAdded || context == null) return
+
+                                        for (userEventSnapshot in userSnapshot.children) {
+                                            if (creatorUid == userEventSnapshot.child("uid").value) {
+                                                val creatorUsername = userEventSnapshot.child("username").value.toString()
+                                                eventEntVM.setInfo(
+                                                    id, maxPeople, title, creatorUid, creatorUsername, photos,
+                                                    arrayListOf("1"), freePlaces, ageLang, description, timeOfCreation,
+                                                    dateOfMeeting, sportType, langSportType, amountRegPeople, ready
+                                                )
+                                                callback(true)
+                                                found = true
+                                                break
+                                            }
                                         }
-                                        checkIfUserAlreadyFriend { ready ->
-                                            var found: Boolean = false
-                                            dbRefUser.addValueEventListener(object :
-                                                ValueEventListener {
-                                                override fun onDataChange(userSnapshot: DataSnapshot) {
-                                                    for (userEventSnapshot in userSnapshot.children) {
-                                                        if (creatorUid == userEventSnapshot.child("uid").value) {
-                                                            val creatorUsername =
-                                                                userEventSnapshot.child("username").value.toString()
-                                                            eventEntVM.setInfo(
-                                                                id,
-                                                                maxPeople,
-                                                                title,
-                                                                creatorUid,
-                                                                creatorUsername,
-                                                                photos,
-                                                                arrayListOf("1"),
-                                                                freePlaces,
-                                                                age_lang,
-                                                                description,
-                                                                timeOfCreation,
-                                                                dateOfMeeting,
-                                                                sportType,
-                                                                lang_sport_type,
-                                                                amountRegPeople,
-                                                                ready
-                                                            )
-                                                            Log.d("INFOG", ready)
-                                                            callback(true)
-                                                            found = true
-                                                            return
-                                                        }
-                                                    }
 
-                                                    if (found == false) {
-                                                        eventEntVM.setInfo(
-                                                            id,
-                                                            maxPeople,
-                                                            title,
-                                                            creatorUid,
-                                                            "Удаленный аккаунт",
-                                                            photos,
-                                                            arrayListOf("1"),
-                                                            freePlaces,
-                                                            age,
-                                                            description,
-                                                            timeOfCreation,
-                                                            dateOfMeeting,
-                                                            sportType,
-                                                            lang_sport_type,
-                                                            amountRegPeople,
-                                                            ready
-                                                        )
-                                                        callback(true)
-                                                    }
-                                                }
-
-                                                override fun onCancelled(error: DatabaseError) {
-                                                    callback(false)
-                                                }
-                                            })
+                                        if (!found) {
+                                            eventEntVM.setInfo(
+                                                id, maxPeople, title, creatorUid, getString(R.string.deleted_ac), photos,
+                                                arrayListOf("1"), freePlaces, age, description, timeOfCreation,
+                                                dateOfMeeting, sportType, langSportType, amountRegPeople, ready
+                                            )
+                                            callback(true)
                                         }
                                     }
-                                }
-                                break
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        callback(false)
+                                    }
+                                })
                             }
                         }
+                        break
                     }
-
-                    override fun onCancelled(databaseError: DatabaseError) {
-                        Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
-                    }
-                })
+                }
             }
-        }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
+            }
+        })
     }
+
 
     fun deleteUserFromEvent(uid: String) {
         val dbRef_user = FirebaseDatabase.getInstance().getReference("users").child(auth.currentUser!!.uid).child("curRegEventsId").child(uid)
-        val userInEventRef = dbRef_event.child(eventEntVM.id.value.toString()).child("reg_people_id").child(auth.currentUser!!.uid)
-        val curPeople = dbRef_event.child(eventEntVM.id.value.toString()).child("amount_reg_people")
+        val userInEventRef = dbrefEvent1.child(eventEntVM.id.value.toString()).child("reg_people_id").child(auth.currentUser!!.uid)
+        val curPeople = dbrefEvent1.child(eventEntVM.id.value.toString()).child("amount_reg_people")
         val groupRef = FirebaseDatabase.getInstance().getReference("groups/${eventEntVM.id.value}/members/${auth.currentUser!!.uid}")
         val groupInProfile = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/groups/$uid")
         dbRef_user.removeValue().addOnSuccessListener {
@@ -555,8 +493,8 @@ class EventEntFragment : Fragment() {
 
     private fun checkIfUserAlreadyReg(curUid: String, eventId: String, callback: (Boolean) -> Unit) {
         try {
-            dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
-            dbRef_event.child(eventId).addListenerForSingleValueEvent(object : ValueEventListener {
+            dbrefEvent1 = FirebaseDatabase.getInstance().getReference("current_events")
+            dbrefEvent1.child(eventId).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val regPeopleSnapshot = dataSnapshot.child("reg_people_id")
                     var isUserRegistered = false
@@ -581,28 +519,28 @@ class EventEntFragment : Fragment() {
 
     private fun regUserToEvent(curUid: String, callback: (Boolean) -> Unit) {
         try {
-            val dbRef_users = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
-            val dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
-            val dbRef_groups = FirebaseDatabase.getInstance().getReference("groups/${eventEntVM.id.value}/members")
-            val event_id = eventEntVM.id.value.toString()
+            val dbrefUsers = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}")
+            val dbrefEvent = FirebaseDatabase.getInstance().getReference("current_events")
+            val dbrefGroups = FirebaseDatabase.getInstance().getReference("groups/${eventEntVM.id.value}/members")
+            val eventId = eventEntVM.id.value.toString()
 
-            dbRef_event.child(event_id).addListenerForSingleValueEvent(object : ValueEventListener {
+            dbrefEvent.child(eventId).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if(dataSnapshot.exists()) {
                         val max = dataSnapshot.child("max_people").getValue(Int::class.java) ?: 0
                         val reg_people = dataSnapshot.child("amount_reg_people").getValue(Int::class.java) ?: 0
 
                         if (max - reg_people > 0) {
-                            val regPeopleRef = dbRef_event.child(event_id).child("reg_people_id").child(auth.currentUser!!.uid)
+                            val regPeopleRef = dbrefEvent.child(eventId).child("reg_people_id").child(auth.currentUser!!.uid)
 
                             regPeopleRef.setValue(curUid)
                                 .addOnSuccessListener {
-                                    dbRef_event.child(event_id).child("amount_reg_people").setValue(reg_people + 1)
+                                    dbrefEvent.child(eventId).child("amount_reg_people").setValue(reg_people + 1)
                                         .addOnSuccessListener {
-                                            dbRef_users.child("curRegEventsId").child(event_id).setValue(event_id)
+                                            dbrefUsers.child("curRegEventsId").child(eventId).setValue(eventId)
                                                 .addOnSuccessListener {
-                                                    dbRef_groups.child(auth.currentUser!!.uid).setValue(auth.currentUser!!.uid).addOnSuccessListener {
-                                                        dbRef_users.child("groups").child(eventEntVM.id.value.toString()).setValue(eventEntVM.id.value.toString()).addOnSuccessListener {
+                                                    dbrefGroups.child(auth.currentUser!!.uid).setValue(auth.currentUser!!.uid).addOnSuccessListener {
+                                                        dbrefUsers.child("groups").child(eventEntVM.id.value.toString()).setValue(eventEntVM.id.value.toString()).addOnSuccessListener {
                                                             binding.btnRegToEvent.visibility = View.GONE
                                                             binding.deleteOrLeave.visibility = View.VISIBLE
                                                         }
@@ -630,7 +568,7 @@ class EventEntFragment : Fragment() {
                         }
                     } else {
                         callback(false)
-                        Log.e("FirebaseError", "Мероприятие с ID $event_id не найдено")
+                        Log.e("FirebaseError", "Мероприятие с ID $eventId не найдено")
                     }
                 }
 

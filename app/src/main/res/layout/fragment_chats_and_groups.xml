@@ -23,7 +23,6 @@
         android:id="@+id/notification_chats"
         android:layout_width="@dimen/_26sdp"
         android:layout_height="@dimen/_26sdp"
-        android:backgroundTint="?attr/colorOnPrimary"
         android:src="@drawable/notification"
         app:layout_constraintBottom_toBottomOf="@+id/tableLayout"
         app:layout_constraintEnd_toStartOf="@+id/tableLayout"
