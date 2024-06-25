@@ -150,7 +150,6 @@
                     android:layout_height="@dimen/_40sdp"
                     android:layout_width="@dimen/_147sdp"
                     android:orientation="horizontal"
-                    android:backgroundTint="@color/night_day"
                     android:layout_gravity="center"
                     android:background="@drawable/sign_with_google">
 

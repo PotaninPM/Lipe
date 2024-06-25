@@ -117,7 +117,8 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         }
 
         binding.btnCreateEvent.setOnClickListener {
-            binding.allEco.visibility = View.INVISIBLE
+            binding.creating.visibility = View.VISIBLE
+            binding.allEco.visibility = View.GONE
             binding.progressBar.visibility = View.VISIBLE
             if(isAdded) {
                 binding.btnCreateEvent.isEnabled = false
@@ -345,8 +346,10 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                         Log.d("INFOG", "${t.message}")
                     }
                 })
-                binding.allEco.visibility = View.VISIBLE
-                binding.progressBar.visibility = View.INVISIBLE
+                //binding.allEco.visibility = View.VISIBLE
+                binding.creating.visibility = View.GONE
+                binding.congrats.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
             } else {
                 binding.btnCreateEvent.isEnabled = true
                 binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))

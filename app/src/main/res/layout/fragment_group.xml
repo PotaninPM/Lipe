@@ -40,8 +40,8 @@
 
                 <ImageView
                     android:id="@+id/back_btn"
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
+                    android:layout_width="@dimen/_23sdp"
+                    android:layout_height="@dimen/_23sdp"
                     android:background="@drawable/back_btn"
                     android:backgroundTint="#868686"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -109,10 +109,10 @@
 
             <ImageView
                 android:id="@+id/emojiBtn"
-                android:layout_width="@dimen/_21sdp"
-                android:layout_height="@dimen/_21sdp"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:src="@drawable/emoji_btn"
-                android:layout_marginStart="@dimen/_4sdp"
+                android:layout_marginStart="@dimen/_6sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

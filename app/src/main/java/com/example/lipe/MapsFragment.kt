@@ -124,6 +124,100 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private var currentLatitude: Double? = null
     private var currentLongitude: Double? = null
 
+    private fun addMarker(latLng: LatLng, type: String, eventId: String, sport_type: String): Marker? {
+        var marker: Marker? = null
+        val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker_event, null)
+        val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
+
+        var sportType: Int = 0
+
+        Log.d("INFOG", type)
+
+        if (sport_type != "-") {
+            sportType = when (sport_type) {
+                "Basketball" -> R.drawable.img_basketballimg
+                "Volleyball" -> R.drawable.volleyball_2
+                "Football" -> R.drawable.football
+                "Rugby" -> R.drawable.rugby_ball
+                "Workout" -> R.drawable.weights
+                "Tennis" -> R.drawable.tennis
+                "Badminton" -> R.drawable.shuttlecock
+                "Table tennis" -> R.drawable.table_tennis
+                "Gymnastics" -> R.drawable.gymnastic_rings
+                "Fencing" -> R.drawable.fencing
+                "Jogging" -> R.drawable.running_shoe
+                "Curling" -> R.drawable.curling
+                "Hockey" -> R.drawable.ice_hockey
+                "Ice skating" -> R.drawable.ice_skate
+                "Skiing" -> R.drawable.skiing_1
+                "Downhill skiing" -> R.drawable.skiing
+                "Snowboarding" -> R.drawable.snowboarding
+                "Table games" -> R.drawable.board_game
+                "Mobile games" -> R.drawable.mobile_game
+                "Chess" -> R.drawable.chess_2
+                "Programming" -> R.drawable.programming
+                else -> {
+                    0
+                }
+            }
+        }
+        val markerImageResource = when (type) {
+            "eco" -> R.drawable.planet_icon
+            "ent" -> sportType
+            "help" -> R.drawable.dollar
+            else -> R.drawable.basketball_32
+        }
+
+        markerImageView.setImageResource(markerImageResource)
+
+        val markerOptions = MarkerOptions()
+            .position(latLng)
+            .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
+            .anchor(0.5f, 1f)
+
+        marker = mMap.addMarker(markerOptions)
+
+        when (type) {
+            "eco" -> ecoEventsMarkersMap[eventId] = marker!!
+            "ent" -> entEventsMarkersMap[eventId] = marker!!
+            "help" -> helpEventsMarkersMap[eventId] = marker!!
+        }
+
+        return marker
+    }
+    //-------
+    private fun searchTypeOfEvent(coord1: Double, coord2: Double, callback: (ready: Boolean) -> Unit) {
+        val dbRefEvent = FirebaseDatabase.getInstance().getReference("current_events")
+
+        dbRefEvent.addListenerForSingleValueEvent(object : ValueEventListener {
+            var done = 0
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for(eventSnapshot in dataSnapshot.children) {
+                    val coordinates: List<Double>? = listOf(eventSnapshot.child("coordinates").child("latitude").value.toString().toDouble(), eventSnapshot.child("coordinates").child("longitude").value.toString().toDouble())
+                    if(coordinates != null && coordinates[0] == coord1 && coordinates[1] == coord2) {
+                        val type = eventSnapshot.child("type_of_event").value.toString()
+                        val eventId: String = eventSnapshot.child("event_id").value.toString()
+                        if(type == "ent") {
+                            val type_sport:String = eventSnapshot.child("sport_type").value.toString()
+                            appVM.type_sport = type_sport
+                        }
+                        appVM.type = type
+                        done = 1
+                        callback(true)
+                        break
+                    }
+                }
+                if(done != 1) {
+                    callback(false)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
+            }
+        })
+    }
+
     private fun setMapStyle() {
         val nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         val mapStyleResourceId = if (nightMode == Configuration.UI_MODE_NIGHT_YES) {
@@ -915,99 +1009,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         requestPermissions(permissions.toTypedArray(), LOCATION_PERMISSION_REQUEST_CODE)
     }
 
-    //-------
-    private fun searchTypeOfEvent(coord1: Double, coord2: Double, callback: (ready: Boolean) -> Unit) {
-        val dbRefEvent = FirebaseDatabase.getInstance().getReference("current_events")
-
-        dbRefEvent.addListenerForSingleValueEvent(object : ValueEventListener {
-            var done = 0
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for(eventSnapshot in dataSnapshot.children) {
-                    val coordinates: List<Double>? = listOf(eventSnapshot.child("coordinates").child("latitude").value.toString().toDouble(), eventSnapshot.child("coordinates").child("longitude").value.toString().toDouble())
-                    if(coordinates != null && coordinates[0] == coord1 && coordinates[1] == coord2) {
-                        val type = eventSnapshot.child("type_of_event").value.toString()
-                        val eventId: String = eventSnapshot.child("event_id").value.toString()
-                        if(type == "ent") {
-                            val type_sport:String = eventSnapshot.child("sport_type").value.toString()
-                            appVM.type_sport = type_sport
-                        }
-                        appVM.type = type
-                        done = 1
-                        callback(true)
-                        break
-                    }
-                }
-                if(done != 1) {
-                    callback(false)
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
-            }
-        })
-    }
-    private fun addMarker(latLng: LatLng, type: String, eventId: String, sport_type: String): Marker? {
-        var marker: Marker? = null
-        val markerLayout = LayoutInflater.from(requireContext()).inflate(R.layout.custom_marker_event, null)
-        val markerImageView = markerLayout.findViewById<ImageView>(R.id.imageView)
-
-        var sportType: Int = 0
-
-        Log.d("INFOG", type)
-
-        if (sport_type != "-") {
-            sportType = when (sport_type) {
-                "Basketball" -> R.drawable.img_basketballimg
-                "Volleyball" -> R.drawable.volleyball_2
-                "Football" -> R.drawable.football
-                "Rugby" -> R.drawable.rugby_ball
-                "Workout" -> R.drawable.weights
-                "Tennis" -> R.drawable.tennis
-                "Badminton" -> R.drawable.shuttlecock
-                "Table tennis" -> R.drawable.table_tennis
-                "Gymnastics" -> R.drawable.gymnastic_rings
-                "Fencing" -> R.drawable.fencing
-                "Jogging" -> R.drawable.running_shoe
-                "Curling" -> R.drawable.curling
-                "Hockey" -> R.drawable.ice_hockey
-                "Ice skating" -> R.drawable.ice_skate
-                "Skiing" -> R.drawable.skiing_1
-                "Downhill skiing" -> R.drawable.skiing
-                "Snowboarding" -> R.drawable.snowboarding
-                "Table games" -> R.drawable.board_game
-                "Mobile games" -> R.drawable.mobile_game
-                "Chess" -> R.drawable.chess_2
-                "Programming" -> R.drawable.programming
-                else -> {
-                    0
-                }
-            }
-        }
-        val markerImageResource = when (type) {
-            "eco" -> R.drawable.planet_icon
-            "ent" -> sportType
-            "help" -> R.drawable.dollar
-            else -> R.drawable.basketball_32
-        }
-
-        markerImageView.setImageResource(markerImageResource)
-
-        val markerOptions = MarkerOptions()
-            .position(latLng)
-            .icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(markerLayout)))
-            .anchor(0.5f, 1f)
-
-        marker = mMap.addMarker(markerOptions)
-
-        when (type) {
-            "eco" -> ecoEventsMarkersMap[eventId] = marker!!
-            "ent" -> entEventsMarkersMap[eventId] = marker!!
-            "help" -> helpEventsMarkersMap[eventId] = marker!!
-        }
-
-        return marker
-    }
     private fun showOrHideMarkers(markerMap: HashMap<String, Marker>, func: String) {
         if(func != "hide")
             markerMap.forEach { it.value.isVisible = true }

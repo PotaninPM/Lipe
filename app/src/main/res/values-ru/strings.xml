@@ -151,4 +151,6 @@
     <string name="can">Отлично, теперь вы можете приступать к использованию приложения, удачи!)</string>
     <string name="theme_help">Вы можете установить тему профиля просто нажав на голубой фон и затем выбрав фотографию которую хотите видеть</string>
     <string name="not_auth">Вы не авторизованы</string>
+    <string name="suc_ev">Событие успешно создано!</string>
+    <string name="creating">Создаем событие...</string>
 </resources>

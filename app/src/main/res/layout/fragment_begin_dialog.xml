@@ -18,7 +18,6 @@
             android:id="@+id/gifImageView"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_212sdp"
-            android:scaleType="centerCrop"
             android:layout_marginTop="@dimen/_6sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

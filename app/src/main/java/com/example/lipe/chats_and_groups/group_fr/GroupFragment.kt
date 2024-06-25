@@ -106,8 +106,10 @@ class GroupFragment(val groupUid: String) : Fragment() {
         binding.emojiBtn.setOnClickListener {
             if (emojiPopup.isShowing) {
                 emojiPopup.dismiss()
+                binding.emojiBtn.setImageResource(R.drawable.emoji_btn)
             } else {
                 emojiPopup.toggle()
+                binding.emojiBtn.setImageResource(R.drawable.keyboard_btn)
             }
         }
 

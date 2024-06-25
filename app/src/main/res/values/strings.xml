@@ -148,7 +148,9 @@
     <string name="confirmed">Confirmed</string>
     <string name="preparation">Learn how to use this app</string>
     <string name="finger">Hold your finger for 1 sec. to create event</string>
-    <string name="can">Perfect, now you can use this app properly, good luck!)</string>
+    <string name="can">Perfect, now you can use this app properly, good luck!</string>
     <string name="theme_help">You can set up a profile theme by clicking on blue background and choosing photo that you want to see</string>
     <string name="not_auth">You are not authorized</string>
+    <string name="suc_ev">Event was successfully created!</string>
+    <string name="creating">Creating event...</string>
 </resources>

@@ -189,7 +189,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
             binding.btnCreateEvent.setOnClickListener {
 
-                binding.allEnt.visibility = View.INVISIBLE
+                binding.allEnt.visibility = View.GONE
                 binding.progressBar.visibility = View.VISIBLE
 
                 binding.btnCreateEvent.isEnabled = false
@@ -276,6 +276,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
     }
 
     private fun createEvent(eventUid: String, photos: String) {
+        binding.creating.visibility = View.VISIBLE
         binding.btnCreateEvent.isEnabled = false
         binding.btnCreateEvent.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
 
@@ -354,7 +355,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                             dbRef_user_events_amount.addListenerForSingleValueEvent(object :
                                 ValueEventListener {
                                 override fun onDataChange(snapshot: DataSnapshot) {
-                                    dbRef_user_events_amount.setValue(snapshot?.value.toString().toInt() + 1) {e, _ ->
+                                    dbRef_user_events_amount.setValue(snapshot.value.toString().toInt() + 1) {e, _ ->
 
                                     }
                                 }
@@ -385,11 +386,16 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                         Log.d("INFOG", "${t.message}")
                     }
                 })
-                binding.allEnt.visibility = View.VISIBLE
+
+                //////////////////////////////////////
+                //binding.allEnt.visibility = View.VISIBLE
+                binding.creating.visibility = View.GONE
+                binding.congrats.visibility = View.VISIBLE
                 binding.progressBar.visibility = View.INVISIBLE
             }
         }else {
             binding.allEnt.visibility = View.VISIBLE
+
             binding.progressBar.visibility = View.INVISIBLE
 
             binding.btnCreateEvent.isEnabled = true

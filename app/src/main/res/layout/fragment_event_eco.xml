@@ -417,6 +417,7 @@
                     android:backgroundTint="@color/quantum_googred"
                     android:ellipsize="end"
                     android:gravity="center"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:singleLine="true"
                     android:textAllCaps="false"
                     android:textColor="@color/quantum_white_100"
@@ -425,8 +426,8 @@
                     android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/listUsers"
-                    tools:ignore="TextSizeCheck"
-                    tools:layout_editor_absoluteY="773dp" />
+                    app:layout_constraintTop_toBottomOf="@+id/lineLineThree"
+                    tools:ignore="TextSizeCheck" />
 
                 <Button
                     android:id="@+id/listUsers"
@@ -437,6 +438,7 @@
                     android:backgroundTint="#2494EA"
                     android:ellipsize="end"
                     android:gravity="center"
+                    android:layout_marginTop="@dimen/_12sdp"
                     android:singleLine="true"
                     android:textAllCaps="false"
                     android:textColor="@color/quantum_white_100"
@@ -444,8 +446,8 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="parent"
-                    tools:ignore="TextSizeCheck"
-                    tools:layout_editor_absoluteY="773dp" />
+                    app:layout_constraintTop_toBottomOf="@+id/lineLineThree"
+                    tools:ignore="TextSizeCheck" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
