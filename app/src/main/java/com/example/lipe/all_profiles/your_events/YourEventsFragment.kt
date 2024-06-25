@@ -54,54 +54,61 @@ class YourEventsFragment(val personUid: String) : Fragment() {
     }
 
     private fun setCurEvents() {
-        val dbRef_your_events = FirebaseDatabase.getInstance().getReference("users/${personUid}/yourCreatedEvents")
+        if (!isAdded || context == null) return
+
+        val dbRefYourEvents = FirebaseDatabase.getInstance().getReference("users/${personUid}/yourCreatedEvents")
         val yourEvents = ArrayList<EventItem>()
-        dbRef_your_events.addValueEventListener(object: ValueEventListener {
+
+        dbRefYourEvents.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.childrenCount.toInt() != 0) {
+                if (!isAdded || context == null) return
+
+                if (snapshot.childrenCount.toInt() != 0) {
                     binding.recuclerviewInProfile.visibility = View.VISIBLE
                     binding.noEvents.visibility = View.INVISIBLE
                 } else {
                     binding.recuclerviewInProfile.visibility = View.INVISIBLE
                     binding.noEvents.visibility = View.VISIBLE
                 }
-                for(event in snapshot.children) {
-                    Log.d("INFOG", event.value.toString())
-                    val dbRef_cur_events = FirebaseDatabase.getInstance().getReference("current_events/${event.value}")
-                    dbRef_cur_events.addListenerForSingleValueEvent(object : ValueEventListener {
+
+                yourEvents.clear()
+                for (event in snapshot.children) {
+                    val eventValue = event.value.toString()
+                    val dbRefCurEvents = FirebaseDatabase.getInstance().getReference("current_events/$eventValue")
+
+                    dbRefCurEvents.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            if(dataSnapshot.exists()) {
+                            if (!isAdded || context == null) return
+
+                            if (dataSnapshot.exists()) {
                                 val title = dataSnapshot.child("title").value.toString()
-                                val date_meeting =
-                                    dataSnapshot.child("date_of_meeting").value.toString()
+                                val dateMeeting = dataSnapshot.child("date_of_meeting").value.toString()
                                 val status = dataSnapshot.child("status").value.toString()
                                 val photos = dataSnapshot.child("photos").value.toString()
 
-                                var statusRus = ""
-
-                                if (status == "ok") {
-                                    statusRus = getString(R.string.confirmed)
-                                } else if (status == "processing") {
-                                    statusRus = "В обработке"
-                                } else if (status == "failed") {
-                                    statusRus = "Будет удалён"
+                                val statusRus = when (status) {
+                                    "ok" -> getString(R.string.confirmed)
+                                    "processing" -> "В обработке"
+                                    "failed" -> "Будет удалён"
+                                    else -> ""
                                 }
 
-                                yourEvents.add(EventItem(photos, title, date_meeting, statusRus))
+                                yourEvents.add(EventItem(photos, title, dateMeeting, statusRus))
                                 adapter.updateRequests(yourEvents)
                             }
                         }
+
                         override fun onCancelled(databaseError: DatabaseError) {
-                            Log.e("FirebaseError","Ошибка Firebase ${databaseError.message}")
+                            Log.e("FirebaseError", "Ошибка Firebase ${databaseError.message}")
                         }
                     })
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Log.e("FirebaseError", "Ошибка Firebase ${error.message}")
             }
-
         })
     }
+
 }

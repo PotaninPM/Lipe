@@ -187,16 +187,7 @@ class EventEntFragment : Fragment() {
                                     val date_ = eventEntVM.date.value
                                     if(date_ != null) {
                                         binding.dateOfMeetingEnt.setText(
-                                            buildString {
-                                                append(
-                                                    date_.substring(
-                                                        6,
-                                                        date_.length
-                                                    )
-                                                )
-                                                append(getString(R.string.`in`))
-                                                append(date_.substring(0, 5))
-                                            }
+                                            date_
                                         )
                                     }
                                     setDialog(

@@ -63,11 +63,6 @@ class EventEcoVM: ViewModel() {
     var latitude: Double = 0.0
     var longtitude: Double = 0.0
 
-    fun setCoord(lat: Double, long: Double) {
-        latitude = lat
-        longtitude = long
-    }
-
     fun formatDate(dateString: String?): String {
         if (dateString.isNullOrEmpty()) return ""
 
@@ -101,7 +96,7 @@ class EventEcoVM: ViewModel() {
         _photosBefore.value = photosBefore_ ?: ""
         _peopleGo.value = peopleGo_ ?: ArrayList()
         _eventDesc.value = eventDesc_ ?: ""
-        _date.value = date_ ?: ""
+        _date.value = formatTimestamp(date_?.toLong() ?: 0L) ?: ""
         _timeOfCreation.value = formatDate(time_of_creation_)
         _amountRegPeople.value = amount_reg_people_ ?: 0
         _freePlaces.value = 100 - 100 * amountRegPeople.value!! / maxPeople.value!!

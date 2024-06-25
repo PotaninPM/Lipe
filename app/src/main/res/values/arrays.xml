@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="months">
+    <string-array name="months_ru">
         <item>января</item>
         <item>февраля</item>
         <item>марта</item>
@@ -13,5 +13,19 @@
         <item>октября</item>
         <item>ноября</item>
         <item>декабря</item>
+    </string-array>
+    <string-array name="months_eng">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
     </string-array>
 </resources>

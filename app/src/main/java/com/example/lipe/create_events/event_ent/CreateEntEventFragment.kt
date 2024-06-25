@@ -491,11 +491,11 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             return getView(position, convertView, parent)
         }
     }
+
     private fun getDateTime() {
-        val datePicker =
-            MaterialDatePicker.Builder.datePicker()
-                .setTitleText(getString(R.string.choose_the_date))
-                .build()
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText(getString(R.string.choose_the_date))
+            .build()
 
         datePicker.addOnPositiveButtonClickListener {
             val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
@@ -520,24 +520,39 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
         datePicker.show(childFragmentManager, "date_picker_tag")
     }
-    fun onTimeSet_() {
+
+    private fun onTimeSet_() {
         binding.notifySetDate.visibility = View.GONE
         binding.timeText.visibility = View.VISIBLE
         binding.timeText.text = String.format("%02d:%02d", savedHour, savedMinute)
 
-        val months = resources.getStringArray(R.array.months)
+        val locale = Locale.getDefault().language
+        Log.i("INFOG", locale.toString())
+        val months = if (locale == "ru") {
+            resources.getStringArray(R.array.months_ru)
+        } else {
+            resources.getStringArray(R.array.months_eng)
+        }
         val monthName = months[savedMonth]
 
         binding.dateText.visibility = View.VISIBLE
-        binding.dateText.text = String.format("%d %s %d ${getString(R.string.year)}", savedDay, monthName, savedYear)
+        binding.dateText.text = String.format(
+            "%d %s %d %s",
+            savedDay,
+            monthName,
+            savedYear,
+            getString(R.string.year)
+        )
 
         binding.dateLay.setBackgroundResource(R.drawable.chosen_date_lay)
     }
 
     override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {
-        TODO("Not yet implemented")
+
     }
+
     override fun onTimeSet(p0: TimePicker?, p1: Int, p2: Int) {
-        TODO("Not yet implemented")
+
     }
+
 }
