@@ -246,10 +246,10 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                 var getPoints: Int = -1
 
                 getPoints = when(selectedPower) {
-                    "Не очень сильный" -> 5
-                    "Достаточно много" -> 7
-                    "Очень много" -> 10
-                    "Похоже на свалку" -> 15
+                    getString(R.string.some) -> 5
+                    getString(R.string.quite_a_lot) -> 7
+                    getString(R.string.a_lot) -> 10
+                    getString(R.string.like_landfield) -> 15
                     else -> 0
                 }
 

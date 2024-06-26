@@ -219,7 +219,7 @@ class EventHelpFragment : Fragment() {
         var dialog: DialogFragment?= null
 
         dialog = when(lay) {
-            0 -> ChoosePeopleFragment(eventHelpVM.id.value.toString(), "help")
+            0 -> ChoosePeopleFragment(eventHelpVM.id.value.toString(), "help", requireView())
             else -> DialogFragment()
         }
         dialog.show(childFragmentManager, "PeopleGoDialog")

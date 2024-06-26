@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
@@ -24,7 +26,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ChoosePeopleFragment(val eventUid: String, val type: String) : DialogFragment() {
+class ChoosePeopleFragment(val eventUid: String, val type: String, val targetView: View) : DialogFragment() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: FragmentChoosePeopleBinding
@@ -181,30 +183,38 @@ class ChoosePeopleFragment(val eventUid: String, val type: String) : DialogFragm
 
     private fun handleEventType() {
         if(isAdded) {
-            when(type) {
+            when (type) {
                 "ent" -> {
-                    val activity = requireActivity() as? AppCompatActivity
-                    activity?.runOnUiThread {
-                        val event = activity.findViewById<ConstraintLayout>(R.id.allEntEvent)
-                        val success = activity.findViewById<ConstraintLayout>(R.id.suc_delete_ent)
-                        event.visibility = View.GONE
-                        success.visibility = View.VISIBLE
+                    requireActivity().runOnUiThread {
+                        val eventLayout = targetView.findViewById<ConstraintLayout>(R.id.allEntEvent)
+                        val successLayout = targetView.findViewById<ConstraintLayout>(R.id.suc_delete_ent)
+
+                        eventLayout?.visibility = View.GONE
+
+                        successLayout?.visibility = View.VISIBLE
+
+                        val successImage = successLayout?.findViewById<ImageView>(R.id.suc_del_image_ent)
+                        val successText = successLayout?.findViewById<TextView>(R.id.suc_del_text_ent)
+
+                        successImage?.setImageResource(R.drawable.success)
+                        successText?.text = "Событие успешно удалено!"
                     }
                 }
                 "eco" -> {
-
+                    // Handle eco type
                 }
                 "help" -> {
-
+                    // Handle help type
                 }
                 else -> {
-
+                    // Handle default case
                 }
             }
         } else {
             Log.e("INFOG", "Fragment not attached to activity")
         }
     }
+
     override fun onStart() {
         super.onStart()
         dialog?.window?.setLayout((resources.displayMetrics.widthPixels * 0.9).toInt(), (resources.displayMetrics.heightPixels * 0.7).toInt())

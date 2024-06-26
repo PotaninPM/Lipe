@@ -39,6 +39,7 @@ import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.create_events.CreateEventFragment
 import com.example.lipe.databinding.FragmentMapsBinding
+import com.example.lipe.friend_on_map_bottom_sheet.FriendOnMapBottomSheetFragment
 import com.example.lipe.rating_board.RatingFragment
 import com.example.lipe.reports.report_fragment_for_moderators.ReportsForModeratorsFragment
 import com.example.lipe.viewModels.EventEcoVM
@@ -272,20 +273,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             mMap.setOnMarkerClickListener { marker ->
 
                 if(marker.title != null) {
-                    val markerPosition = marker.position
-
-                    val latitude = markerPosition.latitude
-                    val longitude = markerPosition.longitude
-
-                    mMap.animateCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(latitude, longitude),
-                            17f
-                        )
-                    )
-
                     appVM.type = marker.title.toString()
-                    EventFragment.show(childFragmentManager)
+
+                    val friendOnMapDialogFragment = FriendOnMapBottomSheetFragment()
+                    friendOnMapDialogFragment.show(childFragmentManager, "FriendOnMapDialogFragment")
+
                 } else {
                     val markerPosition = marker.position
 
@@ -842,118 +834,120 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
-        binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
+        if(auth.currentUser != null) {
+            val mapFragment =
+                childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment?
+            mapFragment?.getMapAsync(callback)
+            binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
-        binding.allText.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            binding.allText.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
 
-        checkUsersRole()
+            checkUsersRole()
 
-        if(locationPermissions()) {
-            startLocationService()
-        } else {
-            requestLocationPermissions()
-        }
+            if (locationPermissions()) {
+                startLocationService()
+            } else {
+                requestLocationPermissions()
+            }
 
-        //if(isFirstTime()) {
+            //if(isFirstTime()) {
             view.post {
-                BeginDialogFragment.newInstance().show(childFragmentManager, "BeginDialogFragment")
-                markAsVisited()
-            }
-        //}
-
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.d("INFOG", "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-
-            val token = task.result
-
-            Log.d("INFOG", token)
-        })
-
-
-        binding.friends.setOnClickListener {
-            if (appVM.markersType != "friends") {
-                appVM.markersType = "friends"
-                resetBackgroundForBtns()
-                showMarkersByType("friends")
-                binding.friends.setBackgroundResource(R.drawable.vary_of_events)
-            }
-        }
-
-        binding.allEvents.setOnClickListener {
-            if (appVM.markersType != "all") {
-                appVM.markersType = "all"
-                resetBackgroundForBtns()
-                showMarkersByType("all")
-                binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
-            }
-        }
-
-        binding.ecoEvents.setOnClickListener {
-            if (appVM.markersType != "eco") {
-                appVM.markersType = "eco"
-                resetBackgroundForBtns()
-                showMarkersByType("eco")
-                binding.ecoEvents.setBackgroundResource(R.drawable.vary_of_events)
-            }
-        }
-
-        binding.entEvents.setOnClickListener {
-            if (appVM.markersType != "ent") {
-                appVM.markersType = "ent"
-                resetBackgroundForBtns()
-                showMarkersByType("ent")
-                binding.entEvents.setBackgroundResource(R.drawable.vary_of_events)
-            }
-        }
-
-        binding.helpEvents.setOnClickListener {
-            if (appVM.markersType != "help") {
-                appVM.markersType = "help"
-                resetBackgroundForBtns()
-                showMarkersByType("help")
-                binding.helpEvents.setBackgroundResource(R.drawable.vary_of_events)
-            }
-        }
-
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.profile -> {
-                    if(currentFragment !is ProfileFragment) {
-                        replaceFragment(ProfileFragment())
+                if(isAdded && context != null) {
+                    if(isFirstTime()) {
+                        BeginDialogFragment.newInstance()
+                            .show(childFragmentManager, "BeginDialogFragment")
+                        markAsVisited()
                     }
                 }
-                R.id.map -> {
-                    if(currentFragment !is MapsFragment) {
-                        replaceFragment(MapsFragment())
-                    }
-                }
-                R.id.rating -> {
-                    if(currentFragment !is RatingFragment) {
-                        replaceFragment(RatingFragment())
-                    }
-                }
-                R.id.chats -> {
-                    if(currentFragment !is ChatsAndGroupsFragment) {
-                        replaceFragment(ChatsAndGroupsFragment())
-                    }
-                }
-                R.id.reports -> {
-                    if(currentFragment !is ReportsForModeratorsFragment) {
-                        replaceFragment(ReportsForModeratorsFragment())
-                    }
-                }
-                else -> {
+            }
+            //}
 
+
+            binding.friends.setOnClickListener {
+                if (appVM.markersType != "friends") {
+                    appVM.markersType = "friends"
+                    resetBackgroundForBtns()
+                    showMarkersByType("friends")
+                    binding.friends.setBackgroundResource(R.drawable.vary_of_events)
                 }
             }
-            true
+
+            binding.allEvents.setOnClickListener {
+                if (appVM.markersType != "all") {
+                    appVM.markersType = "all"
+                    resetBackgroundForBtns()
+                    showMarkersByType("all")
+                    binding.allEvents.setBackgroundResource(R.drawable.vary_of_events)
+                }
+            }
+
+            binding.ecoEvents.setOnClickListener {
+                if (appVM.markersType != "eco") {
+                    appVM.markersType = "eco"
+                    resetBackgroundForBtns()
+                    showMarkersByType("eco")
+                    binding.ecoEvents.setBackgroundResource(R.drawable.vary_of_events)
+                }
+            }
+
+            binding.entEvents.setOnClickListener {
+                if (appVM.markersType != "ent") {
+                    appVM.markersType = "ent"
+                    resetBackgroundForBtns()
+                    showMarkersByType("ent")
+                    binding.entEvents.setBackgroundResource(R.drawable.vary_of_events)
+                }
+            }
+
+            binding.helpEvents.setOnClickListener {
+                if (appVM.markersType != "help") {
+                    appVM.markersType = "help"
+                    resetBackgroundForBtns()
+                    showMarkersByType("help")
+                    binding.helpEvents.setBackgroundResource(R.drawable.vary_of_events)
+                }
+            }
+
+            binding.bottomNavigation.setOnItemSelectedListener { item ->
+                when (item.itemId) {
+                    R.id.profile -> {
+                        if (currentFragment !is ProfileFragment) {
+                            replaceFragment(ProfileFragment())
+                        }
+                    }
+
+                    R.id.map -> {
+                        if (currentFragment !is MapsFragment) {
+                            replaceFragment(MapsFragment())
+                        }
+                    }
+
+                    R.id.rating -> {
+                        if (currentFragment !is RatingFragment) {
+                            replaceFragment(RatingFragment())
+                        }
+                    }
+
+                    R.id.chats -> {
+                        if (currentFragment !is ChatsAndGroupsFragment) {
+                            replaceFragment(ChatsAndGroupsFragment())
+                        }
+                    }
+
+                    R.id.reports -> {
+                        if (currentFragment !is ReportsForModeratorsFragment) {
+                            replaceFragment(ReportsForModeratorsFragment())
+                        }
+                    }
+
+                    else -> {
+
+                    }
+                }
+                true
+            }
         }
 
     }

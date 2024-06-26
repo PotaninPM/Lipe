@@ -44,7 +44,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/imageView10"
+                    android:id="@+id/suc_del_image_ent"
                     android:layout_width="@dimen/_140sdp"
                     android:layout_height="@dimen/_140sdp"
                     android:src="@drawable/success"
@@ -53,13 +53,14 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/suc_del_text_ent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunitosansbold"
                     android:text="@string/suc_delete"
                     android:layout_marginTop="@dimen/_4sdp"
                     android:textSize="@dimen/_14sdp"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+                    app:layout_constraintTop_toBottomOf="@+id/suc_del_image_ent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

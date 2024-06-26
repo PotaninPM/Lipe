@@ -2,14 +2,18 @@ package com.example.lipe.friend_on_map_bottom_sheet
 
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.core.graphics.drawable.toBitmap
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.Coil
+import coil.load
 import coil.request.ImageRequest
 import com.example.lipe.all_profiles.friends.FriendItem
 import com.example.lipe.all_profiles.friends.FriendsBottomSheetAdapter
@@ -26,40 +30,30 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class FriendOnMapBottomSheetFragment : BottomSheetDialogFragment() {
+class FriendOnMapBottomSheetFragment : DialogFragment() {
 
     private lateinit var binding: FragmentFriendOnMapBottomSheetBinding
-
-    private lateinit var adapter: FriendOnBottomSheetAdapter
+    private lateinit var storage: StorageReference
 
     private val appVM: AppVM by activityViewModels()
-
-    private lateinit var storage: StorageReference
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentFriendOnMapBottomSheetBinding.inflate(inflater, container, false)
-
         storage = FirebaseStorage.getInstance().reference
 
-        adapter = FriendOnBottomSheetAdapter(lifecycleScope, appVM.type)
-        binding.friendsRecView.layoutManager = LinearLayoutManager(requireContext())
-        binding.friendsRecView.adapter = adapter
-
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setData()
-        setPeople()
+
+        binding.closeFriend.setOnClickListener {
+            dismiss()
+        }
     }
 
     private fun setData() {
@@ -68,7 +62,7 @@ class FriendOnMapBottomSheetFragment : BottomSheetDialogFragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 binding.username.setText(snapshot.child("username").value.toString())
                 binding.name.setText(snapshot.child("firstAndLastName").value.toString())
-                binding.battery.setText(snapshot.child("batteryLevel").value.toString())
+                binding.battery.setText(snapshot.child("batteryLevel").value.toString() + "%")
 
                 lifecycleScope.launch {
                     val bitmap: Bitmap = withContext(Dispatchers.IO) {
@@ -80,45 +74,22 @@ class FriendOnMapBottomSheetFragment : BottomSheetDialogFragment() {
                     }
                     binding.avatar.setImageBitmap(bitmap)
                 }
-
-                binding.friendsText.setText("Друзья: ")
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                // Handle error
             }
-
         })
     }
 
-    private fun setPeople() {
-        val dbRef_your_friends = FirebaseDatabase.getInstance().getReference("users/${appVM.type}/friends")
-        val yourFriends = ArrayList<FriendItem>()
-        dbRef_your_friends.addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for(friend in snapshot.children) {
-                    val friendUid = friend.value.toString()
-                    val friendDbRef = FirebaseDatabase.getInstance().getReference("users/$friendUid")
-                    friendDbRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            val name = snapshot.child("firstAndLastName").value.toString()
-                            storage.child("avatars").child("$friendUid").downloadUrl.addOnSuccessListener { url ->
-                                yourFriends.add(FriendItem(url.toString(), name, friendUid))
-                                adapter.updateFriends(yourFriends)
-                            }
-                        }
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.95).toInt(),
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        dialog?.window?.attributes?.gravity = Gravity.TOP
 
-                        override fun onCancelled(error: DatabaseError) {
-                            TODO("Not yet implemented")
-                        }
-                    })
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        })
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
     }
 }

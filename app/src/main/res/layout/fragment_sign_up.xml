@@ -88,7 +88,7 @@
                 app:counterMaxLength="50"
                 app:errorEnabled="true">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:hint="Введите пароль"
+                    android:hint="@string/pass_text"
                     android:id="@+id/etPassinput"
                     android:inputType="textPassword"
                     android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:singleLine="true"
-                android:text="Далее"
+                android:text="@string/next"
                 android:textAllCaps="false"
                 android:textColor="@color/quantum_white_100"
                 android:textFontWeight="600"

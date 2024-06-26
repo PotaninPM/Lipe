@@ -17,6 +17,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import coil.Coil
+import coil.load
 import coil.request.ImageRequest
 import com.example.lipe.R
 import com.example.lipe.all_profiles.EventsInProfileTabAdapter
@@ -51,46 +52,51 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if(isAdded) {
 
-            binding.apply {
-                theme.setOnClickListener {
-                    selectImageTheme.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                }
+            if(auth.currentUser != null) {
+                binding.apply {
+                    theme.setOnClickListener {
+                        selectImageTheme.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    }
 
-                changeYourInfo.setOnClickListener {
-                    val bottomSheet = ChangeInfoBottomSheet()
-                    bottomSheet.show(childFragmentManager, "ChangeInfoBottomSheet")
-                }
+                    changeYourInfo.setOnClickListener {
+                        val bottomSheet = ChangeInfoBottomSheet()
+                        bottomSheet.show(childFragmentManager, "ChangeInfoBottomSheet")
+                    }
 
-                avatar.setOnClickListener {
-                    selectImageAvatar.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                }
+                    avatar.setOnClickListener {
+                        selectImageAvatar.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    }
 
-                friendsAmountLay.setOnClickListener {
-                    val friendBottomSheet = FriendsBottomSheet()
-                    friendBottomSheet.show(childFragmentManager, "FriendsBottomSheet")
-                }
+                    friendsAmountLay.setOnClickListener {
+                        val friendBottomSheet = FriendsBottomSheet()
+                        friendBottomSheet.show(childFragmentManager, "FriendsBottomSheet")
+                    }
 
-                tabLayout.apply {
+                    tabLayout.apply {
 
-                    addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
-                        override fun onTabSelected(tab: TabLayout.Tab?) {
-                            binding.viewPager.currentItem = tab!!.position
+                        addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                            override fun onTabSelected(tab: TabLayout.Tab?) {
+                                binding.viewPager.currentItem = tab!!.position
+                            }
+
+                            override fun onTabUnselected(p0: TabLayout.Tab?) {}
+
+                            override fun onTabReselected(p0: TabLayout.Tab?) {}
+
+                        })
+                    }
+
+                    viewPager.registerOnPageChangeCallback(object :
+                        ViewPager2.OnPageChangeCallback() {
+                        override fun onPageSelected(position: Int) {
+                            super.onPageSelected(position)
+
+                            binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
                         }
-
-                        override fun onTabUnselected(p0: TabLayout.Tab?) {}
-
-                        override fun onTabReselected(p0: TabLayout.Tab?) {}
-
                     })
                 }
-
-                viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
-                    override fun onPageSelected(position: Int) {
-                        super.onPageSelected(position)
-
-                        binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
-                    }
-                })
+            } else {
+                auth.signOut()
             }
         }
     }

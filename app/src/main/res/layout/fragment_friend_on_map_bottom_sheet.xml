@@ -3,9 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/_10sdp"
+    android:background="@drawable/begin_dialog"
     tools:context=".friend_on_map_bottom_sheet.FriendOnMapBottomSheetFragment">
 
+    <ImageView
+        android:id="@+id/close_friend"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:src="@drawable/close_48px"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <ImageView
         android:id="@+id/imageView8"
         android:layout_width="@dimen/_28sdp"
@@ -31,7 +41,7 @@
         android:layout_width="@dimen/_90sdp"
         android:layout_height="@dimen/_90sdp"
         android:layout_marginTop="@dimen/_13sdp"
-        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginStart="@dimen/_8sdp"
         android:padding="@dimen/_2sdp"
         android:scaleType="centerCrop"
         android:src="?attr/colorOnSurfaceInverse"
@@ -57,7 +67,7 @@
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="@dimen/_12sdp"
         android:fontFamily="@font/nunitosansextrabold"
         android:textSize="@dimen/_15sdp"
         app:layout_constraintBottom_toTopOf="@+id/name"
@@ -65,24 +75,4 @@
         app:layout_constraintTop_toTopOf="@+id/avatar"
         app:layout_constraintVertical_bias="0.775" />
 
-    <TextView
-        android:id="@+id/friendsText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_12sdp"
-        android:layout_marginTop="@dimen/_12sdp"
-        android:fontFamily="@font/nunitosansbold"
-        android:textSize="@dimen/_14sdp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/avatar" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/friendsRecView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_12sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
-        tools:listitem="@layout/friend_item_with_remove"
-        android:layout_marginTop="@dimen/_4sdp"
-        app:layout_constraintTop_toBottomOf="@+id/friendsText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

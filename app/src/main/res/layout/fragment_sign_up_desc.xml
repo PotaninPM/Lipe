@@ -138,16 +138,7 @@
                         android:layout_marginStart="@dimen/_6sdp"
                         android:layout_marginTop="@dimen/_6sdp"
                         android:layout_marginEnd="@dimen/_6sdp"
-                        android:orientation="vertical">
-
-                        <androidx.appcompat.widget.AppCompatSpinner
-                            android:id="@+id/spinner1"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_46sdp"
-                            android:layout_gravity="center"
-                            android:spinnerMode="dropdown" />
-
-                    </LinearLayout>
+                        android:orientation="vertical"/>
                     <!--                descText-->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/descTextLay"

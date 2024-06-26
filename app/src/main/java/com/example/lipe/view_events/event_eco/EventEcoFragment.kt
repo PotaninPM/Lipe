@@ -303,7 +303,7 @@ class EventEcoFragment : Fragment() {
 
         dialog = when(lay) {
             0 -> PeopleGoToEventFragment(eventEcoVM.id.value.toString())
-            1 -> ChoosePeopleFragment(eventEcoVM.id.value.toString(), "eco")
+            1 -> ChoosePeopleFragment(eventEcoVM.id.value.toString(), "eco", requireView())
             else -> DialogFragment()
         }
         dialog.show(childFragmentManager, "PeopleGoDialog")

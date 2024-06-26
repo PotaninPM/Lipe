@@ -19,22 +19,6 @@ class AppVM: ViewModel() {
 
     var markersType: String = ""
 
-    val selectedItems: MutableLiveData<MutableList<SignUpDescFragment.SpinnerItem>> by lazy {
-        MutableLiveData<MutableList<SignUpDescFragment.SpinnerItem>>(mutableListOf())
-    }
-
-    fun addItem(item: SignUpDescFragment.SpinnerItem) {
-        val items = selectedItems.value ?: mutableListOf()
-        items.add(item)
-        selectedItems.value = items
-    }
-
-    fun removeItem(item: SignUpDescFragment.SpinnerItem) {
-        val items = selectedItems.value ?: return
-        items.remove(item)
-        selectedItems.value = items
-    }
-
     fun setCoord(lat: Double, long: Double) {
         latitude = lat
         longtitude = long

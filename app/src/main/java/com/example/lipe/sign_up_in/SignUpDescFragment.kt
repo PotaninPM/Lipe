@@ -57,38 +57,6 @@ class SignUpDescFragment : Fragment() {
 
     private lateinit var binding: FragmentSignUpDescBinding
 
-    private var selectedItems: MutableList<SpinnerItem> = mutableListOf()
-
-    private var items: List<SpinnerItem> = listOf(
-        SpinnerItem("Ваши увлечения", R.drawable.light_bulb),
-        //summer act
-        SpinnerItem("Баскетбол", R.drawable.img_basketballimg),
-        SpinnerItem("Воллейбол", R.drawable.volleyball_2),
-        SpinnerItem("Футбол", R.drawable.football),
-        SpinnerItem("Рэгби", R.drawable.rugby_ball),
-        SpinnerItem("Воркаут", R.drawable.weights),
-        SpinnerItem("Большой тенис", R.drawable.tennis),
-        SpinnerItem("Бадминтон", R.drawable.shuttlecock),
-        SpinnerItem("Пинпонг", R.drawable.table_tennis),
-        SpinnerItem("Гимнастика", R.drawable.gymnastic_rings),
-        SpinnerItem("Фехтование", R.drawable.fencing),
-        SpinnerItem("Бег", R.drawable.running_shoe),
-        //winter act
-        SpinnerItem("Кёрлинг", R.drawable.curling),
-        SpinnerItem("Хоккей", R.drawable.ice_hockey),
-        SpinnerItem("Катание на коньках", R.drawable.ice_skate),
-        SpinnerItem("Лыжная ходьба", R.drawable.skiing_1),
-        SpinnerItem("Горные лыжи", R.drawable.skiing),
-        SpinnerItem("Сноуборд", R.drawable.snowboarding),
-        //home act
-        SpinnerItem("Настольные игры", R.drawable.board_game),
-        SpinnerItem("Мобильные игры", R.drawable.mobile_game),
-        SpinnerItem("Шахматы", R.drawable.chess_2),
-        //program
-        SpinnerItem("Программирование", R.drawable.programming),
-        //noth
-        SpinnerItem("Ничего", R.drawable.remove),
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -103,32 +71,9 @@ class SignUpDescFragment : Fragment() {
         dbRef = FirebaseDatabase.getInstance().getReference("users")
         auth = FirebaseAuth.getInstance()
 
-        spinner = binding.spinner1
-
         binding.all.visibility = View.VISIBLE
         binding.progressBar.visibility = View.GONE
         binding.progressText.visibility = View.GONE
-
-        val adapter = CustomAdapter(requireContext(), items, appVM.selectedItems)
-
-        spinner.adapter = adapter
-
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedItem = adapter.getItem(position)
-                if (selectedItem != null) {
-                    if (appVM.selectedItems.value?.contains(selectedItem) == true) {
-                        appVM.removeItem(selectedItem)
-                    } else {
-                        appVM.addItem(selectedItem)
-                    }
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Do nothing
-            }
-        }
 
         val view = binding.root
         return view
@@ -310,57 +255,6 @@ class SignUpDescFragment : Fragment() {
     fun checkForEmpty(desc: String) {
         if(desc.isEmpty()) {
             Toast.makeText(requireContext(), "Введите описание!", Toast.LENGTH_LONG).show()
-        }
-    }
-
-    data class SpinnerItem(val name: String, val imageResourceId: Int)
-
-    private class CustomAdapter(
-        context: Context,
-        private val items: List<SpinnerItem>,
-        private val selectedItems: MutableLiveData<MutableList<SpinnerItem>>
-    ) : ArrayAdapter<SpinnerItem>(context, R.layout.spinner_multi_chose, items) {
-
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val view = convertView ?: LayoutInflater.from(context)
-                .inflate(R.layout.spinner_multi_chose, parent, false)
-
-            val checkBox = view.findViewById<CheckBox>(R.id.checkBox)
-            val imageView = view.findViewById<ImageView>(R.id.imageView)
-            val textView = view.findViewById<TextView>(R.id.textView)
-
-            if (position == 0) {
-                checkBox.visibility = View.GONE
-            } else {
-                checkBox.visibility = View.VISIBLE
-                val item = getItem(position)
-                checkBox.isChecked = selectedItems.value?.contains(item) ?: false
-                checkBox.setOnCheckedChangeListener { _, isChecked ->
-                    val selectedItem = getItem(position)
-                    selectedItem?.let {
-                        val currentList = selectedItems.value ?: mutableListOf()
-                        if (isChecked) {
-                            if (!currentList.contains(selectedItem)) {
-                                currentList.add(selectedItem)
-                                selectedItems.value = currentList
-                            }
-                        } else {
-                            currentList.remove(selectedItem)
-                            selectedItems.value = currentList
-                        }
-                    }
-                }
-            }
-
-            val item = getItem(position)
-            textView.text = item?.name
-            imageView.setImageResource(item?.imageResourceId ?: 0)
-
-            return view
-        }
-
-        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-            return getView(position, convertView, parent)
         }
     }
 }

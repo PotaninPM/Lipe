@@ -106,40 +106,43 @@ class EventEntFragment : Fragment() {
             if (ready) {
                 loadAllImages { ready ->
                     if (ready) {
-                        checkIfUserAlreadyReg(
-                            auth.currentUser!!.uid,
-                            eventEntVM.id.value.toString()
-                        ) { ans ->
-                            if (ans) {
-                                val date_ = eventEntVM.date.value
-                                binding.dateOfMeetingEnt.text = date_
+                        if(isAdded && context != null) {
+                            checkIfUserAlreadyReg(
+                                auth.currentUser!!.uid,
+                                eventEntVM.id.value.toString()
+                            ) { ans ->
+                                if (ans) {
+                                    val date_ = eventEntVM.date.value
+                                    binding.dateOfMeetingEnt.text = date_
 
-                                binding.btnRegToEvent.visibility = View.INVISIBLE
+                                    binding.btnRegToEvent.visibility = View.INVISIBLE
 
-                                if (eventEntVM.creator.value == user) {
-                                    binding.deleteOrLeave.visibility = View.VISIBLE
-                                    binding.deleteOrLeave.text = getString(R.string.finish)
+                                    if (eventEntVM.creator.value == user) {
+                                        binding.deleteOrLeave.visibility = View.VISIBLE
+                                        binding.deleteOrLeave.text = getString(R.string.finish)
 
-                                    binding.listUsers.text = getString(R.string.list)
-                                    binding.listUsers.visibility = View.VISIBLE
+                                        binding.listUsers.text = getString(R.string.list)
+                                        binding.listUsers.visibility = View.VISIBLE
 
-                                    binding.report.visibility = View.INVISIBLE
+                                        binding.report.visibility = View.INVISIBLE
+                                    } else {
+                                        binding.deleteOrLeave.text = getString(R.string.leave)
+                                        binding.deleteOrLeave.visibility = View.VISIBLE
+
+                                        binding.listUsers.text = getString(R.string.list)
+                                        binding.listUsers.visibility = View.VISIBLE
+                                        binding.report.visibility = View.INVISIBLE
+                                    }
+
+                                    binding.allEntEvent.visibility = View.VISIBLE
+                                    binding.loadingProgressBar.visibility = View.GONE
                                 } else {
-                                    binding.deleteOrLeave.text = getString(R.string.leave)
-                                    binding.deleteOrLeave.visibility = View.VISIBLE
+                                    binding.allEntEvent.visibility = View.VISIBLE
+                                    binding.loadingProgressBar.visibility = View.GONE
+                                    binding.report.visibility = View.VISIBLE
 
-                                    binding.listUsers.text = getString(R.string.list)
-                                    binding.listUsers.visibility = View.VISIBLE
-                                    binding.report.visibility = View.INVISIBLE
+                                    binding.dateOfMeetingEnt.text = "*******"
                                 }
-
-                                binding.allEntEvent.visibility = View.VISIBLE
-                                binding.loadingProgressBar.visibility = View.GONE
-                            } else {
-                                binding.allEntEvent.visibility = View.VISIBLE
-                                binding.loadingProgressBar.visibility = View.GONE
-
-                                binding.dateOfMeetingEnt.text = "*******"
                             }
                         }
                     }
@@ -196,7 +199,6 @@ class EventEntFragment : Fragment() {
                                         getString(R.string.nice)
                                     )
                                 } else {
-                                    //fail
                                     setDialog(
                                         getString(R.string.error_reg),
                                         getString(R.string.smth_went_wrong_reg_event),
@@ -221,7 +223,7 @@ class EventEntFragment : Fragment() {
 
         dialog = when(lay) {
             0 -> PeopleGoToEventFragment(eventEntVM.id.value.toString())
-            1 -> ChoosePeopleFragment(eventEntVM.id.value.toString(), "ent")
+            1 -> ChoosePeopleFragment(eventEntVM.id.value.toString(), "ent", requireView())
             else -> DialogFragment()
         }
         dialog.show(childFragmentManager, "PeopleGoDialog")

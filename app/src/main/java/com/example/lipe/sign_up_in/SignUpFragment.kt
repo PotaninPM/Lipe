@@ -147,7 +147,6 @@ class SignUpFragment : Fragment() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    // Handle successful sign-in
                     val user = auth.currentUser
                     user?.let {
                         val email = it.email

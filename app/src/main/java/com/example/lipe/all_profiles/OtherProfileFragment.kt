@@ -71,7 +71,7 @@ class OtherProfileFragment(val personUid: String) : Fragment() {
                 lifecycleOwner = viewLifecycleOwner
                 viewModel = otherProfileVM
 
-                adapter = EventsInProfileTabAdapter(childFragmentManager, lifecycle, auth.currentUser!!.uid)
+                adapter = EventsInProfileTabAdapter(childFragmentManager, lifecycle, personUid)
                 binding.switcherOther.adapter = adapter
 
                 loadingProgressBar.visibility = View.VISIBLE
