@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
-import com.example.lipe.friend_on_map_bottom_sheet.FriendOnMapBottomSheetFragment
+import com.example.lipe.friend_on_map_dialog.FriendOnMapBottomSheetFragment
 import com.example.lipe.R
 import com.example.lipe.databinding.FragmentEventBinding
 import com.example.lipe.viewModels.AppVM

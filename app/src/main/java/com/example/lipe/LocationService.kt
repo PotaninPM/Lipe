@@ -17,7 +17,7 @@ import com.google.firebase.database.FirebaseDatabase
 
 class LocationService : Service() {
 
-    //please do not see this part of code, it will appear in the future
+    //please do not watch at this part of code, it will appear in the future
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback

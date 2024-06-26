@@ -162,4 +162,7 @@
     <string name="or">или</string>
     <string name="no_ac">Еще нет аккаунта? Зарегистрируйтесь</string>
     <string name="user_s_events">События юзера</string>
+    <string name="begin_friend_dialog">Чтобы посмотреть информацию о друге на карте, нажмите на его аватарку на карте, информация появится на верху экрана</string>
+    <string name="league">Лига</string>
+    <string name="leagues">Лиги</string>
 </resources>

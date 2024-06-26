@@ -17,6 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout2"
             android:layout_width="match_parent"
@@ -25,17 +27,63 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+<!--            <ImageView-->
+<!--                android:id="@+id/imageView11"-->
+<!--                android:layout_width="@dimen/_140sdp"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:background="@drawable/vine"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
+
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/constraintLayout8"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/_65sdp"
                 android:layout_marginStart="@dimen/_14sdp"
                 app:layout_constraintBottom_toBottomOf="@+id/userRatingAvatar"
+                app:layout_constraintEnd_toStartOf="@+id/userRatingAvatar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/userRatingAvatar">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/league"
+                    android:layout_width="@dimen/_65sdp"
+                    android:layout_height="@dimen/_65sdp"
+                    android:background="@drawable/league_info"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/place_in_rating"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:src="@drawable/league"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/league_text" />
+
+                    <TextView
+                        android:id="@+id/league_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:fontFamily="@font/roboto_bold"
+                        android:text="@string/league"
+                        android:textColor="@color/quantum_white_100"
+                        android:textSize="@dimen/_13sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/place_in_rating"
-                    android:layout_width="@dimen/_142sdp"
+                    android:layout_width="@dimen/_112sdp"
                     android:layout_height="@dimen/_27sdp"
                     android:background="@drawable/rating_info"
                     app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +95,7 @@
                         android:layout_height="@dimen/_18sdp"
                         android:layout_marginStart="@dimen/_8sdp"
                         android:backgroundTint="?attr/colorOnSurfaceInverse"
-                        android:src="@drawable/medal"
+                        android:src="@drawable/workspace_premium_48px"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -56,9 +104,9 @@
                         android:id="@+id/place_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_6sdp"
                         android:fontFamily="@font/roboto_bold"
                         android:text="@string/place"
-                        android:layout_marginStart="@dimen/_6sdp"
                         android:textColor="@color/quantum_white_100"
                         android:textSize="@dimen/_13sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -70,19 +118,19 @@
                         android:id="@+id/place_in_rating_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_12sdp"
                         android:fontFamily="@font/roboto_bold"
                         android:text="@{viewModel.place}"
                         android:textColor="@color/quantum_white_100"
                         android:textSize="@dimen/_13sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/place_text"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/linearLayout2"
-                    android:layout_width="@dimen/_142sdp"
+                    android:layout_width="@dimen/_112sdp"
                     android:layout_height="@dimen/_27sdp"
                     android:background="@drawable/rating_info"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -94,7 +142,7 @@
                         android:layout_height="@dimen/_17sdp"
                         android:layout_marginStart="@dimen/_8sdp"
                         android:backgroundTint="?attr/colorOnSurfaceInverse"
-                        android:src="@drawable/trophy2"
+                        android:src="@drawable/trophy_48px"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -103,9 +151,9 @@
                         android:id="@+id/pointsText_"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_6sdp"
                         android:fontFamily="@font/roboto_bold"
                         android:text="@string/points"
-                        android:layout_marginStart="@dimen/_6sdp"
                         android:textColor="@color/quantum_white_100"
                         android:textSize="@dimen/_13sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -116,13 +164,13 @@
                         android:id="@+id/points_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/_12sdp"
                         android:fontFamily="@font/roboto_bold"
                         android:text="@{viewModel.ratingPoints}"
                         android:textColor="@color/quantum_white_100"
                         android:textSize="@dimen/_13sdp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/pointsText_"
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -130,9 +178,12 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/userRatingAvatar"
-                android:layout_width="@dimen/_95sdp"
-                android:layout_height="@dimen/_95sdp"
+                android:layout_width="@dimen/_90sdp"
+                android:layout_height="@dimen/_90sdp"
                 android:layout_marginEnd="@dimen/_12sdp"
+                android:padding="@dimen/_1sdp"
+                app:strokeColor="@color/_green"
+                app:strokeWidth="@dimen/_1sdp"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

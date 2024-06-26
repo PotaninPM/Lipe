@@ -32,6 +32,7 @@ class BeginDialogFragment : DialogFragment() {
             getString(R.string.finger),
             getString(R.string.theme_help),
             getString(R.string.friends_view),
+            getString(R.string.begin_friend_dialog),
             getString(R.string.can)
         )
 
@@ -40,6 +41,7 @@ class BeginDialogFragment : DialogFragment() {
             R.drawable.left_click,
             R.drawable.lipe,
             R.drawable.friends_photo,
+            R.drawable.friend_dialog,
             R.drawable.success,
         )
     }
@@ -72,7 +74,7 @@ class BeginDialogFragment : DialogFragment() {
         } else {
             binding.backTipButton.visibility = View.VISIBLE
             if(currentTipIndex != 0)
-                progress = (currentTipIndex) * 25
+                progress = (currentTipIndex) * (20)
             binding.progressText.text = "$progress%"
             binding.progressBar.progress = progress
             binding.tipTextView.text = tips[currentTipIndex]
@@ -81,6 +83,8 @@ class BeginDialogFragment : DialogFragment() {
 
         if(currentTipIndex == 0) {
             binding.backTipButton.visibility = View.GONE
+            binding.progressText.text = "0%"
+            binding.progressBar.progress = 0
         } else {
             binding.backTipButton.visibility = View.VISIBLE
         }
@@ -88,6 +92,7 @@ class BeginDialogFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
+        dialog?.setCanceledOnTouchOutside(false)
         dialog?.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
     }

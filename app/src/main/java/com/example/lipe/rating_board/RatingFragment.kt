@@ -14,6 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.ImageLoader
 import coil.request.ImageRequest
+import com.example.lipe.BeginDialogFragment
+import com.example.lipe.LeagueInfoFragment
 import com.example.lipe.databinding.FragmentRatingBinding
 import com.example.lipe.viewModels.RatingVM
 import com.google.firebase.auth.FirebaseAuth
@@ -58,6 +60,12 @@ class RatingFragment : Fragment() {
             binding.cardView.visibility = View.VISIBLE
 
             binding.recyclerView.setHasFixedSize(true)
+
+            binding.league.setOnClickListener {
+                LeagueInfoFragment.newInstance()
+                    .show(childFragmentManager, "LeagueInfoFragment")
+            }
+
 
             binding.searchView.addTextChangedListener {
                     if(it.isNullOrEmpty()) {

@@ -162,4 +162,7 @@
     <string name="or">or</string>
     <string name="no_ac">Dont have an account? Sign up</string>
     <string name="user_s_events">User\'s events</string>
+    <string name="begin_friend_dialog">To see information about a friend on the map, click on his avatar on the map, the information will appear at the top of the screen</string>
+    <string name="league">League</string>
+    <string name="leagues">Leagues</string>
 </resources>

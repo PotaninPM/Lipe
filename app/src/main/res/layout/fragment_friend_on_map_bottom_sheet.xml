@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:paddingBottom="@dimen/_13sdp"
     android:background="@drawable/begin_dialog"
-    tools:context=".friend_on_map_bottom_sheet.FriendOnMapBottomSheetFragment">
+    tools:context=".friend_on_map_dialog.FriendOnMapBottomSheetFragment">
 
     <ImageView
         android:id="@+id/close_friend"
