@@ -264,7 +264,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:icon="@drawable/star_48px"
-                            android:text="@string/your_events" />
+                            android:text="@string/user_s_events" />
                     </com.google.android.material.tabs.TabLayout>
 
                     <androidx.viewpager2.widget.ViewPager2

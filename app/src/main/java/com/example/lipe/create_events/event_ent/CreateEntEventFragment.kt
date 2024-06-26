@@ -452,10 +452,14 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                 getString(R.string.date_of_meeting), getString(R.string.okey))
             check = false
         }
-        if(typeSport == "1") {
-            setDialog(getString(R.string.no_sport_error),
-                getString(R.string.must_type_sport), getString(R.string.okey))
-            check = false
+        if(isAdded) {
+            if (typeSport == "1" || typeSport == getString(R.string.choose_ent_type)) {
+                setDialog(
+                    getString(R.string.no_sport_error),
+                    getString(R.string.must_type_sport), getString(R.string.okey)
+                )
+                check = false
+            }
         }
         return check
     }
@@ -527,7 +531,7 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         binding.timeText.text = String.format("%02d:%02d", savedHour, savedMinute)
 
         val locale = Locale.getDefault().language
-        Log.i("INFOG", locale.toString())
+
         val months = if (locale == "ru") {
             resources.getStringArray(R.array.months_ru)
         } else {

@@ -48,10 +48,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".LocationService"
-            android:exported="false"
-            android:foregroundServiceType="location" />
+<!--        <service-->
+<!--            android:name=".LocationService"-->
+<!--            android:exported="false"-->
+<!--            android:foregroundServiceType="location" />-->
     </application>
 
 </manifest>

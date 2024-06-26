@@ -161,4 +161,5 @@
     <string name="enter">Sign in</string>
     <string name="or">or</string>
     <string name="no_ac">Dont have an account? Sign up</string>
+    <string name="user_s_events">User\'s events</string>
 </resources>

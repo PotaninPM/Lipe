@@ -60,14 +60,15 @@
                         android:layout_width="@dimen/_18sdp"
                         android:layout_height="@dimen/_18sdp"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_6sdp"
-                        android:src="@drawable/select_all" />
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:src="@drawable/all" />
 
                     <TextView
                         android:id="@+id/all_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/_3sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
                         android:gravity="center"
                         android:text="@string/all"

@@ -161,4 +161,5 @@
     <string name="enter">Войти</string>
     <string name="or">или</string>
     <string name="no_ac">Еще нет аккаунта? Зарегистрируйтесь</string>
+    <string name="user_s_events">События юзера</string>
 </resources>
