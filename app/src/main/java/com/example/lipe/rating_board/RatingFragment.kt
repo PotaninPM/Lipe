@@ -16,6 +16,7 @@ import coil.ImageLoader
 import coil.request.ImageRequest
 import com.example.lipe.BeginDialogFragment
 import com.example.lipe.LeagueInfoFragment
+import com.example.lipe.R
 import com.example.lipe.databinding.FragmentRatingBinding
 import com.example.lipe.viewModels.RatingVM
 import com.google.firebase.auth.FirebaseAuth
@@ -162,10 +163,18 @@ class RatingFragment : Fragment() {
                 val dbRef_user = FirebaseDatabase.getInstance().getReference("users/$user")
                 dbRef_user.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
+                        val points = snapshot.child("points").value.toString()
+                        val league = when {
+                            points.toInt() in 0..199 -> binding.leagueImg.setImageResource(R.drawable.log)
+                            points.toInt() in 200..499 -> binding.leagueImg.setImageResource(R.drawable.iron)
+                            points.toInt() in 500..999 -> binding.leagueImg.setImageResource(R.drawable.gold_league)
+                            points.toInt() >= 1000 -> binding.leagueImg.setImageResource(R.drawable.gem)
+                            else -> "Unknown"
+                        }
                         ratingVM.setInfo(
-                            snapshot.child("points").value.toString(),
+                            points,
                             snapshot.child("place_in_rating").value.toString(),
-                            it.toString()
+                            it.toString(),
                         )
                     }
 

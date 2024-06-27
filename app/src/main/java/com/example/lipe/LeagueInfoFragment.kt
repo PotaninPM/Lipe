@@ -21,6 +21,14 @@ class LeagueInfoFragment : DialogFragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.closeBtn.setOnClickListener {
+            dismiss()
+        }
+    }
+
     override fun onStart() {
         super.onStart()
 

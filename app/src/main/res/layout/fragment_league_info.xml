@@ -10,6 +10,15 @@
     android:layout_marginEnd="@dimen/_3sdp"
     tools:context=".LeagueInfoFragment">
 
+    <ImageView
+        android:id="@+id/closeBtn"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:src="@drawable/close_48px"
+        app:layout_constraintBottom_toBottomOf="@+id/textView14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView14" />
+
     <TextView
         android:id="@+id/textView14"
         android:layout_width="wrap_content"
@@ -23,9 +32,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/_250sdp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginTop="@dimen/_4sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView14">
@@ -70,7 +80,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:fontFamily="@font/nunitosansbold"
-                        android:text="Бриллиантовая"
+                        android:text="@string/diamond"
                         android:textSize="@dimen/_14sdp" />
 
                     <TextView
@@ -79,7 +89,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:fontFamily="@font/nunito_sans"
-                        android:text="1000+ баллов" />
+                        android:text="@string/_1000" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -114,7 +124,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:fontFamily="@font/nunitosansbold"
-                        android:text="Золотая"
+                        android:text="@string/gold"
                         android:textSize="@dimen/_14sdp" />
 
                     <TextView
@@ -123,7 +133,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:fontFamily="@font/nunito_sans"
-                        android:text="500-999 баллов" />
+                        android:text="@string/_500_999" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -175,7 +185,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:fontFamily="@font/nunitosansbold"
-                        android:text="Железная"
+                        android:text="@string/iron"
                         android:textSize="@dimen/_14sdp" />
 
                     <TextView
@@ -184,7 +194,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:fontFamily="@font/nunito_sans"
-                        android:text="200 ● 500 баллов" />
+                        android:text="@string/_200_500" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -219,7 +229,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:fontFamily="@font/nunitosansbold"
-                        android:text="Деревянная"
+                        android:text="@string/wood"
                         android:textSize="@dimen/_14sdp" />
 
                     <TextView
@@ -228,7 +238,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/_3sdp"
                         android:fontFamily="@font/nunito_sans"
-                        android:text="от 0 до 200 баллов" />
+                        android:text="@string/_0_200" />
                 </LinearLayout>
             </LinearLayout>
 

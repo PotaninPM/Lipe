@@ -165,4 +165,12 @@
     <string name="begin_friend_dialog">To see information about a friend on the map, click on his avatar on the map, the information will appear at the top of the screen</string>
     <string name="league">League</string>
     <string name="leagues">Leagues</string>
+    <string name="wood">Wood</string>
+    <string name="_0_200">0 ● 200 points</string>
+    <string name="iron">Iron</string>
+    <string name="_200_500">200 ● 500 points</string>
+    <string name="gold">Gold</string>
+    <string name="_500_999">500 ● 999 points</string>
+    <string name="_1000">1000+ points</string>
+    <string name="diamond">Diamond</string>
 </resources>

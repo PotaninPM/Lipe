@@ -11,6 +11,7 @@ class RatingVM : ViewModel() {
     private var _place = MutableLiveData<String>()
     val place: LiveData<String> = _place
 
+
     private var _avatar = MutableLiveData<String>()
     val avatar: LiveData<String> = _avatar
 

@@ -165,4 +165,12 @@
     <string name="begin_friend_dialog">Чтобы посмотреть информацию о друге на карте, нажмите на его аватарку на карте, информация появится на верху экрана</string>
     <string name="league">Лига</string>
     <string name="leagues">Лиги</string>
+    <string name="wood">Деревянная</string>
+    <string name="_0_200">0 ● 200 баллов</string>
+    <string name="iron">Железная</string>
+    <string name="_200_500">200 ● 500 баллов</string>
+    <string name="gold">Золотая</string>
+    <string name="_500_999">500 ● 999 баллов</string>
+    <string name="_1000">1000+ баллов</string>
+    <string name="diamond">Бриллиантовая</string>
 </resources>
