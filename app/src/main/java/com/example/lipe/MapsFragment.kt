@@ -873,11 +873,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
             view.post {
                 if(isAdded && context != null) {
-                    //if(isFirstTime()) {
+                    if(isFirstTime()) {
                         BeginDialogFragment.newInstance()
                             .show(childFragmentManager, "BeginDialogFragment")
                         markAsVisited()
-                    //}
+                    }
                 }
             }
 
