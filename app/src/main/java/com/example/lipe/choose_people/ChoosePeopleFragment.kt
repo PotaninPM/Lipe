@@ -201,13 +201,11 @@ class ChoosePeopleFragment(val eventUid: String, val type: String, val targetVie
                     }
                 }
                 "eco" -> {
-                    // Handle eco type
+
                 }
                 "help" -> {
-                    // Handle help type
                 }
                 else -> {
-                    // Handle default case
                 }
             }
         } else {

@@ -28,10 +28,9 @@ class PushNotifReceive : FirebaseMessagingService() {
             if (remoteMessage.data.isNotEmpty()) {
                 val title = remoteMessage.data["title"]
                 val message = remoteMessage.data["message"]
-                val type = remoteMessage.data["type"]
 
                 Log.d("INFOG", title.toString())
-                understandType(title, message, type)
+                understandType(title, message)
             }
         }
     }
@@ -51,24 +50,13 @@ class PushNotifReceive : FirebaseMessagingService() {
         }
     }
 
-    private fun understandType(title: String?, message: String?, type: String?) {
+    private fun understandType(title: String?, message: String?) {
 
-        if(type == "friendship_request") {
-            val intent = Intent(this, MainActivity::class.java).apply {
-                putExtra("fragmentToLoad", "FriendRequestsFragment")
-            }
-            showNotification(title, message, intent)
-        } else if(type == "accept_friendship") {
-//            intent = Intent(this, MainActivity::class.java).apply {
-//                putExtra("fragmentToLoad", "FriendRequestsFragment")
-//            }
-        } else if(type == "points") {
-            val intent = Intent(this, MainActivity::class.java).apply {
-                putExtra("fragmentToLoad", "RatingFragment")
-            }
-            showNotification(title, message, intent)
+        val intent = Intent(this, MainActivity::class.java).apply {
+            putExtra("fragmentToLoad", "RatingFragment")
         }
 
+        showNotification(title, message, intent)
     }
 
     fun showNotification(title: String?, message: String?, intent: Intent) {

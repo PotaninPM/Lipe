@@ -30,6 +30,7 @@ import com.example.lipe.R
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.databinding.FragmentCreateEntEventBinding
 import com.example.lipe.notifications.EntEventData
+import com.example.lipe.notifications.EventData
 import com.example.lipe.notifications.RetrofitInstance
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -186,31 +187,36 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             }
 
             binding.btnCreateEvent.setOnClickListener {
-
-                binding.allEnt.visibility = View.GONE
-                binding.progressBar.visibility = View.VISIBLE
-                binding.creating.visibility = View.VISIBLE
-
                 binding.btnCreateEvent.isEnabled = false
                 binding.btnCreateEvent.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+
                 val eventUid = UUID.randomUUID().toString()
-                uploadImage(eventUid) { photo ->
-                    if (photo != "-") {
-                        createEvent(eventUid, photo)
-                    } else {
-                        binding.btnCreateEvent.isEnabled = true
-                        binding.btnCreateEvent.setBackgroundColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.green
+                if (checkForEmpty() == true) {
+                    uploadImage(eventUid) { photo ->
+                        if (photo != "-") {
+                            createEvent(eventUid, photo)
+                        } else {
+                            binding.btnCreateEvent.isEnabled = true
+                            binding.btnCreateEvent.setBackgroundColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.green
+                                )
                             )
-                        )
-                        setDialog(
-                            getString(R.string.no_image),
-                            getString(R.string.min_one_photo),
-                            getString(R.string.okey),
-                        )
+                            setDialog(
+                                getString(R.string.no_image),
+                                getString(R.string.min_one_photo),
+                                getString(R.string.okey),
+                            )
+                        }
                     }
+                }else {
+                    binding.allEnt.visibility = View.VISIBLE
+
+                    binding.progressBar.visibility = View.INVISIBLE
+                    binding.creating.visibility = View.INVISIBLE
+                    binding.btnCreateEvent.isEnabled = true
+                    binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
                 }
             }
 
@@ -243,6 +249,9 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
             callback("-")
         } else {
             if(image1 != "-") {
+                binding.allEnt.visibility = View.GONE
+                binding.progressBar.visibility = View.VISIBLE
+                binding.creating.visibility = View.VISIBLE
                 imageUri1.let { uri ->
                     val imageRef = storageRef.child(eventUid)
                     imageRef.putFile(uri)
@@ -305,15 +314,15 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         binding.creating.visibility = View.VISIBLE
         binding.btnCreateEvent.isEnabled = false
         binding.btnCreateEvent.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
-
-        if (checkForEmpty() == true) {
             eventId = eventUid
 
             val current = System.currentTimeMillis()
 
             var title = binding.etNameinputText.text.toString().trim()
-            var coord: HashMap<String, Double> = hashMapOf("latitude" to appVM.latitude, "longitude" to appVM.longtitude)
-            var date_of_meeting: String = binding.timeText.text.toString() + " " + binding.dateText.text.toString()
+            var coord: HashMap<String, Double> =
+                hashMapOf("latitude" to appVM.latitude, "longitude" to appVM.longtitude)
+            var date_of_meeting: String =
+                binding.timeText.text.toString() + " " + binding.dateText.text.toString()
 
             Log.i("INFOG", parseDateToTimestamp(date_of_meeting).toString())
 
@@ -322,16 +331,20 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
             var type: String = "ent"
 
-            var age: String = when(selectedAge) {
+            var age: String = when (selectedAge) {
                 0 -> "any_age"
                 1 -> "more_18"
                 2 -> "before_18"
                 else -> "-1"
             }
 
-            if(typeSport == "1") {
+            if (typeSport == "1") {
                 binding.btnCreateEvent.isEnabled = true
-                Toast.makeText(requireContext(), getString(R.string.choose_sport), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.choose_sport),
+                    Toast.LENGTH_LONG
+                ).show()
             } else {
                 var event = EntEventData(
                     eventId,
@@ -352,9 +365,12 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     Instant.now().epochSecond
                 )
 
-                val dbRef_user_your = FirebaseDatabase.getInstance().getReference("users/${event.creator_id}/yourCreatedEvents")
-                val dbRef_user_groups = FirebaseDatabase.getInstance().getReference("users/${event.creator_id}/groups")
-                val dbRef_user_events_amount = FirebaseDatabase.getInstance().getReference("users/${event.creator_id}/events_amount")
+                val dbRef_user_your = FirebaseDatabase.getInstance()
+                    .getReference("users/${event.creator_id}/yourCreatedEvents")
+                val dbRef_user_groups =
+                    FirebaseDatabase.getInstance().getReference("users/${event.creator_id}/groups")
+                val dbRef_user_events_amount = FirebaseDatabase.getInstance()
+                    .getReference("users/${event.creator_id}/events_amount")
 
                 val dbRef_group = FirebaseDatabase.getInstance().getReference("groups")
 
@@ -363,11 +379,12 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                 val creatorUid = event.creator_id
 
                 val dbRef_events = FirebaseDatabase.getInstance().getReference("current_events")
-                val dbRef_user_cr = FirebaseDatabase.getInstance().getReference("users/${event.creator_id}/curRegEventsId")
+                val dbRef_user_cr = FirebaseDatabase.getInstance()
+                    .getReference("users/${event.creator_id}/curRegEventsId")
 
-                dbRef_events.child(event.event_id).setValue(event) {e, _ ->
-                    dbRef_user_cr.child(event.event_id).setValue(event.event_id) {e, _ ->
-                        dbRef_user_your.child(event.event_id).setValue(event.event_id) {e, _ ->
+                dbRef_events.child(event.event_id).setValue(event) { e, _ ->
+                    dbRef_user_cr.child(event.event_id).setValue(event.event_id) { e, _ ->
+                        dbRef_user_your.child(event.event_id).setValue(event.event_id) { e, _ ->
                             val group = GroupModel(
                                 event.event_id,
                                 event.title,
@@ -375,15 +392,18 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                                 hashMapOf(event.creator_id to event.creator_id),
                                 arrayListOf()
                             )
-                            dbRef_group.child(event.event_id).setValue(group) {e, _ ->
-                                dbRef_user_groups.child(event.event_id).setValue(event.event_id) {e, _ ->
+                            dbRef_group.child(event.event_id).setValue(group) { e, _ ->
+                                dbRef_user_groups.child(event.event_id)
+                                    .setValue(event.event_id) { e, _ ->
 
-                                }
+                                    }
                             }
                             dbRef_user_events_amount.addListenerForSingleValueEvent(object :
                                 ValueEventListener {
                                 override fun onDataChange(snapshot: DataSnapshot) {
-                                    dbRef_user_events_amount.setValue(snapshot.value.toString().toInt() + 1) {e, _ ->
+                                    dbRef_user_events_amount.setValue(
+                                        snapshot.value.toString().toInt() + 1
+                                    ) { e, _ ->
 
                                     }
                                 }
@@ -397,7 +417,12 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     }
                 }
 
-                val call: Call<Void> = RetrofitInstance.api.sendEventEntData(event)
+                val call: Call<Void> = RetrofitInstance.api.sendEventData(
+                    EventData(
+                        latitude.toFloat(),
+                        longitude.toFloat()
+                    )
+                )
 
                 Log.d("INFOG", call.request().toString())
 
@@ -419,14 +444,6 @@ class CreateEntEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                 binding.congrats.visibility = View.VISIBLE
                 binding.progressBar.visibility = View.INVISIBLE
             }
-        }else {
-            binding.allEnt.visibility = View.VISIBLE
-
-            binding.progressBar.visibility = View.INVISIBLE
-
-            binding.btnCreateEvent.isEnabled = true
-            binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
-        }
     }
 
     fun checkForEmpty(): Boolean {

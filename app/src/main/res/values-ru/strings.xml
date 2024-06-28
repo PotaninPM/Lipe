@@ -173,4 +173,8 @@
     <string name="_500_999">500 ● 999 баллов</string>
     <string name="_1000">1000+ баллов</string>
     <string name="diamond">Бриллиантовая</string>
+    <string name="ok">Хорошо</string>
+    <string name="you">Это вы</string>
+    <string name="your_friend">Ваш друг</string>
+    <string name="not_friend">Еще не друг</string>
 </resources>

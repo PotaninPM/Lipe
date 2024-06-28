@@ -10,6 +10,6 @@ data class HelpEventModelDB(
     var coordinates: HashMap<String, Double>,
     var date_of_meeting: String ?= null,
     var description: String,
-    var photos: ArrayList<String>,
-    var people_want_id: ArrayList<String>? = null,
+    var photos: String,
+    var reg_people_id: ArrayList<String>? = null,
 )

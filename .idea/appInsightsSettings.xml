@@ -9,9 +9,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.example.lipe" />
-                  <option name="mobileSdkAppId" value="1:895088919548:android:686b40037bd39e8b242879" />
-                  <option name="projectId" value="durable-path-406515" />
-                  <option name="projectNumber" value="895088919548" />
+                  <option name="mobileSdkAppId" value="1:404756016768:android:5c31a7d5f03e12c79d4065" />
+                  <option name="projectId" value="lipe-efa31" />
+                  <option name="projectNumber" value="404756016768" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

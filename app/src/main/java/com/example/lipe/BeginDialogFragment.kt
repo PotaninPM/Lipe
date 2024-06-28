@@ -27,23 +27,25 @@ class BeginDialogFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        tips = listOf(
-            getString(R.string.preparation),
-            getString(R.string.finger),
-            getString(R.string.theme_help),
-            getString(R.string.friends_view),
-            getString(R.string.begin_friend_dialog),
-            getString(R.string.can)
-        )
+        if(isAdded && context != null) {
+            tips = listOf(
+                getString(R.string.preparation),
+                getString(R.string.finger),
+                getString(R.string.theme_help),
+                getString(R.string.friends_view),
+                getString(R.string.begin_friend_dialog),
+                getString(R.string.can)
+            )
 
-        gifUrls = listOf(
-            R.drawable.classroom,
-            R.drawable.left_click,
-            R.drawable.lipe,
-            R.drawable.friends_photo,
-            R.drawable.friend_dialog,
-            R.drawable.success,
-        )
+            gifUrls = listOf(
+                R.drawable.classroom,
+                R.drawable.left_click,
+                R.drawable.lipe,
+                R.drawable.friends_photo,
+                R.drawable.friend_dialog,
+                R.drawable.success,
+            )
+        }
     }
 
     override fun onCreateView(
@@ -53,40 +55,44 @@ class BeginDialogFragment : DialogFragment() {
 
         binding = FragmentBeginDialogBinding.inflate(inflater, container, false)
 
-        updateTip()
-
-        binding.nextTipButton.setOnClickListener {
-            currentTipIndex += 1
+        if(isAdded && context != null) {
             updateTip()
-        }
 
-        binding.backTipButton.setOnClickListener {
-            currentTipIndex -= 1
-            updateTip()
+            binding.nextTipButton.setOnClickListener {
+                currentTipIndex += 1
+                updateTip()
+            }
+
+            binding.backTipButton.setOnClickListener {
+                currentTipIndex -= 1
+                updateTip()
+            }
         }
 
         return binding.root
     }
 
     private fun updateTip() {
-        if (currentTipIndex == tips.size) {
-            dismiss()
-        } else {
-            binding.backTipButton.visibility = View.VISIBLE
-            if(currentTipIndex != 0)
-                progress = (currentTipIndex) * (20)
-            binding.progressText.text = "$progress%"
-            binding.progressBar.progress = progress
-            binding.tipTextView.text = tips[currentTipIndex]
-            binding.gifImageView.load(gifUrls[currentTipIndex])
-        }
+        if(isAdded && context != null) {
+            if (currentTipIndex == tips.size) {
+                dismiss()
+            } else {
+                binding.backTipButton.visibility = View.VISIBLE
+                if (currentTipIndex != 0)
+                    progress = (currentTipIndex) * (20)
+                binding.progressText.text = "$progress%"
+                binding.progressBar.progress = progress
+                binding.tipTextView.text = tips[currentTipIndex]
+                binding.gifImageView.load(gifUrls[currentTipIndex])
+            }
 
-        if(currentTipIndex == 0) {
-            binding.backTipButton.visibility = View.GONE
-            binding.progressText.text = "0%"
-            binding.progressBar.progress = 0
-        } else {
-            binding.backTipButton.visibility = View.VISIBLE
+            if (currentTipIndex == 0) {
+                binding.backTipButton.visibility = View.GONE
+                binding.progressText.text = "0%"
+                binding.progressBar.progress = 0
+            } else {
+                binding.backTipButton.visibility = View.VISIBLE
+            }
         }
     }
 

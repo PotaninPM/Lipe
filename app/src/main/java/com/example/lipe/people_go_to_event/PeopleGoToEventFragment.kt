@@ -64,11 +64,8 @@ class PeopleGoToEventFragment(val eventUid: String) : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-
-        dialog?.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            (resources.displayMetrics.heightPixels * 0.7).toInt()
-        )
+        dialog?.window?.setLayout((resources.displayMetrics.widthPixels * 0.9).toInt(), (resources.displayMetrics.heightPixels * 0.7).toInt())
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
     }
 
     private fun loadData(eventUid: String) {
@@ -108,4 +105,5 @@ class PeopleGoToEventFragment(val eventUid: String) : DialogFragment() {
             }
         })
     }
+
 }

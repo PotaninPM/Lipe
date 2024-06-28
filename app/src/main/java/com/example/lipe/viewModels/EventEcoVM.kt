@@ -63,15 +63,6 @@ class EventEcoVM: ViewModel() {
     var latitude: Double = 0.0
     var longtitude: Double = 0.0
 
-    fun formatDate(dateString: String?): String {
-        if (dateString.isNullOrEmpty()) return ""
-
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("Создано d MMMM yyyy года HH:mm", Locale("ru"))
-        val date = inputFormat.parse(dateString)
-        return date?.let { outputFormat.format(it) } ?: ""
-    }
-
     fun setInfo(
         id_: String?,
         maxPeople_: Int?,
@@ -84,10 +75,10 @@ class EventEcoVM: ViewModel() {
         peopleGo_: ArrayList<String>?,
         freePlaces_: Int?,
         eventDesc_: String?,
-        time_of_creation_: String?,
-        date_: String?,
+        time_of_creation_: Long,
+        date_: String,
         amount_reg_people_: Int?,
-        getPoints_: Int?
+        getPoints_: Int?,
     ) {
         _id.value = id_ ?: ""
         _maxPeople.value = maxPeople_ ?: 0
@@ -96,8 +87,8 @@ class EventEcoVM: ViewModel() {
         _photosBefore.value = photosBefore_ ?: ""
         _peopleGo.value = peopleGo_ ?: ArrayList()
         _eventDesc.value = eventDesc_ ?: ""
-        _date.value = formatTimestamp(date_?.toLong() ?: 0L) ?: ""
-        _timeOfCreation.value = formatDate(time_of_creation_)
+        _timeOfCreation.value = formatTimestamp(time_of_creation_)
+        _date.value = formatTimestamp(date_.toLong())
         _amountRegPeople.value = amount_reg_people_ ?: 0
         _freePlaces.value = 100 - 100 * amountRegPeople.value!! / maxPeople.value!!
         _powerPollution.value = powerPollution_ ?: ""

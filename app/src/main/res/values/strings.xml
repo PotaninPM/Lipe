@@ -173,4 +173,8 @@
     <string name="_500_999">500 ● 999 points</string>
     <string name="_1000">1000+ points</string>
     <string name="diamond">Diamond</string>
+    <string name="ok">Ok</string>
+    <string name="you">It is you</string>
+    <string name="your_friend">Your friend</string>
+    <string name="not_friend">Not a friend</string>
 </resources>

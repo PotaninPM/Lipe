@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/begin_dialog"
     tools:context=".people_go_to_event.PeopleGoToEventFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewPeopleGo"
-        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_marginTop="@dimen/_4sdp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent" />

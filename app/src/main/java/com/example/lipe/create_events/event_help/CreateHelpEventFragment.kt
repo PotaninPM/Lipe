@@ -28,6 +28,8 @@ import com.example.lipe.database_models.GroupModel
 import com.example.lipe.database_models.HelpEventModelDB
 import com.example.lipe.databinding.FragmentCreateEcoEventBinding
 import com.example.lipe.databinding.FragmentCreateHelpEventBinding
+import com.example.lipe.notifications.EventData
+import com.example.lipe.notifications.RetrofitInstance
 import com.example.lipe.viewModels.AppVM
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -39,6 +41,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.ArrayList
 import java.util.Calendar
@@ -56,12 +61,6 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
     private var image1: String = "-"
     private var image2: String = "-"
     private var image3: String = "-"
-
-    private var imagesUid: ArrayList<String> = arrayListOf("-", "-", "-")
-
-    private lateinit var firebaseRef: DatabaseReference
-
-    private lateinit var spinner: Spinner
 
     private lateinit var storageRef : StorageReference
 
@@ -103,28 +102,41 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        dbRef = FirebaseDatabase.getInstance().getReference("current_events")
-        dbRef_id = FirebaseDatabase.getInstance().getReference("id_event")
+        if(isAdded && context != null) {
+            dbRef = FirebaseDatabase.getInstance().getReference("current_events")
+            dbRef_id = FirebaseDatabase.getInstance().getReference("id_event")
 
-        auth = FirebaseAuth.getInstance()
+            auth = FirebaseAuth.getInstance()
 
-        binding.btnCreateEvent.setOnClickListener {
-            uploadImage {photos ->
-                if(photos[0] != "-" || photos[1] != "-" || photos[2] != "-") {
-                    createEvent(photos)
+            binding.btnCreateEvent.setOnClickListener {
+                if (checkForEmpty() == true) {
+                    uploadImage { photos ->
+                        if (photos[0] != "-" || photos[1] != "-" || photos[2] != "-") {
+                            createEvent(photos[0])
+                        } else {
+                            setDialog(
+                                getString(R.string.no_image),
+                                getString(R.string.min_one_photo),
+                                getString(R.string.nice)
+                            )
+                        }
+                    }
                 } else {
-                    setDialog(getString(R.string.no_image), getString(R.string.min_one_photo), getString(R.string.nice))
+                    binding.allHelp.visibility = View.VISIBLE
+
+                    binding.progressBar.visibility = View.INVISIBLE
+                    binding.creating.visibility = View.INVISIBLE
                 }
             }
-        }
 
 
-        binding.dateLay.setOnClickListener {
-            getDateTime()
-        }
+            binding.dateLay.setOnClickListener {
+                getDateTime()
+            }
 
-        binding.photoLay1.setOnClickListener {
-            selectImage1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            binding.photoLay1.setOnClickListener {
+                selectImage1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
         }
     }
 
@@ -150,6 +162,10 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
         } else {
             var used: Int = 0;
             if(image1 != "-") {
+                binding.allHelp.visibility = View.GONE
+                binding.progressBar.visibility = View.VISIBLE
+                binding.creating.visibility = View.VISIBLE
+
                 imageUri1.let { uri ->
                     val uid: String = UUID.randomUUID().toString()
                     val imageRef = storageRef.child(uid)
@@ -179,17 +195,15 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
             .show()
     }
 
-    private fun createEvent(photos: ArrayList<String>) {
+    private fun createEvent(photos: String) {
         appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
-        if(checkForEmpty() == true) {
             eventId = UUID.randomUUID().toString()
-            val time = Calendar.getInstance().time
-            val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm")
-            val current = formatter.format(time)
+
+            val current = System.currentTimeMillis().toString()
 
             var price = binding.etPriceinputText.text.toString().trim().toInt()
 
-            var dating = binding.dateText.text.toString()
+            var dating = binding.timeText.text.toString() + " " + binding.dateText.text.toString()
             var coord: HashMap<String, Double> = hashMapOf("latitude" to appVM.latitude, "longitude" to appVM.longtitude)
             var maxPeople: Int = binding.etMaxInputText.text.toString().trim().toInt()
             var desc: String = binding.etDescInputText.text.toString().trim()
@@ -204,7 +218,7 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
                 price,
                 maxPeople,
                 coord,
-                dating,
+                parseDateToTimestamp(dating).toString(),
                 desc,
                 photos,
                 arrayListOf()
@@ -217,7 +231,31 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
                     //do pop up notif and navigate to maps
                 }
             }
-        }
+        val call: Call<Void> = RetrofitInstance.api.sendEventData(
+            EventData(
+                coord["latitude"]!!.toFloat(),
+                coord["longitude"]!!.toFloat()
+            )
+        )
+
+        Log.d("INFOG", call.request().toString())
+
+        call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.d("INFOG", "OK, notifications were sent")
+                } else {
+                    Log.d("INFOG", "${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Log.d("INFOG", "${t.message}")
+            }
+        })
+        binding.creating.visibility = View.GONE
+        binding.congrats.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.INVISIBLE
     }
 
     fun checkForEmpty(): Boolean {
@@ -239,31 +277,10 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
     }
 
     private fun setDesignToFields() {
-        //binding.etNameinputLay.boxStrokeColor = Color.BLUE
         binding.etDescInputLay.boxStrokeColor = Color.BLUE
         binding.etMaxInputLay.boxStrokeColor = Color.BLUE
     }
 
-    data class SpinnerItem(val name: String, val imageResourceId: Int)
-    class CustomAdapter(context: Context, private val items: List<SpinnerItem>) : ArrayAdapter<SpinnerItem>(context,
-        R.layout.spinner_one_chose, items) {
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.spinner_one_chose, parent, false)
-
-            val imageView = view.findViewById<ImageView>(R.id.imageView)
-            val textView = view.findViewById<TextView>(R.id.textView)
-
-            val item = getItem(position)
-            textView.text = item?.name
-            imageView.setImageResource(item?.imageResourceId ?: 0)
-
-            return view
-        }
-
-        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-            return getView(position, convertView, parent)
-        }
-    }
     private fun getDateTime() {
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText(getString(R.string.choose_the_date))
@@ -294,29 +311,58 @@ class CreateHelpEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, 
     }
 
     private fun onTimeSet_() {
-        binding.notifySetDate.visibility = View.GONE
-        binding.timeText.visibility = View.VISIBLE
-        binding.timeText.text = String.format("%02d:%02d", savedHour, savedMinute)
+        if(isAdded && context != null) {
+            binding.notifySetDate.visibility = View.GONE
+            binding.timeText.visibility = View.VISIBLE
+            binding.timeText.text = String.format("%02d:%02d", savedHour, savedMinute)
 
-        val locale = Locale.getDefault().language
-        Log.i("INFOG", locale.toString())
-        val months = if (locale == "ru") {
-            resources.getStringArray(R.array.months_ru)
-        } else {
-            resources.getStringArray(R.array.months_eng)
+            val locale = Locale.getDefault().language
+
+            val months = if (locale == "ru") {
+                resources.getStringArray(R.array.months_ru)
+            } else {
+                resources.getStringArray(R.array.months_eng)
+            }
+            val monthName = months[savedMonth]
+
+            binding.dateText.visibility = View.VISIBLE
+            binding.dateText.text = String.format(
+                "%d %s %d %s",
+                savedDay,
+                monthName,
+                savedYear,
+                getString(R.string.year)
+            )
+
+            binding.dateLay.setBackgroundResource(R.drawable.chosen_date_lay)
         }
-        val monthName = months[savedMonth]
+    }
 
-        binding.dateText.visibility = View.VISIBLE
-        binding.dateText.text = String.format(
-            "%d %s %d %s",
-            savedDay,
-            monthName,
-            savedYear,
-            getString(R.string.year)
-        )
+    fun parseDateToTimestamp(dateString: String): Long {
+        val locale = Locale.getDefault()
+        if(locale.language == "ru") {
+            val pattern = "HH:mm dd MMMM yyyy 'года'"
+            val dateFormat = SimpleDateFormat(pattern, locale)
 
-        binding.dateLay.setBackgroundResource(R.drawable.chosen_date_lay)
+            return try {
+                val date = dateFormat.parse(dateString)
+                date?.time ?: throw IllegalArgumentException("Invalid date string")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                0L
+            }
+        } else {
+            val pattern = "HH:mm dd MMMM yyyy 'year'"
+            val dateFormat = SimpleDateFormat(pattern, locale)
+
+            return try {
+                val date = dateFormat.parse(dateString)
+                date?.time ?: throw IllegalArgumentException("Invalid date string")
+            } catch (e: Exception) {
+                e.printStackTrace()
+                0L
+            }
+        }
     }
 
     override fun onDateSet(p0: DatePicker?, p1: Int, p2: Int, p3: Int) {

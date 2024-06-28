@@ -19,3 +19,8 @@ data class EntEventData(
     @SerializedName("status") var status: String,
     @SerializedName("timestamp") var timestamp: Long
 )
+
+data class EventData (
+    @SerializedName("latitude") var latitude: Float,
+    @SerializedName("longitude") var longitude: Float
+)

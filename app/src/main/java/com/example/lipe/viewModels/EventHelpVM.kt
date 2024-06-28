@@ -1,9 +1,11 @@
 package com.example.lipe.viewModels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class EventHelpVM : ViewModel() {
@@ -57,30 +59,35 @@ class EventHelpVM : ViewModel() {
         longtitude = long
     }
 
-    fun setInfo(id_: String, maxPeople_: Int, price_: Int, creator_: String, creatorUsername_: String, photos_: ArrayList<String>, freePlaces_: Int, eventDesc_: String, time_of_creation_: String, date_: String, amount_reg_people_: Int, friend_: String) {
+    fun setInfo(id_: String, price_: Int, creator_: String, creatorUsername_: String, photos_: ArrayList<String>, freePlaces_: Int, eventDesc_: String, time_of_creation_: Long, date_: String, friend_: String) {
         _id.value = id_
-        _maxPeople.value = maxPeople_
         _creator.value = creator_
         _photos.value = photos_
         _eventDesc.value = eventDesc_
-        _date.value = date_
-        _timeOfCreation.value = time_of_creation_
-        _amountRegPeople.value = amount_reg_people_
-        _freePlaces.value = 100 - 100 * amountRegPeople.value!! / maxPeople.value!!
+        _freePlaces.value = freePlaces_
 
-        _timeOfCreation.value = formatDate(time_of_creation_)
+        _timeOfCreation.value = formatTimestamp(time_of_creation_)
+        _date.value = formatTimestamp(date_.toLong())
 
         _friend.value = friend_
 
-        _price.value = price_.toString()
+        _price.value = price_.toString() + " ₽"
         _creatorUsername.value = creatorUsername_
 
     }
 
-    fun formatDate(dateString: String): String {
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-        val outputFormat = SimpleDateFormat("Создано d MMMM yyyy года HH:mm", Locale("ru"))
-        val date = inputFormat.parse(dateString)
+    private fun getDateFormat(): SimpleDateFormat {
+        val locale = Locale.getDefault()
+        return if (locale.language == "ru") {
+            SimpleDateFormat("dd MMMM yyyy 'года' 'в' HH:mm", locale)
+        } else {
+            SimpleDateFormat("MMMM dd, yyyy 'at' HH:mm", locale)
+        }
+    }
+
+    private fun formatTimestamp(timestamp: Long): String {
+        val date = Date(timestamp)
+        val outputFormat = getDateFormat()
         return outputFormat.format(date)
     }
 }

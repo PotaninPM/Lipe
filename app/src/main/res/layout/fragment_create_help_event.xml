@@ -16,223 +16,284 @@
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/horizontalScrollView"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_210sdp"
-                android:fillViewport="true"
-                android:orientation="horizontal"
+                android:id="@+id/congrats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/_6sdp"
+                android:paddingTop="@dimen/_3sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/photo_lay_1"
-                    android:layout_width="@dimen/_290sdp"
-                    android:layout_height="@dimen/_210sdp"
-                    android:background="@drawable/upload_photo_event"
+                <ImageView
+                    android:id="@+id/imageView10"
+                    android:layout_width="@dimen/_140sdp"
+                    android:layout_height="@dimen/_140sdp"
+                    android:src="@drawable/firework"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/photo1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                    <ImageView
-                        android:id="@+id/arrowUp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/img_arrowup"
-                        app:layout_constraintBottom_toTopOf="@+id/textImg"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                    <TextView
-                        android:id="@+id/textImg"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:text="@string/tap_to_upload"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <View
-                android:id="@+id/lineVectorOne"
-                android:layout_width="@dimen/_286sdp"
-                android:layout_height="@dimen/_1sdp"
-                android:layout_gravity="start"
-                android:layout_marginTop="@dimen/_12sdp"
-                android:background="#959494"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
-
-            <LinearLayout
-                android:id="@+id/linearLayout4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_12sdp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lineVectorOne">
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/event_details"
-                    android:layout_gravity="center"
-                    android:textSize="@dimen/_22sdp"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:fontFamily="@font/nunitosansbold"
+                    android:text="@string/suc_ev"
+                    android:textSize="@dimen/_14sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/etPriceinputLay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:layout_marginStart="@dimen/_6sdp"
-                    android:layout_marginEnd="@dimen/_6sdp"
-                    android:layout_gravity="center"
-                    app:prefixText="₽ "
-                    app:boxStrokeColor="?attr/colorControlNormal"
-                    app:endIconMode="custom"
-                    app:errorEnabled="true">
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                android:indeterminate="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etPriceinputText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/price"
-                        android:inputType="number"
-                        android:singleLine="true"
-                        tools:ignore="Autofill"
-                        android:textColor="#FFFFFF" />
-                </com.google.android.material.textfield.TextInputLayout>
+            <TextView
+                android:id="@+id/creating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunitosansbold"
+                android:text="@string/creating"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:textSize="@dimen/_14sdp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/etDescInputLay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/_1sdp"
-                    android:layout_marginStart="@dimen/_6sdp"
-                    android:layout_marginEnd="@dimen/_6sdp"
-                    android:layout_gravity="center"
-                    app:errorEnabled="true"
-                    app:boxStrokeColor="?attr/colorControlNormal">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etDescInputText"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_140sdp"
-                        android:hint="@string/detailed_desc"
-                        android:inputType="textMultiLine"
-                        android:gravity="top"
-                        android:singleLine="true"
-                        android:textColor="#FFFFFF" />
-                </com.google.android.material.textfield.TextInputLayout>
-
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/allHelp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/dateLay"
+                    android:id="@+id/horizontalScrollView"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_42sdp"
+                    android:layout_height="@dimen/_210sdp"
+                    android:fillViewport="true"
                     android:orientation="horizontal"
-                    android:gravity="start"
-                    android:background="@drawable/choose_date_lay"
-                    android:layout_marginStart="@dimen/_6sdp"
-                    android:layout_marginEnd="@dimen/_6sdp">
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:id="@+id/notify_set_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:layout_marginStart="@dimen/_12sdp"
-                        android:textSize="@dimen/_13sdp"
-                        android:text="@string/meeting_date"/>
-
-                    <TextView
-                        android:id="@+id/timeText"
-                        android:visibility="invisible"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/_12sdp"
-                        android:fontFamily="@font/nunitosansextrabold"
-                        android:text="13:25"
-                        android:textSize="@dimen/_20sdp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/dateText"
-                        android:visibility="invisible"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/nunitosansregular"
-                        android:text="25 октября 2024 года"
-                        android:textSize="@dimen/_16sdp"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/photo_lay_1"
+                        android:layout_width="@dimen/_290sdp"
+                        android:layout_height="@dimen/_210sdp"
+                        android:background="@drawable/upload_photo_event"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/timeText"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/photo1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <ImageView
+                            android:id="@+id/arrowUp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/img_arrowup"
+                            app:layout_constraintBottom_toTopOf="@+id/textImg"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textImg"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="@string/tap_to_upload"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <View
+                    android:id="@+id/lineVectorOne"
+                    android:layout_width="@dimen/_286sdp"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_gravity="start"
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:background="#959494"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
 
                 <LinearLayout
+                    android:id="@+id/linearLayout4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="start"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    android:layout_marginTop="@dimen/_8sdp">
+                    android:layout_marginTop="@dimen/_12sdp"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lineVectorOne">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/event_details"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/_22sdp"
+                        android:textStyle="bold" />
+
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/etMaxInputLay"
+                        android:id="@+id/etPriceinputLay"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        app:startIconDrawable="@drawable/profile_icon"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:layout_marginEnd="@dimen/_6sdp"
+                        android:layout_gravity="center"
+                        app:prefixText="₽ "
                         app:boxStrokeColor="?attr/colorControlNormal"
+                        app:endIconMode="custom"
                         app:errorEnabled="true">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etMaxInputText"
+                            android:id="@+id/etPriceinputText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/people_need"
+                            android:hint="@string/price"
                             android:inputType="number"
-                            android:gravity="center"
                             android:singleLine="true"
-                            android:textColor="#FFFFFF"
                             tools:ignore="Autofill" />
                     </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/etDescInputLay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/_1sdp"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:layout_marginEnd="@dimen/_6sdp"
+                        android:layout_gravity="center"
+                        app:errorEnabled="true"
+                        app:boxStrokeColor="?attr/colorControlNormal">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etDescInputText"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_140sdp"
+                            android:hint="@string/detailed_desc"
+                            android:inputType="textMultiLine"
+                            android:gravity="top"
+                            android:singleLine="true" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/dateLay"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_42sdp"
+                        android:orientation="horizontal"
+                        android:gravity="start"
+                        android:background="@drawable/choose_date_lay"
+                        android:layout_marginStart="@dimen/_6sdp"
+                        android:layout_marginEnd="@dimen/_6sdp">
+
+                        <TextView
+                            android:id="@+id/notify_set_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:layout_marginStart="@dimen/_12sdp"
+                            android:textSize="@dimen/_13sdp"
+                            android:text="@string/meeting_date"/>
+
+                        <TextView
+                            android:id="@+id/timeText"
+                            android:visibility="invisible"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/_12sdp"
+                            android:fontFamily="@font/nunitosansextrabold"
+                            android:text="13:25"
+                            android:textSize="@dimen/_20sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/dateText"
+                            android:visibility="invisible"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nunitosansregular"
+                            android:text="25 октября 2024 года"
+                            android:textSize="@dimen/_16sdp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/timeText"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="start"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:layout_marginTop="@dimen/_8sdp">
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/etMaxInputLay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            app:startIconDrawable="@drawable/profile_icon"
+                            app:boxStrokeColor="?attr/colorControlNormal"
+                            app:errorEnabled="true">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etMaxInputText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/people_need"
+                                android:inputType="number"
+                                android:gravity="center"
+                                android:singleLine="true"
+                                tools:ignore="Autofill" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/btnCreateEvent"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:backgroundTint="@color/green"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:layout_marginBottom="@dimen/_8sdp"
+                        android:text="@string/create_event"
+                        android:textAllCaps="false"
+                        android:textColor="@color/quantum_white_100"
+                        android:textFontWeight="600"
+                        android:textSize="@dimen/_12sdp"
+                        tools:ignore="TextSizeCheck" />
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/btnCreateEvent"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_40sdp"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:layout_marginEnd="@dimen/_8sdp"
-                    android:backgroundTint="@color/green"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:layout_marginBottom="@dimen/_8sdp"
-                    android:text="@string/create_event"
-                    android:textAllCaps="false"
-                    android:textColor="@color/quantum_white_100"
-                    android:textFontWeight="600"
-                    android:textSize="@dimen/_12sdp"
-                    tools:ignore="TextSizeCheck" />
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>

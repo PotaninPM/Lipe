@@ -140,6 +140,7 @@ class EventEntFragment : Fragment() {
                                     binding.allEntEvent.visibility = View.VISIBLE
                                     binding.loadingProgressBar.visibility = View.GONE
                                     binding.report.visibility = View.VISIBLE
+                                    binding.listUsers.visibility = View.GONE
 
                                     binding.dateOfMeetingEnt.text = "*******"
                                 }
@@ -170,6 +171,7 @@ class EventEntFragment : Fragment() {
                     showPeopleGoDialog(1)
                 } else {
                     binding.dateOfMeetingEnt.text = "*******"
+
                     deleteUserFromEvent(eventEntVM.id.value.toString())
 
                     binding.deleteOrLeave.visibility = View.GONE
@@ -229,40 +231,22 @@ class EventEntFragment : Fragment() {
         dialog.show(childFragmentManager, "PeopleGoDialog")
     }
 
-    private fun sendFriendRequest() {
-        val dbrefUserQueryFriends = FirebaseDatabase.getInstance().getReference("users/${eventEntVM.creator.value.toString()}/query_friends")
-        dbrefUserQueryFriends.child(auth.currentUser!!.uid).setValue(auth.currentUser!!.uid)
-    }
+    private fun checkIfUserAlreadyFriend(creatorUid: String, callback: (ready: String) -> Unit) {
+        if(creatorUid == auth.currentUser!!.uid) {
+            callback("you")
+        } else {
+            val dbRef_user_friends = FirebaseDatabase.getInstance()
+                .getReference("users/${auth.currentUser!!.uid}/friends")
 
-    private fun checkIfUserAlreadyFriend(callback: (ready: String) -> Unit) {
-        val dbrefUserFriends = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/friends")
-        val dbrefUserQueryFriendsToYou = FirebaseDatabase.getInstance().getReference("users/${auth.currentUser!!.uid}/query_friends")
-        val dbrefUserQueryFriendsToCreator = FirebaseDatabase.getInstance().getReference("users/${eventEntVM.creator.value.toString()}/query_friends")
+            var reg = "not"
 
-        var reg = "not"
-
-        dbrefUserFriends.addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-               for(user in snapshot.children) {
-                   if(user.value.toString() == eventEntVM.creator.value.toString()) {
-                       reg = "friend"
-                       break
-                   }
-               }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                 reg = "error"
-            }
-
-        })
-        if(reg != "friend") {
-            dbrefUserQueryFriendsToYou.addValueEventListener(object : ValueEventListener {
+            dbRef_user_friends.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (user in snapshot.children) {
-                        if (user.value == auth.currentUser!!.uid) {
-                            reg = "request_to_you"
-                            break
+                        if (user.value.toString() == creatorUid) {
+                            callback("friend")
+                            reg = "friend"
+                            return
                         }
                     }
                 }
@@ -272,26 +256,8 @@ class EventEntFragment : Fragment() {
                 }
 
             })
+            callback(reg)
         }
-
-        if(reg != "friend" && reg != "request_to_you") {
-            dbrefUserQueryFriendsToCreator.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (user in snapshot.children) {
-                        if (user.value == auth.currentUser!!.uid) {
-                            reg = "request_to_creator"
-                            break
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    reg = "error"
-                }
-
-            })
-        }
-        callback(reg)
     }
 
 
@@ -398,9 +364,15 @@ class EventEntFragment : Fragment() {
                                 else -> "0"
                             }
 
-                            checkIfUserAlreadyFriend { ready ->
+                            checkIfUserAlreadyFriend(creatorUid) { friend ->
                                 if (!isAdded || context == null) return@checkIfUserAlreadyFriend
 
+                                val friend_tot = when (friend) {
+                                    "you" -> getString(R.string.you)
+                                    "friend" -> getString(R.string.your_friend)
+                                    "not" -> getString(R.string.not_friend)
+                                    else -> "-"
+                                }
                                 var found = false
                                 dbRefUser.addValueEventListener(object : ValueEventListener {
                                     override fun onDataChange(userSnapshot: DataSnapshot) {
@@ -412,7 +384,7 @@ class EventEntFragment : Fragment() {
                                                 eventEntVM.setInfo(
                                                     id, maxPeople, title, creatorUid, creatorUsername, photos,
                                                     arrayListOf("1"), freePlaces, ageLang, description, timeOfCreation,
-                                                    dateOfMeeting, sportType, langSportType, amountRegPeople, ready
+                                                    dateOfMeeting, sportType, langSportType, amountRegPeople, friend_tot
                                                 )
                                                 callback(true)
                                                 found = true
@@ -424,7 +396,7 @@ class EventEntFragment : Fragment() {
                                             eventEntVM.setInfo(
                                                 id, maxPeople, title, creatorUid, getString(R.string.deleted_ac), photos,
                                                 arrayListOf("1"), freePlaces, age, description, timeOfCreation,
-                                                dateOfMeeting, sportType, langSportType, amountRegPeople, ready
+                                                dateOfMeeting, sportType, langSportType, amountRegPeople, friend_tot
                                             )
                                             callback(true)
                                         }

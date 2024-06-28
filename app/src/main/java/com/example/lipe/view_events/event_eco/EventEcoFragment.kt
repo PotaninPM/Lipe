@@ -17,6 +17,7 @@ import com.example.lipe.R
 import com.example.lipe.choose_people.ChoosePeopleFragment
 import com.example.lipe.databinding.FragmentEventEcoBinding
 import com.example.lipe.people_go_to_event.PeopleGoToEventFragment
+import com.example.lipe.reports.report_dialog.EventReportFragment
 import com.example.lipe.viewModels.AppVM
 import com.example.lipe.viewModels.EventEcoVM
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -60,138 +61,6 @@ class EventEcoFragment : Fragment() {
     ): View? {
 
         binding = FragmentEventEcoBinding.inflate(inflater, container, false)
-
-        binding.allEcoEvent.visibility = View.GONE
-        binding.loadingProgressBar.visibility = View.VISIBLE
-
-        binding.apply {
-            lifecycleOwner = viewLifecycleOwner
-            viewModel = eventEcoVM
-
-            storageRef = FirebaseStorage.getInstance().reference
-
-            appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
-
-            dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
-
-            searchEvent(appVM.latitude, appVM.longtitude) {ready ->
-                if(ready) {
-                    loadAllImages { ready->
-                        if (ready) {
-                            checkIfUserAlreadyReg(
-                                auth.currentUser!!.uid,
-                                eventEcoVM.id.value.toString()
-                            ) { ans ->
-                                if (ans) {
-                                    val date_ = eventEcoVM.date.value
-
-                                    binding.dateOfMeetingEco.text = buildString {
-                                        append(
-                                            date_?.substring(
-                                                6,
-                                                date_.length
-                                            )
-                                        )
-                                        append(getString(R.string.`in`))
-                                        append(date_?.substring(0, 5))
-                                    }
-
-                                    binding.btnRegToEvent.visibility = View.GONE
-
-                                    if (eventEcoVM.creator.value == auth.currentUser!!.uid) {
-                                        binding.deleteOrLeave.visibility = View.VISIBLE
-                                        binding.deleteOrLeave.text = getString(R.string.finish)
-
-                                        binding.listUsers.text = getString(R.string.list)
-                                        binding.listUsers.visibility = View.VISIBLE
-                                    } else {
-                                        binding.deleteOrLeave.text = getString(R.string.leave)
-                                        binding.deleteOrLeave.visibility = View.VISIBLE
-
-                                        binding.listUsers.text = getString(R.string.list)
-                                        binding.listUsers.visibility = View.VISIBLE
-                                    }
-
-                                    binding.allEcoEvent.visibility = View.VISIBLE
-                                    binding.loadingProgressBar.visibility = View.GONE
-                                } else {
-                                    binding.allEcoEvent.visibility = View.VISIBLE
-                                    binding.loadingProgressBar.visibility = View.GONE
-
-                                    binding.dateOfMeetingEco.text = "*******"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            listUsers.setOnClickListener {
-                showPeopleGoDialog(0)
-            }
-
-            deleteOrLeave.setOnClickListener {
-                if(isAdded) {
-                    if (auth.currentUser!!.uid == eventEcoVM.creator.value) {
-                        showPeopleGoDialog(1)
-                    } else {
-                        deleteUserFromEvent(eventEcoVM.id.value.toString())
-
-                        binding.dateOfMeetingEco.text = "*******"
-
-                        binding.deleteOrLeave.visibility = View.GONE
-                        binding.listUsers.visibility = View.GONE
-
-                        binding.btnRegToEvent.visibility = View.VISIBLE
-                    }
-                }
-            }
-
-            binding.btnRegToEvent.setOnClickListener {
-                val curUid = auth.currentUser?.uid
-                if (curUid != null) {
-                    checkIfUserAlreadyReg(curUid, eventEcoVM.id.value!!) { isUserAlreadyRegistered ->
-                        if (!isUserAlreadyRegistered) {
-                            regUserToEvent(curUid) { result ->
-                                if (result == true) {
-                                    val date_= eventEcoVM.date.value
-                                    binding.dateOfMeetingEco.setText(
-                                        buildString {
-                                            append(
-                                                date_?.substring(
-                                                    6,
-                                                    date_.length
-                                                )
-                                            )
-                                            append(getString(R.string.`in`))
-                                            append(date_?.substring(0, 5))
-                                        }
-                                    )
-
-                                    setDialog(
-                                        getString(R.string.success_reg),
-                                        getString(R.string.congrats_success_reg),
-                                        getString(R.string.nice)
-                                    )
-                                } else {
-                                    //fail
-                                    setDialog(
-                                        getString(R.string.error_reg),
-                                        getString(R.string.smth_went_wrong_reg_event),
-                                        getString(R.string.okey)
-                                    )
-                                }
-                            }
-                        } else {
-                            Log.d("INFOG", "Пользователь уже зарегистрирован на мероприятие")
-                        }
-                    }
-                } else {
-                    Log.e("INFOG", "UID пользователя не найден")
-                }
-            }
-        }
-
-        auth = FirebaseAuth.getInstance()
 
         val view = binding.root
         return view
@@ -275,6 +144,9 @@ class EventEcoFragment : Fragment() {
     }
 
     fun deleteUserFromEvent(uid: String) {
+        binding.deleteOrLeave.visibility = View.GONE
+        binding.listUsers.visibility = View.GONE
+        binding.btnRegToEvent.visibility = View.VISIBLE
         val dbRef_user = FirebaseDatabase.getInstance().getReference("users").child(auth.currentUser!!.uid).child("curRegEventsId").child(uid)
         val userInEventRef = dbRef_event.child(eventEcoVM.id.value.toString()).child("reg_people_id").child(auth.currentUser!!.uid)
         val curPeople = dbRef_event.child(eventEcoVM.id.value.toString()).child("amount_reg_people")
@@ -286,8 +158,7 @@ class EventEcoFragment : Fragment() {
                     groupRef.removeValue().addOnSuccessListener {
                         curPeople.setValue(eventEcoVM.amountRegPeople.value?.minus(1)).addOnSuccessListener {
                             groupInProfile.removeValue().addOnSuccessListener {
-                                binding.deleteOrLeave.visibility = View.GONE
-                                binding.btnRegToEvent.visibility = View.VISIBLE
+
                             }
                         }
                     }
@@ -390,17 +261,61 @@ class EventEcoFragment : Fragment() {
                         val dateOfMeeting = eventSnapshot.child("date_of_meeting").value.toString()
                         val amountRegPeople = eventSnapshot.child("amount_reg_people").value.toString().toInt()
                         val getPoints:Int = eventSnapshot.child("get_points").value.toString().toInt()
-                        val powerPollution: String = eventSnapshot.child("power_of_pollution").value.toString()
+
+                        val powerPollution_: String = eventSnapshot.child("power_of_pollution").value.toString()
+
+                        val powerPollution = when(powerPollution_) {
+                            "0" -> getString(R.string.some)
+                            "1" -> getString(R.string.quite_a_lot)
+                            "2" -> getString(R.string.a_lot)
+                            "3" ->   getString(R.string.like_landfield)
+                            else -> ""
+                        }
 
                         when(type) {
                             "eco" -> {
-                                var found: Boolean = false
-                                dbRefUser.addValueEventListener(object : ValueEventListener {
-                                    override fun onDataChange(userSnapshot: DataSnapshot) {
-                                        for(userEventSnapshot in userSnapshot.children) {
-                                            if(creatorUid == userEventSnapshot.child("uid").value) {
-                                                val creatorUsername = userEventSnapshot.child("username").value.toString()
-                                                Log.d("INFOG", "нуы")
+                                checkIfUserAlreadyFriend(creatorUid) { friend ->
+                                    if (!isAdded || context == null) return@checkIfUserAlreadyFriend
+
+                                    val friend_tot = when (friend) {
+                                        "you" -> getString(R.string.you)
+                                        "friend" -> getString(R.string.your_friend)
+                                        "not" -> getString(R.string.not_friend)
+                                        else -> "-"
+                                    }
+                                    binding.friend.text = friend_tot
+                                    var found: Boolean = false
+                                    dbRefUser.addValueEventListener(object : ValueEventListener {
+                                        override fun onDataChange(userSnapshot: DataSnapshot) {
+                                            for (userEventSnapshot in userSnapshot.children) {
+                                                if (creatorUid == userEventSnapshot.child("uid").value) {
+                                                    val creatorUsername =
+                                                        userEventSnapshot.child("username").value.toString()
+                                                    Log.d("INFOG", "нуы")
+                                                    eventEcoVM.setInfo(
+                                                        id,
+                                                        maxPeople,
+                                                        minPeople,
+                                                        powerPollution,
+                                                        title,
+                                                        creatorUid,
+                                                        creatorUsername,
+                                                        photos,
+                                                        arrayListOf("1"),
+                                                        freePlaces,
+                                                        description,
+                                                        timeOfCreation.toLong(),
+                                                        dateOfMeeting,
+                                                        amountRegPeople,
+                                                        getPoints
+                                                    )
+                                                    callback(true)
+                                                    found = true
+                                                    return
+                                                }
+                                            }
+
+                                            if (found == false) {
                                                 eventEcoVM.setInfo(
                                                     id,
                                                     maxPeople,
@@ -408,46 +323,25 @@ class EventEcoFragment : Fragment() {
                                                     powerPollution,
                                                     title,
                                                     creatorUid,
-                                                    creatorUsername,
+                                                    "Удаленный аккаунт",
                                                     photos,
                                                     arrayListOf("1"),
                                                     freePlaces,
                                                     description,
-                                                    timeOfCreation,
+                                                    timeOfCreation.toLong(),
                                                     dateOfMeeting,
                                                     amountRegPeople,
-                                                    getPoints)
+                                                    getPoints
+                                                )
                                                 callback(true)
-                                                found = true
-                                                return
                                             }
                                         }
 
-                                        if(found == false) {
-                                            eventEcoVM.setInfo(
-                                                id,
-                                                maxPeople,
-                                                minPeople,
-                                                powerPollution,
-                                                title,
-                                                creatorUid,
-                                                "Удаленный аккаунт",
-                                                photos,
-                                                arrayListOf("1"),
-                                                freePlaces,
-                                                description,
-                                                timeOfCreation,
-                                                dateOfMeeting,
-                                                amountRegPeople,
-                                                getPoints)
-                                            callback(true)
+                                        override fun onCancelled(error: DatabaseError) {
+                                            callback(false)
                                         }
-                                    }
-
-                                    override fun onCancelled(error: DatabaseError) {
-                                        callback(false)
-                                    }
-                                })
+                                    })
+                                }
                             }
                         }
                         break
@@ -464,8 +358,170 @@ class EventEcoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        binding.allEntEvent.visibility = View.GONE
-//        binding.loadingProgressBar.visibility = View.VISIBLE
+        auth = FirebaseAuth.getInstance()
+
+        binding.allEcoEvent.visibility = View.GONE
+        binding.loadingProgressBar.visibility = View.VISIBLE
+
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = eventEcoVM
+
+            storageRef = FirebaseStorage.getInstance().reference
+
+            appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
+
+            dbRef_event = FirebaseDatabase.getInstance().getReference("current_events")
+
+            searchEvent(appVM.latitude, appVM.longtitude) {ready ->
+                if(ready) {
+                    loadAllImages { ready->
+                        if(ready) {
+                            checkIfUserAlreadyReg(
+                                auth.currentUser!!.uid,
+                                eventEcoVM.id.value.toString()
+                            ) { ans ->
+                                if (ans) {
+                                    val date_ = eventEcoVM.date.value
+
+                                    binding.dateOfMeetingEco.text = date_
+
+                                    binding.btnRegToEvent.visibility = View.INVISIBLE
+
+                                    if (eventEcoVM.creator.value == auth.currentUser!!.uid) {
+                                        binding.deleteOrLeave.visibility = View.VISIBLE
+                                        binding.deleteOrLeave.text = getString(R.string.finish)
+
+                                        binding.listUsers.text = getString(R.string.list)
+                                        binding.listUsers.visibility = View.VISIBLE
+
+                                        binding.report.visibility = View.INVISIBLE
+                                    } else {
+                                        binding.deleteOrLeave.text = getString(R.string.leave)
+                                        binding.deleteOrLeave.visibility = View.VISIBLE
+
+                                        binding.listUsers.text = getString(R.string.list)
+                                        binding.listUsers.visibility = View.VISIBLE
+
+                                        binding.report.visibility = View.INVISIBLE
+                                    }
+
+                                    binding.allEcoEvent.visibility = View.VISIBLE
+                                    binding.loadingProgressBar.visibility = View.GONE
+                                } else {
+                                    binding.allEcoEvent.visibility = View.VISIBLE
+                                    binding.loadingProgressBar.visibility = View.GONE
+                                    binding.report.visibility = View.VISIBLE
+                                    binding.deleteOrLeave.visibility = View.GONE
+                                    binding.listUsers.visibility = View.GONE
+                                    binding.btnRegToEvent.visibility = View.VISIBLE
+
+                                    binding.dateOfMeetingEco.text = "*******"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            binding.apply {
+                lifecycleOwner = viewLifecycleOwner
+                viewModel = eventEcoVM
+
+                listUsers.setOnClickListener {
+                    showPeopleGoDialog(0)
+                }
+
+                deleteOrLeave.setOnClickListener {
+                    if (isAdded) {
+                        if (auth.currentUser!!.uid == eventEcoVM.creator.value) {
+                            showPeopleGoDialog(1)
+                        } else {
+                            deleteUserFromEvent(eventEcoVM.id.value.toString())
+
+                            binding.dateOfMeetingEco.text = "*******"
+
+                            binding.deleteOrLeave.visibility = View.GONE
+                            binding.listUsers.visibility = View.GONE
+
+                            binding.btnRegToEvent.visibility = View.VISIBLE
+                        }
+                    }
+                }
+
+                binding.btnRegToEvent.setOnClickListener {
+                    binding.report.visibility = View.INVISIBLE
+                    val curUid = auth.currentUser?.uid
+                    if (curUid != null) {
+                        checkIfUserAlreadyReg(
+                            curUid,
+                            eventEcoVM.id.value!!
+                        ) { isUserAlreadyRegistered ->
+                            if (!isUserAlreadyRegistered) {
+                                regUserToEvent(curUid) { result ->
+                                    if (result == true) {
+                                        val date_ = eventEcoVM.date.value
+                                        binding.dateOfMeetingEco.setText(
+                                            date_
+                                        )
+
+                                        setDialog(
+                                            getString(R.string.success_reg),
+                                            getString(R.string.congrats_success_reg),
+                                            getString(R.string.nice)
+                                        )
+                                    } else {
+                                        //fail
+                                        setDialog(
+                                            getString(R.string.error_reg),
+                                            getString(R.string.smth_went_wrong_reg_event),
+                                            getString(R.string.okey)
+                                        )
+                                    }
+                                }
+                            } else {
+                                Log.d("INFOG", "Пользователь уже зарегистрирован на мероприятие")
+                            }
+                        }
+                    } else {
+                        Log.e("INFOG", "UID пользователя не найден")
+                    }
+                }
+            }
+        }
+
+        binding.report.setOnClickListener {
+            val reportDialog = EventReportFragment(eventEcoVM.id.value.toString(), auth.currentUser!!.uid)
+            reportDialog.show(childFragmentManager, "EventReport")
+        }
+    }
+
+    private fun checkIfUserAlreadyFriend(creatorUid: String, callback: (ready: String) -> Unit) {
+        if(creatorUid == auth.currentUser!!.uid) {
+            callback("you")
+        } else {
+            val dbRef_user_friends = FirebaseDatabase.getInstance()
+                .getReference("users/${auth.currentUser!!.uid}/friends")
+
+            var reg = "not"
+
+            dbRef_user_friends.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (user in snapshot.children) {
+                        if (user.value.toString() == creatorUid) {
+                            callback("friend")
+                            reg = "friend"
+                            return
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    reg = "error"
+                }
+
+            })
+            callback(reg)
+        }
     }
 
 }

@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import coil.Coil
+import coil.load
 import coil.request.ImageRequest
 import com.example.lipe.databinding.FragmentFriendOnMapBottomSheetBinding
 import com.example.lipe.viewModels.AppVM
@@ -51,29 +52,25 @@ class FriendOnMapBottomSheetFragment : DialogFragment() {
     }
 
     private fun setData() {
-        val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${appVM.type}")
-        dbRef_user.addValueEventListener(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                binding.username.setText(snapshot.child("username").value.toString())
-                binding.name.setText(snapshot.child("firstAndLastName").value.toString())
-                binding.battery.setText(snapshot.child("batteryLevel").value.toString() + "%")
+        if(isAdded && context != null) {
+            val dbRef_user = FirebaseDatabase.getInstance().getReference("users/${appVM.type}")
+            dbRef_user.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    binding.username.setText(snapshot.child("username").value.toString())
+                    binding.name.setText(snapshot.child("firstAndLastName").value.toString())
+                    binding.battery.setText(snapshot.child("batteryLevel").value.toString() + "%")
 
-                lifecycleScope.launch {
-                    val bitmap: Bitmap = withContext(Dispatchers.IO) {
-                        Coil.imageLoader(requireContext()).execute(
-                            ImageRequest.Builder(requireContext())
-                                .data(snapshot.child("imageUrl").value.toString())
-                                .build()
-                        ).drawable?.toBitmap()!!
+                    lifecycleScope.launch {
+
+                        binding.avatar.load(snapshot.child("imageUrl").value.toString())
                     }
-                    binding.avatar.setImageBitmap(bitmap)
                 }
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                // Handle error
-            }
-        })
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle error
+                }
+            })
+        }
     }
 
     override fun onStart() {

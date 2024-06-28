@@ -83,61 +83,61 @@ class RatingFragment : Fragment() {
 
             addPeople()
 
-            val db = FirebaseDatabase.getInstance().getReference("rating")
-            db.addValueEventListener(object: ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    db.addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                val usersList = mutableListOf<User>()
-                                dataSnapshot.children.forEach { userSnapshot ->
-                                    val user = User(userSnapshot.child("place").value.toString().toInt(), userSnapshot.child("points").value.toString().toInt(), userSnapshot.child("userUid").value.toString())
-                                    usersList.add(user)
-                                }
-
-                                val sortedUsers = usersList.sortedByDescending { it.points }
-                                sortedUsers.forEachIndexed { index, user ->
-                                    val userUid = dataSnapshot.children.elementAtOrNull(index)?.key
-                                    if (userUid != null) {
-                                        db.child(userUid).child("place").setValue(index + 1) { databaseError, _ ->
-                                            if (databaseError != null) {
-                                                //println("${databaseError.message}")
-                                            } else {
-                                                //println("Data saved successfully")
-                                            }
-                                        }
-                                        db.child(userUid).child("points").setValue(user.points) { databaseError, _ ->
-                                            if (databaseError != null) {
-                                                //println("${databaseError.message}")
-                                            } else {
-                                                //println("Data saved successfully")
-                                            }
-                                        }
-                                        db.child(userUid).child("userUid").setValue(user.userUid) { databaseError, _ ->
-                                            if (databaseError != null) {
-                                                //println("${databaseError.message}")
-                                            } else {
-                                                //println("Data saved successfully")
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                println("No data found")
-                            }
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            println("Failed to read value: ${error.toException()}")
-                        }
-                    })
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-
-            })
+//            val db = FirebaseDatabase.getInstance().getReference("rating")
+//            db.addValueEventListener(object: ValueEventListener {
+//                override fun onDataChange(snapshot: DataSnapshot) {
+//                    db.addListenerForSingleValueEvent(object : ValueEventListener {
+//                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                            if (dataSnapshot.exists()) {
+//                                val usersList = mutableListOf<User>()
+//                                dataSnapshot.children.forEach { userSnapshot ->
+//                                    val user = User(userSnapshot.child("place").value.toString().toInt(), userSnapshot.child("points").value.toString().toInt(), userSnapshot.child("userUid").value.toString())
+//                                    usersList.add(user)
+//                                }
+//
+//                                val sortedUsers = usersList.sortedByDescending { it.points }
+//                                sortedUsers.forEachIndexed { index, user ->
+//                                    val userUid = dataSnapshot.children.elementAtOrNull(index)?.key
+//                                    if (userUid != null) {
+//                                        db.child(userUid).child("place").setValue(index + 1) { databaseError, _ ->
+//                                            if (databaseError != null) {
+//                                                //println("${databaseError.message}")
+//                                            } else {
+//                                                //println("Data saved successfully")
+//                                            }
+//                                        }
+//                                        db.child(userUid).child("points").setValue(user.points) { databaseError, _ ->
+//                                            if (databaseError != null) {
+//                                                //println("${databaseError.message}")
+//                                            } else {
+//                                                //println("Data saved successfully")
+//                                            }
+//                                        }
+//                                        db.child(userUid).child("userUid").setValue(user.userUid) { databaseError, _ ->
+//                                            if (databaseError != null) {
+//                                                //println("${databaseError.message}")
+//                                            } else {
+//                                                //println("Data saved successfully")
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            } else {
+//                                println("No data found")
+//                            }
+//                        }
+//
+//                        override fun onCancelled(error: DatabaseError) {
+//                            println("Failed to read value: ${error.toException()}")
+//                        }
+//                    })
+//                }
+//
+//                override fun onCancelled(error: DatabaseError) {
+//                    TODO("Not yet implemented")
+//                }
+//
+//            })
         }
     }
     private fun loadDataOfUser() {

@@ -180,8 +180,7 @@
                         android:hint="@string/event_name"
                         android:inputType="text"
                         android:singleLine="true"
-                        tools:ignore="Autofill"
-                        android:textColor="#FFFFFF" />
+                        tools:ignore="Autofill" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -283,7 +282,6 @@
                             android:inputType="number"
                             android:gravity="center"
                             android:singleLine="true"
-                            android:textColor="#FFFFFF"
                             tools:ignore="Autofill" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
@@ -307,8 +305,7 @@
                         android:hint="@string/detailed_desc"
                         android:inputType="textMultiLine"
                         android:gravity="top"
-                        android:singleLine="true"
-                        android:textColor="#FFFFFF" />
+                        android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button

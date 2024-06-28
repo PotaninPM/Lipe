@@ -302,8 +302,7 @@
                         android:hint="@string/detailed_desc"
                         android:inputType="textMultiLine"
                         android:gravity="top"
-                        android:singleLine="true"
-                        android:textColor="#FFFFFF" />
+                        android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button

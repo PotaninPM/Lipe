@@ -29,6 +29,7 @@ import com.example.lipe.create_events.event_ent.CreateEntEventFragment
 import com.example.lipe.database_models.EcoEventModelDB
 import com.example.lipe.database_models.GroupModel
 import com.example.lipe.databinding.FragmentCreateEcoEventBinding
+import com.example.lipe.notifications.EventData
 import com.example.lipe.notifications.RetrofitInstance
 import com.example.lipe.viewModels.AppVM
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -114,26 +115,32 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         val autoCompleteTextView = view.findViewById<AutoCompleteTextView>(R.id.pollutionSpinner)
         autoCompleteTextView.setAdapter(adapter)
         autoCompleteTextView.setOnItemClickListener { parent, view, position, id ->
-            selectedPower = parent.getItemAtPosition(position).toString()
+            selectedPower = position.toString()
         }
 
         binding.btnCreateEvent.setOnClickListener {
-            binding.creating.visibility = View.VISIBLE
-            binding.allEco.visibility = View.GONE
-            binding.progressBar.visibility = View.VISIBLE
             if(isAdded) {
                 binding.btnCreateEvent.isEnabled = false
                 binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.grey))
-
-                uploadImage {photos ->
-                    if(photos != "-") {
-                        createEvent(photos)
-                    } else {
-                        binding.btnCreateEvent.isEnabled = true
-                        binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
-                        setDialog(getString(R.string.no_image),
-                            getString(R.string.min_one_photo), "Хорошо")
+                if(checkForEmpty() == true) {
+                    uploadImage {photos ->
+                        if(photos != "-") {
+                            createEvent(photos)
+                        } else {
+                            binding.btnCreateEvent.isEnabled = true
+                            binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
+                            setDialog(getString(R.string.no_image),
+                                getString(R.string.min_one_photo), getString(R.string.ok))
+                        }
                     }
+                } else {
+                    binding.allEco.visibility = View.VISIBLE
+
+                    binding.progressBar.visibility = View.INVISIBLE
+                    binding.creating.visibility = View.INVISIBLE
+                    binding.btnCreateEvent.isEnabled = true
+
+                    binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
                 }
             }
         }
@@ -168,6 +175,10 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
         } else {
             if(isAdded) {
                 if (image1 != "-") {
+                    binding.creating.visibility = View.VISIBLE
+                    binding.allEco.visibility = View.GONE
+                    binding.progressBar.visibility = View.VISIBLE
+
                     imageUri1.let { uri ->
                         val uid: String = UUID.randomUUID().toString()
                         val imageRef = storageRef.child(uid)
@@ -227,7 +238,6 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
 
     private fun createEvent(photosBefore: String) {
             appVM = ViewModelProvider(requireActivity()).get(AppVM::class.java)
-            if(checkForEmpty() == true) {
                 eventId = UUID.randomUUID().toString()
 
                 val current = System.currentTimeMillis()
@@ -321,7 +331,7 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                     }
                 }
 
-                val call: Call<Void> = RetrofitInstance.api.sendEventEcoData(event)
+                val call: Call<Void> = RetrofitInstance.api.sendEventData(EventData(latitude.toFloat(), longitude.toFloat()))
 
                 Log.d("INFOG", call.request().toString())
 
@@ -342,10 +352,6 @@ class CreateEcoEventFragment : Fragment(), DatePickerDialog.OnDateSetListener, T
                 binding.creating.visibility = View.GONE
                 binding.congrats.visibility = View.VISIBLE
                 binding.progressBar.visibility = View.GONE
-            } else {
-                binding.btnCreateEvent.isEnabled = true
-                binding.btnCreateEvent.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
-            }
     }
 
     fun checkForEmpty(): Boolean {
