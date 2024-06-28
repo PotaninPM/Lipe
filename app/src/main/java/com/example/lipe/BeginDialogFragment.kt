@@ -34,6 +34,7 @@ class BeginDialogFragment : DialogFragment() {
                 getString(R.string.theme_help),
                 getString(R.string.friends_view),
                 getString(R.string.begin_friend_dialog),
+                getString(R.string.copy),
                 getString(R.string.can)
             )
 
@@ -43,6 +44,7 @@ class BeginDialogFragment : DialogFragment() {
                 R.drawable.lipe,
                 R.drawable.friends_photo,
                 R.drawable.friend_dialog,
+                R.drawable.event_instruct,
                 R.drawable.success,
             )
         }
@@ -73,25 +75,15 @@ class BeginDialogFragment : DialogFragment() {
     }
 
     private fun updateTip() {
-        if(isAdded && context != null) {
+        if (isAdded && context != null) {
             if (currentTipIndex == tips.size) {
                 dismiss()
             } else {
-                binding.backTipButton.visibility = View.VISIBLE
-                if (currentTipIndex != 0)
-                    progress = (currentTipIndex) * (20)
-                binding.progressText.text = "$progress%"
-                binding.progressBar.progress = progress
                 binding.tipTextView.text = tips[currentTipIndex]
                 binding.gifImageView.load(gifUrls[currentTipIndex])
-            }
+                binding.progressBar.progress = ((currentTipIndex + 1).toFloat() / tips.size.toFloat() * 100).toInt()
 
-            if (currentTipIndex == 0) {
-                binding.backTipButton.visibility = View.GONE
-                binding.progressText.text = "0%"
-                binding.progressBar.progress = 0
-            } else {
-                binding.backTipButton.visibility = View.VISIBLE
+                binding.backTipButton.visibility = if (currentTipIndex == 0) View.GONE else View.VISIBLE
             }
         }
     }

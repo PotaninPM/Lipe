@@ -1,16 +1,22 @@
 package com.example.lipe.all_profiles.cur_events
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.lipe.R
 import com.example.lipe.databinding.FragmentCurEventsInProfileBinding
 import com.example.lipe.all_profiles.EventItem
+import com.example.lipe.notifications.EventData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -18,8 +24,13 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import java.util.Locale
 
-class CurEventsInProfileFragment(val personUid: String) : Fragment() {
+interface OnEventClickListener {
+    fun onEventClick(latitude: Double, longitude: Double)
+}
+
+class CurEventsInProfileFragment(val personUid: String) : Fragment(), OnEventClickListener {
 
     private lateinit var binding: FragmentCurEventsInProfileBinding
 
@@ -39,13 +50,15 @@ class CurEventsInProfileFragment(val personUid: String) : Fragment() {
 
         storageRef = FirebaseStorage.getInstance().reference
 
-        adapter = CurEventsAdapter(lifecycleScope)
+        adapter = CurEventsAdapter(lifecycleScope, this)
+
         binding.recuclerviewInProfile.layoutManager = LinearLayoutManager(requireContext())
         binding.recuclerviewInProfile.adapter = adapter
 
         val view = binding.root
         return view
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,7 +67,6 @@ class CurEventsInProfileFragment(val personUid: String) : Fragment() {
     }
 
     private fun setCurEvents() {
-        // Ensure the fragment is attached and context is not null
         if (!isAdded || context == null) return
 
         val dbRefCurUserEvents = FirebaseDatabase.getInstance().getReference("users/${personUid}/curRegEventsId")
@@ -82,6 +94,7 @@ class CurEventsInProfileFragment(val personUid: String) : Fragment() {
                             val dateMeeting = dataSnapshot.child("date_of_meeting").value.toString()
                             val status = dataSnapshot.child("status").value.toString()
                             val photos = dataSnapshot.child("photos").value.toString()
+                            val coord: ArrayList<String> = arrayListOf(dataSnapshot.child("coordinates").child("latitude").value.toString(), dataSnapshot.child("coordinates").child("longitude").value.toString())
 
                             val statusRus = when (status) {
                                 "ok" -> getString(R.string.confirmed)
@@ -90,7 +103,7 @@ class CurEventsInProfileFragment(val personUid: String) : Fragment() {
                                 else -> ""
                             }
 
-                            curEvents.add(EventItem(photos, title, dateMeeting, statusRus))
+                            curEvents.add(EventItem(photos, title, dateMeeting, statusRus, coord))
                             adapter.updateRequests(curEvents)
                         }
 
@@ -105,5 +118,40 @@ class CurEventsInProfileFragment(val personUid: String) : Fragment() {
                 Log.e("FirebaseError", "Ошибка Firebase ${error.message}")
             }
         })
+    }
+
+    private fun getAddressFromCoordinates(latitude: Double, longitude: Double): String {
+        val geocoder = Geocoder(requireContext(), Locale.getDefault())
+        try {
+            val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+            if (!addresses.isNullOrEmpty()) {
+                val address = addresses[0].getAddressLine(0)
+                return address
+                Log.i("INFOG", "Address: $address")
+            } else {
+                Log.i("INFOG", "No address found")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.e("INFOG", "Geocoder failed", e)
+        }
+        return "-"
+    }
+
+    private fun copyToClipboard(text: String) {
+        if(isAdded && context != null) {
+            val clipboard =
+                requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Event Address", text)
+            clipboard.setPrimaryClip(clip)
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.address_copied_to_clipboard), Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    override fun onEventClick(latitude: Double, longitude: Double) {
+        copyToClipboard(getAddressFromCoordinates(latitude, longitude))
     }
 }

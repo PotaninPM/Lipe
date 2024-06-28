@@ -177,4 +177,6 @@
     <string name="you">Это вы</string>
     <string name="your_friend">Ваш друг</string>
     <string name="not_friend">Еще не друг</string>
+    <string name="address_copied_to_clipboard">Адрес скопирован</string>
+    <string name="copy">Чтобы скопировать адрес события просто нажмите на него</string>
 </resources>

@@ -93,7 +93,7 @@ class YourEventsFragment(val personUid: String) : Fragment() {
                                     else -> ""
                                 }
 
-                                yourEvents.add(EventItem(photos, title, dateMeeting, statusRus))
+                                yourEvents.add(EventItem(photos, title, dateMeeting, statusRus, arrayListOf()))
                                 adapter.updateRequests(yourEvents)
                             }
                         }

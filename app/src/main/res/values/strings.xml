@@ -177,4 +177,6 @@
     <string name="you">It is you</string>
     <string name="your_friend">Your friend</string>
     <string name="not_friend">Not a friend</string>
+    <string name="address_copied_to_clipboard">Address copied to clipboard</string>
+    <string name="copy">To copy event\'s address just press it</string>
 </resources>
