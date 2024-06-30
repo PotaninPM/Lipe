@@ -179,4 +179,12 @@
     <string name="not_friend">Not a friend</string>
     <string name="address_copied_to_clipboard">Address copied to clipboard</string>
     <string name="copy">To copy event\'s address just press it</string>
+    <string name="list_partic">List of participators</string>
+    <string name="_4">Password must contain at least 4 symbols</string>
+    <string name="enter_pass">Enter password</string>
+    <string name="policy">Agree with app\'s policy</string>
+    <string name="Completing">Completing...</string>
+    <string name="auth_go">Authorising...</string>
+    <string name="google">Google</string>
+    <string name="create_acc">Create account</string>
 </resources>

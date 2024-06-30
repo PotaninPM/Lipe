@@ -26,7 +26,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout6"
             android:layout_width="@dimen/_283sdp"
-            android:layout_marginBottom="@dimen/_12sdp"
+            android:layout_marginBottom="@dimen/_36sdp"
             android:layout_height="@dimen/_302sdp"
             android:background="@drawable/start_2"
             app:layout_constraintBottom_toBottomOf="parent"

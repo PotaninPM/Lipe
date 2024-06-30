@@ -91,6 +91,9 @@ class ChoosePeopleFragment(val eventUid: String, val type: String, val targetVie
         super.onViewCreated(view, savedInstanceState)
 
         binding.finish.setOnClickListener {
+            binding.allGetPoints.visibility = View.INVISIBLE
+            binding.progressBar.visibility = View.VISIBLE
+            dialog?.setCanceledOnTouchOutside(false)
             val selectedUsers = peopleGoAdapter.getSelectedPeople()
             addPointsToUsers(selectedUsers, 3)
             deleteEvent(eventUid)
@@ -118,25 +121,8 @@ class ChoosePeopleFragment(val eventUid: String, val type: String, val targetVie
         })
 
         val database = FirebaseDatabase.getInstance()
-        val dbRefUsers = database.getReference("users")
         val dbRefRating = database.getReference("rating")
 
-        selectedUsers.forEach { userUid ->
-            val userPointsRef = dbRefUsers.child(userUid)
-            userPointsRef.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val currentPoints = snapshot.child("points").getValue(Int::class.java) ?: 0
-                    val newPoints = currentPoints + points
-                    userPointsRef.child("points").setValue(newPoints) {e, _ ->
-                        //sendNotificationToUser(snapshot.child("userToken").value.toString(), "Вам начислены баллы", "Вам начислено $pointsInt баллов. Общие баллы: $newPoints", "points")
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    print("Failed points $userUid: ${error.message}")
-                }
-            })
-        }
         dbRefRating.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.forEach { it ->
@@ -185,20 +171,7 @@ class ChoosePeopleFragment(val eventUid: String, val type: String, val targetVie
         if(isAdded) {
             when (type) {
                 "ent" -> {
-                    requireActivity().runOnUiThread {
-                        val eventLayout = targetView.findViewById<ConstraintLayout>(R.id.allEntEvent)
-                        val successLayout = targetView.findViewById<ConstraintLayout>(R.id.suc_delete_ent)
 
-                        eventLayout?.visibility = View.GONE
-
-                        successLayout?.visibility = View.VISIBLE
-
-                        val successImage = successLayout?.findViewById<ImageView>(R.id.suc_del_image_ent)
-                        val successText = successLayout?.findViewById<TextView>(R.id.suc_del_text_ent)
-
-                        successImage?.setImageResource(R.drawable.success)
-                        successText?.text = "Событие успешно удалено!"
-                    }
                 }
                 "eco" -> {
 

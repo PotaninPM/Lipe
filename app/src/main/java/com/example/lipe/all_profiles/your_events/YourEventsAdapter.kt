@@ -21,7 +21,7 @@ import java.util.ArrayList
 import java.util.Date
 import java.util.Locale
 
-class YourEventsAdapter(val lifecycleScope: LifecycleCoroutineScope) : RecyclerView.Adapter<YourEventsAdapter.YourEventsHolder>() {
+class YourEventsAdapter(val lifecycleScope: LifecycleCoroutineScope, private val listener: OnEventClickListener) : RecyclerView.Adapter<YourEventsAdapter.YourEventsHolder>() {
 
     val yourEvents = ArrayList<EventItem>()
     inner class YourEventsHolder(item: View): RecyclerView.ViewHolder(item) {
@@ -42,6 +42,10 @@ class YourEventsAdapter(val lifecycleScope: LifecycleCoroutineScope) : RecyclerV
                     ).drawable?.toBitmap()!!
                 }
                 imageEvent.setImageBitmap(bitmap)
+            }
+
+            binding.allEvent.setOnClickListener {
+                listener.onEventClick(event.coord[0].toDouble(), event.coord[1].toDouble())
             }
         }
     }

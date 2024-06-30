@@ -179,4 +179,12 @@
     <string name="not_friend">Еще не друг</string>
     <string name="address_copied_to_clipboard">Адрес скопирован</string>
     <string name="copy">Чтобы скопировать адрес события просто нажмите на него</string>
+    <string name="list_partic">Список участников</string>
+    <string name="_4">Пароль должен содержать хотя бы 4 символа</string>
+    <string name="enter_pass">Введите пароль</string>
+    <string name="policy">Примите политику приложения</string>
+    <string name="Completing">Выполняется...</string>
+    <string name="auth_go">Идет авторизация...</string>
+    <string name="google">Google</string>
+    <string name="create_acc">Создай аккаунт</string>
 </resources>

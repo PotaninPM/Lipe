@@ -7,15 +7,16 @@
     android:layout_gravity="end">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_3sdp"
         android:layout_marginStart="@dimen/_3sdp"
+        android:layout_marginTop="@dimen/_3sdp"
         android:background="@drawable/message_receiver_background"
         android:padding="@dimen/_8sdp"
-        app:layout_constraintWidth_max="@dimen/_262sdp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="@dimen/_262sdp">
 
         <TextView
             android:id="@+id/sender_message_text"
@@ -30,5 +31,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_4sdp"
+        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout11"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout11"
+        app:layout_constraintTop_toTopOf="@+id/constraintLayout11" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

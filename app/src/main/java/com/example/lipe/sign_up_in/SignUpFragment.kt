@@ -89,38 +89,49 @@ class SignUpFragment : Fragment() {
         }
 
         binding.btnNext.setOnClickListener {
-            val username: String = binding.etLogininput.text.toString().trim()
-            val email: String = binding.etEmailinput.text.toString().trim()
-            val pass: String = binding.etPassinput.text.toString().trim()
-            val nameAndSurname: String = binding.etNameAndSurnameinput.text.toString().trim()
+            if(isAdded && context != null) {
+                val username: String = binding.etLogininput.text.toString().trim()
+                val email: String = binding.etEmailinput.text.toString().trim()
+                val pass: String = binding.etPassinput.text.toString().trim()
+                val nameAndSurname: String = binding.etNameAndSurnameinput.text.toString().trim()
 
-            if (username.isNotEmpty() && pass.isNotEmpty() && email.isNotEmpty() && nameAndSurname.isNotEmpty() && username.length < 51 && username.length < 13 && email.length < 31 && pass.length < 51) {
-                checkIfUsernameExists(username) { result ->
-                    Log.d("INFOG", result)
-                    if (result == "ok") {
-                        if (pass.length < 4) {
-                            binding.etPassinput.error = "Пароль должен содержать хотя бы 4 символа"
-                        } else {
-                            checkIfEmailExists(email) { result2 ->
-                                if (result2 == "ok") {
-                                    signUpVM.setData(nameAndSurname, username, email, pass)
-                                    view?.findNavController()?.navigate(R.id.action_signUpFragment_to_signUpDescFragment)
-                                } else if (result2 == "noEmail") {
-                                    setError("Эта почта уже занята", binding.etEmailinput)
-                                    binding.etEmailinput.setText("")
-                                } else if (result2 == "Error") {
-                                    Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_LONG).show()
+                if(username.isNotEmpty() && pass.isNotEmpty() && email.isNotEmpty() && nameAndSurname.isNotEmpty() && username.length < 51 && username.length < 13 && email.length < 31 && pass.length < 51 && binding.agreeTerms.isChecked == true) {
+                    checkIfUsernameExists(username) { result ->
+                        Log.d("INFOG", result)
+                        if (result == "ok") {
+                            if (pass.length < 4) {
+                                binding.etPassinput.error = getString(R.string._4)
+                            } else {
+                                checkIfEmailExists(email) { result2 ->
+                                    if (result2 == "ok") {
+                                        signUpVM.setData(nameAndSurname, username, email, pass)
+                                        view?.findNavController()
+                                            ?.navigate(R.id.action_signUpFragment_to_signUpDescFragment)
+                                    } else if (result2 == "noEmail") {
+                                        setError("Эта почта уже занята", binding.etEmailinput)
+                                        binding.etEmailinput.setText("")
+                                    } else if (result2 == "Error") {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "Что-то пошло не так",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
                                 }
                             }
+                        } else if (result == "noUsername") {
+                            setError("Такой никнейм уже занят", binding.etLogininput)
+                        } else if (result == "Error") {
+                            Toast.makeText(
+                                requireContext(),
+                                "Что-то пошло не так",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
-                    } else if (result == "noUsername") {
-                        setError("Такой никнейм уже занят", binding.etLogininput)
-                    } else if (result == "Error") {
-                        Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_LONG).show()
                     }
+                } else {
+                    checkForEmpty(username, pass, email, nameAndSurname)
                 }
-            } else {
-                checkForEmpty(username, pass, email, nameAndSurname)
             }
         }
 
@@ -165,17 +176,20 @@ class SignUpFragment : Fragment() {
     }
 
     private fun checkForEmpty(username: String, pass: String, email: String, nameAndSurname: String) {
-        if (username.isEmpty()) {
-            setError("Введите логин!", binding.etLogininput)
+        if(username.isEmpty()) {
+            setError(getString(R.string.enter_login), binding.etLogininput)
+        }
+        if(binding.agreeTerms.isChecked == false) {
+            Toast.makeText(requireContext(), getString(R.string.policy), Toast.LENGTH_LONG).show()
         }
         if (pass.isEmpty()) {
-            setError("Введите пароль", binding.etPassinput)
+            setError(getString(R.string.enter_pass), binding.etPassinput)
         }
         if (email.isEmpty()) {
-            setError("Введите электронную почту!", binding.etEmailinput)
+            setError(getString(R.string.enter_email), binding.etEmailinput)
         }
         if (nameAndSurname.isEmpty()) {
-            setError("Введите ваше имя и фамилию!", binding.etNameAndSurnameinput)
+            setError(getString(R.string.enter_name_lastname), binding.etNameAndSurnameinput)
         }
     }
 

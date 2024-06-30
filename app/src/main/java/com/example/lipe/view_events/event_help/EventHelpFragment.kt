@@ -91,7 +91,9 @@ class EventHelpFragment : Fragment() {
 
                                 binding.btnRegToEvent.visibility = View.INVISIBLE
 
-                                if (eventHelpVM.creator.value == user) {
+                                Log.d("INFOG", eventHelpVM.creator.value.toString())
+
+                                if(eventHelpVM.creator.value == user) {
                                     binding.deleteOrLeave.visibility = View.VISIBLE
                                     binding.deleteOrLeave.text = getString(R.string.finish)
 
@@ -112,13 +114,31 @@ class EventHelpFragment : Fragment() {
                                 binding.allHelpEvent.visibility = View.VISIBLE
                                 binding.loadingProgressBar.visibility = View.GONE
                             } else {
-                                binding.allHelpEvent.visibility = View.VISIBLE
-                                binding.loadingProgressBar.visibility = View.GONE
-                                binding.report.visibility = View.VISIBLE
+                                if(eventHelpVM.creator.value == user) {
+                                    binding.deleteOrLeave.visibility = View.VISIBLE
+                                    binding.deleteOrLeave.text = getString(R.string.finish)
 
-                                binding.listUsers.visibility = View.GONE
+                                    binding.listUsers.text = getString(R.string.list)
+                                    binding.listUsers.visibility = View.VISIBLE
 
-                                binding.dateOfMeetingHelp.text = "*******"
+                                    binding.btnRegToEvent.visibility = View.INVISIBLE
+
+                                    val date_ = eventHelpVM.date.value
+                                    binding.dateOfMeetingHelp.text = date_
+
+                                    binding.allHelpEvent.visibility = View.VISIBLE
+                                    binding.loadingProgressBar.visibility = View.GONE
+
+                                    binding.report.visibility = View.INVISIBLE
+                                } else {
+                                    binding.allHelpEvent.visibility = View.VISIBLE
+                                    binding.loadingProgressBar.visibility = View.GONE
+                                    binding.report.visibility = View.VISIBLE
+
+                                    binding.listUsers.visibility = View.GONE
+
+                                    binding.dateOfMeetingHelp.text = "*******"
+                                }
                             }
                         }
                     }
@@ -367,6 +387,10 @@ class EventHelpFragment : Fragment() {
                                 }
                             }
                             break
+                        } else {
+                            binding.listUsers.visibility = View.GONE
+                            binding.report.visibility = View.GONE
+                            binding.deleteOrLeave.visibility = View.GONE
                         }
                     }
                 }

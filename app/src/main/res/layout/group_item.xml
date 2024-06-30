@@ -23,7 +23,6 @@
         android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_1sdp"
         android:fontFamily="@font/roboto_bold"
-        android:text="Mike Potanin"
         android:textSize="@dimen/_13sdp"
         app:layout_constraintStart_toEndOf="@+id/avatar_chat"
         app:layout_constraintTop_toTopOf="@+id/avatar_chat" />
@@ -32,7 +31,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_regular"
-        android:text="Привет, как дела?"
         android:textSize="@dimen/_12sdp"
         android:layout_marginStart="@dimen/_12sdp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import coil.Coil
+import coil.load
 import coil.request.ImageRequest
 import com.example.lipe.reports.report_dialog.EventReportFragment
 import com.example.lipe.R
@@ -154,10 +155,6 @@ class EventEntFragment : Fragment() {
         binding.allEntEvent.visibility = View.GONE
         binding.loadingProgressBar.visibility = View.VISIBLE
 
-        binding.creator.setOnClickListener {
-
-        }
-
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = eventEntVM
@@ -272,24 +269,10 @@ class EventEntFragment : Fragment() {
                 val userAvatarRef = storageRef.child("avatars/${eventEntVM.creator.value}")
                 val tokenTask2 = userAvatarRef.downloadUrl
                 lifecycleScope.launch {
-                    val bitmap: Bitmap = withContext(Dispatchers.IO) {
-                        Coil.imageLoader(requireContext()).execute(
-                            ImageRequest.Builder(requireContext())
-                                .data(url)
-                                .build()
-                        ).drawable?.toBitmap()!!
-                    }
-                    binding.image.setImageBitmap(bitmap)
+                    binding.image.load(url)
                     tokenTask2.addOnSuccessListener { url_2 ->
                         lifecycleScope.launch {
-                            val bitmap: Bitmap = withContext(Dispatchers.IO) {
-                                Coil.imageLoader(requireContext()).execute(
-                                    ImageRequest.Builder(requireContext())
-                                        .data(url_2)
-                                        .build()
-                                ).drawable?.toBitmap()!!
-                            }
-                            binding.eventAvatar.setImageBitmap(bitmap)
+                            binding.eventAvatar.load(url_2)
                         }
                         callback(true)
                     }.addOnFailureListener {
@@ -409,6 +392,10 @@ class EventEntFragment : Fragment() {
                             }
                         }
                         break
+                    } else {
+                        binding.listUsers.visibility = View.GONE
+                        binding.report.visibility = View.GONE
+                        binding.deleteOrLeave.visibility = View.GONE
                     }
                 }
             }

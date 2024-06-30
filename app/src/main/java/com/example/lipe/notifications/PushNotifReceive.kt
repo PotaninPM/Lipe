@@ -28,9 +28,11 @@ class PushNotifReceive : FirebaseMessagingService() {
             if (remoteMessage.data.isNotEmpty()) {
                 val title = remoteMessage.data["title"]
                 val message = remoteMessage.data["message"]
+                val type = remoteMessage.data["type"]!!
 
                 Log.d("INFOG", title.toString())
-                understandType(title, message)
+
+                understandType(title, message, type)
             }
         }
     }
@@ -50,24 +52,40 @@ class PushNotifReceive : FirebaseMessagingService() {
         }
     }
 
-    private fun understandType(title: String?, message: String?) {
+    private fun understandType(title: String?, message: String?, type: String) {
 
         val intent = Intent(this, MainActivity::class.java).apply {
             putExtra("fragmentToLoad", "RatingFragment")
         }
 
-        showNotification(title, message, intent)
+        showNotification(title, message, type, intent)
     }
 
-    fun showNotification(title: String?, message: String?, intent: Intent) {
+    private fun showNotification(title: String?, message: String?, type: String, intent: Intent) {
+
+        val notificationId = when (type) {
+            "friendship_request" -> 0
+            "new_event" -> 1
+            "accept_friendship" -> 2
+            "rating_update" -> 3
+            else -> 4
+        }
+
         val pendingIntent = PendingIntent.getActivity(
             this,
-            0,
+            notificationId,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val channelId = "channel_id"
+        val channelId = when (type) {
+            "friendship_request" -> "friendship_request"
+            "new_event" -> "new_event"
+            "accept_friendship" -> "accept_friendship"
+            "rating_update" -> "rating_update"
+            else -> "channel_id"
+        }
+
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.planet_icon)
             .setContentTitle(title)
@@ -76,13 +94,23 @@ class PushNotifReceive : FirebaseMessagingService() {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, "Notification Channel", NotificationManager.IMPORTANCE_DEFAULT)
+            val name = when (type) {
+                "friendship_request" -> "friendship_request"
+                "new_event" -> "new_event"
+                "accept_friendship" -> "accept_friendship"
+                "rating_update" -> "rating_update"
+                else -> "channel_id"
+            }
+            val channel =
+                NotificationChannel(channelId, name, NotificationManager.IMPORTANCE_DEFAULT)
             notificationManager.createNotificationChannel(channel)
         }
 
-        notificationManager.notify(0, notificationBuilder.build())
+        // Use unique notificationId here
+        notificationManager.notify(notificationId, notificationBuilder.build())
     }
 }

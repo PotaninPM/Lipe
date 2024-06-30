@@ -28,7 +28,7 @@
                 android:textSize="@dimen/_22sdp"
                 android:singleLine="true"
                 android:textStyle="bold"
-                android:text="Создай аккаунт" />
+                android:text="@string/create_acc" />
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

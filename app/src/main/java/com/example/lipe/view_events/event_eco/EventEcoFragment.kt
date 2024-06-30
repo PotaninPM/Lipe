@@ -345,6 +345,10 @@ class EventEcoFragment : Fragment() {
                             }
                         }
                         break
+                    } else {
+                        binding.listUsers.visibility = View.GONE
+                        binding.report.visibility = View.GONE
+                        binding.deleteOrLeave.visibility = View.GONE
                     }
                 }
             }

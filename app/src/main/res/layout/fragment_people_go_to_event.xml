@@ -7,10 +7,23 @@
     android:background="@drawable/begin_dialog"
     tools:context=".people_go_to_event.PeopleGoToEventFragment">
 
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:fontFamily="@font/nunitosansbold"
+        android:text="@string/list_partic"
+        android:textSize="@dimen/_16sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewPeopleGo"
-        android:layout_marginTop="@dimen/_4sdp"
         android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/_12sdp"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView10"
+        tools:layout_editor_absoluteX="16dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

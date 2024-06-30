@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nunitosansbold"
-            android:text="Идет авторизация..."
+            android:text="@string/auth_go"
             android:textSize="@dimen/_14sdp"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
@@ -192,7 +192,7 @@
                         android:textColor="@color/quantum_black_100"
                         android:layout_width="wrap_content"
                         android:singleLine="true"
-                        android:text="Google"
+                        android:text="@string/google"
                         android:textSize="@dimen/_14sdp"/>
                 </LinearLayout>
 

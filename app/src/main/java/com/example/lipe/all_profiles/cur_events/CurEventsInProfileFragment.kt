@@ -103,7 +103,19 @@ class CurEventsInProfileFragment(val personUid: String) : Fragment(), OnEventCli
                                 else -> ""
                             }
 
-                            curEvents.add(EventItem(photos, title, dateMeeting, statusRus, coord))
+                            if(title == "null") {
+                                curEvents.add(EventItem(photos, getString(R.string.help), dateMeeting, getString(R.string.confirmed), coord))
+                            } else {
+                                curEvents.add(
+                                    EventItem(
+                                        photos,
+                                        title,
+                                        dateMeeting,
+                                        statusRus,
+                                        coord
+                                    )
+                                )
+                            }
                             adapter.updateRequests(curEvents)
                         }
 
