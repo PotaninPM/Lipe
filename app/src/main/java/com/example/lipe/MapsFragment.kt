@@ -3,6 +3,8 @@ package com.example.lipe
 import ProfileFragment
 import android.Manifest
 import android.animation.ValueAnimator
+import android.app.Activity
+import android.app.NotificationManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -28,6 +30,7 @@ import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.activityViewModels
@@ -853,6 +856,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if(isAdded && requireActivity() != null) {
+            requestNotificationPermission(requireActivity())
+        }
+
         if(auth.currentUser != null) {
             val mapFragment =
                 childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment?
@@ -1069,6 +1077,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

@@ -1,12 +1,21 @@
 package com.example.lipe.chats_and_groups.chat_fr
 
+import android.Manifest
+import android.app.Activity
+import android.app.NotificationManager
+import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
