@@ -3,6 +3,7 @@ package com.example.lipe.chats_and_groups.group_fr
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,9 @@ import com.example.lipe.R
 import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.chats_and_groups.Message
 import com.example.lipe.databinding.FragmentGroupBinding
+import com.example.lipe.notifications.NewMessageChat
+import com.example.lipe.notifications.NewMessageGroup
+import com.example.lipe.notifications.RetrofitInstance
 import com.example.lipe.viewModels.GroupVM
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -32,6 +36,9 @@ import com.vanniktech.emoji.google.GoogleEmojiProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class GroupFragment(val groupUid: String) : Fragment() {
 
@@ -127,6 +134,50 @@ class GroupFragment(val groupUid: String) : Fragment() {
                 }
 
                 db.push().setValue(message)
+
+
+                if(auth.currentUser != null) {
+
+                    val users: ArrayList<String> = arrayListOf()
+
+                    val dbGroup = FirebaseDatabase.getInstance().getReference("groups/${groupUid}/members")
+                    dbGroup.addListenerForSingleValueEvent(object: ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            users.add(snapshot.value.toString())
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            TODO("Not yet implemented")
+                        }
+
+                    })
+
+                    val call: Call<Void> = RetrofitInstance.api.newMessageGroup(
+                        NewMessageGroup(
+                            groupVM.name.value.toString(),
+                            auth.currentUser!!.uid,
+                            users,
+                            messageText
+                        )
+                    )
+
+                    Log.d("INFOG", call.request().toString())
+
+                    call.enqueue(object : Callback<Void> {
+                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                            if (response.isSuccessful) {
+                                Log.d("INFOG", "OK, notifications were sent")
+                            } else {
+                                Log.d("INFOG", "${response.message()}")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            Log.d("INFOG", "${t.message}")
+                        }
+                    })
+                }
+
                 binding.messageInput.text?.clear()
             }
 

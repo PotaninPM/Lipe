@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import java.util.Locale
 
 class GroupVM : ViewModel() {
 
@@ -26,7 +27,11 @@ class GroupVM : ViewModel() {
     fun setInfo(name_ :String, chatUid_:String, countMembers_: String, key_: String) {
         _name.value = name_
         _groupUid.value = chatUid_
-        _countMembers.value = "$countMembers_ участников"
+        if(Locale.getDefault().language == "ru") {
+            _countMembers.value = "$countMembers_ участников"
+        } else {
+            _countMembers.value = "$countMembers_ participants"
+        }
         _key.value = key_
     }
 

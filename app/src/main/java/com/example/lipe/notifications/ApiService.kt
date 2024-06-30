@@ -9,6 +9,12 @@ import retrofit2.http.POST
 
 interface ApiService {
 
+    @POST("/new_message_chat")
+    fun newMessageChat(@Body newMessageChat: NewMessageChat): Call<Void>
+
+    @POST("/new_message_group")
+    fun newMessageGroup(@Body newMessageGroup: NewMessageGroup): Call<Void>
+
     @POST("/create_event")
     fun sendEventData(@Body entEventData: EventData): Call<Void>
 

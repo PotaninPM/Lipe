@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import java.util.Locale
 
 class PushNotifReceive : FirebaseMessagingService() {
 
@@ -68,6 +69,8 @@ class PushNotifReceive : FirebaseMessagingService() {
             "new_event" -> 1
             "accept_friendship" -> 2
             "rating_update" -> 3
+            "new_message_chat" -> 4
+            "new_message_group" -> 5
             else -> 4
         }
 

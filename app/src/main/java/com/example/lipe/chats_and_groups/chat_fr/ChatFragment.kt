@@ -1,6 +1,5 @@
 package com.example.lipe.chats_and_groups.chat_fr
 
-import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -19,6 +18,8 @@ import com.example.lipe.R
 import com.example.lipe.chats_and_groups.ChatsAndGroupsFragment
 import com.example.lipe.chats_and_groups.Message
 import com.example.lipe.databinding.FragmentChatBinding
+import com.example.lipe.notifications.NewMessageChat
+import com.example.lipe.notifications.RetrofitInstance
 import com.example.lipe.viewModels.ChatVM
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -30,6 +31,9 @@ import com.vanniktech.emoji.google.GoogleEmojiProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ChatFragment(val chatUid: String) : Fragment() {
 
@@ -97,7 +101,7 @@ class ChatFragment(val chatUid: String) : Fragment() {
         chatAdapter = ChatAdapter(listOf(), auth.currentUser!!.uid)
         binding.recyclerViewChat.adapter = chatAdapter
 
-        val dbRef_chatLastMessage = FirebaseDatabase.getInstance().getReference("chats/${chatUid}/last_message")
+        val dbrefChatlastmessage = FirebaseDatabase.getInstance().getReference("chats/${chatUid}/last_message")
         binding.sendBtn.setOnClickListener {
             val messageText = binding.messageInput.text.toString().trim()
             if (messageText.isNotEmpty()) {
@@ -109,11 +113,38 @@ class ChatFragment(val chatUid: String) : Fragment() {
                     System.currentTimeMillis()
                 )
 
-                dbRef_chatLastMessage.setValue(messageText).addOnSuccessListener {
+                dbrefChatlastmessage.setValue(messageText).addOnSuccessListener {
 
                 }
 
                 db.push().setValue(message)
+
+                if(auth.currentUser != null) {
+                    val call: Call<Void> = RetrofitInstance.api.newMessageChat(
+                        NewMessageChat(
+                            auth.currentUser!!.uid,
+                            chatVM.opponentUid.value.toString(),
+                            messageText
+                        )
+                    )
+
+                    Log.d("INFOG", call.request().toString())
+
+                    call.enqueue(object : Callback<Void> {
+                        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                            if (response.isSuccessful) {
+                                Log.d("INFOG", "OK, notifications were sent")
+                            } else {
+                                Log.d("INFOG", "${response.message()}")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<Void>, t: Throwable) {
+                            Log.d("INFOG", "${t.message}")
+                        }
+                    })
+                }
+
                 binding.messageInput.text?.clear()
             }
 
@@ -186,7 +217,7 @@ class ChatFragment(val chatUid: String) : Fragment() {
                         val name = snapshot.child("firstAndLastName").value.toString()
                         val status = snapshot.child("status").value.toString()
                         val key = snapshot.child("key").value.toString()
-                        chatVM.setInfo("$name", status, chatUid, key)
+                        chatVM.setInfo("$name", status, chatUid, key, opponentUid)
                     }
 
                     override fun onCancelled(error: DatabaseError) {
