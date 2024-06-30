@@ -857,10 +857,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(isAdded && requireActivity() != null) {
-            requestNotificationPermission(requireActivity())
-        }
-
         if(auth.currentUser != null) {
             val mapFragment =
                 childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment?
