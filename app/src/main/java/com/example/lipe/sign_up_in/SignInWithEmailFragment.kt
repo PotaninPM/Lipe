@@ -63,7 +63,7 @@ class SignInWithEmailFragment : Fragment() {
                         val editor = sharedPrefUser?.edit()
 
                         editor?.apply {
-                            putString("enter", "first")
+                            putBoolean("enter", true)
                             apply()
                         }
                         view.findNavController().navigate(R.id.action_signInWithEmailFragment_to_mapsFragment)
